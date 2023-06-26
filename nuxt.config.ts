@@ -61,4 +61,18 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  components: [
+    {
+      path: '~/components/Atoms',
+      pathPrefix: false,
+    },
+    {
+      path: '~/components/Molecules',
+      pathPrefix: false,
+    },
+    {
+      path: '~/components/Organisms',
+      pathPrefix: false,
+    },
+  ],
 })
