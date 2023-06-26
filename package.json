@@ -1,17 +1,41 @@
 {
-  "name": "nuxt-app",
+  "name": "naturalee",
   "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint": "yarn lint:js && yarn lint:prettier",
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
     "nuxt": "^3.6.0",
-    "typescript": "latest"
+    "typescript": "latest",
+    "@nuxt/eslint-config": "^0.1.1",
+    "@types/three": "^0.150.0",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.9.0",
+    "prettier": "^2.8.4",
+    "sass": "^1.58.3",
+    "vite-plugin-fonts": "^0.7.0",
+    "vite-svg-loader": "^4.0.0"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.4.7",
+    "@vueuse/core": "^9.13.0",
+    "gsap": "^3.11.4",
+    "pinia": "^2.0.33"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }
