@@ -1,4 +1,64 @@
+import svgLoader from 'vite-svg-loader'
+
+const cssGlobals = [
+  '@/assets/css/modules',
+  '@/assets/css/variables/constants.scss',
+  '@/assets/css/utilities/responsive.scss',
+  '@/assets/css/utilities/bemit.scss',
+  '@/assets/css/utilities/unit.scss',
+  '@/assets/css/utilities/transition.scss',
+  '@/assets/css/utilities/text.scss',
+  '@/assets/css/utilities/vue-transition.scss',
+  '@/assets/css/variables/compounds.scss',
+]
+const additionalData = cssGlobals.reduce(
+  (accumulator, file) => accumulator + `@import "${file}";`,
+  ''
+)
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  runtimeConfig: {
+    public: {
+      title: process.env.APP_TITLE,
+      endpoint: process.env.API_ENDPOINT_URL || '/',
+    },
+  },
+  app: {
+    baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
+    rootId: 'app',
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in',
+    },
+  },
+  css: [
+    '@/assets/css/main.scss',
+  ],
+  vite: {
+    plugins: [
+      svgLoader(),
+    ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData,
+        },
+      },
+    },
+  },
+  modules: [
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: [
+          'defineStore',
+          'skipHydrate',
+          'acceptHMRUpdate',
+          'storeToRefs',
+        ],
+      },
+    ],
+  ],
 })

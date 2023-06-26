@@ -1,0 +1,21 @@
+@include vue-transition(
+  page,
+  (opacity, filter),
+  (
+    duration: 400ms,
+  )
+) {
+  opacity: 0;
+  filter: var(--blur);
+}
+
+@include vue-transition(
+  background,
+  (opacity),
+  (
+    duration: 500ms,
+    timing: ease,
+  )
+) {
+  opacity: 0;
+}

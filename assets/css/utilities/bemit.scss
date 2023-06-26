@@ -1,0 +1,91 @@
+@use 'sass:selector';
+
+@function compose-element($block, $element) {
+  @return selector.append($block, '__#{$element}');
+}
+
+@mixin element($element) {
+  $block: current(&);
+  $selector: compose-element($block, $element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-modifier($block, $element) {
+  @return selector.append($block, '--#{$element}');
+}
+
+@mixin modifier($element) {
+  $block: current(&);
+  $selector: compose-modifier($block, $element);
+
+  &#{$selector} {
+    @content;
+  }
+}
+
+@function compose-object($selector) {
+  @return selector.append('.o-', $selector);
+}
+
+@mixin object($element) {
+  $selector: compose-object($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-component($selector) {
+  @return selector.append('.c-', $selector);
+}
+
+@mixin component($element) {
+  $selector: compose-component($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-utility($selector) {
+  @return selector.append('.u-', $selector);
+}
+
+@mixin utility($element) {
+  $selector: compose-utility($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-state($selector, $has: false) {
+  @if ($has) {
+    @return selector.append('.has-', $selector);
+  }
+
+  @return selector.append('.is-', $selector);
+}
+
+@mixin state($element, $has: false) {
+  $selector: compose-state($element, $has);
+
+  &#{$selector} {
+    @content;
+  }
+}
+
+@mixin is($element) {
+  @include state($element, false) {
+    @content;
+  }
+}
+
+@mixin has($element) {
+  @include state($element, true) {
+    @content;
+  }
+}

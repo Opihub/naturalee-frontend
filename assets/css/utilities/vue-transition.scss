@@ -1,0 +1,16 @@
+@mixin vue-transition(
+  $name,
+  $transition-properties: (all),
+  $transition-inline: (duration: 0.4s, timing: linear, delay: 0s)
+) {
+  .#{$name}-enter-active,
+  .#{$name}-leave-active {
+    @include transition-inline($transition-inline);
+    @include transition-properties($transition-properties);
+  }
+
+  .#{$name}-enter-from,
+  .#{$name}-leave-to {
+    @content;
+  }
+}

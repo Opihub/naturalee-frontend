@@ -1,0 +1,35 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+@mixin variable($name, $var) {
+  @if (meta.type-of($var) == 'map') {
+    @each $media, $value in $var {
+      @if ($media == 0 or $media == mobile) {
+        --#{$name}: #{$value};
+      } @else {
+        $size: $media;
+        @if (meta.type-of($size) == 'string') {
+          $size: map.get($responsive, $size);
+        }
+
+        @media (min-width: "#{$size}px") {
+          --#{$name}: #{$value};
+        }
+      }
+    }
+  } @else {
+    --#{$name}: #{$var};
+  }
+}
+
+@mixin media($size) {
+  @if (not map.has-key($responsive, $size)) {
+    @error "#{$size} non è una media query registrata";
+  }
+
+  $size: map.get($responsive, $size);
+
+  @media (min-width: "#{$size}px") {
+    @content;
+  }
+}

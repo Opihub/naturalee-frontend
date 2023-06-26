@@ -1,0 +1,23 @@
+@use 'sass:map';
+@use 'sass:math';
+
+@mixin font-weight($size) {
+  $weights: (
+    thin: 100,
+    extralight: 200,
+    light: 300,
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+    extrabold: 800,
+    black: 900,
+  );
+
+  font-weight: map.get($weights, $size);
+}
+
+// Converte il valore da XD a CSS
+@mixin letter-spacing($spacing) {
+  letter-spacing: math.div($spacing, 1000) * 1em;
+}

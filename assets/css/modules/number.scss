@@ -1,0 +1,53 @@
+@use 'sass:meta';
+@use 'sass:math';
+@use 'sass:list';
+@use 'sass:string';
+
+@function number($string) {
+  @if (meta.type-of($string) == number) {
+    @return $string;
+  }
+
+  $index: string.index($string, '.');
+  @if ($index != null) {
+    $int: string.slice($string, 0, $index - 1);
+    $float: string.slice($string, $index + 1);
+
+    // Gestisce i numeri con la virgola
+    @return number($int) +
+      math.div(number($float), math.pow(10, string.length($float)));
+  }
+
+  // Matrices
+  $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9' '.';
+  $numbers: 0 1 2 3 4 5 6 7 8 9;
+
+  // Result
+  $result: 0;
+
+  // Looping through all characters
+  $isDecimal: false;
+  @for $i from 1 through string.length($string) {
+    $character: string.slice($string, $i, $i);
+    $index: list.index($strings, $character);
+
+    @if not $index {
+      @warn "Unknown character `#{$character}`.";
+      @return $result;
+    }
+
+    @if ($character == '.') {
+      $isDecimal: true;
+    } @else {
+      $number: list.nth($numbers, $index);
+
+      @if ($isDecimal) {
+        $result: $result + math.div($number, 10);
+      } @else {
+        $result: $result * 10 + $number;
+      }
+    }
+  }
+
+  @return $result;
+}
