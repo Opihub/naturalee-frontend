@@ -10,6 +10,7 @@ module.exports = {
     'plugin:nuxt/recommended',
     '@nuxt/eslint-config',
     'prettier',
+    'plugin:storybook/recommended',
   ],
   rules: {
     'vue/no-multiple-template-root': 'off',
