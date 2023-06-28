@@ -1,5 +1,6 @@
 # Naturalee
 
+Il design del sito seguirà le linee guida dell'[Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)
 
 ## Setup
 
