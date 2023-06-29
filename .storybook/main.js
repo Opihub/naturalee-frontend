@@ -3,8 +3,14 @@
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
   stories: [
-    '../components/**/*.mdx',
-    '../components/**/*.stories.@(js|jsx|ts|tsx)',
+    '../components/Atoms/*.mdx',
+    '../components/Atoms/*.stories.@(js|jsx|ts|tsx)',
+    '../components/Molecules/*.mdx',
+    '../components/Molecules/*.stories.@(js|jsx|ts|tsx)',
+    '../components/Compounds/*.mdx',
+    '../components/Compounds/*.stories.@(js|jsx|ts|tsx)',
+    '../components/Organisms/*.mdx',
+    '../components/Organisms/*.stories.@(js|jsx|ts|tsx)',
     '../layouts/*.mdx',
     '../layouts/*.stories.@(js|jsx|ts|tsx)',
     '../pages/*.mdx',
