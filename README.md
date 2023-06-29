@@ -2,6 +2,8 @@
 
 Il design del sito seguirà le linee guida dell'[Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)
 
+https://www.futurelearn.com/info/blog/atomic-design-molecules-organisms
+
 ## Setup
 
 Make sure to install the dependencies:
