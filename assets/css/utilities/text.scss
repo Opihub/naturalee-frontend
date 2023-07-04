@@ -2,6 +2,10 @@
 @use 'sass:math';
 
 @mixin font-weight($size) {
+  font-weight: #{font-weight($size)};
+}
+
+@function font-weight($size) {
   $weights: (
     thin: 100,
     extralight: 200,
@@ -14,7 +18,7 @@
     black: 900,
   );
 
-  font-weight: map.get($weights, $size);
+  @return map.get($weights, $size);
 }
 
 // Converte il valore da XD a CSS
