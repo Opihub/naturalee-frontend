@@ -1,5 +1,3 @@
-import svgLoader from 'vite-svg-loader'
-
 const cssGlobals = [
   '@/assets/css/modules',
   '@/assets/css/variables/constants.scss',
@@ -33,13 +31,8 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  css: [
-    '@/assets/css/main.scss',
-  ],
+  css: ['@/assets/css/main.scss'],
   vite: {
-    plugins: [
-      svgLoader(),
-    ],
     css: {
       preprocessorOptions: {
         scss: {
@@ -49,6 +42,8 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    'nuxt-svgo',
+    'nuxt-icons',
     '@nuxt/image',
     [
       '@pinia/nuxt',
@@ -82,5 +77,8 @@ export default defineNuxtConfig({
   ],
   image: {
     // Options
+  },
+  svgo: {
+    defaultImport: 'component',
   },
 })
