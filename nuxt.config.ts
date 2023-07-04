@@ -1,18 +1,4 @@
-const cssGlobals = [
-  '@/assets/css/modules',
-  '@/assets/css/variables/constants.scss',
-  '@/assets/css/utilities/responsive.scss',
-  '@/assets/css/utilities/bemit.scss',
-  '@/assets/css/utilities/unit.scss',
-  '@/assets/css/utilities/transition.scss',
-  '@/assets/css/utilities/text.scss',
-  '@/assets/css/utilities/vue-transition.scss',
-  '@/assets/css/variables/compounds.scss',
-]
-const additionalData = cssGlobals.reduce(
-  (accumulator, file) => accumulator + `@import "${file}";`,
-  ''
-)
+import { additionalData } from "./utilities/globalCSS"
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({

@@ -1,4 +1,5 @@
-
+const { mergeConfig } = require('vite')
+import { additionalData } from '../utilities/globalCSS'
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
@@ -30,6 +31,18 @@ const config = {
   },
   docs: {
     autodocs: 'tag',
+  },
+  async viteFinal(config) {
+    return mergeConfig(config, {
+      css: {
+        postcss: null,
+        preprocessorOptions: {
+          scss: {
+            additionalData,
+          },
+        },
+      },
+    })
   },
 }
 export default config
