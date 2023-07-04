@@ -1,0 +1,74 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+$registered-variables: ();
+
+@mixin set-variable($name, $value, $group: default) {
+  --#{"" + $name}: #{$value};
+
+  $registered-group-variables: map.get($registered-variables, $group);
+  @if ($registered-group-variables == null) {
+    $registered-group-variables: ();
+  }
+
+  $registered-group-variables: map.set(
+    $registered-group-variables,
+    $name,
+    $value
+  );
+
+  $registered-variables: map.set(
+    $registered-variables,
+    $group,
+    $registered-group-variables
+  ) !global;
+}
+
+@mixin set-var($name, $value, $group: default) {
+  @include set-variable($name, $value, $group);
+}
+
+@function get-variable($name, $default: null, $group: default) {
+  @if ($default) {
+    @return var(--#{$name}, #{$default});
+  }
+
+  @if (map.has($registered-variables, $group)) {
+    $registered-group-variables: map.get($registered-variables, $group);
+
+    @if (map.has($registered-group-variables, $name)) {
+      @return var(--#{$name}, #{map.get($registered-group-variables, $name)});
+    }
+  }
+
+  @return var(--#{$name});
+}
+
+@function get-var($name, $default) {
+  @return get-variable($name, $default);
+}
+
+@mixin set-media-variables($name, $variables) {
+  @if (meta.type-of($variables) == map) {
+    @each $media, $value in $variables {
+      @if ($media == 0 or $media == mobile) {
+        @include set-var($name, $value, mobile);
+      } @else {
+        $size: $media;
+        @if (meta.type-of($size) == string) {
+          $size: map.get($responsive, $size);
+        }
+
+        @media (min-width: "#{$size}px") {
+          @include set-var($name, $value, $media);
+        }
+      }
+    }
+  } @else {
+    @include set-var($name, $variables);
+  }
+}
+
+@mixin set-media-vars($name, $variables) {
+  @include set-media-variables($name, $variables);
+}

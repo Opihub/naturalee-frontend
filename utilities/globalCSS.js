@@ -6,6 +6,7 @@ const cssGlobals = [
   '@/assets/css/utilities/unit.scss',
   '@/assets/css/utilities/transition.scss',
   '@/assets/css/utilities/text.scss',
+  '@/assets/css/utilities/variables.scss',
   '@/assets/css/utilities/vue-transition.scss',
   '@/assets/css/variables/compounds.scss',
 ]
