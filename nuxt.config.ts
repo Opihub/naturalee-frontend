@@ -49,6 +49,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxt/image',
     [
       '@pinia/nuxt',
       {
@@ -79,4 +80,7 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  image: {
+    // Options
+  },
 })
