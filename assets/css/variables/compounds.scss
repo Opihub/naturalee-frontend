@@ -8,6 +8,7 @@ $blur: 10px;
 
 $variables-to-set: (
   font-size: $font-size,
+
   color-green: $green,
   color-red: $red,
   color-brown: $brown,
@@ -17,6 +18,8 @@ $variables-to-set: (
   color-dark: $dark,
   color-white: $white,
   color-black: $black,
-  text-color: $text,
-  background-color: $background,
+
+  text-color: $text-color,
+  background-color: $background-color,
+  border-color: $border-color,
 );
