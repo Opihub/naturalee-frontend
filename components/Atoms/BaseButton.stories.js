@@ -6,43 +6,47 @@ export default {
   component: BaseButton,
   tags: ['autodocs'],
   argTypes: {
-    backgroundColor: {
-      control: 'color',
-    },
-    onClick: {},
-    size: {
+    style: {
       control: {
         type: 'select',
       },
-      options: ['small', 'medium', 'large'],
+      options: ['green', 'yellow', 'transparent'],
     },
   },
 }
 
 // More on writing stories with args: https://storybook.js.org/docs/vue/writing-stories/args
-export const Primary = {
-  args: {
-    primary: true,
-    label: 'Button',
+const Template = (args) => ({
+  components: { BaseButton },
+  setup() {
+    return { args }
   },
+  template: `
+  <BaseButton v-bind="args">
+    {{ args.default }}
+  </BaseButton>
+  `,
+})
+
+export const Default = Template.bind({})
+Default.args = {
+  default: 'Lorem ipsum',
 }
 
-export const Secondary = {
-  args: {
-    label: 'Button',
-  },
+export const Yellow = Template.bind({})
+Yellow.args = {
+  default: 'Lorem ipsum',
+  style: 'yellow',
 }
 
-export const Large = {
-  args: {
-    size: 'large',
-    label: 'Button',
-  },
+export const Green = Template.bind({})
+Green.args = {
+  default: 'Lorem ipsum',
+  style: 'green',
 }
 
-export const Small = {
-  args: {
-    size: 'small',
-    label: 'Button',
-  },
+export const ForFilter = Template.bind({})
+ForFilter.args = {
+  default: 'Lorem ipsum',
+  style: 'transparent',
 }
