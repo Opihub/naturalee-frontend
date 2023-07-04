@@ -1,13 +1,9 @@
 :root {
-  --black: #{$black};
-  --white: #{$white};
-  --primary: #{$primary};
-  --text: #{$text};
-  --background: #{$black};
-  --font-size: #{$font-size};
-  --blur: blur(#{$blur});
+  @each $name, $value in $variables-to-set {
+    @include set-var($name, $value);
+  }
 
-  @include variable(overlay-padding, $overlay-padding);
+  @include set-media-vars(overlay-padding, $overlay-padding);
 }
 
 // TODO: rendere dinamica questa parte

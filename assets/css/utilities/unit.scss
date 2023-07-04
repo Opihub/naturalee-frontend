@@ -1,7 +1,5 @@
-@use 'sass:map';
 @use 'sass:math';
 @use 'sass:meta';
-@use 'sass:list';
 @use 'sass:string';
 
 @function ratio($size, $font: $font-size) {

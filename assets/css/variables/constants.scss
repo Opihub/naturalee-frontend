@@ -1,8 +1,18 @@
 $font-size: 16px;
-$primary: #bf9000;
+
+$green: #00966e;
+$red: #e4002b;
+$brown: #653818;
+$orange: #ff5600;
+$yellow: #ffd100;
+
+$light: #f0f1fb;
+$dark: #101820;
+
 $white: #ffffff;
 $black: #000000;
-$text: #161615;
+$text: $dark;
+$background: $light;
 
 $transition-timing-function: ease-in-out;
 $transition-duration: 300ms;

@@ -5,3 +5,18 @@ $overlay-padding: (
 );
 
 $blur: 10px;
+
+$variables-to-set: (
+  font-size: $font-size,
+  color-green: $green,
+  color-red: $red,
+  color-brown: $brown,
+  color-orange: $orange,
+  color-yellow: $yellow,
+  color-light: $light,
+  color-dark: $dark,
+  color-white: $white,
+  color-black: $black,
+  text-color: $text,
+  background-color: $background,
+);
