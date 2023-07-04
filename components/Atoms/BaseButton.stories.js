@@ -6,11 +6,17 @@ export default {
   component: BaseButton,
   tags: ['autodocs'],
   argTypes: {
-    style: {
+    color: {
       control: {
         type: 'select',
       },
       options: ['green', 'yellow', 'transparent'],
+    },
+    scope: {
+      control: {
+        type: 'select',
+      },
+      options: ['filter', 'search'],
     },
   },
 }
@@ -23,30 +29,41 @@ const Template = (args) => ({
   },
   template: `
   <BaseButton v-bind="args">
-    {{ args.default }}
+    <template #default v-if="args.defaultSlot">{{ args.defaultSlot }}</template>
+    <template #svg v-if="args.svgSlot">{{ args.svgSlot }}</template>
   </BaseButton>
   `,
 })
 
 export const Default = Template.bind({})
 Default.args = {
-  default: 'Lorem ipsum',
+  text: 'Lorem ipsum',
 }
 
 export const Yellow = Template.bind({})
 Yellow.args = {
-  default: 'Lorem ipsum',
-  style: 'yellow',
+  text: 'Lorem ipsum',
+  color: 'yellow',
 }
 
 export const Green = Template.bind({})
 Green.args = {
-  default: 'Lorem ipsum',
-  style: 'green',
+  text: 'Lorem ipsum',
+  color: 'green',
 }
 
 export const ForFilter = Template.bind({})
 ForFilter.args = {
-  default: 'Lorem ipsum',
-  style: 'transparent',
+  text: 'Lorem ipsum',
+  color: 'transparent',
+  scope: 'filter',
+}
+
+export const Search = Template.bind({})
+Search.args = {
+  text: 'Lorem ipsum',
+  color: 'yellow',
+  scope: 'search',
+  svg: 'search',
+  svgSize: ['22px', '22px'],
 }

@@ -6,7 +6,7 @@
 
     <Suspense>
       <slot name="svg">
-        <NuxtIcon v-if="svg" :name="svg" />
+        <NuxtIcon v-if="svg" :name="svg" :style="svgStyle" />
       </slot>
     </Suspense>
   </button>
@@ -20,6 +20,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  svgSize: {
+    type: Array,
+    default: () => [],
+  },
   text: {
     type: String,
     default: null,
@@ -32,7 +36,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  style: {
+  scope: {
+    type: String,
+    default: null,
+    validator(value) {
+      // The value must match one of these strings
+      return ['filter', 'search'].includes(value)
+    },
+  },
+  color: {
     type: String,
     default: null,
     validator(value) {
@@ -42,11 +54,35 @@ const props = defineProps({
   },
 })
 
+const svgStyle = computed(() => {
+  let width = null
+  let height = null
+
+  if (Array.isArray(props.svgSize) && props.svgSize.length > 0) {
+    width = props.svgSize[0]
+    if (props.svgSize.length > 1) {
+      height = props.svgSize[1]
+    } else {
+      height = props.svgSize[0]
+    }
+  }
+
+  console.debug(width, height)
+  return {
+    '--svg-width': width,
+    '--svg-height': height,
+  }
+})
+
 const className = computed(() => {
   const className = []
 
-  if (props.style) {
-    className.push(`${CSS_NAME}--${props.style}`)
+  if (props.scope) {
+    className.push(`${CSS_NAME}--${props.scope}`)
+  }
+
+  if (props.color) {
+    className.push(`${CSS_NAME}--${props.color}`)
   }
 
   if (props.active) {
@@ -60,6 +96,7 @@ const className = computed(() => {
 <style lang="scss">
 @include object(button) {
   $prefix: button;
+  $svg-prefix: svg;
 
   @include set-vars(
     $prefix: $prefix,
@@ -72,7 +109,17 @@ const className = computed(() => {
     )
   );
 
-  border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(border-color)};
+  @include set-local-vars(
+    $prefix: $svg-prefix,
+    $map: (
+      width: 1em,
+      height: 1em,
+    )
+  );
+
+  border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
+      border-color
+    )};
   border-radius: 999em;
   font-weight: #{get-var(font-weight, $prefix: $prefix)};
   padding: #{get-var(padding, $prefix: $prefix)};
@@ -80,6 +127,16 @@ const className = computed(() => {
   text-align: center;
   background-color: #{get-var(background-color, $prefix: $prefix)};
   color: #{get-var(text-color, $prefix: $prefix)};
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+
+  svg {
+    margin: 0;
+    width: #{get-var(width, $prefix: $svg-prefix)};
+    height: #{get-var(height, $prefix: $svg-prefix)};
+  }
 
   @include transition(background-color, color, border-color);
 
@@ -137,11 +194,9 @@ const className = computed(() => {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
-        padding: 12px 14px,
         background-color: transparent,
         text-color: get-var(border-color),
         border-width: 1px,
-        font-weight: font-weight(medium),
       )
     );
 
@@ -160,6 +215,26 @@ const className = computed(() => {
         $prefix: $prefix
       );
     }
+  }
+
+  @include modifier('search') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        padding: 21px 30px,
+        font-weight: font-weight(bold),
+      )
+    );
+  }
+
+  @include modifier('filter') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        padding: 12px 14px,
+        font-weight: font-weight(medium),
+      )
+    );
   }
 }
 </style>
