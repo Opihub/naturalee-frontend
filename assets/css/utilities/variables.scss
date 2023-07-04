@@ -42,8 +42,18 @@ $registered-variables: ();
   @include set-variable($name, $value, $group, $prefix, $override);
 }
 
+@mixin set-vars($map, $group: default, $prefix: null, $override: true) {
+  @each $name, $value in $map {
+    @include set-variable($name, $value, $group, $prefix, $override);
+  }
+}
+
 @mixin set-local-var($name, $value, $group: default, $prefix: null) {
   @include set-variable($name, $value, $group, $prefix, false);
+}
+
+@mixin set-local-vars($map, $group: default, $prefix: null) {
+  @include set-vars($map, $group, $prefix, false);
 }
 
 @function get-variable($name, $default: null, $group: default, $prefix: null) {

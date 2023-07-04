@@ -61,13 +61,18 @@ const className = computed(() => {
 @include object(button) {
   $prefix: button;
 
-  @include set-var(padding, 12px 44px, $prefix: $prefix);
-  @include set-var(background-color, get-var(color-white), $prefix: $prefix);
-  @include set-var(text-color, get-var(color-green), $prefix: $prefix);
-  @include set-var(border-width, 0, $prefix: $prefix);
-  @include set-var(font-weight, font-weight(bold), $prefix: $prefix);
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding: 12px 44px,
+      background-color: get-var(color-white),
+      text-color: get-var(color-green),
+      border-width: 0,
+      font-weight: font-weight(bold),
+    )
+  );
 
-  border: 0 solid #{get-var(border-color)};
+  border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(border-color)};
   border-radius: 999em;
   font-weight: #{get-var(font-weight, $prefix: $prefix)};
   padding: #{get-var(padding, $prefix: $prefix)};
@@ -79,64 +84,66 @@ const className = computed(() => {
   @include transition(background-color, color, border-color);
 
   &:hover {
-    @include set-local-var(
-      background-color,
-      get-var(color-green),
-      $prefix: $prefix
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-green),
+        text-color: get-var(color-white),
+      )
     );
-    @include set-local-var(text-color, get-var(color-white), $prefix: $prefix);
   }
 
   @include modifier('yellow') {
-    @include set-local-var(
-      background-color,
-      get-var(color-yellow),
-      $prefix: $prefix
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-yellow),
+        text-color: get-var(color-green),
+      )
     );
-    @include set-local-var(text-color, get-var(color-green), $prefix: $prefix);
 
     &:hover {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
-      );
-      @include set-local-var(
-        text-color,
-        get-var(color-yellow),
-        $prefix: $prefix
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-white),
+          text-color: get-var(color-yellow),
+        )
       );
     }
   }
 
   @include modifier('green') {
-    @include set-local-var(
-      background-color,
-      get-var(color-green),
-      $prefix: $prefix
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-green),
+        text-color: get-var(color-white),
+      )
     );
-    @include set-local-var(text-color, get-var(color-white), $prefix: $prefix);
 
     &:hover {
-      @include set-local-var(
-        background-color,
-        get-var(color-yellow),
-        $prefix: $prefix
-      );
-      @include set-local-var(
-        text-color,
-        get-var(color-green),
-        $prefix: $prefix
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-yellow),
+          text-color: get-var(color-green),
+        )
       );
     }
   }
 
   @include modifier('transparent') {
-    @include set-local-var(padding, 12px 14px, $prefix: $prefix);
-    @include set-local-var(background-color, transparent, $prefix: $prefix);
-    @include set-local-var(text-color, get-var(border-color), $prefix: $prefix);
-    @include set-local-var(font-weight, font-weight(medium), $prefix: $prefix);
-    border-width: 1px;
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        padding: 12px 14px,
+        background-color: transparent,
+        text-color: get-var(border-color),
+        border-width: 1px,
+        font-weight: font-weight(medium),
+      )
+    );
 
     @include is(active) {
       @include set-local-var(
