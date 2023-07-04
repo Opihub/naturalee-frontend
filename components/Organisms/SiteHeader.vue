@@ -1,3 +1,6 @@
 <template>
-  <header class="c-header">header</header>
+  <header class="c-header">
+    <SiteLogo />
+    header
+  </header>
 </template>
