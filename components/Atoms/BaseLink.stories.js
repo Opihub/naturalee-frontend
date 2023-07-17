@@ -6,8 +6,11 @@ export default {
   component: BaseLink,
   tags: ['autodocs'],
   argTypes: {
-    default: {
-      control: 'text',
+    color: {
+      control: {
+        type: 'select',
+      },
+      options: ['yellow', 'black'],
     },
   },
 }
