@@ -1,5 +1,5 @@
 <template>
-  <button class="o-button" :class="className" :type="type">
+  <button :class="className" :type="type">
     <slot>
       <span v-if="text">{{ text }}</span>
     </slot>
@@ -75,7 +75,7 @@ const svgStyle = computed(() => {
 })
 
 const className = computed(() => {
-  const className = []
+  const className = [CSS_NAME]
 
   if (props.scope) {
     className.push(`${CSS_NAME}--${props.scope}`)
