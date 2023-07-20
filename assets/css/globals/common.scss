@@ -1,4 +1,8 @@
 :root {
+  @each $weight, $value in $weights {
+    @include set-var(weight-#{$weight}, $value);
+  }
+
   @each $name, $value in $variables-to-set {
     @include set-var($name, $value);
   }
@@ -16,6 +20,10 @@
     url('@/assets/fonts/Canela-Regular.woff') format('woff'),
     url('@/assets/fonts/Canela-Regular.ttf') format('truetype'),
     url('@/assets/fonts/Canela-Regular.svg#Canela-Regular') format('svg');
+}
+
+html {
+  font-size: #{get-var(font-size)};
 }
 
 body {
