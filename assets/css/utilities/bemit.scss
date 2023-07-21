@@ -1,3 +1,4 @@
+@use 'sass:meta';
 @use 'sass:selector';
 
 @function compose-element($block, $element) {
@@ -71,21 +72,45 @@
 }
 
 @mixin state($element, $has: false) {
-  $selector: compose-state($element, $has);
+  @if (meta.type-of($element) == map) {
+    @each $state in $element {
+      @include state($state, $has) {
+        @content;
+      }
+    }
+  } @else {
+    $selector: compose-state($element, $has);
 
-  &#{$selector} {
-    @content;
+    &#{$selector} {
+      @content;
+    }
   }
 }
 
 @mixin is($element) {
-  @include state($element, false) {
-    @content;
+  @if (meta.type-of($element) == map) {
+    @each $state in $element {
+      @include is($state) {
+        @content;
+      }
+    }
+  } @else {
+    @include state($element, false) {
+      @content;
+    }
   }
 }
 
 @mixin has($element) {
-  @include state($element, true) {
-    @content;
+  @if (meta.type-of($element) == map) {
+    @each $state in $element {
+      @include has($state) {
+        @content;
+      }
+    }
+  } @else {
+    @include state($element, true) {
+      @content;
+    }
   }
 }
