@@ -1,4 +1,4 @@
-import { additionalData } from "./utilities/globalCSS"
+import { additionalData } from './utilities/globalCSS'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -28,6 +28,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
     '@nuxt/image',
@@ -61,6 +62,17 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  googleFonts: {
+    download: true,
+    display: 'swap',
+    families: {
+      Mulish: [400, 700, 800],
+      Lato: {
+        wght: [400],
+        ital: [400],
+      },
+    },
+  },
   image: {
     // Options
   },
