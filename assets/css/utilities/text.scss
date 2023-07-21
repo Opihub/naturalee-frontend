@@ -13,3 +13,8 @@
 @mixin letter-spacing($spacing) {
   letter-spacing: math.div($spacing, 1000) * 1em;
 }
+
+@mixin typography($font-size, $line-height) {
+  font-size: rem($font-size);
+  line-height: ratio($line-height, $font-size);
+}
