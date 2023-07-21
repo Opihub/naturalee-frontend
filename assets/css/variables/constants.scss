@@ -16,6 +16,11 @@ $text-color: $dark;
 $background-color: $light;
 $border-color: #707070;
 
+$font-family: (
+  main: (Mulish, sans-serif),
+  text: (Lato, sans-serif),
+);
+
 $transition-timing-function: ease-in-out;
 $transition-duration: 300ms;
 $transition-delay: 0ms;

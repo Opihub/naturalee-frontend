@@ -3,6 +3,10 @@
     @include set-var(weight-#{$weight}, $value);
   }
 
+  @each $name, $family in $font-family {
+    @include set-var(family-#{$name}, $family);
+  }
+
   @each $name, $value in $variables-to-set {
     @include set-var($name, $value);
   }
@@ -10,24 +14,12 @@
   @include set-media-vars(overlay-padding, $overlay-padding);
 }
 
-// TODO: rendere dinamica questa parte
-@font-face {
-  font-family: 'Canela-Regular';
-  src: url('@/assets/fonts/Canela-Regular.eot');
-  src: url('@/assets/fonts/Canela-Regular.eot?#iefix')
-      format('embedded-opentype'),
-    url('@/assets/fonts/Canela-Regular.woff2') format('woff2'),
-    url('@/assets/fonts/Canela-Regular.woff') format('woff'),
-    url('@/assets/fonts/Canela-Regular.ttf') format('truetype'),
-    url('@/assets/fonts/Canela-Regular.svg#Canela-Regular') format('svg');
-}
-
 html {
   font-size: #{get-var(font-size)};
 }
 
 body {
-  font-family: 'Canela-Regular', sans-serif;
+  font-family: #{get-var(family-main)};
   color: var(--text-color);
   background-color: var(--background-color);
   overflow-x: hidden;
