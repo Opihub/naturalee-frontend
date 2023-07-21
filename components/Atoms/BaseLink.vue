@@ -46,7 +46,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['yellow', 'black'].includes(value)
+      return ['dark'].includes(value)
     },
   },
 })
@@ -113,6 +113,16 @@ const className = computed(() => {
   flex-wrap: wrap;
   gap: #{get-var(gap, $prefix: $prefix)};
   align-items: baseline;
+  @include transition(color);
+
+  &:hover {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        text-color: get-var(color-white),
+      )
+    );
+  }
 
   @include element('icon') {
     display: block;
@@ -139,6 +149,15 @@ const className = computed(() => {
         text-color: get-var(color-black),
       )
     );
+
+    &:hover {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-yellow),
+        )
+      );
+    }
   }
 
   @include has('underline') {
