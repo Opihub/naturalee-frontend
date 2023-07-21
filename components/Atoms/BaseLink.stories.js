@@ -10,7 +10,7 @@ export default {
       control: {
         type: 'select',
       },
-      options: ['yellow', 'dark'],
+      options: ['yellow', 'dark', 'white'],
     },
   },
 }

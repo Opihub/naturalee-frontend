@@ -46,7 +46,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['dark'].includes(value)
+      return ['white', 'dark'].includes(value)
     },
   },
 })
@@ -140,6 +140,24 @@ const className = computed(() => {
     width: #{get-var(width, $prefix: $arrow-prefix)};
     height: #{get-var(height, $prefix: $arrow-prefix)};
     align-self: baseline;
+  }
+
+  @include modifier('white') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        text-color: get-var(color-white),
+      )
+    );
+
+    &:hover {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-yellow),
+        )
+      );
+    }
   }
 
   @include modifier('dark') {
