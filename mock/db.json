@@ -1,0 +1,79 @@
+{
+  "menu": [
+    {
+      "id": "primary",
+      "menu": [
+        {
+          "id": 1,
+          "title": "Azienda",
+          "url": "azienda",
+          "target": null
+        },
+        {
+          "id": 2,
+          "title": "Contatti",
+          "url": "contatti",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "FAQ",
+          "url": "faq",
+          "target": null
+        },
+        {
+          "id": 4,
+          "title": "Consegna",
+          "url": "consegna",
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "socials",
+      "menu": [
+        {
+          "id": 1,
+          "title": "Facebook",
+          "url": "https://it-it.facebook.com/",
+          "target": "_blank"
+        },
+        {
+          "id": 2,
+          "title": "Instagram",
+          "url": "https://www.instagram.com/",
+          "target": "_blank"
+        }
+      ]
+    },
+    {
+      "id": "privacy",
+      "menu": [
+        {
+          "id": 1,
+          "title": "Privacy Policy",
+          "url": "privacy-policy",
+          "target": null
+        },
+        {
+          "id": 2,
+          "title": "Cookie Policy",
+          "url": "cookie-policy",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "Condizioni di vendita",
+          "url": "condizioni-di-vendita",
+          "target": null
+        },
+        {
+          "id": 4,
+          "title": "R-innovazione by Opiquad.it",
+          "url": "#",
+          "target": null
+        }
+      ]
+    }
+  ]
+}
