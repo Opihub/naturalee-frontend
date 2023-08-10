@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.7",
+    "@splidejs/vue-splide": "^0.6.12",
     "@vueuse/core": "^9.13.0",
     "gsap": "^3.11.4",
     "pinia": "^2.0.33"

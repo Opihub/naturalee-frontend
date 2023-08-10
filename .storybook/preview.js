@@ -1,4 +1,5 @@
 import 'assets/css/main.scss'
+import '@splidejs/vue-splide/css/core'
 
 /** @type { import('@storybook/vue3').Preview } */
 const preview = {

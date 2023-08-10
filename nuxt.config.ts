@@ -17,7 +17,7 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  css: ['@/assets/css/main.scss'],
+  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
   vite: {
     css: {
       preprocessorOptions: {
