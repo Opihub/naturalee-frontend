@@ -65,8 +65,6 @@ const className = computed(() => {
 
   return className
 })
-
-// const { data: primaryMenu } = await useFetchAPI('menu/primary')
 </script>
 
 <style lang="scss">
