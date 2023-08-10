@@ -4,6 +4,10 @@ export default {
   title: 'Molecules/InlineMenu',
   component: InlineMenu,
   tags: ['autodocs'],
+  parameters: {
+    // More on how to position stories at: https://storybook.js.org/docs/vue/configure/story-layout
+    layout: 'centered',
+  },
   argTypes: {
     _background: 'color',
     color: {
