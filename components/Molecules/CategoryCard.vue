@@ -79,8 +79,9 @@ const style = computed(() => {
     inset: 0;
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
     background-color: get-var(color-green);
-    background: var(--background-image);
+    background-image: var(--background-image);
     transform: scale(#{get-var(scale, $prefix: $prefix)});
     border-radius: #{get-var(border-radius, $prefix: $prefix)};
 
