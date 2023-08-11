@@ -1,0 +1,5 @@
+@include object(row) {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: get-var(--column-gap, rem(20px));
+}
