@@ -1,7 +1,7 @@
 import InlineMenu from './InlineMenu.vue'
 
 export default {
-  title: 'Molecules/InlineMenu',
+  title: 'Molecules/Inline Menu',
   component: InlineMenu,
   tags: ['autodocs'],
   parameters: {
