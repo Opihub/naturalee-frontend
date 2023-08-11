@@ -43,3 +43,16 @@ $weights: (
   extrabold: 800,
   black: 900,
 );
+
+$utilities-sizes: (
+  mini: 4,
+  tiny: 8,
+  small: 12,
+  medium: 20,
+  large: 24,
+  huge: 30,
+);
+
+$utilities-with-sizes: (
+  mb: margin-bottom,
+);
