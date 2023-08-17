@@ -11,11 +11,13 @@
       </slot>
     </Suspense>
 
-    <slot>
-      <span v-if="text">{{ text }}</span>
-    </slot>
+    <span :class="[`${CSS_NAME}__label`, labelClassName]">
+      <slot>
+        <span v-if="text">{{ text }}</span>
+      </slot>
 
-    <ArrowSVG v-if="arrow" :class="`${CSS_NAME}__arrow`" />
+      <ArrowSVG v-if="arrow" :class="`${CSS_NAME}__arrow`" />
+    </span>
   </NuxtLink>
 </template>
 
@@ -40,6 +42,10 @@ const props = defineProps({
   underline: {
     type: Boolean,
     default: false,
+  },
+  labelClassName: {
+    type: String,
+    default: '',
   },
   color: {
     type: String,
@@ -140,6 +146,13 @@ const className = computed(() => {
     width: #{get-var(width, $prefix: $arrow-prefix)};
     height: #{get-var(height, $prefix: $arrow-prefix)};
     align-self: baseline;
+  }
+
+  @include element('label') {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: #{get-var(gap, $prefix: $prefix)};
   }
 
   @include modifier('white') {

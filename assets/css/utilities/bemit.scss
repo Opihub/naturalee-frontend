@@ -1,13 +1,30 @@
 @use 'sass:meta';
+@use 'sass:list';
+@use 'sass:string';
 @use 'sass:selector';
+
+@function filter-selector($selector) {
+  $blocks: ();
+
+  @each $block in $selector {
+    @if (string.index($block, '--') == null) {
+      $blocks: list.append($blocks, $block, $separator: comma);
+    }
+  }
+
+  @return $blocks;
+}
 
 @function compose-element($block, $element) {
   @return selector.append($block, '__#{$element}');
 }
 
-@mixin element($element) {
-  $block: current(&);
-  $selector: compose-element($block, $element);
+@mixin element($element, $root: false) {
+  $current: current(&);
+  @if ($root == true) {
+    $current: root(&);
+  }
+  $selector: compose-element(filter-selector($current), $element);
 
   #{$selector} {
     @content;
@@ -18,9 +35,12 @@
   @return selector.append($block, '--#{$element}');
 }
 
-@mixin modifier($element) {
-  $block: current(&);
-  $selector: compose-modifier($block, $element);
+@mixin modifier($element, $root: false) {
+  $current: current(&);
+  @if ($root == true) {
+    $current: root(&);
+  }
+  $selector: compose-modifier(filter-selector($current), $element);
 
   &#{$selector} {
     @content;

@@ -5,7 +5,7 @@ export default {
   component: SiteTopBar,
   tags: ['autodocs'],
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
   args: {
     socialsMenu: [
