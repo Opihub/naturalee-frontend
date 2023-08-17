@@ -1,12 +1,10 @@
 import CategoryCard from './CategoryCard.vue'
 
-// More on how to set up stories at: https://storybook.js.org/docs/vue/writing-stories/introduction
 export default {
   title: 'Molecules/Category Card',
   component: CategoryCard,
   tags: ['autodocs'],
   parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/vue/configure/story-layout
     layout: 'centered',
   },
   argTypes: {
@@ -19,7 +17,6 @@ export default {
   },
 }
 
-// More on writing stories with args: https://storybook.js.org/docs/vue/writing-stories/args
 const Template = (args) => ({
   components: { CategoryCard },
   setup() {

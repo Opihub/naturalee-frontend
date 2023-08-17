@@ -14,10 +14,6 @@
 const CSS_CLASS = 'c-category-card'
 
 const props = defineProps({
-  text: {
-    type: String,
-    required: true,
-  },
   image: {
     type: String,
     default: null,
