@@ -1,7 +1,7 @@
 import SiteHeader from './SiteHeader.vue'
 
 export default {
-  title: 'Organisms/SiteHeader',
+  title: 'Organisms/Header',
   component: SiteHeader,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/vue/writing-docs/autodocs
   tags: ['autodocs'],

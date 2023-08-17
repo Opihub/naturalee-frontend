@@ -5,6 +5,9 @@ export default {
   title: 'Atoms/Link',
   component: BaseLink,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     color: {
       control: {
