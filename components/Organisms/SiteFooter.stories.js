@@ -24,6 +24,20 @@ const Template = (args) => ({
 export const Default = Template.bind({})
 Default.args = {
   paymentImage: '/pagamenti-sicuri.png',
+  socialsMenu: [
+    {
+      id: 1,
+      title: 'Facebook',
+      url: 'https://it-it.facebook.com/',
+      target: '_blank',
+    },
+    {
+      id: 2,
+      title: 'Instagram',
+      url: 'https://www.instagram.com/',
+      target: '_blank',
+    },
+  ],
   menu: [
     {
       id: 1,
