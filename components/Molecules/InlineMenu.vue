@@ -1,8 +1,17 @@
 <template>
   <ul :class="className" :style="style">
-    <li v-for="record in menu" :key="record.id" class="c-menu__item">
-      <BaseLink :to="record.url" :text="record.title" :target="record.target" :color="color" />
+    <slot name="before" :class-name="`${CSS_NAME}__item`" />
+    <li v-for="record in menu" :key="record.id" :class="`${CSS_NAME}__item`">
+      <BaseLink
+        v-if="record.url"
+        :to="record.url"
+        :text="record.title || record.text"
+        :target="record.target"
+        :color="color"
+      />
+      <span v-else>{{ record.title || record.text }}</span>
     </li>
+    <slot name="after" :class-name="`${CSS_NAME}__item`" />
   </ul>
 </template>
 
@@ -39,13 +48,13 @@ const props = defineProps({
 })
 
 const style = computed(() => {
-  const style = {};
+  const style = {}
 
   if (props.separator) {
-    style['--link-separator'] = `"${props.separator}"`;
+    style['--menu-separator'] = `"${props.separator}"`
   }
 
-  return style;
+  return style
 })
 
 const className = computed(() => {
@@ -68,9 +77,8 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include component("menu") {
-  $prefix: link;
-
+$prefix: 'menu';
+@include component($prefix) {
   @include set-vars(
     $prefix: $prefix,
     $map: (
@@ -82,14 +90,15 @@ const className = computed(() => {
   list-style: none;
   display: flex;
   align-items: baseline;
-  gap: #{get-var(gap, $prefix: $prefix)};
+  gap: get-var(gap, $prefix: $prefix);
   padding: 0;
   margin: 0;
-  color: #{get-var(text-color, $prefix: $prefix)};
-  @include typography(15px, 16px);
-  @include font-weight(bold);
+  color: get-var(text-color, $prefix: $prefix);
+  font-weight: get-var(font-weight, get-var(weight-bold), $prefix: $prefix);
+  font-size: get-var(font-size, rem(15px), $prefix: $prefix);
+  line-height: get-var(line-height, rem(16px), $prefix: $prefix);
 
-  @include modifier("mini") {
+  @include modifier('mini') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -98,7 +107,7 @@ const className = computed(() => {
     );
   }
 
-  @include modifier("stretch") {
+  @include modifier('stretch') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -107,7 +116,7 @@ const className = computed(() => {
     );
   }
 
-  @include modifier("large") {
+  @include modifier('large') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -134,8 +143,8 @@ const className = computed(() => {
     );
   }
 
-  @include modifier("separate") {
-    @include element("item") {
+  @include modifier('separate') {
+    @include element('item') {
       position: relative;
 
       &::after {

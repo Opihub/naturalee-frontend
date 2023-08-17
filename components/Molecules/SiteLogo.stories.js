@@ -1,7 +1,7 @@
 import SiteLogo from './SiteLogo.vue'
 
 export default {
-  title: 'Molecules/SiteLogo',
+  title: 'Molecules/Logo',
   component: SiteLogo,
   tags: ['autodocs'],
 }

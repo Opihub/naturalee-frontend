@@ -1,4 +1,7 @@
 import { additionalData } from './utilities/globalCSS'
+import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
+const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -78,5 +81,17 @@ export default defineNuxtConfig({
   },
   svgo: {
     defaultImport: 'component',
+  },
+  // @ts-ignore
+  storybook: {
+    components: {
+      NuxtImg: 'storybook/custom/components.mjs',
+    },
+    templates: [
+      {
+        src: join(runtimeDir, 'components.mjs'),
+        filename: 'storybook/custom/components.mjs',
+      },
+    ],
   },
 })
