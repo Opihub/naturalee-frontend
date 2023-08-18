@@ -15,13 +15,13 @@
 }
 
 html {
-  font-size: #{get-var(font-size)};
+  font-size: get-var(font-size);
 }
 
 body {
-  font-family: #{get-var(family-main)};
-  color: var(--text-color);
-  background-color: var(--background-color);
+  font-family: get-var(family-main);
+  color: get-var(text-color);
+  background-color: get-var(background-color);
   overflow-x: hidden;
 }
 
