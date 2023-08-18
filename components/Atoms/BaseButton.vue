@@ -41,7 +41,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['filter', 'search'].includes(value)
+      return ['filter'].includes(value)
     },
   },
   color: {
@@ -93,18 +93,14 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include object(button) {
-  $prefix: button;
-  $svg-prefix: svg;
+$prefix: 'button';
+@include object($prefix) {
+  $svg-prefix: 'svg';
 
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      padding: 12px 44px,
-      background-color: get-var(color-white),
-      text-color: get-var(color-green),
       border-width: 0,
-      font-weight: font-weight(bold),
     )
   );
 
@@ -120,16 +116,22 @@ const className = computed(() => {
       border-color
     )};
   border-radius: 999em;
-  font-weight: #{get-var(font-weight, $prefix: $prefix)};
-  padding: #{get-var(padding, $prefix: $prefix)};
+  font-weight: get-var(font-weight, font-weight(bold), $prefix: $prefix);
+  padding: get-var(padding, rem(12px) rem(44px), $prefix: $prefix);
   cursor: pointer;
   text-align: center;
-  background-color: #{get-var(background-color, $prefix: $prefix)};
-  color: #{get-var(text-color, $prefix: $prefix)};
+  background-color: get-var(
+    background-color,
+    get-var(color-white),
+    $prefix: $prefix
+  );
+  color: get-var(text-color, get-var(color-green), $prefix: $prefix);
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
+  font-size: get-var(font-size, 1em, $prefix: $prefix);
+  line-height: get-var(line-height, inherit, $prefix: $prefix);
+  gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
 
   svg {
     margin: 0;
