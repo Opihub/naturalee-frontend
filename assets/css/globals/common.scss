@@ -25,6 +25,19 @@ body {
   overflow-x: hidden;
 }
 
+input {
+  &,
+  select,
+  textarea {
+    font-family: get-var(family-text);
+  }
+
+  &::placeholder {
+    color: inherit;
+    opacity: 0.5;
+  }
+}
+
 #app {
   height: max(100vh, 100%);
 }
