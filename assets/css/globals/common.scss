@@ -15,14 +15,27 @@
 }
 
 html {
-  font-size: #{get-var(font-size)};
+  font-size: get-var(font-size);
 }
 
 body {
-  font-family: #{get-var(family-main)};
-  color: var(--text-color);
-  background-color: var(--background-color);
+  font-family: get-var(family-main);
+  color: get-var(text-color);
+  background-color: get-var(background-color);
   overflow-x: hidden;
+}
+
+input {
+  &,
+  select,
+  textarea {
+    font-family: get-var(family-text);
+  }
+
+  &::placeholder {
+    color: inherit;
+    opacity: 0.5;
+  }
 }
 
 #app {
