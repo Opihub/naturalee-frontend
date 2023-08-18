@@ -19,7 +19,7 @@ export default {
       control: {
         type: 'select',
       },
-      options: ['filter', 'search'],
+      options: ['filter'],
     },
   },
 }
@@ -66,7 +66,6 @@ export const Search = Template.bind({})
 Search.args = {
   text: 'Lorem ipsum',
   color: 'yellow',
-  scope: 'search',
   svg: 'search',
   svgSize: ['22px', '22px'],
 }

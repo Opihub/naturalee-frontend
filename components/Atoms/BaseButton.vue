@@ -216,16 +216,6 @@ const className = computed(() => {
     }
   }
 
-  @include modifier('search') {
-    @include set-local-vars(
-      $prefix: $prefix,
-      $map: (
-        padding: 21px 30px,
-        font-weight: font-weight(bold),
-      )
-    );
-  }
-
   @include modifier('filter') {
     @include set-local-vars(
       $prefix: $prefix,
