@@ -93,27 +93,18 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include object(input) {
-  $prefix: input;
-  $svg-prefix: svg;
+$prefix: 'input';
+@include object($prefix) {
+  $svg-prefix: 'svg';
 
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      // padding: rem(14px) rem(20px),
-      // font-size: rem(20px),
       background-color: get-var(color-white),
       text-color: get-var(color-dark),
       border-width: 1px,
       border-color: get-var(color-dark),
-      width: auto,
-      max-width: 100%,
-      font-weight: get-var(weight-regular),
       radius: rem(10px),
-
-      padding: rem(8px) rem(20px),
-      font-size: rem(18px),
-      line-height: rem(35px),
     )
   );
 
@@ -121,15 +112,15 @@ const className = computed(() => {
       border-color
     )};
 
-  border-radius: #{get-var(radius, $prefix: $prefix)};
-  font-size: #{get-var(font-size, $prefix: $prefix)};
-  line-height: #{get-var(line-height, $prefix: $prefix)};
-  font-weight: #{get-var(font-weight, $prefix: $prefix)};
-  padding: #{get-var(padding, $prefix: $prefix)};
-  background-color: #{get-var(background-color, $prefix: $prefix)};
-  color: #{get-var(text-color, $prefix: $prefix)};
-  width: #{get-var(width, $prefix: $prefix)};
-  max-width: #{get-var(max-width, $prefix: $prefix)};
+  border-radius: get-var(radius, $prefix: $prefix);
+  font-size: get-var(font-size, rem(18px), $prefix: $prefix);
+  line-height: get-var(line-height, rem(35px), $prefix: $prefix);
+  font-weight: get-var(font-weight, get-var(weight-regular), $prefix: $prefix);
+  padding: get-var(padding, rem(8px) rem(20px), $prefix: $prefix);
+  background-color: get-var(background-color, $prefix: $prefix);
+  color: get-var(text-color, $prefix: $prefix);
+  width: get-var(width, auto, $prefix: $prefix);
+  max-width: get-var(max-width, 100%, $prefix: $prefix);
 
   &::placeholder {
     opacity: 0.4;
