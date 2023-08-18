@@ -67,10 +67,9 @@ const svgStyle = computed(() => {
     }
   }
 
-  console.debug(width, height)
   return {
-    '--svg-width': width,
-    '--svg-height': height,
+    '--svg-width': typeof width === 'number' ? `${width}px`: width,
+    '--svg-height': typeof height === 'number' ? `${height}px`: height,
   }
 })
 
