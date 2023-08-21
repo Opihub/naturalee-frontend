@@ -64,8 +64,8 @@ $prefix: 'popup';
     )
   );
 
-  width: 100%;
-  max-width: get-var(max-width, get-var(container-width), $prefix, $prefix);
+  width: get-var(max-width, 100%, $prefix: $prefix);
+  max-width: get-var(max-width, get-var(container-width), $prefix: $prefix);
   margin: 0;
   padding: 0;
   border: 1px solid
