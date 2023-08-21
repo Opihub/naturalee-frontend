@@ -91,3 +91,8 @@ const Template = (args) => ({
 
 export const Default = Template.bind({})
 Default.args = {}
+
+export const Empty = Template.bind({})
+Empty.args = {
+  cart: []
+}

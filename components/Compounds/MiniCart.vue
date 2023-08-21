@@ -2,15 +2,18 @@
   <PopupContainer :class="CSS_NAME" color="white">
     <ul :class="CSS_NAME_LIST">
       <li :class="`${CSS_NAME_LIST}__recap`">
-        <span>Il tuo carrello - {{ cart.length }} prodotti</span>
+        <template v-if="cart.length">
+          <span>Il tuo carrello - {{ cart.length }} prodotti</span>
 
-        <BaseLink
-          :class="`${CSS_NAME}__review`"
-          to="cart"
-          :underline="true"
-          color="dark"
-          >Modifica</BaseLink
-        >
+          <BaseLink
+            :class="`${CSS_NAME}__review`"
+            to="cart"
+            :underline="true"
+            color="dark"
+            >Modifica</BaseLink
+          >
+        </template>
+        <span v-else>Non hai alcun prodotto nel carrello</span>
       </li>
 
       <li
@@ -45,7 +48,7 @@
       </li>
     </ul>
 
-    <div :class="CSS_NAME_TOTALS">
+    <div v-if="cart.length" :class="CSS_NAME_TOTALS">
       <dl :class="`${CSS_NAME_TOTALS}__calculation`">
         <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
           >Spese di consegna</span
