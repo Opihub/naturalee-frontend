@@ -9,12 +9,6 @@ export default {
   },
   argTypes: {
     _modalWidth: 'string',
-    size: {
-      control: {
-        type: 'select',
-      },
-      options: ['default', 'mini'],
-    },
   },
   args: {
     _modalWidth: '317px',
