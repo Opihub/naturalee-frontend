@@ -1,5 +1,5 @@
 <template>
-  <PopupContainer>
+  <PopupContainer max-width="317px">
     <InlineMenu
       :class="CSS_NAME"
       :item-class="`${CSS_NAME}__item`"

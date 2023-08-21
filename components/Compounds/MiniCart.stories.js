@@ -5,13 +5,9 @@ export default {
   component: MiniCart,
   tags: ['autodocs'],
   parameters: {
-    layout: 'centered',
-  },
-  argTypes: {
-    _modalWidth: 'string',
+    layout: 'padded',
   },
   args: {
-    _modalWidth: '357px',
     cart: [
       {
         id: 1,
@@ -83,9 +79,7 @@ const Template = (args) => ({
     return { args }
   },
   template: `
-  <div :style="{width: args._modalWidth}" style="padding: 10px; max-width: calc(100vw - 1rem * 2);">
-    <MiniCart :style="{width: '100%', maxWidth: args._modalWidth}" v-bind="args" />
-  </div>
+  <MiniCart v-bind="args" />
   `,
 })
 

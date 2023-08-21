@@ -1,5 +1,5 @@
 <template>
-  <PopupContainer :class="CSS_NAME" color="white">
+  <PopupContainer :class="CSS_NAME" color="white" max-width="337px">
     <ul :class="CSS_NAME_LIST">
       <li :class="`${CSS_NAME_LIST}__recap`">
         <template v-if="cart.length">
