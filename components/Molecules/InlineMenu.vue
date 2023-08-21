@@ -10,7 +10,11 @@
     <li
       v-for="record in menu"
       :key="record.id"
-      :class="{[CSS_NAME_ITEM]: true, [itemClass]: itemClass, 'has-no-link': !record.url}"
+      :class="{
+        [CSS_NAME_ITEM]: true,
+        [itemClass]: itemClass,
+        'has-no-link': !record.url,
+      }"
     >
       <BaseLink
         v-if="record.url"
@@ -18,6 +22,7 @@
         :to="record.url"
         :text="record.title || record.text"
         :target="record.target"
+        :svg="record.image"
         :color="color"
         :arrow="arrow"
       />
@@ -234,6 +239,7 @@ $prefix: 'menu';
 
     @include element('link') {
       width: get-var(width, auto, $prefix: $item-prefix);
+      height: get-var(height, auto, $prefix: $item-prefix);
       padding: get-var(padding, 0, $prefix: $item-prefix);
 
       &:hover {
