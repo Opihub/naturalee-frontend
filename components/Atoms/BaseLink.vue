@@ -124,6 +124,7 @@ $prefix: 'link';
   display: inline-flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: get-var(gap, $prefix: $prefix);
   @include transition(color);
