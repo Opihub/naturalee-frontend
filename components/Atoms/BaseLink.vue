@@ -83,10 +83,11 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include object(link) {
-  $prefix: link;
-  $svg-prefix: svg;
-  $arrow-prefix: arrow;
+$prefix: 'link';
+@include object($prefix) {
+  $svg-prefix: 'svg';
+  $arrow-prefix: 'arrow';
+  $label-prefix: 'link-label';
 
   @include set-vars(
     $prefix: $prefix,
@@ -114,10 +115,10 @@ const className = computed(() => {
   );
 
   text-decoration: none;
-  color: #{get-var(text-color, $prefix: $prefix)};
+  color: get-var(text-color, $prefix: $prefix);
   display: inline-flex;
   flex-wrap: wrap;
-  gap: #{get-var(gap, $prefix: $prefix)};
+  gap: get-var(gap, $prefix: $prefix);
   align-items: baseline;
   @include transition(color);
 
@@ -136,23 +137,24 @@ const className = computed(() => {
 
     svg {
       margin: 0 auto;
-      width: #{get-var(width, $prefix: $svg-prefix)};
-      height: #{get-var(height, $prefix: $svg-prefix)};
+      width: get-var(width, $prefix: $svg-prefix);
+      height: get-var(height, $prefix: $svg-prefix);
     }
   }
 
   @include element('arrow') {
     margin: 0;
-    width: #{get-var(width, $prefix: $arrow-prefix)};
-    height: #{get-var(height, $prefix: $arrow-prefix)};
+    width: get-var(width, $prefix: $arrow-prefix);
+    height: get-var(height, $prefix: $arrow-prefix);
     align-self: baseline;
   }
 
   @include element('label') {
     display: inline-flex;
     align-items: baseline;
-    justify-content: center;
-    gap: #{get-var(gap, $prefix: $prefix)};
+    width: get-var(width, auto, $prefix: $label-prefix);
+    justify-content: get-var(disposition, center, $prefix: $label-prefix);
+    gap: get-var(gap, $prefix: $prefix);
   }
 
   @include modifier('white') {
