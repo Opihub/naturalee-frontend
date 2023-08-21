@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" :style="style">
     <slot />
   </div>
 </template>
@@ -8,6 +8,13 @@
 const CSS_NAME = 'o-popup'
 
 const props = defineProps({
+  maxWidth: {
+    type: String,
+    default: null,
+    validator(value) {
+      return !isNaN(parseFloat(value))
+    },
+  },
   color: {
     type: String,
     default: 'green',
@@ -26,7 +33,19 @@ const className = computed(() => {
 
   return className
 })
-console.debug(className)
+
+const style = computed(() => {
+  const style = {}
+
+  if (props.maxWidth) {
+    style['--popup-max-width'] =
+      typeof props.maxWidth === 'number'
+        ? `${props.maxWidth}px`
+        : props.maxWidth
+  }
+
+  return style
+})
 </script>
 
 <style lang="scss">
@@ -46,11 +65,11 @@ $prefix: 'popup';
   );
 
   width: 100%;
+  max-width: get-var(max-width, get-var(container-width), $prefix, $prefix);
   margin: 0;
   padding: 0;
   border: 1px solid
     get-var(border-color, get-var(color-green), $prefix: $prefix);
-  max-width: get-var(container-width);
   background-color: get-var(
     background-color,
     get-var(color-white),
