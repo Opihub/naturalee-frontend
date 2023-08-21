@@ -31,11 +31,11 @@
         gap="mini"
         separator="-"
       >
-        <template #before="{ className }">
-          <li :class="className">&copy;Copyright {{ getYear() }}</li>
+        <template #before="{ itemClassName }">
+          <li :class="itemClassName">&copy;Copyright {{ getYear() }}</li>
         </template>
-        <template #after="{ className }">
-          <li :class="className">
+        <template #after="{ itemClassName }">
+          <li :class="itemClassName">
             <!-- TODO: apertura popup delle company info -->
             <u>Company Info</u>
           </li>
