@@ -9,7 +9,7 @@
       hover-color="green"
       direction="vertical"
     >
-      <template v-if="username" #before="{ itemClassName }">
+      <template #before="{ itemClassName }">
         <li
           :class="[
             itemClassName,
@@ -34,7 +34,7 @@ const CSS_NAME = 'c-profile-menu'
 defineProps({
   username: {
     type: String,
-    default: null,
+    required: true,
   },
   menu: {
     type: Array,
