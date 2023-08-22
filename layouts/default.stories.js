@@ -44,6 +44,11 @@ NoBreadCrumb.args = {
   },
 }
 
+export const NoBottombar = Template.bind({})
+NoBottombar.args = {
+  hideBottombar: true,
+}
+
 export const NoBanner = Template.bind({})
 NoBanner.args = {
   topbar: {

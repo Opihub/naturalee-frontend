@@ -16,6 +16,7 @@
     />
 
     <HeaderBottomBar
+      v-if="!hideBottombar"
       ref="bottomBarElement"
       :search="bottombar.search"
       :breadcrumb="bottombar.breadcrumb"
@@ -58,6 +59,10 @@ defineProps({
     validator(value) {
       return 'search' in value
     },
+  },
+  hideBottombar: {
+    type: Boolean,
+    default: false,
   },
   marquee: {
     type: Array,
