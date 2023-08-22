@@ -41,6 +41,7 @@ $prefix: 'bottom-bar';
   position: relative;
 
   @include element('search') {
+    margin-left: auto;
     width: 100%;
     max-width: get-var(search-width, rem(495px), $prefix: $prefix);
   }
