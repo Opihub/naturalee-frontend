@@ -1,6 +1,6 @@
 <template>
   <SiteContainer>
-    <BaseHeading v-if="title" class="u-mb-large" tag="h5">{{ title }}</BaseHeading>
+    <BaseHeading v-if="title" class="u-mb-medium" tag="h5">{{ title }}</BaseHeading>
     <div class="o-row">
       <CategoryCard
         v-for="category in categories"
