@@ -113,6 +113,7 @@ $prefix: 'header';
   background-color: get-var(color-white);
   padding: 0;
   position: relative;
+  z-index: 10;
 
   @include element('container') {
     display: grid;
