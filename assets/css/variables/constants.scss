@@ -60,3 +60,10 @@ $utilities-with-sizes: (
   pt: padding-top,
   pb: padding-bottom,
 );
+
+$utilities-without-sizes: (
+  text: (
+    rule: text-align,
+    values: (left, center, right, justify),
+  ),
+);

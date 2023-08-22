@@ -1,7 +1,17 @@
+@use 'sass:map';
+
 @each $prop, $rule in $utilities-with-sizes {
   @each $key, $value in $utilities-sizes {
     @include utility(#{$prop}-#{$key}) {
       #{$rule}: rem($value) !important;
+    }
+  }
+}
+
+@each $prop, $options in $utilities-without-sizes {
+  @each $value in map.get($options, values) {
+    @include utility(#{$prop}-#{$value}) {
+      #{map.get($options, rule)}: $value !important;
     }
   }
 }
