@@ -1,7 +1,7 @@
 @each $prop, $rule in $utilities-with-sizes {
   @each $key, $value in $utilities-sizes {
     @include utility(#{$prop}-#{$key}) {
-      #{$rule}: rem($value);
+      #{$rule}: rem($value) !important;
     }
   }
 }
