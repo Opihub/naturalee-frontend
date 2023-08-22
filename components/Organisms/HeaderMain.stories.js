@@ -10,6 +10,8 @@ export default {
     layout: 'fullscreen',
   },
   args: {
+    cart: MiniCart.args.cart,
+    username: 'Opiquad',
     profileMenu: ProfileMenu.args.menu,
     categories: [
       {
@@ -57,20 +59,20 @@ const Template = (args) => ({
 })
 
 export const NotLoggedInAndCartEmpty = Template.bind({})
-NotLoggedInAndCartEmpty.args = {}
+NotLoggedInAndCartEmpty.args = {
+  username: null,
+  cart: [],
+}
 
 export const LoggedInAndCartEmpty = Template.bind({})
 LoggedInAndCartEmpty.args = {
-  username: 'Opiquad'
+  cart: [],
 }
 
 export const NotLoggedInAndCartFull = Template.bind({})
 NotLoggedInAndCartFull.args = {
-  cart: MiniCart.args.cart,
+  username: null,
 }
 
 export const LoggedInAndCartFull = Template.bind({})
-LoggedInAndCartFull.args = {
-  cart: MiniCart.args.cart,
-  username: 'Opiquad'
-}
+LoggedInAndCartFull.args = {}
