@@ -1,41 +1,76 @@
 import SiteHeader from './SiteHeader.vue'
+import MiniCart from '@/components/Compounds/MiniCart.stories'
+import ProfileMenu from '@/components/Compounds/ProfileMenu.stories'
 
 export default {
   title: 'Organisms/Header',
   component: SiteHeader,
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/vue/writing-docs/autodocs
   tags: ['autodocs'],
-  render: (args) => ({
-    // Components used in your story `template` are defined in the `components` object
-    components: {
-      SiteHeader,
-    },
-    // The story's `args` need to be mapped into the template through the `setup()` method
-    setup() {
-      // Story args can be spread into the returned object
-      return {
-        ...args,
-      }
-    },
-    // Then, the spread values can be accessed directly in the template
-    template: '<SiteHeader :user="user" />',
-  }),
   parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/vue/configure/story-layout
     layout: 'fullscreen',
+  },
+  args: {
+    profileMenu: ProfileMenu.args.menu,
+    categories: [
+      {
+        id: 1,
+        title: 'Verdura',
+        url: 'verdura',
+        image: 'verdura',
+      },
+      {
+        id: 2,
+        title: 'Frutta',
+        url: 'frutta',
+        image: 'frutta',
+      },
+      {
+        id: 3,
+        title: 'Esotico',
+        url: 'esotico',
+        image: 'esotico',
+      },
+      {
+        id: 4,
+        title: 'Aromi',
+        url: 'aromi',
+        image: 'aromi',
+      },
+      {
+        id: 5,
+        title: 'Dispensa',
+        url: 'dispensa',
+        image: 'dispensa',
+      },
+    ],
   },
 }
 
-export const LoggedIn = {
-  args: {
-    user: {
-      name: 'Jane Doe',
-    },
+const Template = (args) => ({
+  components: { SiteHeader },
+  setup() {
+    return { args }
   },
-};
+  template: `
+  <SiteHeader v-bind="args" />
+  `,
+})
 
-export const LoggedOut = {
-  args: {
-    user: null,
-  },
-};
+export const NotLoggedInAndCartEmpty = Template.bind({})
+NotLoggedInAndCartEmpty.args = {}
+
+export const LoggedInAndCartEmpty = Template.bind({})
+LoggedInAndCartEmpty.args = {
+  username: 'Opiquad'
+}
+
+export const NotLoggedInAndCartFull = Template.bind({})
+NotLoggedInAndCartFull.args = {
+  cart: MiniCart.args.cart,
+}
+
+export const LoggedInAndCartFull = Template.bind({})
+LoggedInAndCartFull.args = {
+  cart: MiniCart.args.cart,
+  username: 'Opiquad'
+}
