@@ -115,21 +115,42 @@ $prefix: 'header';
   position: relative;
   z-index: 10;
 
+  @include between(tablet, desktop) {
+    padding: rem(8px) 0 0;
+  }
+
   @include element('container') {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     justify-content: space-between;
     align-items: center;
-    column-gap: rem(8px);
+    gap: rem(8px);
+
+    @include between(tablet, desktop) {
+      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   @include element('logo') {
+    grid-column: 1 / 2;
     margin-right: auto;
+
+    @include between(tablet, desktop) {
+      grid-row: 1 / 2;
+    }
   }
 
   @include element('categories') {
+    grid-column: 2 / 3;
     height: 100%;
     text-transform: uppercase;
+    justify-content: center;
+
+    @include between(tablet, desktop) {
+      grid-column: 1 / 3;
+      grid-row: 2 / 3;
+    }
 
     @include set-vars(
       $prefix: 'menu',
@@ -150,9 +171,14 @@ $prefix: 'header';
     @include element('item') {
       height: 100%;
     }
+
+    @include until(tablet) {
+      display: none;
+    }
   }
 
   @include element('actions') {
+    grid-column: 3 / 4;
     justify-self: end;
     list-style: none;
     display: flex;
@@ -160,6 +186,11 @@ $prefix: 'header';
     align-items: stretch;
     padding: 0;
     align-self: stretch;
+
+    @include between(tablet, desktop) {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
 
     @include element('single') {
       width: rem(80px);
