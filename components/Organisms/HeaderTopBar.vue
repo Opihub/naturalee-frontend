@@ -116,8 +116,13 @@ $prefix: 'topbar';
     grid-template-columns: 1fr auto 1fr;
     justify-content: space-between;
     align-items: center;
-    column-gap: rem(8px);
+    gap: rem(8px);
     display: grid;
+
+    @include between(tablet, desktop) {
+      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   @include element('banner') {
@@ -134,6 +139,10 @@ $prefix: 'topbar';
     @include until(tablet) {
       display: none;
     }
+
+    @include between(tablet, desktop) {
+      grid-row: 2 / 3;
+    }
   }
 
   @include element('center') {
@@ -144,6 +153,11 @@ $prefix: 'topbar';
     color: get-var(color-white);
     @include typography(15px, 19px);
     overflow: hidden;
+
+    @include between(tablet, desktop) {
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
+    }
   }
 
   @include element('right') {
@@ -153,6 +167,11 @@ $prefix: 'topbar';
 
     @include until(tablet) {
       display: none;
+    }
+
+    @include between(tablet, desktop) {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
     }
   }
 
