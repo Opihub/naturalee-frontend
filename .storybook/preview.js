@@ -14,6 +14,30 @@ const preview = {
             height: '760px',
           },
         },
+        {
+          name: 'Macbook pro',
+          type: 'desktop',
+          styles: {
+            width: '1280px',
+            height: '720px',
+          },
+        },
+        {
+          name: 'MAX DESKTOP SIZE',
+          type: 'desktop',
+          styles: {
+            width: '992px',
+            height: '720px',
+          },
+        },
+        {
+          name: 'MAX TABLET SIZE',
+          type: 'tablet',
+          styles: {
+            width: '768px',
+            height: '1024px',
+          },
+        },
       ],
     },
     actions: { argTypesRegex: '^on[A-Z].*' },
