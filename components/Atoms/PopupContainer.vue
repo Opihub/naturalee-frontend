@@ -34,18 +34,7 @@ const className = computed(() => {
   return className
 })
 
-const style = computed(() => {
-  const style = {}
-
-  if (props.maxWidth) {
-    style['--popup-max-width'] =
-      typeof props.maxWidth === 'number'
-        ? `${props.maxWidth}px`
-        : props.maxWidth
-  }
-
-  return style
-})
+const { style } = useMaxWidth(props.maxWidth, 'popup')
 </script>
 
 <style lang="scss">
