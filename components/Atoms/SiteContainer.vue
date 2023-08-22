@@ -20,6 +20,7 @@ $prefix: "container";
 @include object($prefix) {
   width: 100%;
   margin: 0 auto;
-  max-width: get-var(max-width, get-var(container-width), $prefix: $prefix);
+  padding: 0 get-var(padding, get-var(container-padding), $prefix: $prefix);
+  max-width: get-var(max-width, get-var(container-size), $prefix: $prefix);
 }
 </style>
