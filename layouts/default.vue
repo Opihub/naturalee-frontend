@@ -23,7 +23,11 @@
     />
     <slot />
 
-    <MarqueeSlider v-if="marquee.length" :marquee="marquee" />
+    <section class="u-pt-huge" style="background-color: var(--color-white)">
+      <CategoryCards v-if="categories" class="u-mb-huge" :title="categoriesTitle" :categories="categories" />
+
+      <MarqueeSlider v-if="marquee.length" :marquee="marquee" />
+    </section>
 
     <SiteFooter
       ref="footerElement"
@@ -63,6 +67,16 @@ defineProps({
   hideBottombar: {
     type: Boolean,
     default: false,
+  },
+  categoriesTitle: {
+    type: String,
+    default: null,
+  },
+  categories: {
+    type: Array,
+    default() {
+      return []
+    },
   },
   marquee: {
     type: Array,
