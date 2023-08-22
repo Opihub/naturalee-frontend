@@ -1,21 +1,22 @@
 import { within, userEvent } from '@storybook/testing-library'
 import DefaultLayout from './default.vue'
 
+import TopBar from '@/components/Organisms/HeaderTopBar.stories'
+import Header from '@/components/Organisms/HeaderMain.stories'
 import { Default as Marquee } from '@/components/Molecules/MarqueeSlider.stories'
 import { Default as Footer } from '@/components/Organisms/SiteFooter.stories'
-import { Default as TopBar } from '@/components/Organisms/HeaderTopBar.stories'
 
 export default {
   title: 'Layout/Default',
   component: DefaultLayout,
   parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/vue/configure/story-layout
     layout: 'fullscreen',
   },
   args: {
+    topbar: TopBar.args,
+    header: Header.args,
     marquee: Marquee.args,
     footer: Footer.args,
-    topbar: TopBar.args,
   },
 }
 

@@ -7,7 +7,13 @@
       :banners="topbar.banners"
     />
 
-    <HeaderMain ref="headerElement" />
+    <HeaderMain
+      ref="headerElement"
+      :categories="header.categories"
+      :username="header.username"
+      :profile-menu="header.profileMenu"
+      :cart="header.cart"
+    />
 
     <slot />
 
@@ -32,13 +38,36 @@ const headerElement = ref(null)
 const footerElement = ref(null)
 
 defineProps({
+  topbar: {
+    type: Object,
+    required: true,
+    validator(value) {
+      if (typeof value !== 'object') {
+        return false
+      }
+
+      return value.socialsMenu && value.primaryMenu && value.banners
+    },
+  },
+  header: {
+    type: Object,
+    required: true,
+    validator(value) {
+      if (typeof value !== 'object') {
+        return false
+      }
+
+      return (
+        value.categories && value.username && value.profileMenu && value.cart
+      )
+    },
+  },
   marquee: {
     type: Array,
     default() {
       return []
     },
   },
-
   footer: {
     type: Object,
     required: true,
@@ -46,7 +75,6 @@ defineProps({
       if (typeof value !== 'object') {
         return false
       }
-      console.debug(value)
 
       return (
         value.copyright &&
@@ -55,18 +83,6 @@ defineProps({
         value.privacyMenu &&
         value.paymentImage
       )
-    },
-  },
-  topbar: {
-    type: Object,
-    required: true,
-    validator(value) {
-      if (typeof value !== 'object') {
-        return false
-      }
-      console.debug(value)
-
-      return value.socialsMenu && value.primaryMenu && value.banners
     },
   },
 })
