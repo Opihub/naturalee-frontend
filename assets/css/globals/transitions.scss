@@ -10,11 +10,11 @@
 }
 
 @include vue-transition(
-  background,
+  fade,
   (opacity),
   (
-    duration: 500ms,
-    timing: ease,
+    duration: 300ms,
+    timing: ease-in-out,
   )
 ) {
   opacity: 0;

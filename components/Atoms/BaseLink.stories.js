@@ -45,5 +45,12 @@ TextWithArrow.args = {
 export const TextWithIcon = Template.bind({})
 TextWithIcon.args = {
   default: 'Lorem ipsum',
-  svg: 'broccoli'
+  svg: 'verdura',
+}
+
+export const Everything = Template.bind({})
+Everything.args = {
+  default: 'Lorem ipsum',
+  svg: 'verdura',
+  arrow: true,
 }

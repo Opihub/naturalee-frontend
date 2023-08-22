@@ -1,8 +1,8 @@
 <template>
   <div class="o-layout">
-    <SiteTopBar ref="topBar" />
+    <HeaderTopBar ref="topBar" />
 
-    <SiteHeader ref="header" />
+    <HeaderMain ref="header" />
 
     <slot />
 

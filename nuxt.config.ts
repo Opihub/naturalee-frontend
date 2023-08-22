@@ -71,7 +71,7 @@ export default defineNuxtConfig({
     families: {
       Mulish: [400, 700, 800],
       Lato: {
-        wght: [400],
+        wght: [300, 400, 700],
         ital: [400],
       },
     },
