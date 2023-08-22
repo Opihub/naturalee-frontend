@@ -9,6 +9,7 @@ export default {
     layout: 'fullscreen',
   },
   args: {
+    search: '',
     breadcrumb: BreadCrumb.args.menu,
   },
 }

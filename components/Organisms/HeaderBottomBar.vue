@@ -1,9 +1,14 @@
 <template>
   <section :class="`${CSS_NAME}`">
     <SiteContainer :class="`${CSS_NAME}__container`">
-      <BreadCrumb v-if="breadcrumb.length" :menu="breadcrumb" />
+      <BreadCrumb v-if="breadcrumb && breadcrumb.length" :menu="breadcrumb" />
 
-      <SearchForm :class="`${CSS_NAME}__search`" size="mini" placeholder="Di cosa hai bisogno?" />
+      <SearchForm
+        v-model="value"
+        :class="`${CSS_NAME}__search`"
+        size="mini"
+        placeholder="Di cosa hai bisogno?"
+      />
     </SiteContainer>
   </section>
 </template>
@@ -11,12 +16,27 @@
 <script setup>
 const CSS_NAME = 'c-bottom-bar'
 
-defineProps({
+const props = defineProps({
+  search: {
+    type: String,
+    required: true,
+  },
   breadcrumb: {
     type: Array,
     default() {
       return []
     },
+  },
+})
+
+const emit = defineEmits(['search'])
+
+const value = computed({
+  get() {
+    return props.search
+  },
+  set(value) {
+    emit('search', value)
   },
 })
 </script>
