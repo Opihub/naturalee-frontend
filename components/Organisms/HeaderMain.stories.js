@@ -1,10 +1,10 @@
-import SiteHeader from './SiteHeader.vue'
+import HeaderMain from './HeaderMain.vue'
 import MiniCart from '@/components/Compounds/MiniCart.stories'
 import ProfileMenu from '@/components/Compounds/ProfileMenu.stories'
 
 export default {
   title: 'Organisms/Header',
-  component: SiteHeader,
+  component: HeaderMain,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -47,12 +47,12 @@ export default {
 }
 
 const Template = (args) => ({
-  components: { SiteHeader },
+  components: { HeaderMain },
   setup() {
     return { args }
   },
   template: `
-  <SiteHeader v-bind="args" />
+  <HeaderMain v-bind="args" />
   `,
 })
 

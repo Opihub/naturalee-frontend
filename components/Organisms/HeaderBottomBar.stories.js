@@ -1,9 +1,9 @@
-import SiteBottomHeader from './SiteBottomHeader.vue'
+import HeaderBottomBar from './HeaderBottomBar.vue'
 import BreadCrumb from '@/components/Molecules/BreadCrumb.stories'
 
 export default {
   title: 'Organisms/Header Bottom Bar',
-  component: SiteBottomHeader,
+  component: HeaderBottomBar,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -14,12 +14,12 @@ export default {
 }
 
 const Template = (args) => ({
-  components: { SiteBottomHeader },
+  components: { HeaderBottomBar },
   setup() {
     return { args }
   },
   template: `
-  <SiteBottomHeader v-bind="args" />
+  <HeaderBottomBar v-bind="args" />
   `,
 })
 

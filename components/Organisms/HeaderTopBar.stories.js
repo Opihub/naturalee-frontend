@@ -1,8 +1,8 @@
-import SiteTopBar from './SiteTopBar.vue'
+import HeaderTopBar from './HeaderTopBar.vue'
 
 export default {
-  title: 'Organisms/Top Bar',
-  component: SiteTopBar,
+  title: 'Organisms/Header Top Bar',
+  component: HeaderTopBar,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -57,12 +57,12 @@ export default {
 }
 
 const Template = (args) => ({
-  components: { SiteTopBar },
+  components: { HeaderTopBar },
   setup() {
     return { args }
   },
   template: `
-  <SiteTopBar v-bind="args" />
+  <HeaderTopBar v-bind="args" />
   `,
 })
 
