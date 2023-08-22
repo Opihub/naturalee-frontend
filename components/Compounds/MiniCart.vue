@@ -189,7 +189,8 @@ $prefix: 'mini-cart';
         justify-content: flex-start;
 
         padding-top: get-var(product-bound, $prefix: $prefix);
-        font-weight: get-var(weight-semibold);
+        font-weight: get-var(weight-bold);
+        // font-weight: get-var(weight-semibold);
         @include typography(13px, 16px);
 
         @include element('quantity') {
@@ -253,7 +254,8 @@ $prefix: 'mini-cart';
         padding-left: rem(3px);
         border-bottom: 1px solid get-var(color-dark);
         font-family: get-var(family-text);
-        font-weight: get-var(weight-semibold);
+        font-weight: get-var(weight-bold);
+        // font-weight: get-var(weight-semibold);
         @include typography(12px, 14px);
       }
 
