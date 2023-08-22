@@ -15,6 +15,11 @@
       :cart="header.cart"
     />
 
+    <HeaderBottomBar
+      ref="bottomBarElement"
+      :search="bottombar.search"
+      :breadcrumb="bottombar.breadcrumb"
+    />
     <slot />
 
     <MarqueeSlider v-if="marquee.length" :marquee="marquee" />
@@ -35,31 +40,23 @@
 <script setup>
 const topBarElement = ref(null)
 const headerElement = ref(null)
+const bottomBarElement = ref(null)
 const footerElement = ref(null)
 
 defineProps({
   topbar: {
     type: Object,
     required: true,
-    validator(value) {
-      if (typeof value !== 'object') {
-        return false
-      }
-
-      return value.socialsMenu && value.primaryMenu && value.banners
-    },
   },
   header: {
     type: Object,
     required: true,
+  },
+  bottombar: {
+    type: Object,
+    required: true,
     validator(value) {
-      if (typeof value !== 'object') {
-        return false
-      }
-
-      return (
-        value.categories && value.username && value.profileMenu && value.cart
-      )
+      return 'search' in value
     },
   },
   marquee: {
@@ -71,19 +68,6 @@ defineProps({
   footer: {
     type: Object,
     required: true,
-    validator(value) {
-      if (typeof value !== 'object') {
-        return false
-      }
-
-      return (
-        value.copyright &&
-        value.menu &&
-        value.socialsMenu &&
-        value.privacyMenu &&
-        value.paymentImage
-      )
-    },
   },
 })
 </script>

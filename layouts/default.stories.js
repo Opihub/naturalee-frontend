@@ -1,13 +1,14 @@
-import { within, userEvent } from '@storybook/testing-library'
+// import { within, userEvent } from '@storybook/testing-library'
 import DefaultLayout from './default.vue'
 
 import TopBar from '@/components/Organisms/HeaderTopBar.stories'
 import Header from '@/components/Organisms/HeaderMain.stories'
-import { Default as Marquee } from '@/components/Molecules/MarqueeSlider.stories'
-import { Default as Footer } from '@/components/Organisms/SiteFooter.stories'
+import BottomBar from '@/components/Organisms/HeaderBottomBar.stories'
+import Marquee from '@/components/Molecules/MarqueeSlider.stories'
+import Footer from '@/components/Organisms/SiteFooter.stories'
 
 export default {
-  title: 'Layout/Default',
+  title: 'Layouts/Default',
   component: DefaultLayout,
   parameters: {
     layout: 'fullscreen',
@@ -15,7 +16,8 @@ export default {
   args: {
     topbar: TopBar.args,
     header: Header.args,
-    marquee: Marquee.args,
+    bottombar: BottomBar.args,
+    marquee: Marquee.args.marquee,
     footer: Footer.args,
   },
 }
@@ -32,14 +34,30 @@ const Template = (args) => ({
   `,
 })
 
-export const LoggedOut = Template.bind({})
+export const Complete = Template.bind({})
+
+export const NoBreadCrumb = Template.bind({})
+NoBreadCrumb.args = {
+  bottombar: {
+    ...BottomBar.args,
+    breadcrumb: null,
+  },
+}
+
+export const NoBanner = Template.bind({})
+NoBanner.args = {
+  topbar: {
+    ...TopBar.args,
+    banners: null,
+  },
+}
 
 // More on interaction testing: https://storybook.js.org/docs/vue/writing-tests/interaction-testing
-export const LoggedIn = Template.bind({})
-LoggedIn.play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement)
-  const loginButton = await canvas.getByRole('button', {
-    name: /Log in/i,
-  })
-  await userEvent.click(loginButton)
-}
+// export const LoggedIn = Template.bind({})
+// LoggedIn.play = async ({ canvasElement }) => {
+//   const canvas = within(canvasElement)
+//   const loginButton = await canvas.getByRole('button', {
+//     name: /Log in/i,
+//   })
+//   await userEvent.click(loginButton)
+// }
