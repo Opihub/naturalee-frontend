@@ -32,21 +32,21 @@ const style = computed(() => {
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      background-color: transparent,
       border-radius: rem(20px),
       padding: rem(24px),
       aspect-ratio: '100 / 128.61',
       scale: 1,
       bottom: get-var(padding, $prefix: $prefix),
       bottom-translate: 0,
+      opacity: 1,
     )
   );
 
   width: 100%;
-  background-color: #{get-var(background-color, $prefix: $prefix)};
-  aspect-ratio: #{get-var(aspect-ratio, $prefix: $prefix)};
-  border-radius: #{get-var(border-radius, $prefix: $prefix)};
-  padding: #{get-var(padding, $prefix: $prefix)};
+  background-color: get-var(color-green);
+  aspect-ratio: get-var(aspect-ratio, $prefix: $prefix);
+  border-radius: get-var(border-radius, $prefix: $prefix);
+  padding: get-var(padding, $prefix: $prefix);
   @include typography(40px, 50px);
   font-weight: get-var(weight-bold);
   align-items: flex-end;
@@ -54,7 +54,6 @@ const style = computed(() => {
   flex-wrap: nowrap;
   position: relative;
   overflow: hidden;
-  @include transition(background-color);
 
   @include element(label) {
     text-align: center;
@@ -63,7 +62,7 @@ const style = computed(() => {
         bottom,
         $prefix: $prefix
       )} #{get-var(padding, $prefix: $prefix)};
-    z-index: 1;
+    z-index: 2;
     transform: translateY(#{get-var(bottom-translate, $prefix: $prefix)});
     @include transition(bottom, transform);
   }
@@ -71,27 +70,28 @@ const style = computed(() => {
   &::before {
     content: '';
     position: absolute;
-    z-index: -1;
+    z-index: 0;
     inset: 0;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-color: get-var(color-green);
+    opacity: get-var(opacity, $prefix: $prefix);
     background-image: var(--background-image);
     transform: scale(#{get-var(scale, $prefix: $prefix)});
-    border-radius: #{get-var(border-radius, $prefix: $prefix)};
+    border-radius: get-var(border-radius, $prefix: $prefix);
 
-    @include transition(transform);
+    @include transition(transform, opacity);
   }
 
   &:hover {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
-        background-color: get-var(color-green),
         scale: 1.1,
         bottom: 50%,
         bottom-translate: 50%,
+        opacity: 0,
       )
     );
   }
