@@ -30,7 +30,6 @@ const CSS_NAME = 'c-search'
 const props = defineProps({
   modelValue: {
     type: String,
-    default: '',
     required: true,
   },
   placeholder: {
