@@ -1,25 +1,27 @@
 <template>
-  <section class="c-topbar">
-    <SiteContainer class="c-topbar__container">
-      <InlineMenu :menu="socialsMenu" class="c-topbar__left" gap="mini" />
+  <section :class="CSS_NAME">
+    <SiteContainer :class="`${CSS_NAME}__container`">
+      <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="mini" />
 
-      <div v-if="banners.length > 0" class="c-topbar__center">
-        <ClientOnly>
+      <ClientOnly>
+        <div v-if="banners && banners.length" :class="`${CSS_NAME}__center`">
           <Splide :options="SPLIDE_OPTIONS" aria-label="My Favorite Images">
             <SplideSlide v-for="(banner, index) in banners" :key="index">
               {{ banner }}
             </SplideSlide>
           </Splide>
-        </ClientOnly>
-      </div>
+        </div>
+      </ClientOnly>
 
-      <InlineMenu :menu="primaryMenu" class="c-topbar__right" />
+      <InlineMenu :menu="primaryMenu" :class="`${CSS_NAME}__right`" />
     </SiteContainer>
   </section>
 </template>
 
 <script setup>
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
+
+const CSS_NAME = 'c-topbar'
 
 const SPLIDE_OPTIONS = {
   arrows: false,
@@ -55,12 +57,13 @@ defineProps({
 </script>
 
 <style lang="scss">
-@include component('topbar') {
+$prefix: 'topbar';
+@include component($prefix) {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  background-color: #{get-var(color-green)};
+  background-color: get-var(color-green);
   padding: rem(8px) 0;
   position: relative;
 
@@ -73,10 +76,13 @@ defineProps({
   }
 
   @include element('left') {
+    grid-column: 1 / 2;
     justify-self: start;
+    margin-right: auto;
   }
 
   @include element('center') {
+    grid-column: 2 / 3;
     list-style: none;
     padding: 0;
     text-align: center;
@@ -86,7 +92,9 @@ defineProps({
   }
 
   @include element('right') {
+    grid-column: 3 / 4;
     justify-self: end;
+    margin-left: auto;
   }
 }
 </style>
