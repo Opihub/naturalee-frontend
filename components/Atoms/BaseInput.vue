@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-defineEmits(['update:modelValue'])
+const CSS_NAME = 'o-input'
 
 const props = defineProps({
   type: {
@@ -60,7 +60,7 @@ const props = defineProps({
   },
 })
 
-const CSS_NAME = 'o-input'
+defineEmits(['update:modelValue'])
 
 const className = computed(() => {
   const className = [CSS_NAME]

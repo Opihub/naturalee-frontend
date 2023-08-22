@@ -131,10 +131,6 @@ $prefix: 'footer';
         display: flex;
         align-items: baseline;
         gap: 40px;
-
-        @include element('menu', $root: true) {
-          @warn &;
-        }
       }
     }
 
