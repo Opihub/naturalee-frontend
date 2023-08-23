@@ -26,11 +26,13 @@ $transition-duration: 300ms;
 $transition-delay: 0ms;
 
 $container-width: 1600px;
+$container-padding: 20px;
 
 $responsive: (
   tablet: 768,
   desktop: 992
 );
+$responsive-offset: 0.02;
 
 $weights: (
   thin: 100,
@@ -45,10 +47,12 @@ $weights: (
 );
 
 $utilities-sizes: (
+  none: 0,
   micro: 4,
   mini: 8,
   tiny: 12,
-  small: 20,
+  small: 16,
+  half: 20,
   medium: 24,
   large: 30,
   huge: 40,

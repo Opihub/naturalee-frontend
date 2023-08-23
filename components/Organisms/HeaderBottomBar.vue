@@ -1,7 +1,11 @@
 <template>
   <section :class="`${CSS_NAME}`">
     <SiteContainer :class="`${CSS_NAME}__container`">
-      <BreadCrumb v-if="breadcrumb && breadcrumb.length" :menu="breadcrumb" />
+      <BreadCrumb
+        v-if="breadcrumb && breadcrumb.length"
+        :class="`${CSS_NAME}__breadcrumb`"
+        :menu="breadcrumb"
+      />
 
       <SearchForm
         v-model="value"
@@ -60,10 +64,20 @@ $prefix: 'bottom-bar';
   padding: get-var(padding, $prefix: $prefix) 0;
   position: relative;
 
+  @include element('breadcrumb') {
+    @include until(tablet) {
+      display: none;
+    }
+  }
+
   @include element('search') {
-    margin-left: auto;
     width: 100%;
-    max-width: get-var(search-width, rem(495px), $prefix: $prefix);
+    max-width: 100%;
+
+    @include from(tablet) {
+      margin-left: auto;
+      max-width: get-var(search-width, rem(495px), $prefix: $prefix);
+    }
   }
 
   @include element('container') {

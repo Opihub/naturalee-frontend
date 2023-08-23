@@ -34,4 +34,6 @@ $variables-to-set: (
   background-color: $background-color,
   border-color: $border-color,
   container-width: rem($container-width),
+  container-padding: rem($container-padding),
+  container-size: calc(#{get-var(container-width)} + #{get-var(container-padding)} * 2),
 );

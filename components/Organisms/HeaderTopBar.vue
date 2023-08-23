@@ -1,13 +1,18 @@
 <template>
-  <section :class="CSS_NAME">
+  <section :class="className">
     <SiteContainer :class="`${CSS_NAME}__container`">
       <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="mini" />
 
       <ClientOnly>
         <div v-if="banners && banners.length" :class="`${CSS_NAME}__center`">
-          <Splide :options="SPLIDE_OPTIONS" aria-label="My Favorite Images">
-            <SplideSlide v-for="(banner, index) in banners" :key="index">
-              {{ banner }}
+          <Splide
+            ref="splide"
+            :options="SPLIDE_OPTIONS"
+            aria-label="My Favorite Images"
+            @splide:mounted="updateHeight"
+          >
+            <SplideSlide v-for="(banner, index) in banners" :key="index" :class="`${CSS_NAME}__banner`">
+              <span ref="slides">{{ banner }}</span>
             </SplideSlide>
           </Splide>
         </div>
@@ -34,7 +39,7 @@ const SPLIDE_OPTIONS = {
   interval: 4000,
 }
 
-defineProps({
+const props = defineProps({
   socialsMenu: {
     type: Array,
     default() {
@@ -54,6 +59,46 @@ defineProps({
     },
   },
 })
+
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (!props.banners || props.banners.length <= 0) {
+    className.push('has-no-banners')
+  }
+
+  return className
+})
+
+const splide = ref(null)
+const slides = ref([])
+
+onMounted(() => {
+  window.addEventListener('resize', updateHeight)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateHeight)
+})
+
+const updateHeight = () => {
+  console.debug('tet')
+  if (slides.value.length <= 0) {
+    return
+  }
+
+  let height = 0
+
+  for (const slide of slides.value) {
+    height = Math.max(height, slide.offsetHeight)
+  }
+
+  splide.value.splide.options = {
+    height,
+  }
+
+  splide.value.splide.refresh()
+}
 </script>
 
 <style lang="scss">
@@ -68,17 +113,36 @@ $prefix: 'topbar';
   position: relative;
 
   @include element('container') {
-    display: grid;
     grid-template-columns: 1fr auto 1fr;
     justify-content: space-between;
     align-items: center;
-    column-gap: rem(8px);
+    gap: rem(8px);
+    display: grid;
+
+    @include between(tablet, desktop) {
+      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @include element('banner') {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @include element('left') {
     grid-column: 1 / 2;
     justify-self: start;
     margin-right: auto;
+
+    @include until(tablet) {
+      display: none;
+    }
+
+    @include between(tablet, desktop) {
+      grid-row: 2 / 3;
+    }
   }
 
   @include element('center') {
@@ -89,12 +153,32 @@ $prefix: 'topbar';
     color: get-var(color-white);
     @include typography(15px, 19px);
     overflow: hidden;
+
+    @include between(tablet, desktop) {
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
+    }
   }
 
   @include element('right') {
     grid-column: 3 / 4;
     justify-self: end;
     margin-left: auto;
+
+    @include until(tablet) {
+      display: none;
+    }
+
+    @include between(tablet, desktop) {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+    }
+  }
+
+  @include until(tablet) {
+    @include has('no-banners') {
+      display: none;
+    }
   }
 }
 </style>

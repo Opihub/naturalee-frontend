@@ -49,7 +49,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['green', 'yellow', 'transparent'].includes(value)
+      return ['green', 'yellow', 'transparent', 'white'].includes(value)
     },
   },
 })
@@ -80,7 +80,7 @@ const className = computed(() => {
     className.push(`${CSS_NAME}--${props.scope}`)
   }
 
-  if (props.color) {
+  if (props.color && props.color !== 'white') {
     className.push(`${CSS_NAME}--${props.color}`)
   }
 
