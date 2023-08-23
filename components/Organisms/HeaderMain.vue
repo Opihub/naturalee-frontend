@@ -194,19 +194,27 @@ $prefix: 'header';
     }
 
     @include element('single') {
-      width: rem(80px);
       height: 100%;
       position: relative;
-      border-right: 1px solid rgba(get-var(rgb-green), 0.45);
 
-      &:last-child {
-        border-right: 0;
+      @include from(tablet) {
+        width: rem(80px);
+        border-right: 1px solid rgba(get-var(rgb-green), 0.45);
+
+        &:last-child {
+          border-right: 0;
+        }
       }
     }
 
     @include element('icon') {
       width: 100%;
       height: 100%;
+      padding: rem(20px) rem(14px);
+
+      @include from(tablet) {
+        padding: 0;
+      }
     }
 
     @include element('popup') {
