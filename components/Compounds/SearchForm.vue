@@ -141,7 +141,6 @@ $prefix: 'search';
 
   @include element('submit') {
     flex: 0 0 auto;
-    text-transform: uppercase;
   }
 }
 </style>

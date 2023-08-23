@@ -143,6 +143,7 @@ $prefix: 'button';
   font-size: get-var(font-size, 1em, $prefix: $prefix);
   line-height: get-var(line-height, inherit, $prefix: $prefix);
   gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
+  text-transform: get-var(text-transform, uppercase, $prefix: $prefix);
 
   svg {
     margin: 0;
