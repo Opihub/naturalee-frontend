@@ -1,5 +1,5 @@
 <template>
-  <button :class="className" :type="type">
+  <component :is="is" :class="className" :type="type">
     <slot>
       <span v-if="text">{{ text }}</span>
     </slot>
@@ -9,13 +9,20 @@
         <NuxtIcon v-if="svg" :name="svg" :style="svgStyle" />
       </slot>
     </Suspense>
-  </button>
+  </component>
 </template>
 
 <script setup>
 const CSS_NAME = 'o-button'
 
 const props = defineProps({
+  as: {
+    type: String,
+    default: 'button',
+    validator(value) {
+      return ['button', 'link'].includes(value)
+    },
+  },
   svg: {
     type: String,
     default: null,
@@ -89,6 +96,10 @@ const className = computed(() => {
   }
 
   return className
+})
+
+const is = computed(() => {
+  return props.as === 'link' ? resolveComponent('NuxtLink') : props.as
 })
 </script>
 
