@@ -133,6 +133,7 @@ $prefix: 'header';
   }
 
   @include element('logo') {
+    height: 100%;
     grid-column: 1 / 2;
     margin-right: auto;
 
