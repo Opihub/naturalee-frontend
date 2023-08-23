@@ -47,10 +47,12 @@ $weights: (
 );
 
 $utilities-sizes: (
+  none: 0,
   micro: 4,
   mini: 8,
   tiny: 12,
-  small: 20,
+  small: 16,
+  half: 20,
   medium: 24,
   large: 30,
   huge: 40,

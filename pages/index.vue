@@ -9,7 +9,7 @@
       <SiteContainer :max-width="912">
         <SearchForm v-model="search" placeholder="Inizia la tua spesa">
           <template #before>
-            <BaseHeading class="u-mb-small" tag="h4"
+            <BaseHeading class="u-mb-half" tag="h4"
               >Esplora una spesa Fresca e Naturalee. Ordina subito!</BaseHeading
             >
           </template>
