@@ -22,6 +22,21 @@
         </SearchForm>
       </SiteContainer>
     </BackgroundHolder>
+
+    <BackgroundHolder
+      class="c-second-section u-pt-small u-pb-small"
+      tag="section"
+      color="yellow"
+    >
+      <SiteContainer>
+        <p class="u-mb-tiny u-mb-none@tablet">
+          Il servizio è attivo su Milano città e hinterland
+        </p>
+        <BaseButton color="white"
+          >Verifica se il tuo indirizzo è coperto dal servizio</BaseButton
+        >
+      </SiteContainer>
+    </BackgroundHolder>
   </main>
 </template>
 
@@ -51,6 +66,41 @@ const search = ref('')
 
     p {
       @include typography(16px, 20px);
+    }
+
+    @include object('heading') {
+      @include typography(24px, 30px);
+    }
+  }
+
+  @include component('second-section') {
+    text-align: center;
+
+    @include object('container') {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+
+      @include from(tablet) {
+        flex-direction: row;
+      }
+    }
+
+    p {
+      @include typography(18px, 23px);
+      font-weight: get-var(weight-bold);
+
+      @include from(tablet) {
+        @include typography(20px, 25px);
+      }
+    }
+
+    @include object('button') {
+      font-weight: get-var(weight-extrabold);
+      text-transform: uppercase;
+      @include typography(15px, 19px);
     }
   }
 }
