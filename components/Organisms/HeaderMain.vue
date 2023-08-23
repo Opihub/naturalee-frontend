@@ -32,7 +32,25 @@
             </Transition>
           </li>
           <li
-            :class="`${CSS_NAME_ACTIONS}__single`"
+            :class="[
+              `${CSS_NAME_ACTIONS}__single`,
+              `${CSS_NAME_ACTIONS}__single--menu`,
+            ]"
+          >
+            <HamburgerMenu
+              :is-logged-in="!!username"
+              :class="{
+                [`${CSS_NAME_ACTIONS}__icon`]: true,
+                'is-active': isMobileMenuOpen,
+              }"
+              @click="openMenuMobile"
+            />
+          </li>
+          <li
+            :class="[
+              `${CSS_NAME_ACTIONS}__single`,
+              `${CSS_NAME_ACTIONS}__single--profile`,
+            ]"
             @mouseleave="isProfileMenuOpen = false"
           >
             <ProfileIcon
@@ -89,8 +107,23 @@ defineProps({
   },
 })
 
+const emit = defineEmits([
+  'menuMobile:toggle',
+  'menuMobile:open',
+  'menuMobile:close',
+])
+
 const isMiniCartMenuOpen = ref(false)
+const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
+
+const openMenuMobile = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+
+  const event = isMobileMenuOpen.value ? 'open' : 'close'
+  emit('menuMobile:toggle', isMobileMenuOpen.value)
+  emit(`menuMobile:${event}`, isMobileMenuOpen.value)
+}
 </script>
 
 <style lang="scss">
@@ -203,6 +236,22 @@ $prefix: 'header';
 
         &:last-child {
           border-right: 0;
+        }
+      }
+
+      @include modifier('profile') {
+        display: none;
+
+        @include from(tablet) {
+          display: block;
+        }
+      }
+
+      @include modifier('menu') {
+        display: block;
+
+        @include from(tablet) {
+          display: none;
         }
       }
     }
