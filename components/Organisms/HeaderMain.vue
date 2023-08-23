@@ -38,7 +38,6 @@
             ]"
           >
             <HamburgerMenu
-              :is-logged-in="!!username"
               :class="{
                 [`${CSS_NAME_ACTIONS}__icon`]: true,
                 'is-active': isMobileMenuOpen,
