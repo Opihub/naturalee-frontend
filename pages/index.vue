@@ -37,6 +37,19 @@
         >
       </SiteContainer>
     </BackgroundHolder>
+
+    <ContentRow class="c-third-section" :button="{ text: 'Chi siamo', to: 'chi-siamo' }" image="/home/chi-siamo.png">
+      <template #sup-title>LOREM IPSUM DOLOR SIT</template>
+      <template #title>Amet consectetur adipiscing elit</template>
+
+      <template #default>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+        velit esse cillum dolore.
+      </template>
+    </ContentRow>
   </main>
 </template>
 
@@ -102,6 +115,15 @@ const search = ref('')
       text-transform: uppercase;
       @include typography(15px, 19px);
     }
+  }
+
+  @include component('third-section') {
+    @include set-local-vars(
+      $prefix: 'content-row',
+      $map: (
+        margin: rem(120px)
+      )
+    );
   }
 }
 </style>
