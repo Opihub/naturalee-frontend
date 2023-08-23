@@ -37,15 +37,15 @@ const search = ref('')
 
 <style lang="scss" scoped>
 @include scope('homepage') {
-  @include set-local-vars(
-    $prefix: 'background',
-    $map: (
-      width: 100%,
-      height: rem(554px),
-    )
-  );
-
   @include component('first-section') {
+    @include set-local-vars(
+      $prefix: 'background',
+      $map: (
+        width: 100%,
+        height: rem(554px),
+      )
+    );
+
     text-align: center;
     color: get-var(color-white);
 
