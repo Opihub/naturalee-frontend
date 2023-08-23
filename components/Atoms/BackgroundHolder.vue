@@ -25,6 +25,23 @@ const props = defineProps({
       return ['div', 'section', 'main', 'span'].includes(value)
     },
   },
+  color: {
+    type: String,
+    default: null,
+    validator(value) {
+      return [
+        'green',
+        'red',
+        'brown',
+        'orange',
+        'yellow',
+        'light',
+        'dark',
+        'white',
+        'black',
+      ].includes(value)
+    },
+  },
 })
 
 const className = computed(() => {
@@ -42,6 +59,10 @@ const style = computed(() => {
 
   if (props.image) {
     style['--background-image'] = `url(${props.image})`
+  }
+
+  if (props.color) {
+    style['--background-color'] = `var(--color-${props.color})`
   }
 
   return style
