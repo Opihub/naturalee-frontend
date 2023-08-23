@@ -14,9 +14,24 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  /**
+   * Usato per gestire quale tag HTML avrà il titolo.
+   * Se `use` non viene usato, allora `tag` verrà impiegato anche
+   * per definire lo stile
+   */
   tag: {
     type: String,
     default: 'h1',
+    validator(value) {
+      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(value)
+    },
+  },
+  /**
+   * Usato per definire lo stile del titolo
+   */
+  use: {
+    type: String,
+    default: null,
     validator(value) {
       return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(value)
     },
@@ -26,7 +41,9 @@ const props = defineProps({
 const className = computed(() => {
   const className = [CSS_NAME]
 
-  if (props.tag) {
+  if (props.use) {
+    className.push(`${CSS_NAME}--${props.use}`)
+  } else if (props.tag) {
     className.push(`${CSS_NAME}--${props.tag}`)
   }
 
