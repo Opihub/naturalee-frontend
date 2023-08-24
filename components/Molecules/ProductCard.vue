@@ -7,7 +7,10 @@
       :color="product.marker.color"
     />
 
-    <WishlistButton :product-id="product.id" :class="`${CSS_CLASS}__wishlist`" />
+    <WishlistButton
+      :product-id="product.id"
+      :class="`${CSS_CLASS}__wishlist`"
+    />
 
     <ProductImage
       :class="[`${CSS_CLASS}__thumbnail`, 'u-mb-half']"
@@ -15,10 +18,20 @@
       :size="fit"
     />
 
-    <BaseHeading tag="span" :class="`${CSS_CLASS}__title`" class="u-mb-micro">{{ product.title }}</BaseHeading>
-    <BaseHeading tag="span" :class="`${CSS_CLASS}__provenance`" class="u-mb-micro">{{
-      product.provenance
-    }}</BaseHeading>
+    <div :class="`${CSS_CLASS}__body`">
+      <BaseHeading
+        tag="span"
+        :class="`${CSS_CLASS}__title`"
+        class="u-mb-micro"
+        >{{ product.title }}</BaseHeading
+      >
+      <BaseHeading
+        tag="span"
+        :class="`${CSS_CLASS}__provenance`"
+        class="u-mb-micro"
+        >{{ product.provenance }}</BaseHeading
+      >
+    </div>
 
     <BaseButton class="u-mb-tiny u-mt-half" color="green"
       >Aggiungi al carrello</BaseButton
@@ -68,6 +81,10 @@ $prefix: 'product-card';
     )
   );
 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
   text-align: center;
   background-color: get-var(color-white);
@@ -90,16 +107,16 @@ $prefix: 'product-card';
     z-index: 1;
   }
 
-  @include element('title') {
-    text-align: left;
-    font-weight: get-var(weight-bold);
-    @include typography(22px, 28px);
-  }
-
-  @include element('provenance') {
+  @include element('body') {
+    align-self: stretch;
     text-align: left;
     font-weight: get-var(weight-regular);
     @include typography(16px, 20px);
+  }
+
+  @include element('title') {
+    font-weight: get-var(weight-bold);
+    @include typography(22px, 28px);
   }
 
   @include element('thumbnail') {
