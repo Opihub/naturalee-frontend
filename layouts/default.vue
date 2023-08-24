@@ -1,14 +1,12 @@
 <template>
-  <div class="o-layout">
+  <div ref="layout" :class="CSS_NAME">
     <HeaderTopBar
-      ref="topBarElement"
       :socials-menu="topbar.socialsMenu"
       :primary-menu="topbar.primaryMenu"
       :banners="topbar.banners"
     />
 
     <HeaderMain
-      ref="headerElement"
       :categories="header.categories"
       :username="header.username"
       :profile-menu="header.profileMenu"
@@ -17,20 +15,30 @@
 
     <HeaderBottomBar
       v-if="!hideBottombar"
-      ref="bottomBarElement"
       :search="bottombar.search"
       :breadcrumb="bottombar.breadcrumb"
     />
     <slot />
 
     <section class="u-pt-huge" style="background-color: var(--color-white)">
-      <CategoryCards v-if="categories" class="u-mb-huge" :title="categoriesTitle" :categories="categories" />
+      <CategoryCards
+        v-if="categories"
+        class="u-mb-huge"
+        :title="categoriesTitle"
+        :categories="categories"
+      />
 
       <MarqueeSlider v-if="marquee.length" :marquee="marquee" />
     </section>
 
+    <CategoriesMenu
+      v-if="header.categories"
+      ref="categoriesMenu"
+      :class="`${CSS_NAME}__categories`"
+      :categories="header.categories"
+    />
+
     <SiteFooter
-      ref="footerElement"
       :copyright="footer.copyright"
       :menu="footer.menu"
       :socials-menu="footer.socialsMenu"
@@ -43,10 +51,7 @@
 </template>
 
 <script setup>
-const topBarElement = ref(null)
-const headerElement = ref(null)
-const bottomBarElement = ref(null)
-const footerElement = ref(null)
+const CSS_NAME = 'o-layout'
 
 defineProps({
   topbar: {
@@ -89,4 +94,58 @@ defineProps({
     required: true,
   },
 })
+
+const layout = ref(null)
+const categoriesMenu = ref(null)
+
+const setBottomGap = () => {
+  if (!layout.value) {
+    return
+  }
+
+  layout.value.style.setProperty(
+    '--layout-bottom-gap',
+    `${categoriesMenu.value.$el.clientHeight}px`
+  )
+}
+
+onMounted(() => {
+  setBottomGap()
+  window.addEventListener('resize', setBottomGap)
+})
 </script>
+
+<style lang="scss">
+$prefix: 'layout';
+@include object($prefix) {
+  margin-bottom: get-var(bottom-gap, 0, $prefix: $prefix);
+
+  @include element('categories') {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    background-color: get-var(color-white);
+
+    justify-content: space-around;
+    @include set-local-vars(
+      $prefix: 'menu',
+      $map: (
+        gap: 0,
+        font-size: rem(13px),
+        line-height: rem(16px),
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'menu-item',
+      $map: (
+        padding: rem(18px) 0,
+      )
+    );
+
+    @include from(desktop) {
+      display: none;
+    }
+  }
+}
+</style>
