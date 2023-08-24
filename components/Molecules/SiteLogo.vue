@@ -26,17 +26,9 @@ defineProps({
 <style lang="scss">
 $prefix: 'logo';
 @include component($prefix) {
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      width: 220px,
-      height: 34.6px,
-    )
-  );
-
   @include element(image) {
-    width: get-var(width, $prefix: $prefix);
-    height: get-var(height, $prefix: $prefix);
+    width: get-var(width, rem(220px), $prefix: $prefix);
+    height: get-var(height, rem(34.6px), $prefix: $prefix);
     display: block;
   }
 }

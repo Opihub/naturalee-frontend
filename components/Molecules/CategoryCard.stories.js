@@ -8,11 +8,11 @@ export default {
     layout: 'centered',
   },
   argTypes: {
-    color: {
+    position: {
       control: {
         type: 'select',
       },
-      options: ['yellow', 'dark', 'white'],
+      options: ['center', 'bottom', 'top'],
     },
   },
 }
@@ -36,4 +36,16 @@ Default.args = {
   image: 'https://picsum.photos/304/391?grayscale&blur=2',
   default: 'Verdura',
   arrow: true,
+}
+
+export const BackgroundAtBottom = Template.bind({})
+BackgroundAtBottom.args = {
+  ...Default.args,
+  position: 'bottom',
+}
+
+export const BackgroundAtTop = Template.bind({})
+BackgroundAtTop.args = {
+  ...Default.args,
+  position: 'top',
 }

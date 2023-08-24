@@ -1,8 +1,11 @@
 <template>
   <SiteContainer>
-    <BaseHeading v-if="title" class="u-mb-medium" tag="h5">{{
-      title
-    }}</BaseHeading>
+    <BaseHeading
+      v-if="title"
+      class="u-mb-medium u-text-center u-text-left@tablet"
+      tag="h5"
+      >{{ title }}</BaseHeading
+    >
     <ClientOnly>
       <Splide
         :class="CSS_NAME"
@@ -102,7 +105,10 @@ $prefix: 'product-cards';
       border-radius: 0;
       cursor: pointer;
       top: 50%;
-      transform: translate(calc(50% * get-var(scale, 1, $prefix: $prefix)), -50%)
+      transform: translate(
+          calc(50% * get-var(scale, 1, $prefix: $prefix)),
+          -50%
+        )
         scaleX(get-var(scale, 1, $prefix: $prefix));
       display: block;
       pointer-events: all;

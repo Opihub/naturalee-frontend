@@ -29,14 +29,19 @@ const SPLIDE_OPTIONS = {
   noDrag: true,
   focus: 'center',
   perPage: 1,
-  gap: 180,
-  autoWidth: true,
   autoScroll: {
     speed: 1,
   },
-
   arrows: false,
   pagination: false,
+  autoWidth: true,
+  gap: 130,
+  mediaQuery: 'min',
+  breakpoints: {
+    767.98: {
+      gap: 180,
+    },
+  },
 }
 
 defineProps({
@@ -53,9 +58,13 @@ defineProps({
 @include component(marquee) {
   @include element(item) {
     color: get-var(color-green);
-    @include typography(72px, 150px);
     font-weight: get-var(weight-black);
     @include letter-spacing(16);
+    @include typography(50px, 105px);
+
+    @include from(tablet) {
+      @include typography(72px, 150px);
+    }
   }
 }
 </style>
