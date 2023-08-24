@@ -23,7 +23,7 @@ const props = defineProps({
     type: String,
     default: 'h1',
     validator(value) {
-      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(value)
+      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span'].includes(value)
     },
   },
   /**
@@ -43,7 +43,7 @@ const className = computed(() => {
 
   if (props.use) {
     className.push(`${CSS_NAME}--${props.use}`)
-  } else if (props.tag) {
+  } else if (props.tag && props.tag !== 'span') {
     className.push(`${CSS_NAME}--${props.tag}`)
   }
 
@@ -52,16 +52,11 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include object(heading) {
-  $prefix: heading;
-
+$prefix: 'heading';
+@include object($prefix) {
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      font-weight: get-var(weight-extrabold),
-      text-color: get-var(color-dark),
-      font-size: 70px,
-      line-height: 80px,
       text-transform: none,
     )
   );
@@ -73,19 +68,51 @@ const className = computed(() => {
   text-transform: get-var(text-transform, $prefix: $prefix);
   display: block;
 
-  @include modifier(h2) {
+  @include modifier('h1') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        font-weight: get-var(weight-extrabold),
+        text-color: get-var(color-dark),
+        font-size: 36px,
+        line-height: 42px,
+      )
+    );
+
+    @include media(desktop) {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          font-size: 70px,
+          line-height: 80px,
+        )
+      );
+    }
+  }
+
+  @include modifier('h2') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
         text-color: get-var(color-white),
-        font-size: 50px,
-        line-height: 60px,
+        font-size: 38px,
+        line-height: 44px,
       )
     );
+
+    @include media(desktop) {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          font-size: 50px,
+          line-height: 60px,
+        )
+      );
+    }
   }
 
-  @include modifier(h3) {
+  @include modifier('h3') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -95,9 +122,19 @@ const className = computed(() => {
         line-height: 50px,
       )
     );
+
+    @include media(desktop) {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          font-size: 40px,
+          line-height: 50px,
+        )
+      );
+    }
   }
 
-  @include modifier(h4) {
+  @include modifier('h4') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -107,21 +144,41 @@ const className = computed(() => {
         line-height: 40px,
       )
     );
+
+    @include media(desktop) {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          font-size: 30px,
+          line-height: 40px,
+        )
+      );
+    }
   }
 
-  @include modifier(h5) {
+  @include modifier('h5') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
         text-color: get-var(color-green),
-        font-size: 26px,
-        line-height: 30px,
+        font-size: 30px,
+        line-height: 40px,
       )
     );
+
+    @include media(desktop) {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          font-size: 26px,
+          line-height: 30px,
+        )
+      );
+    }
   }
 
-  @include modifier(h6) {
+  @include modifier('h6') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -132,6 +189,16 @@ const className = computed(() => {
         text-transform: uppercase,
       )
     );
+
+    @include media(desktop) {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          font-size: 18px,
+          line-height: 23px,
+        )
+      );
+    }
   }
 }
 </style>
