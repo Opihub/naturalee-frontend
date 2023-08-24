@@ -16,6 +16,7 @@ export default {
         link: 'verdura',
         slug: 'verdura',
         image: 'https://picsum.photos/id/100/304/391?grayscale&blur=2',
+        position: 'bottom',
       },
       {
         id: 2,
@@ -30,6 +31,7 @@ export default {
         link: 'esotico',
         slug: 'esotico',
         image: 'https://picsum.photos/id/300/304/391?grayscale&blur=2',
+        position: 'bottom',
       },
       {
         id: 4,
@@ -37,6 +39,7 @@ export default {
         link: 'aromi',
         slug: 'aromi',
         image: 'https://picsum.photos/id/400/304/391?grayscale&blur=2',
+        position: 'top',
       },
       {
         id: 5,
