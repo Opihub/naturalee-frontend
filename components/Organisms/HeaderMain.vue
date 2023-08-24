@@ -3,13 +3,9 @@
     <SiteContainer :class="CSS_NAME_CONTAINER">
       <SiteLogo :class="`${CSS_NAME}__logo`" />
 
-      <InlineMenu
+      <CategoriesMenu
         :class="`${CSS_NAME}__categories`"
-        :menu="categories"
-        :item-class="`${CSS_NAME}__categories__item`"
-        gap="large"
-        color="dark"
-        hover-color="green"
+        :categories="categories"
       />
 
       <ClientOnly>
@@ -183,26 +179,6 @@ $prefix: 'header';
     @include between(tablet, desktop) {
       grid-column: 1 / 3;
       grid-row: 2 / 3;
-    }
-
-    @include set-vars(
-      $prefix: 'menu',
-      $map: (
-        font-size: rem(15px),
-        line-height: rem(19px),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'menu-item',
-      $map: (
-        height: 100%,
-        padding: rem(18px) rem(16px),
-      )
-    );
-
-    @include element('item') {
-      height: 100%;
     }
 
     @include until(tablet) {

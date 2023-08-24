@@ -1,6 +1,7 @@
 import HeaderMain from './HeaderMain.vue'
 import MiniCart from '@/components/Compounds/MiniCart.stories'
 import ProfileMenu from '@/components/Compounds/ProfileMenu.stories'
+import CategoriesMenu from '@/components/Compounds/CategoriesMenu.stories'
 
 export default {
   title: 'Organisms/Header',
@@ -13,38 +14,7 @@ export default {
     cart: MiniCart.args.cart,
     username: 'Opiquad',
     profileMenu: ProfileMenu.args.menu,
-    categories: [
-      {
-        id: 1,
-        title: 'Verdura',
-        url: 'verdura',
-        image: 'verdura',
-      },
-      {
-        id: 2,
-        title: 'Frutta',
-        url: 'frutta',
-        image: 'frutta',
-      },
-      {
-        id: 3,
-        title: 'Esotico',
-        url: 'esotico',
-        image: 'esotico',
-      },
-      {
-        id: 4,
-        title: 'Aromi',
-        url: 'aromi',
-        image: 'aromi',
-      },
-      {
-        id: 5,
-        title: 'Dispensa',
-        url: 'dispensa',
-        image: 'dispensa',
-      },
-    ],
+    categories: CategoriesMenu.args.categories,
   },
 }
 
