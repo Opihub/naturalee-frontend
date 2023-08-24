@@ -113,6 +113,10 @@ onMounted(() => {
   setBottomGap()
   window.addEventListener('resize', setBottomGap)
 })
+
+onUnmounted(() => {
+  window.removeEventListener('resize', setBottomGap)
+})
 </script>
 
 <style lang="scss">
