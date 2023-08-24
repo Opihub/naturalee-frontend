@@ -143,10 +143,6 @@ $prefix: 'header';
   position: relative;
   z-index: 10;
 
-  @include between(tablet, desktop) {
-    padding: rem(8px) 0 0;
-  }
-
   @include element('container') {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -155,7 +151,6 @@ $prefix: 'header';
     gap: rem(8px);
 
     @include between(tablet, desktop) {
-      grid-template-rows: auto auto;
       grid-template-columns: 1fr 1fr;
     }
   }
@@ -166,7 +161,7 @@ $prefix: 'header';
     margin-right: auto;
 
     @include between(tablet, desktop) {
-      grid-row: 1 / 2;
+      padding: rem(12px) 0;
     }
   }
 
@@ -176,12 +171,7 @@ $prefix: 'header';
     text-transform: uppercase;
     justify-content: center;
 
-    @include between(tablet, desktop) {
-      grid-column: 1 / 3;
-      grid-row: 2 / 3;
-    }
-
-    @include until(tablet) {
+    @include until(desktop) {
       display: none;
     }
   }
@@ -198,7 +188,6 @@ $prefix: 'header';
 
     @include between(tablet, desktop) {
       grid-column: 2 / 3;
-      grid-row: 1 / 2;
     }
 
     @include element('single') {
