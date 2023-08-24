@@ -153,7 +153,16 @@ $prefix: 'menu';
   display: flex;
   align-items: get-var(align-items, baseline, $prefix: $prefix);
   flex-direction: get-var(direction, row, $prefix: $prefix);
-  gap: get-var(gap, rem(30px), $prefix: $prefix);
+  gap: get-var(
+      row-gap,
+      get-var(gap, rem(30px), $prefix: $prefix),
+      $prefix: $prefix
+    )
+    get-var(
+      column-gap,
+      get-var(gap, rem(30px), $prefix: $prefix),
+      $prefix: $prefix
+    );
   padding: 0;
   margin: 0;
   color: get-var(text-color, $prefix: $prefix);
