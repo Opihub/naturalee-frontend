@@ -1,17 +1,36 @@
 <template>
   <NuxtLink :class="className">
-    <Suspense>
+    <Suspense v-if="svg || slots.svg">
       <slot name="svg" :class-name="CSS_NAME_ICON">
         <NuxtIcon
-          v-if="svg"
           :name="svg"
           :class="CSS_NAME_ICON"
           :filled="svgFilled"
         />
       </slot>
+
+      <template #fallback>
+        <span class="nuxt-icon" :class="CSS_NAME_ICON">
+          <svg viewBox="0 0 50 50">
+            <g>
+              <circle
+                cx="25"
+                cy="25"
+                r="20"
+                fill="#f0f1fb"
+                stroke="#00966e"
+                stroke-width="2"
+              />
+            </g>
+          </svg>
+        </span>
+      </template>
     </Suspense>
 
-    <span v-if="slots.default || text || arrow" :class="[`${CSS_NAME}__label`, labelClassName]">
+    <span
+      v-if="slots.default || text || arrow"
+      :class="[`${CSS_NAME}__label`, labelClassName]"
+    >
       <slot>
         <span v-if="text">{{ text }}</span>
       </slot>
