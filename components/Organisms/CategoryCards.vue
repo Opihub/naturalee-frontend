@@ -1,6 +1,6 @@
 <template>
   <SiteContainer :class="CSS_NAME">
-    <BaseHeading v-if="title" class="u-mb-medium" tag="h5">{{
+    <BaseHeading v-if="title" class="u-mb-medium u-text-center u-text-left@tablet" tag="h5">{{
       title
     }}</BaseHeading>
     <div class="o-row">
