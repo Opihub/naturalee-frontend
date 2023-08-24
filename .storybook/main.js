@@ -19,6 +19,7 @@ const config = {
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(js|jsx|ts|tsx)',
   ],
+  staticDirs: ['../public'],
   addons: [
     'storybook-addon-nuxt',
     '@storybook/addon-links',

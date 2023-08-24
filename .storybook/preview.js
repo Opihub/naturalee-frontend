@@ -1,8 +1,18 @@
 import 'assets/css/main.scss'
 import '@splidejs/vue-splide/css/core'
 
+import { initialize, mswDecorator } from 'msw-storybook-addon'
+
+/*
+ * Initializes MSW
+ * See https://github.com/mswjs/msw-storybook-addon#configuring-msw
+ * to learn how to customize it
+ */
+initialize()
+
 /** @type { import('@storybook/vue3').Preview } */
 const preview = {
+  decorators: [mswDecorator],
   parameters: {
     viewport: {
       viewports: [
