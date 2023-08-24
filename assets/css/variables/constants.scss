@@ -17,8 +17,14 @@ $background-color: $light;
 $border-color: #707070;
 
 $font-family: (
-  main: (Mulish, sans-serif),
-  text: (Lato, sans-serif),
+  main: (
+    Mulish,
+    sans-serif,
+  ),
+  text: (
+    Lato,
+    sans-serif,
+  ),
 );
 
 $transition-timing-function: ease-in-out;
@@ -30,7 +36,8 @@ $container-padding: 20px;
 
 $responsive: (
   tablet: 768,
-  desktop: 992
+  desktop: 992,
+  full: 1600,
 );
 $responsive-offset: 0.02;
 
@@ -68,6 +75,11 @@ $utilities-with-sizes: (
 $utilities-without-sizes: (
   text: (
     rule: text-align,
-    values: (left, center, right, justify),
+    values: (
+      left,
+      center,
+      right,
+      justify,
+    ),
   ),
 );
