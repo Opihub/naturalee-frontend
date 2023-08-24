@@ -38,7 +38,11 @@
       </SiteContainer>
     </BackgroundHolder>
 
-    <ContentRow class="c-third-section" :button="{ text: 'Chi siamo', to: 'chi-siamo' }" image="/home/chi-siamo.png">
+    <ContentRow
+      class="c-third-section"
+      :button="{ text: 'Chi siamo', to: 'chi-siamo' }"
+      image="/home/chi-siamo.png"
+    >
       <template #sup-title>LOREM IPSUM DOLOR SIT</template>
       <template #title>Amet consectetur adipiscing elit</template>
 
@@ -50,6 +54,13 @@
         velit esse cillum dolore.
       </template>
     </ContentRow>
+
+    <BackgroundHolder
+      class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
+      tag="section"
+    >
+      <ProductCards :products="products" title="Frutta e Verdura Fresca" />
+    </BackgroundHolder>
   </main>
 </template>
 
@@ -58,9 +69,52 @@
  * TODO:
  *  - spostare background via API
  *  - usare video
+ *  - caricare prodotti per l'homepage
  */
 const image = ref('https://picsum.photos/1920/700?blur=3')
 const search = ref('')
+const products = ref([
+  {
+    id: 1,
+    image: 'https://picsum.photos/300/300',
+    title: 'Anguria',
+    provenance: 'Italia',
+    slug: 'anguria',
+    link: 'frutta/anguria',
+  },
+  {
+    id: 2,
+    image: 'https://picsum.photos/300/300',
+    title: 'Melone',
+    provenance: 'Italia',
+    slug: 'melone',
+    link: 'frutta/melone',
+  },
+  {
+    id: 3,
+    image: 'https://picsum.photos/300/300',
+    title: 'Pere Williams',
+    provenance: 'Italia',
+    slug: 'pere-williams',
+    link: 'frutta/pere-williams',
+  },
+  {
+    id: 4,
+    image: 'https://picsum.photos/300/300',
+    title: 'Carciofi',
+    provenance: 'Italia',
+    slug: 'carciofi',
+    link: 'verdura/carciofi',
+  },
+  {
+    id: 5,
+    image: 'https://picsum.photos/300/300',
+    title: 'Peperoni',
+    provenance: 'Italia',
+    slug: 'peperoni',
+    link: 'verdura/peperoni',
+  },
+])
 </script>
 
 <style lang="scss" scoped>
@@ -112,7 +166,6 @@ const search = ref('')
 
     @include object('button') {
       font-weight: get-var(weight-extrabold);
-      text-transform: uppercase;
       @include typography(15px, 19px);
     }
   }
@@ -121,7 +174,17 @@ const search = ref('')
     @include set-local-vars(
       $prefix: 'content-row',
       $map: (
-        margin: rem(120px)
+        margin: rem(120px),
+      )
+    );
+  }
+
+  @include component('fourth-section') {
+    @include set-local-vars(
+      $prefix: 'custom',
+      $map: (
+        pt: rem(110px),
+        pb: rem(60px),
       )
     );
   }
