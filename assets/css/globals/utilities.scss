@@ -15,6 +15,18 @@
         }
       }
     }
+
+    @if ($media) {
+      @include from($media) {
+        @include utility(#{$prop}-custom\@#{$media}) {
+          #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+        }
+      }
+    } @else {
+      @include utility(#{$prop}-custom) {
+        #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+      }
+    }
   }
 }
 

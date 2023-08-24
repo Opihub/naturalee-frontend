@@ -140,7 +140,6 @@ $prefix: 'mini-cart';
 
   @include element('submit') {
     @include typography(15px, 19px);
-    text-transform: inherit;
   }
 
   @include element('list') {

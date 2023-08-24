@@ -2,6 +2,7 @@
 import HomePage from './index.vue'
 import DefaultLayout from '@/layouts/default.vue'
 import Layout from '@/layouts/default.stories'
+import SVGDefinitions from '@/components/Atoms/SVGDefinitions.vue'
 
 export default {
   title: 'Pages/Home',
@@ -20,26 +21,29 @@ export const WithLayout = {
     components: {
       HomePage,
       DefaultLayout,
+      SVGDefinitions,
     },
     setup() {
       return { args }
     },
     template: `
+    <SVGDefinitions />
     <DefaultLayout v-bind="args">
       <HomePage />
     </DefaultLayout>
     `,
-  })
+  }),
 }
 
 export const WithoutLayout = {
   render: (args) => ({
     components: {
       HomePage,
+      SVGDefinitions,
     },
     setup() {
       return { args }
     },
-    template: '<HomePage />',
+    template: '<SVGDefinitions /><HomePage />',
   }),
 }
