@@ -87,7 +87,15 @@ export default defineNuxtConfig({
     components: {
       NuxtImg: 'storybook/custom/components.mjs',
     },
+    composables: {
+      // 'storybook/custom/composables.mjs': ['useImage'],
+    },
     templates: [
+      {
+        src: join(runtimeDir, 'composables.mjs'),
+        filename: 'storybook/custom/composables.mjs',
+      },
+
       {
         src: join(runtimeDir, 'components.mjs'),
         filename: 'storybook/custom/components.mjs',
