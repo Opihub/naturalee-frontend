@@ -1,31 +1,23 @@
 <template>
   <footer :class="CSS_NAME">
-    <SiteContainer
-      :class="[`${CSS_NAME}__container`, `${CSS_NAME}__container--top`]"
-    >
-      <div :class="`${CSS_NAME}__left`">
+    <SiteContainer :class="CSS_NAME_NAVIGATION">
+      <div :class="[`${CSS_NAME_NAVIGATION}__links`, `${CSS_NAME}__left`]">
         <SiteLogo :alt="true" />
-        <InlineMenu
-          gap="mini"
-          :menu="socialsMenu"
-          :class="[`${CSS_NAME}__menu`, `${CSS_NAME}__menu--socials`]"
-        />
+        <InlineMenu gap="mini" :menu="socialsMenu" />
       </div>
 
-      <InlineMenu :menu="menu" :class="`${CSS_NAME}__menu`" />
+      <InlineMenu :menu="menu" :class="`${CSS_NAME_NAVIGATION}__menu`" />
 
       <NuxtImg
         v-if="paymentImage"
-        :class="`${CSS_NAME}__right`"
+        :class="[`${CSS_NAME_NAVIGATION}__payment`, `${CSS_NAME}__right`]"
         :src="paymentImage"
       />
     </SiteContainer>
 
-    <SiteContainer
-      :class="[`${CSS_NAME}__container`, `${CSS_NAME}__container--bottom`]"
-    >
+    <SiteContainer :class="CSS_NAME_INFO">
       <InlineMenu
-        :class="`${CSS_NAME}__left`"
+        :class="[`${CSS_NAME_INFO}__menu`, `${CSS_NAME}__left`]"
         :menu="copyright"
         color="white"
         gap="mini"
@@ -43,7 +35,7 @@
       </InlineMenu>
 
       <InlineMenu
-        :class="`${CSS_NAME}__right`"
+        :class="[`${CSS_NAME_INFO}__menu`, `${CSS_NAME}__right`]"
         :menu="privacyMenu"
         color="white"
         gap="mini"
@@ -59,6 +51,8 @@
 
 <script setup>
 const CSS_NAME = 'c-footer'
+const CSS_NAME_NAVIGATION = `${CSS_NAME}__navigation`
+const CSS_NAME_INFO = `${CSS_NAME}__info`
 
 defineProps({
   copyright: {
@@ -105,10 +99,11 @@ $prefix: 'footer';
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      padding: rem(12px),
+      padding: rem(30px) 0 rem(40px),
       gap: rem(44px),
       font-size: 13px,
-      line-height: 16px,
+      line-height: 19px,
+      max-image-width: rem(270px),
     )
   );
 
@@ -116,51 +111,158 @@ $prefix: 'footer';
   flex-wrap: wrap;
   gap: get-var(gap, $prefix: $prefix);
   background-color: get-var(color-green);
-  padding: get-var(padding, $prefix: $prefix) 0;
+  padding: get-var(padding, $prefix: $prefix);
   position: relative;
 
-  @include element('container') {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    justify-content: space-between;
-    align-items: center;
-    column-gap: rem(8px);
+  @include until(tablet) {
+    @include set-local-vars(
+      $prefix: 'logo',
+      $map: (
+        width: get-var(max-image-width, $prefix: $prefix),
+        height: 42.5px,
+      )
+    );
+  }
 
-    @include modifier('top') {
-      @include element('left', $root: true) {
-        display: flex;
-        align-items: baseline;
-        gap: 40px;
-      }
-    }
-
-    @include modifier('bottom') {
-      color: get-var(color-white);
-      grid-template-columns: auto auto;
-
-      @include set-local-vars(
-        $prefix: 'menu',
-        $map: (
-          font-size: 13px,
-          line-height: 16px,
-          font-weight: get-var(weight-regular),
-        )
-      );
-    }
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        padding: rem(12px) 0,
+        line-height: 16px,
+      )
+    );
   }
 
   @include element('left') {
     justify-self: start;
   }
 
-  @include element('center') {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-  }
-
   @include element('right') {
     justify-self: end;
+  }
+
+  @include element('navigation') {
+    display: flex;
+    flex-direction: column;
+    gap: rem(30px);
+
+    @include from(tablet) {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      align-items: center;
+      gap: rem(8px);
+    }
+
+    @include from(desktop) {
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-rows: auto;
+      justify-content: space-between;
+    }
+
+    @include element('links') {
+      grid-column: 1 / 2;
+      display: flex;
+      align-items: center;
+      gap: rem(30px);
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      @include from(desktop) {
+        flex-direction: row;
+        align-items: baseline;
+      }
+
+      @include between(tablet, desktop) {
+        grid-row: 1 / 3;
+        grid-column: 1 / 2;
+      }
+    }
+
+    @include element('menu') {
+      grid-column: 2 / 3;
+      list-style: none;
+      padding: 0;
+      text-align: center;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+
+      @include set-local-vars(
+        $prefix: 'menu',
+        $map: (
+          gap: 0,
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: 'menu-item',
+        $map: (
+          width: 100%,
+          padding: rem(10px),
+        )
+      );
+
+      @include from(tablet) {
+        flex-direction: row;
+      }
+
+      @include between(tablet, desktop) {
+        grid-row: 1 / 2;
+        grid-column: 2 / 3;
+        justify-self: end;
+      }
+    }
+
+    @include element('payment') {
+      grid-column: 3 / 4;
+      margin: 0 auto;
+      max-width: get-var(max-image-width, $prefix: $prefix);
+      flex-wrap: wrap;
+      justify-content: center;
+
+      @include from(tablet) {
+        margin: 0;
+        max-width: 100%;
+      }
+
+      @include between(tablet, desktop) {
+        grid-row: 2 / 3;
+        grid-column: 2 / 3;
+      }
+    }
+  }
+
+  @include element('info') {
+    display: flex;
+    flex-direction: column;
+    color: get-var(color-white);
+    gap: rem(10px);
+
+    @include from(desktop) {
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: rem(8px);
+    }
+
+    @include set-local-vars(
+      $prefix: 'menu',
+      $map: (
+        row-gap: rem(4px),
+        font-size: 13px,
+        line-height: 16px,
+        font-weight: get-var(weight-regular),
+      )
+    );
+
+    @include element('menu') {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 }
 </style>
