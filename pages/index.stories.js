@@ -1,5 +1,8 @@
-import { within, userEvent } from '@storybook/testing-library';
-import HomePage from './index.vue';
+// import { within, userEvent } from '@storybook/testing-library';
+import HomePage from './index.vue'
+import DefaultLayout from '@/layouts/default.vue'
+import Layout from '@/layouts/default.stories'
+import SVGDefinitions from '@/components/Atoms/SVGDefinitions.vue'
 
 export default {
   title: 'Pages/Home',
@@ -8,23 +11,39 @@ export default {
     // More on how to position stories at: https://storybook.js.org/docs/vue/configure/story-layout
     layout: 'fullscreen',
   },
-};
+  args: {
+    ...Layout.args,
+  },
+}
 
-export const LoggedOut = {};
-
-// More on interaction testing: https://storybook.js.org/docs/vue/writing-tests/interaction-testing
-export const LoggedIn = {
-  render: () => ({
+export const WithLayout = {
+  render: (args) => ({
     components: {
       HomePage,
+      DefaultLayout,
+      SVGDefinitions,
     },
-    template: '<index />',
+    setup() {
+      return { args }
+    },
+    template: `
+    <SVGDefinitions />
+    <DefaultLayout v-bind="args">
+      <HomePage />
+    </DefaultLayout>
+    `,
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const loginButton = await canvas.getByRole('button', {
-      name: /Log in/i,
-    })
-    await userEvent.click(loginButton)
-  },
+}
+
+export const WithoutLayout = {
+  render: (args) => ({
+    components: {
+      HomePage,
+      SVGDefinitions,
+    },
+    setup() {
+      return { args }
+    },
+    template: '<SVGDefinitions /><HomePage />',
+  }),
 }

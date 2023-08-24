@@ -59,6 +59,18 @@
   }
 }
 
+@function compose-scope($selector) {
+  @return selector.append('.s-', $selector);
+}
+
+@mixin scope($element) {
+  $selector: compose-scope($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
 @function compose-component($selector) {
   @return selector.append('.c-', $selector);
 }

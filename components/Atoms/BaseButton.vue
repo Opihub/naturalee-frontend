@@ -1,5 +1,5 @@
 <template>
-  <button :class="className" :type="type">
+  <component :is="is" :class="className" :type="type">
     <slot>
       <span v-if="text">{{ text }}</span>
     </slot>
@@ -9,13 +9,20 @@
         <NuxtIcon v-if="svg" :name="svg" :style="svgStyle" />
       </slot>
     </Suspense>
-  </button>
+  </component>
 </template>
 
 <script setup>
 const CSS_NAME = 'o-button'
 
 const props = defineProps({
+  as: {
+    type: String,
+    default: 'button',
+    validator(value) {
+      return ['button', 'link'].includes(value)
+    },
+  },
   svg: {
     type: String,
     default: null,
@@ -49,7 +56,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['green', 'yellow', 'transparent'].includes(value)
+      return ['green', 'yellow', 'transparent', 'white'].includes(value)
     },
   },
 })
@@ -80,7 +87,7 @@ const className = computed(() => {
     className.push(`${CSS_NAME}--${props.scope}`)
   }
 
-  if (props.color) {
+  if (props.color && props.color !== 'white') {
     className.push(`${CSS_NAME}--${props.color}`)
   }
 
@@ -89,6 +96,10 @@ const className = computed(() => {
   }
 
   return className
+})
+
+const is = computed(() => {
+  return props.as === 'link' ? resolveComponent('NuxtLink') : props.as
 })
 </script>
 
@@ -132,6 +143,7 @@ $prefix: 'button';
   font-size: get-var(font-size, 1em, $prefix: $prefix);
   line-height: get-var(line-height, inherit, $prefix: $prefix);
   gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
+  text-transform: get-var(text-transform, uppercase, $prefix: $prefix);
 
   svg {
     margin: 0;
