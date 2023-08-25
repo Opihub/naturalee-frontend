@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:meta';
 
 @mixin from($size) {
   @include media($size) {
@@ -21,11 +22,13 @@
 }
 
 @mixin media($size, $reverse: false) {
-  @if (not map.has-key($responsive, $size)) {
-    @error "#{$size} non è una media query registrata";
+  @if (map.has-key($responsive, $size)) {
+    $size: map.get($responsive, $size);
+  } @else {
+    @if (not meta.type-of($size) == number) {
+      @error "#{$size} non è una media query registrata";
+    }
   }
-
-  $size: map.get($responsive, $size);
 
   $query: 'min-width: #{$size}px';
   @if ($reverse) {
