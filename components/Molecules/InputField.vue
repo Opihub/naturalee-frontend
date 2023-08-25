@@ -1,9 +1,19 @@
 <template>
   <div :class="className">
-    <BaseLabel v-if="slots.default" :for-input="name">
+    <BaseLabel
+      v-if="slots.default"
+      :class="`${CSS_NAME}__label`"
+      :for-input="name"
+    >
       <slot />
     </BaseLabel>
-    <BaseInput v-model="value" :type="type" :name="name" v-bind="attributes" />
+    <BaseInput
+      v-model="value"
+      :class="`${CSS_NAME}__input`"
+      :type="type"
+      :name="name"
+      v-bind="attributes"
+    />
   </div>
 </template>
 
@@ -84,8 +94,19 @@ const className = computed(() => {
 <style lang="scss">
 $prefix: 'input-field';
 @include component($prefix) {
+  $prefix-label: '#{$prefix}-label';
+  $prefix-input: '#{$prefix}-input';
+
+  display: flex;
+  flex-direction: column;
+
+  @include element('label') {
+    margin: get-var(margin, 0, $prefix: $prefix-label);
+    padding: get-var(padding, 0, $prefix: $prefix-label);
+  }
+
   @include has('no-label') {
-    input {
+    @include element('input') {
       height: 100%;
     }
   }
