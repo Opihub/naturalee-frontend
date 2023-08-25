@@ -9,8 +9,16 @@ const CSS_NAME = 'o-container'
 
 const props = defineProps({
   maxWidth: {
-    type: Number,
+    type: [Number, String],
     default: null,
+  },
+  padless: {
+    type: Boolean,
+    default: false,
+  },
+  full: {
+    type: Boolean,
+    default: false,
   },
   flex: {
     type: Boolean,
@@ -18,7 +26,21 @@ const props = defineProps({
   },
 })
 
-const { style } = useMaxWidth(props.maxWidth, 'container')
+const { style: maxWidth } = useMaxWidth(props.full ? '100%' : props.maxWidth, 'container')
+
+const style = computed(() => {
+  let style = {}
+
+  if (maxWidth.value) {
+    style = { ...maxWidth.value }
+  }
+
+  if (props.padless || props.full) {
+    style['--container-padding'] = 0
+  }
+
+  return style
+})
 
 const className = computed(() => {
   const className = [CSS_NAME]
