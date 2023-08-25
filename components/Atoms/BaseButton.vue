@@ -61,6 +61,8 @@ const props = defineProps({
   },
 })
 
+const slots = useSlots()
+
 const svgStyle = computed(() => {
   let width = null
   let height = null
@@ -75,13 +77,17 @@ const svgStyle = computed(() => {
   }
 
   return {
-    '--svg-width': typeof width === 'number' ? `${width}px`: width,
-    '--svg-height': typeof height === 'number' ? `${height}px`: height,
+    '--svg-width': typeof width === 'number' ? `${width}px` : width,
+    '--svg-height': typeof height === 'number' ? `${height}px` : height,
   }
 })
 
 const className = computed(() => {
   const className = [CSS_NAME]
+
+  if (slots.svg || props.svg) {
+    className.push(`has-svg`)
+  }
 
   if (props.scope) {
     className.push(`${CSS_NAME}--${props.scope}`)
@@ -139,7 +145,7 @@ $prefix: 'button';
   color: get-var(text-color, get-var(color-green), $prefix: $prefix);
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   font-size: get-var(font-size, 1em, $prefix: $prefix);
   line-height: get-var(line-height, inherit, $prefix: $prefix);
   gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
@@ -149,6 +155,10 @@ $prefix: 'button';
     margin: 0;
     width: #{get-var(width, $prefix: $svg-prefix)};
     height: #{get-var(height, $prefix: $svg-prefix)};
+  }
+
+  @include has('svg') {
+    justify-content: space-between;
   }
 
   @include transition(background-color, color, border-color);
