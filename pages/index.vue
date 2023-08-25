@@ -61,6 +61,18 @@
     >
       <ProductCards :products="products" title="Frutta e Verdura Fresca" />
     </BackgroundHolder>
+
+    <TrackRow class="c-fifth-section">
+      <template #title>Amet consectetur adipiscing elit</template>
+
+      <template #firstPoint><strong>Scegli</strong> i tuoi prodotti</template>
+
+      <template #secondPoint><strong>Conferma</strong> il tuo ordine</template>
+
+      <template #thirdPoint><strong>Ricevi</strong> la tua spesa</template>
+
+      <template #fourthPoint><strong>Riordina<br />quando vuoi!</strong></template>
+    </TrackRow>
   </main>
 </template>
 
@@ -185,6 +197,16 @@ const products = ref([
       $map: (
         pt: rem(110px),
         pb: rem(60px),
+      )
+    );
+  }
+
+  @include component('fifth-section') {
+    @include set-local-vars(
+      $prefix: 'custom',
+      $map: (
+        pt: rem(80px),
+        pb: rem(80px),
       )
     );
   }
