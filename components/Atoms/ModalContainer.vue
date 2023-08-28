@@ -74,6 +74,7 @@ $prefix: 'modal';
 
   position: fixed;
   inset: 0;
+  z-index: 100;
   padding: get-var(
     padding,
     get-var(padding, $prefix: 'container'),
