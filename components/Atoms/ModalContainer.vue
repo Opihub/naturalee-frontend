@@ -60,7 +60,11 @@ onMounted(() => {
   emit('toggle', true)
 })
 
-const closeModal = () => {
+const closeModal = (event) => {
+  if (event.target !== event.currentTarget) {
+    return
+  }
+
   emit('close')
   emit('toggle', false)
 }
@@ -142,6 +146,10 @@ $prefix: 'modal';
     svg {
       width: rem(20px);
       height: rem(20px);
+    }
+
+    & > * {
+      pointer-events: none;
     }
 
     @include modifier('header') {
