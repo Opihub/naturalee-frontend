@@ -82,7 +82,6 @@ onUnmounted(() => {
 })
 
 const updateHeight = () => {
-  console.debug('tet')
   if (slides.value.length <= 0) {
     return
   }
