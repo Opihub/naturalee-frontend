@@ -35,7 +35,7 @@
     @each $value in map.get($options, values) {
       @if ($media) {
         @include from($media) {
-          @include utility(#{$prop}-#{$value}) {
+          @include utility(#{$prop}-#{$value}\@#{$media}) {
             #{map.get($options, rule)}: $value !important;
           }
         }
