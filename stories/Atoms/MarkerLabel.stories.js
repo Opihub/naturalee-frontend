@@ -20,7 +20,7 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: `<MarkerLabel v-bind="args">`,
+  template: `<MarkerLabel v-bind="args" />`,
 })
 
 export const Default = Template.bind({})
