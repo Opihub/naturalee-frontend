@@ -1,5 +1,5 @@
 const { mergeConfig } = require('vite')
-import { additionalData } from '../utilities/globalCSS'
+import { additionalData } from '../utils/globalCSS'
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
