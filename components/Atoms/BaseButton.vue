@@ -129,6 +129,10 @@ $prefix: 'button';
     )
   );
 
+  &:focus {
+    outline: 1px solid get-var(color-yellow);
+  }
+
   border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
       border-color
     )};

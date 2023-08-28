@@ -108,9 +108,8 @@ $prefix: 'input';
     )
   );
 
-  border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
-      border-color
-    )};
+  border: get-var(border-width, $prefix: $prefix) solid
+    get-var(border-color, $prefix: $prefix);
 
   border-radius: get-var(radius, $prefix: $prefix);
   font-size: get-var(font-size, rem(18px), $prefix: $prefix);
@@ -121,6 +120,36 @@ $prefix: 'input';
   color: get-var(text-color, $prefix: $prefix);
   width: get-var(width, auto, $prefix: $prefix);
   max-width: get-var(max-width, 100%, $prefix: $prefix);
+
+  @include transition(border-color);
+
+  &:focus {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        border-color: get-var(color-yellow),
+      )
+    );
+    outline: none;
+  }
+
+  &:valid {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        border-color: get-var(color-green),
+      )
+    );
+  }
+
+  &:invalid {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        border-color: get-var(color-red),
+      )
+    );
+  }
 
   &::placeholder {
     opacity: 0.4;

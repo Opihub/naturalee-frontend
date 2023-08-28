@@ -25,16 +25,24 @@ body {
   overflow-x: hidden;
 }
 
-input {
-  &,
-  select,
-  textarea {
-    font-family: get-var(family-text);
-  }
+input,
+select,
+textarea {
+  font-family: get-var(family-text);
 
   &::placeholder {
     color: inherit;
     opacity: 0.5;
+  }
+}
+
+input,
+select,
+textarea,
+button {
+  &:focus {
+    outline-offset: 1px;
+    outline: 1px solid get-var(color-yellow);
   }
 }
 
