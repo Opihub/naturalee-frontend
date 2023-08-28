@@ -1,7 +1,7 @@
 <template>
-  <Teleport to="body">
-    <div :class="className" :style="style" v-bind="$attrs">
-      <div :class="`${className}__body`" :style="style" v-bind="$attrs">
+  <Transition name="fade">
+    <div :class="className" :style="style" v-bind="$attrs" @click="closeModal">
+      <div :class="`${className}__body`" :style="style">
         <div :class="CSS_NAME_HEADER">
           <slot name="header" />
 
@@ -22,13 +22,17 @@
         <slot name="footer" :class-name="CSS_NAME_FOOTER" />
       </div>
     </div>
-  </Teleport>
+  </Transition>
 </template>
 
 <script setup>
 const CSS_NAME = 'o-modal'
 const CSS_NAME_HEADER = `${CSS_NAME}__header`
 const CSS_NAME_FOOTER = `${CSS_NAME}__footer`
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = defineProps({
   maxWidth: {
