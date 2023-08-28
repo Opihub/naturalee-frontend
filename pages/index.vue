@@ -32,7 +32,7 @@
         <p class="u-mb-tiny u-mb-none@tablet">
           Il servizio è attivo su Milano città e hinterland
         </p>
-        <BaseButton color="white"
+        <BaseButton color="white" @click="togglePostcodeModal"
           >Verifica se il tuo indirizzo è coperto dal servizio</BaseButton
         >
       </SiteContainer>
@@ -61,10 +61,33 @@
     >
       <ProductCards :products="products" title="Frutta e Verdura Fresca" />
     </BackgroundHolder>
+
+    <TrackRow class="c-fifth-section">
+      <template #title>Amet consectetur adipiscing elit</template>
+
+      <template #firstPoint><strong>Scegli</strong> i tuoi prodotti</template>
+
+      <template #secondPoint><strong>Conferma</strong> il tuo ordine</template>
+
+      <template #thirdPoint><strong>Ricevi</strong> la tua spesa</template>
+
+      <template #fourthPoint
+        ><strong>Riordina<br />quando vuoi!</strong></template
+      >
+    </TrackRow>
   </main>
+
+  <Teleport to="body">
+    <PostcodeModal
+      v-show="isPostcodeModalOpen"
+      @close="togglePostcodeModal(false)"
+    />
+  </Teleport>
 </template>
 
 <script setup>
+const isPostcodeModalOpen = ref(false)
+
 /**
  * TODO:
  *  - spostare background via API
@@ -115,6 +138,11 @@ const products = ref([
     link: 'verdura/peperoni',
   },
 ])
+
+const togglePostcodeModal = (status = null) => {
+  isPostcodeModalOpen.value =
+    status !== null ? !!status : !isPostcodeModalOpen.value
+}
 </script>
 
 <style lang="scss" scoped>
@@ -185,6 +213,16 @@ const products = ref([
       $map: (
         pt: rem(110px),
         pb: rem(60px),
+      )
+    );
+  }
+
+  @include component('fifth-section') {
+    @include set-local-vars(
+      $prefix: 'custom',
+      $map: (
+        pt: rem(80px),
+        pb: rem(80px),
       )
     );
   }

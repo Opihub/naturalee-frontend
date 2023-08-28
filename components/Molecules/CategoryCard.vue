@@ -18,10 +18,32 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  position: {
+    type: String,
+    default: null,
+    validator(value) {
+      return ['center', 'bottom', 'top'].includes(value)
+    },
+  },
 })
 
 const style = computed(() => {
-  return { '--background-image': `url("${props.image}")` }
+  const style = {}
+
+  if (props.image) {
+    style['--background-image'] = `url("${props.image}")`
+  }
+
+  if (props.position) {
+    let position = props.position
+    if (position !== 'center') {
+      position += ' center'
+    }
+
+    style['--background-position'] = position
+  }
+
+  return style
 })
 </script>
 
@@ -42,12 +64,20 @@ const style = computed(() => {
     )
   );
 
+  @include set-local-vars(
+    $prefix: 'arrow',
+    $map: (
+      width: rem(20px),
+      height: rem(20px),
+    )
+  );
+
   width: 100%;
+  height: rem(100px);
   background-color: get-var(color-green);
-  aspect-ratio: get-var(aspect-ratio, $prefix: $prefix);
   border-radius: get-var(border-radius, $prefix: $prefix);
   padding: get-var(padding, $prefix: $prefix);
-  @include typography(40px, 50px);
+  @include typography(26px, 33px);
   font-weight: get-var(weight-bold);
   align-items: flex-end;
   justify-content: center;
@@ -55,16 +85,29 @@ const style = computed(() => {
   position: relative;
   overflow: hidden;
 
+  @include from(tablet) {
+    height: auto;
+    aspect-ratio: get-var(aspect-ratio, $prefix: $prefix);
+    @include typography(40px, 50px);
+  }
+
   @include element(label) {
     text-align: center;
     position: absolute;
-    inset: auto #{get-var(padding, $prefix: $prefix)} #{get-var(
-        bottom,
-        $prefix: $prefix
-      )} #{get-var(padding, $prefix: $prefix)};
+    top: 50%;
+    left: 50%;
     z-index: 2;
-    transform: translateY(#{get-var(bottom-translate, $prefix: $prefix)});
-    @include transition(bottom, transform);
+    transform: translate(-50%, -50%);
+    @include transition(transform);
+
+    @include from(tablet) {
+      inset: auto #{get-var(padding, $prefix: $prefix)} #{get-var(
+          bottom,
+          $prefix: $prefix
+        )} #{get-var(padding, $prefix: $prefix)};
+      transform: translateY(#{get-var(bottom-translate, $prefix: $prefix)});
+      @include transition-properties(bottom, transform);
+    }
   }
 
   &::before {
@@ -72,12 +115,12 @@ const style = computed(() => {
     position: absolute;
     z-index: 0;
     inset: 0;
-    background-position: center;
+    background-position: get-var(position, center, $prefix: 'background');
     background-size: cover;
     background-repeat: no-repeat;
     background-color: get-var(color-green);
     opacity: get-var(opacity, $prefix: $prefix);
-    background-image: var(--background-image);
+    background-image: get-var(image, $prefix: 'background');
     transform: scale(#{get-var(scale, $prefix: $prefix)});
     border-radius: get-var(border-radius, $prefix: $prefix);
 
