@@ -32,7 +32,7 @@
         <p class="u-mb-tiny u-mb-none@tablet">
           Il servizio è attivo su Milano città e hinterland
         </p>
-        <BaseButton color="white"
+        <BaseButton color="white" @click="togglePostcodeModal"
           >Verifica se il tuo indirizzo è coperto dal servizio</BaseButton
         >
       </SiteContainer>
@@ -71,12 +71,23 @@
 
       <template #thirdPoint><strong>Ricevi</strong> la tua spesa</template>
 
-      <template #fourthPoint><strong>Riordina<br />quando vuoi!</strong></template>
+      <template #fourthPoint
+        ><strong>Riordina<br />quando vuoi!</strong></template
+      >
     </TrackRow>
   </main>
+
+  <Teleport to="body">
+    <PostcodeModal
+      v-show="isPostcodeModalOpen"
+      @close="togglePostcodeModal(false)"
+    />
+  </Teleport>
 </template>
 
 <script setup>
+const isPostcodeModalOpen = ref(false)
+
 /**
  * TODO:
  *  - spostare background via API
@@ -127,6 +138,11 @@ const products = ref([
     link: 'verdura/peperoni',
   },
 ])
+
+const togglePostcodeModal = (status = null) => {
+  isPostcodeModalOpen.value =
+    status !== null ? !!status : !isPostcodeModalOpen.value
+}
 </script>
 
 <style lang="scss" scoped>
