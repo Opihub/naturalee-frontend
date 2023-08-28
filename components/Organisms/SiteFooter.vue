@@ -129,7 +129,6 @@ $prefix: 'footer';
       $prefix: $prefix,
       $map: (
         padding: rem(12px) 0,
-        line-height: 16px,
       )
     );
   }
@@ -153,6 +152,14 @@ $prefix: 'footer';
       grid-template-rows: auto auto;
       align-items: center;
       gap: rem(8px);
+
+      @include set-local-vars(
+        $prefix: 'menu',
+        $map: (
+          font-size: 18px,
+          line-height: 23px,
+        )
+      );
     }
 
     @include from(desktop) {
@@ -191,19 +198,21 @@ $prefix: 'footer';
       align-items: stretch;
 
       @include set-local-vars(
-        $prefix: 'menu',
-        $map: (
-          gap: 0,
-        )
-      );
-
-      @include set-local-vars(
         $prefix: 'menu-item',
         $map: (
           width: 100%,
           padding: rem(10px),
         )
       );
+
+      @include until(tablet) {
+        @include set-local-vars(
+          $prefix: 'menu',
+          $map: (
+            gap: 0,
+          )
+        );
+      }
 
       @include from(tablet) {
         flex-direction: row;
