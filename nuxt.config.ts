@@ -1,4 +1,4 @@
-import { additionalData } from './utilities/globalCSS'
+import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
@@ -88,7 +88,16 @@ export default defineNuxtConfig({
       NuxtImg: 'storybook/custom/components.mjs',
     },
     composables: {
-      // 'storybook/custom/composables.mjs': ['useImage'],
+      'storybook/custom/composables.mjs': {
+        '#app': [
+          'useFetch',
+          'useLazyFetch',
+          'useAsyncData',
+          'useLazyAsyncData',
+          'useRuntimeConfig',
+        ],
+        '#build/storybook/composables.mjs': ['useNuxtApp'],
+      },
     },
     templates: [
       {
