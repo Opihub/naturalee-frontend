@@ -154,6 +154,7 @@ $prefix: 'button';
   line-height: get-var(line-height, inherit, $prefix: $prefix);
   gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
   text-transform: get-var(text-transform, uppercase, $prefix: $prefix);
+  opacity: 1;
 
   svg {
     margin: 0;
@@ -165,7 +166,7 @@ $prefix: 'button';
     justify-content: space-between;
   }
 
-  @include transition(background-color, color, border-color);
+  @include transition(background-color, color, border-color, opacity);
 
   &:hover {
     @include set-local-vars(
@@ -252,6 +253,11 @@ $prefix: 'button';
         font-weight: font-weight(medium),
       )
     );
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: no-drop;
   }
 }
 </style>
