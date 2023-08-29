@@ -21,7 +21,7 @@ const props = defineProps({
       return [
         'date',
         'datetime-locale',
-        'mail',
+        'email',
         'hidden',
         'month',
         'number',
