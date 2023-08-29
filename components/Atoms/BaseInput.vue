@@ -4,7 +4,8 @@
     :type="type"
     :name="name"
     :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="input"
+    @blur="check"
   />
 </template>
 
@@ -60,7 +61,7 @@ const props = defineProps({
   },
 })
 
-defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
 
 const className = computed(() => {
   const className = [CSS_NAME]
@@ -71,6 +72,10 @@ const className = computed(() => {
 
   if (props.borderless) {
     className.push(`${CSS_NAME}--borderless`)
+  }
+
+  if (firstInteraction.value) {
+    className.push('is-init')
   }
 
   switch (props.width) {
@@ -90,6 +95,25 @@ const className = computed(() => {
 
   return className
 })
+
+const firstInteraction = ref(false)
+
+const input = (event) => {
+  firstInteraction.value = true
+
+  emit('update:modelValue', event.target.value)
+
+  check(event)
+}
+
+const check = (event) => {
+  let eventName = 'invalid'
+  if (event.target.checkValidity()) {
+    eventName = 'valid'
+  }
+
+  emit(eventName, event.target.value)
+}
 </script>
 
 <style lang="scss">
@@ -133,26 +157,28 @@ $prefix: 'input';
     outline: none;
   }
 
-  &:valid {
-    @include set-local-vars(
-      $prefix: $prefix,
-      $map: (
-        border-color: get-var(color-green),
-      )
-    );
-  }
-
-  &:invalid {
-    @include set-local-vars(
-      $prefix: $prefix,
-      $map: (
-        border-color: get-var(color-red),
-      )
-    );
-  }
-
   &::placeholder {
     opacity: 0.4;
+  }
+
+  @include is('init') {
+    &:valid {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          border-color: get-var(color-green),
+        )
+      );
+    }
+
+    &:invalid {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          border-color: get-var(color-red),
+        )
+      );
+    }
   }
 
   @include modifier('rounded') {
