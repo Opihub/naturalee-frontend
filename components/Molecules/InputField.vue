@@ -196,6 +196,7 @@ $prefix: 'input-field';
       grid-row: 1 / 2;
       // justify-self: end;
       justify-self: stretch;
+      text-align: right;
 
       & > span {
         inset: auto 0 0;
@@ -220,6 +221,7 @@ $prefix: 'input-field';
       @include element('error') {
         grid-column: 1 / 2;
         grid-row: 3 / 4;
+        text-align: left;
 
         & > span {
           inset: 0 0 auto;
