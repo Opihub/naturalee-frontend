@@ -5,14 +5,12 @@
         <div :class="CSS_NAME_HEADER">
           <slot name="header" />
 
-          <Suspense>
-            <button
-              :class="[`${className}__close`, `${className}__close--header`]"
-              @click="closeModal"
-            >
-              <NuxtIcon name="close" />
-            </button>
-          </Suspense>
+          <BaseButton
+            :class="[`${className}__close`, `${className}__close--header`]"
+            color="yellow"
+            svg="close"
+            @click="closeModal"
+          />
         </div>
 
         <div :class="`${className}__main`">
@@ -110,6 +108,7 @@ $prefix: 'modal';
   }
 
   @include element('header') {
+    overflow: hidden;
     background-color: get-var(
       background,
       get-var(color-white),
@@ -127,21 +126,18 @@ $prefix: 'modal';
   }
 
   @include element('close') {
-    padding: rem(30px);
+    @include set-local-vars(
+      $prefix: 'button',
+      $map: (
+        padding: rem(30px),
+        text-color: get-var(color-white),
+      )
+    );
+
     display: flex;
-    margin: 0;
     align-items: center;
     justify-content: center;
     border-radius: 0;
-    border: 0;
-    cursor: pointer;
-
-    color: get-var(close-color, get-var(color-white), $prefix: $prefix-close);
-    background-color: get-var(
-      close-background,
-      get-var(color-yellow),
-      $prefix: $prefix-close
-    );
 
     svg {
       width: rem(20px);
@@ -159,6 +155,15 @@ $prefix: 'modal';
       @include from(tablet) {
         margin-left: rem(30px);
       }
+    }
+
+    &:hover {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          background-color: get-var(color-green),
+        )
+      );
     }
   }
 }
