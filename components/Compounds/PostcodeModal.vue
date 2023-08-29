@@ -1,30 +1,112 @@
 <template>
-  <ModalContainer
-    :class="CSS_NAME"
-    :max-width="1088"
-    title="Verifica se il tuo indirizzo è coperto dal servizio"
-  >
+  <ModalContainer :class="CSS_NAME" :max-width="1088" @close="resetStatus">
     <template #header>
-      <BaseHeading tag="span"
+      <BaseHeading
+        tag="span"
+        :class="[`${CSS_NAME}__heading`, `${CSS_NAME}__heading--header`]"
         >Verifica se il tuo indirizzo è coperto dal servizio</BaseHeading
       >
     </template>
 
-    <form method="POST" :class="`${CSS_NAME}__form`" @submit.prevent="checkPostcode">
-      <InputField v-model="formData.postcode" name="postcode" rounded
-        >CAP</InputField
+    <Transition name="fade" mode="out-in">
+      <form
+        v-if="matchedPostcode === null"
+        method="POST"
+        :class="`${CSS_NAME}__form`"
+        @submit.prevent="checkPostcode"
       >
+        <InputField
+          v-model="formData.postcode"
+          name="postcode"
+          error="CAP non valido"
+          pattern="\d{5}"
+          error-after
+          rounded
+          required
+          >CAP</InputField
+        >
 
-      <InputField
-        v-model="formData.address"
-        :class="`${CSS_NAME}__form__address`"
-        name="address"
-        rounded
-        >Indirizzo di consegna</InputField
-      >
+        <InputField
+          v-model="formData.address"
+          :class="`${CSS_NAME}__form__address`"
+          name="address"
+          error="L'indirizzo di consegna è obbligatorio"
+          error-after
+          rounded
+          required
+          >Indirizzo di consegna</InputField
+        >
 
-      <BaseButton color="green" type="submit" text="Verifica indirizzo" />
-    </form>
+        <BaseButton
+          :disabled="sending"
+          color="green"
+          type="submit"
+          text="Verifica indirizzo"
+        />
+      </form>
+
+      <div v-else>
+        <div class="u-mb-half u-text-center">
+          <BaseHeading
+            tag="h4"
+            :class="`${CSS_NAME}__heading`"
+            :text="feedbackTitle"
+          />
+
+          <BaseParagraph
+            v-if="feedbackMessage"
+            class="u-mb-micro"
+            :text="feedbackMessage"
+          />
+        </div>
+
+        <div v-if="matchedPostcode || savedEmail" :class="`${CSS_NAME}__user`">
+          <BaseButton as="link" to="login" color="green">Accedi</BaseButton>
+          oppure
+          <BaseButton as="link" to="register" color="green"
+            >Registrati</BaseButton
+          >
+        </div>
+        <form
+          v-else
+          method="POST"
+          :class="[`${CSS_NAME}__form`, `${CSS_NAME}__form--notify`]"
+          @submit.prevent="registerEmail"
+        >
+          <InputField
+            v-model="formData.email"
+            name="email"
+            type="email"
+            error="Inserisci un indirizzo e-mail valido"
+            rounded
+            required
+            >Indirizzo e-mail</InputField
+          >
+
+          <BaseButton
+            :disabled="sending"
+            color="green"
+            type="submit"
+            text="Notificami"
+          />
+        </form>
+        <Transition name="fade">
+          <BaseMessage v-if="savedEmail === false" class="u-mt-half">
+            <BaseHeading
+              tag="h4"
+              :class="`${CSS_NAME}__heading`"
+              text="Oh, no!"
+            />
+
+            <BaseParagraph
+              v-if="feedbackMessage"
+              class="u-mb-micro"
+              text="È avvenuto un errore durante il salvataggio… Riprova ad inviare il form"
+            />
+          </BaseMessage>
+        </Transition>
+      </div>
+    </Transition>
   </ModalContainer>
 </template>
 
@@ -34,24 +116,111 @@ const CSS_NAME = 'c-postcode-modal'
 const formData = reactive({
   postcode: '',
   address: '',
+  email: null,
 })
 
-const checkPostcode = () => {
-  console.debug(formData)
-  // TODO
+const sending = ref(false)
+const matchedPostcode = ref(null)
+const savedEmail = ref(null)
+const response = ref({})
+
+const resetStatus = () => {
+  sending.value = false
+
+  savedEmail.value = null
+  matchedPostcode.value = null
 }
+
+const checkPostcode = async () => {
+  sending.value = false
+  savedEmail.value = null
+  matchedPostcode.value = null
+  response.value = {}
+
+  if (!formData.postcode) {
+    return
+  }
+
+  if (!formData.address) {
+    return
+  }
+
+  sending.value = true
+
+  response.value = await useApi('postcodes/validate', {
+    method: 'POST',
+    body: formData,
+  })
+
+  matchedPostcode.value = response.value.success
+  sending.value = false
+}
+
+const registerEmail = async () => {
+  sending.value = false
+
+  if (!formData.email) {
+    return
+  }
+
+  sending.value = true
+
+  response.value = await useApi(`postcodes/validate/${response.data}`, {
+    method: 'POST',
+    body: formData,
+  })
+
+  savedEmail.value = response.value.success
+  sending.value = false
+}
+
+const feedbackTitle = computed(() => {
+  if (matchedPostcode.value) {
+    // Form compilato e CAP presente
+    return 'Complimenti, il tuo indirizzo è coperto dal servizio!'
+  }
+
+  if (savedEmail.value) {
+    // Form per registrazione compilato
+    return 'Complimenti, la tua email è stata registrata!'
+  }
+
+  return 'Il servizio di consegna non è ancora attivo per questo indirizzo.'
+})
+
+const feedbackMessage = computed(() => {
+  if (matchedPostcode.value) {
+    // Form compilato e CAP presente
+    return null
+  }
+
+  if (savedEmail.value) {
+    // Form per registrazione compilato
+    return 'Verrai notificato non appena il tuo CAP verrà aggiunto al servizio di consegna!'
+  }
+
+  return 'Vuoi essere aggiornato quando il servizio sarà disponibile? Compila il form sottostante!'
+})
 </script>
 
 <style lang="scss">
 $prefix: 'postcode-modal';
 @include component($prefix) {
-  @include object('heading') {
+  @include element('heading') {
     color: get-var(color-green);
     font-weight: inherit;
     @include typography(18px, 23px);
 
     @include from(tablet) {
       @include typography(22px, 28px);
+    }
+
+    @include modifier('header') {
+      @include typography(18px, 23px);
+
+      @include from(tablet) {
+        @include typography(22px, 28px);
+      }
     }
   }
 
@@ -88,8 +257,14 @@ $prefix: 'postcode-modal';
     @include set-local-vars(
       $prefix: 'input-field-label',
       $map: (
-        margin: 0 0 rem(5px),
         padding: 0 rem(20px),
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'input-field-error',
+      $map: (
+        margin: rem(4px) rem(20px) 0,
       )
     );
 
@@ -102,6 +277,12 @@ $prefix: 'postcode-modal';
       )
     );
 
+    @include modifier('notify') {
+      @include component('input-field') {
+        flex: 1 1 auto;
+      }
+    }
+
     @include object('button') {
       flex: 0 0 auto;
     }
@@ -109,6 +290,13 @@ $prefix: 'postcode-modal';
     @include element('address') {
       flex-grow: 2;
     }
+  }
+
+  @include element('user') {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: rem(20px);
   }
 }
 </style>
