@@ -63,6 +63,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
 
+const isValid = ref(false)
+
 const className = computed(() => {
   const className = [CSS_NAME]
 
@@ -72,6 +74,12 @@ const className = computed(() => {
 
   if (props.borderless) {
     className.push(`${CSS_NAME}--borderless`)
+  }
+
+  if (isValid.value === true) {
+    className.push('is-valid')
+  } else if (isValid.value === false) {
+    className.push('is-invalid')
   }
 
   if (firstInteraction.value) {
@@ -99,17 +107,20 @@ const className = computed(() => {
 const firstInteraction = ref(false)
 
 const input = (event) => {
-  firstInteraction.value = true
-
   emit('update:modelValue', event.target.value)
 
   check(event)
 }
 
 const check = (event) => {
+  firstInteraction.value = true
+
   let eventName = 'invalid'
   if (event.target.checkValidity()) {
     eventName = 'valid'
+    isValid.value = true
+  } else {
+    isValid.value = false
   }
 
   emit(eventName, event.target.value)
@@ -118,6 +129,24 @@ const check = (event) => {
 
 <style lang="scss">
 $prefix: 'input';
+
+%input-valid {
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      border-color: get-var(color-green),
+    )
+  );
+}
+
+%input-invalid {
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      border-color: get-var(color-red),
+    )
+  );
+}
 @include object($prefix) {
   $svg-prefix: 'svg';
 
@@ -162,22 +191,20 @@ $prefix: 'input';
   }
 
   @include is('init') {
+    @include is('valid') {
+      @extend %input-valid;
+    }
+
     &:valid {
-      @include set-local-vars(
-        $prefix: $prefix,
-        $map: (
-          border-color: get-var(color-green),
-        )
-      );
+      @extend %input-valid;
+    }
+
+    @include is('invalid') {
+      @extend %input-invalid;
     }
 
     &:invalid {
-      @include set-local-vars(
-        $prefix: $prefix,
-        $map: (
-          border-color: get-var(color-red),
-        )
-      );
+      @extend %input-invalid;
     }
   }
 
