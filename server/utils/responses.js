@@ -19,3 +19,37 @@ export function createResponse(input) {
     data: typeof input.data !== 'undefined' ? input.data : {},
   }
 }
+
+export function createPaginatedResponse(input) {
+  const response = createResponse(input)
+
+  const page = parseInt(input.paginate?.page || 0)
+  let previous = null
+  let next = null
+  if (page > 0) {
+    previous = page - 1
+  }
+
+  const count = parseInt(input.paginate?.count || 0)
+  const limit = parseInt(input.paginate?.limit || 12)
+
+  if ((limit * page) + 1 < count) {
+    next = page + 1
+  }
+
+  return {
+    ...response,
+    data: {
+      records: response.data,
+      pagination: {
+        page,
+        limit,
+        count,
+        last: next === null,
+        previous,
+        next,
+        ...input.paginate,
+      },
+    },
+  }
+}
