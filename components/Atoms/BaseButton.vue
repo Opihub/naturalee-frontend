@@ -223,12 +223,12 @@ $prefix: 'button';
       $prefix: $prefix,
       $map: (
         background-color: transparent,
-        text-color: get-var(border-color),
+        text-color: get-var(color-dark),
         border-width: 1px,
       )
     );
 
-    @include is(active) {
+    @include is('active') {
       @include set-local-var(
         background-color,
         get-var(color-white),
