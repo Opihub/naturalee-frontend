@@ -134,7 +134,7 @@ $prefix: 'button';
   }
 
   border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
-      border-color
+      color-dark
     )};
   border-radius: 999em;
   font-weight: get-var(font-weight, font-weight(bold), $prefix: $prefix);
@@ -229,18 +229,22 @@ $prefix: 'button';
     );
 
     @include is('active') {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-dark),
+          text-color: get-var(color-white),
+        )
       );
     }
 
     &:hover {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-white),
+          text-color: get-var(color-dark),
+        )
       );
     }
   }
