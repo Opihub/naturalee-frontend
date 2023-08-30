@@ -12,7 +12,7 @@ const costDescriptions = ['1 pezzo per 500g', '1 cesta da 750g', '1 mazzo']
 const count = 100
 
 const fetchedCategoryProducts = {
-  url: '/shop/:category/products?page=true&limit=true',
+  url: '/shop/:category/products?page=true&filters[]&orderby=true&limit=true',
   method: 'GET',
   status: 200,
   response: (request) => {
@@ -71,8 +71,13 @@ const fetchedCategoryProducts = {
   },
 }
 
-const noProductsFound = {
+const fetchedCategoryProductsWithoutFilters = {
   ...fetchedCategoryProducts,
+  url: '/shop/:category/products?page=true&limit=true&orderby=true',
+}
+
+const noProductsFound = {
+  ...fetchedCategoryProductsWithoutFilters,
   response: createResponse({
     success: false,
     statusCode: 404,
@@ -88,7 +93,7 @@ export default {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
-    mockData: [fetchedCategoryProducts],
+    mockData: [fetchedCategoryProductsWithoutFilters],
   },
 }
 
@@ -107,7 +112,43 @@ export const Category = Template.bind({})
 Category.args = {
   from: 'shop/verdura/products',
 }
-Category.parameters = {
+
+export const CategoryWithFilters = Template.bind({})
+CategoryWithFilters.args = {
+  ...Category.args,
+  sortable: true,
+  filters: [
+    {
+      slug: 'pesche-albicocche',
+      text: 'Pesche e albicocche',
+    },
+    {
+      slug: 'frutta-esotica',
+      text: 'Frutta esotica',
+    },
+    {
+      slug: 'meloni-angurie',
+      text: 'Meloni e angurie',
+    },
+    {
+      slug: 'agrumi',
+      text: 'Agrumi',
+    },
+    {
+      slug: 'frutti-bosco',
+      text: 'Frutti di bosco',
+    },
+    {
+      slug: 'mele-pere',
+      text: 'Mele e pere',
+    },
+    {
+      slug: 'altro',
+      text: 'Altro',
+    },
+  ],
+}
+CategoryWithFilters.parameters = {
   mockData: [fetchedCategoryProducts],
 }
 
