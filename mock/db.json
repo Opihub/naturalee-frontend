@@ -70,6 +70,29 @@
       ]
     },
     {
+      "id": "profile",
+      "records": [
+        {
+          "id": 1,
+          "title": "Il mio profilo",
+          "url": "profilo",
+          "target": null
+        },
+        {
+          "id": 2,
+          "title": "I miei ordini",
+          "url": "miei-ordini",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "La mia lista",
+          "url": "miei-preferiti",
+          "target": null
+        }
+      ]
+    },
+    {
       "id": "categories",
       "records": [
         {
