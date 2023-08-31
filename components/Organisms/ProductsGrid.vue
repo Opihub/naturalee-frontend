@@ -1,106 +1,141 @@
 <template>
-  <SiteContainer :class="CSS_NAME">
-    <div
+  <section :class="CSS_NAME">
+    <ResponsiveTrigger
+      :is="SiteContainer"
       v-if="sortable || filters.length"
-      :class="`${CSS_NAME}__toolbar`"
-      class="u-mb-huge"
+      :size="992"
     >
-      <ul v-if="filters.length" :class="`${CSS_NAME}__filter`">
-        <li v-for="filter in filters" :key="filter.slug">
-          <BaseButton
-            color="transparent"
-            scope="filter"
-            :class="{ 'is-active': chosenFilters.includes(filter.slug) }"
-            @click="toggleFilter(filter.slug)"
-            >{{ filter.text }}</BaseButton
-          >
-        </li>
-      </ul>
-
-      <div v-if="sortable && orderOptions" :class="`${CSS_NAME}__action`">
-        <BaseButton
-          ref="orderButton"
-          color="transparent"
-          scope="filter"
-          svg="arrow-group"
-          :class="{
-            [`${CSS_NAME}__order`]: true,
-            'is-active': orderby !== null,
-          }"
-          :text="orderByText"
-          :svg-size="[9.14, 12.15]"
-          @click="toggleDropdown()"
-        />
-        <OnClickOutside
-          :options="{ ignore: [orderButton] }"
-          @trigger="toggleDropdown(false)"
+      <div :class="`${CSS_NAME}__toolbar`" class="u-mb-huge">
+        <div
+          v-if="filters.length"
+          :class="[CSS_NAME_ACTION, `${CSS_NAME_ACTION}--filter`]"
         >
+          <button
+            :class="`${CSS_NAME_ACTION}__trigger`"
+            type="button"
+            @click="toggleOverlay(true)"
+          >
+            Filtra
+          </button>
+
           <Transition name="fade">
-            <PopupContainer
-              v-show="isOrderDropdownOpen"
-              :class="`${CSS_NAME}__dropdown`"
-            >
-              <ul :class="`${CSS_NAME}__sorts`">
-                <li
-                  :class="{
-                    [`${CSS_NAME}__sorts__item`]: true,
-                    'is-active': orderby === null,
-                  }"
-                  @click="changeOrder(null)"
-                >
-                  Ordina per...
-                </li>
-                <li
-                  v-for="(name, key) in orderOptions"
-                  :key="key"
-                  :class="{
-                    [`${CSS_NAME}__sorts__item`]: true,
-                    'is-active': orderby === key,
-                  }"
-                  @click="changeOrder(key)"
-                >
-                  {{ name }}
-                </li>
-              </ul>
-            </PopupContainer>
+            <KeepAlive>
+              <ResponsiveTrigger
+                :is="BaseOverlay"
+                v-show="isFilterOverlayOpen"
+                :size="992"
+                desktop-first
+                :class="CSS_NAME_OVERLAY"
+              >
+                <template #before>
+                  <div :class="`${CSS_NAME_OVERLAY}__header`">
+                    <span>{{ selectedFiltersMessage }}</span>
+                    <u @click="clearFilters">Azzera</u>
+                  </div>
+                </template>
+
+                <ul :class="`${CSS_NAME}__filter`">
+                  <li
+                    v-for="filter in filters"
+                    :key="filter.slug"
+                    :class="`${CSS_NAME}__filter__item`"
+                  >
+                    <BaseButton
+                      color="transparent"
+                      scope="filter"
+                      :class="{
+                        'is-active': chosenFilters.includes(filter.slug),
+                      }"
+                      @click="toggleFilter(filter.slug)"
+                      >{{ filter.text }}</BaseButton
+                    >
+                  </li>
+                </ul>
+
+                <template #after>
+                  <div :class="`${CSS_NAME_OVERLAY}__footer`">
+                    <BaseButton
+                      color="transparent"
+                      scope="filter"
+                      @click="toggleOverlay(false)"
+                      >Applica
+                    </BaseButton>
+                  </div>
+                </template>
+              </ResponsiveTrigger>
+            </KeepAlive>
           </Transition>
-        </OnClickOutside>
+        </div>
+
+        <div v-if="sortable && orderOptions" :class="CSS_NAME_ACTION">
+          <button
+            :class="[
+              `${CSS_NAME_ACTION}__trigger`,
+              `${CSS_NAME_ACTION}__trigger--intent`,
+            ]"
+            type="button"
+          >
+            Ordina
+            <Suspense>
+              <NuxtIcon name="caret" />
+            </Suspense>
+          </button>
+          <select
+            :value="orderby"
+            :class="{
+              [`${CSS_NAME_ACTION}__trigger`]: true,
+              [`${CSS_NAME_ACTION}__trigger--select`]: true,
+              'is-active': orderby !== null,
+            }"
+            @change="changeOrder($event.target.value)"
+          >
+            <option value="">Ordina per...</option>
+            <option v-for="(name, key) in orderOptions" :key="key" :value="key">
+              {{ name }}
+            </option>
+          </select>
+        </div>
       </div>
-    </div>
+    </ResponsiveTrigger>
 
-    <div v-if="products.length" class="o-row">
-      <ProductCard
-        v-for="product in products"
-        :key="product.id"
-        :product="product"
-        class="o-row__column"
-      />
-    </div>
+    <SiteContainer>
+      <div v-if="products.length" class="o-row">
+        <ProductCard
+          v-for="product in products"
+          :key="product.id"
+          :product="product"
+          class="o-row__column"
+        />
+      </div>
 
-    <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
+      <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
 
-    <span
-      v-if="canFetch && products.length"
-      ref="loader"
-      :class="`${CSS_NAME}__loader`"
-      >Caricamento</span
-    >
-    <!-- <BaseButton
-      v-if="canFetch && products.length"
-      :disabled="isFetching"
-      @click="fetchProducts"
-      >Carica altri prodotti</BaseButton
-    > -->
-  </SiteContainer>
+      <span
+        v-if="canFetch && products.length"
+        ref="loader"
+        :class="`${CSS_NAME}__loader`"
+        >Caricamento</span
+      >
+      <!-- <BaseButton
+        v-if="canFetch && products.length"
+        :disabled="isFetching"
+        @click="fetchProducts"
+        >Carica altri prodotti</BaseButton
+      > -->
+    </SiteContainer>
+  </section>
 </template>
 
 <script setup>
 // Imports
+import BaseOverlay from '@/components/Atoms/BaseOverlay.vue'
+import SiteContainer from '@/components/Atoms/SiteContainer.vue'
 import { useElementVisibility } from '@vueuse/core'
-import { OnClickOutside } from '@vueuse/components'
 
 // Constants
 const CSS_NAME = 'c-products-grid'
+const CSS_NAME_OVERLAY = `${CSS_NAME}__overlay`
+const CSS_NAME_ACTION = `${CSS_NAME}__action`
 
 // Props & Emits
 const props = defineProps({
@@ -145,10 +180,10 @@ const loaderIsVisible = useElementVisibility(loader)
 const noProductsMessage = ref('Nessun prodotto trovato')
 
 const chosenFilters = ref([])
+const isFilterOverlayOpen = ref(false)
+const selectedFiltersMessage = ref('Nessun filtro selezionato')
 
 const orderby = ref(null)
-const orderButton = ref(null)
-const isOrderDropdownOpen = ref(false)
 
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
@@ -158,11 +193,37 @@ const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
 })
 
 // Computed
-const orderByText = computed(() => {
-  return props.orderOptions[orderby.value] || 'Ordina per...'
+const cleanedChosenFilters = computed(() => {
+  return chosenFilters.value.filter((filter) => filter)
 })
 
 // Methods
+const resetParams = () => {
+  page.value = 0
+  products.value = []
+  canFetch.value = true
+}
+
+const clearFilters = () => {
+  resetParams()
+
+  chosenFilters.value = []
+
+  changeFiltersMessage()
+
+  fetchProducts()
+}
+
+const changeFiltersMessage = () => {
+  if (cleanedChosenFilters.value.length === 0) {
+    selectedFiltersMessage.value = 'Nessun filtro selezionato'
+  } else if (cleanedChosenFilters.value.length === 1) {
+    selectedFiltersMessage.value = '1 filtro selezionato'
+  } else {
+    selectedFiltersMessage.value = `${cleanedChosenFilters.value.length} filtri selezionati`
+  }
+}
+
 const toggleFilter = (filter) => {
   const index = chosenFilters.value.indexOf(filter)
 
@@ -172,8 +233,9 @@ const toggleFilter = (filter) => {
     chosenFilters.value.push(filter)
   }
 
-  products.value = []
-  canFetch.value = true
+  changeFiltersMessage()
+
+  resetParams()
 
   fetchProducts()
 }
@@ -181,17 +243,14 @@ const toggleFilter = (filter) => {
 const changeOrder = (order) => {
   orderby.value = order
 
-  toggleDropdown(false)
-
-  products.value = []
-  canFetch.value = true
+  resetParams()
 
   fetchProducts()
 }
 
-const toggleDropdown = (status = null) => {
-  isOrderDropdownOpen.value =
-    status === null ? !isOrderDropdownOpen.value : status
+const toggleOverlay = (status = null) => {
+  isFilterOverlayOpen.value =
+    status === null ? !isFilterOverlayOpen.value : status
 }
 
 const fetchProducts = async () => {
@@ -212,7 +271,7 @@ const fetchProducts = async () => {
         page,
         limit: 12,
         orderby,
-        'filters[]': chosenFilters.value.filter((filter) => filter),
+        'filters[]': cleanedChosenFilters,
       },
     })
 
@@ -257,56 +316,196 @@ $prefix: 'products-grid';
 
   @include element('toolbar') {
     display: flex;
-    justify-content: space-between;
     flex-wrap: nowrap;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
     gap: rem(20px);
+    background-color: get-var(color-white);
+    padding: 0 get-var(padding, $prefix: 'container');
+    @include typography(16px, 20px);
+
+    @include from(desktop) {
+      @include typography(14px, 18px);
+      padding: 0;
+      align-items: flex-start;
+      background-color: transparent;
+      justify-content: space-between;
+      // gap: rem(10px);
+    }
+  }
+
+  @include element('overlay') {
+    padding: rem(20px) 0;
+
+    @include set-local-vars(
+      $prefix: 'container',
+      $map: (
+        direction: column,
+        align-items: stretch,
+        gap: rem(20px),
+        height: 100%,
+        justify-content: flex-start,
+      )
+    );
+
+    @include element('header') {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: nowrap;
+    }
+
+    @include element('footer') {
+      margin-top: auto;
+
+      @include object('button') {
+        width: 100%;
+      }
+    }
   }
 
   @include element('filter') {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
+    align-items: stretch;
+    flex-direction: column;
     gap: rem(10px) rem(20px);
     padding: 0;
     margin: 0;
-  }
 
-  @include element('order') {
-    min-width: get-var(inner-width, rem(200px), $prefix: 'button');
-    white-space: nowrap;
+    @include from(tablet) {
+      flex-direction: row;
+      gap: rem(10px);
+    }
 
-    @include set-local-vars(
-      $prefix: 'button',
-      $map: (
-        padding: rem(12px) rem(20px),
-        text-transform: none,
-      )
-    );
+    @include between(tablet, desktop) {
+      justify-content: space-between;
+    }
+
+    @include from(desktop) {
+      gap: rem(10px);
+    }
+
+    @include from(full) {
+      gap: rem(10px) rem(20px);
+    }
+
+    @include element('item') {
+      width: 100%;
+
+      @include between(tablet, desktop) {
+        width: calc(50% - 10px);
+      }
+
+      @include from(desktop) {
+        width: auto;
+      }
+    }
+
+    @include object('button') {
+      width: 100%;
+
+      @include from(desktop) {
+        width: auto;
+      }
+    }
   }
 
   @include element('action') {
     position: relative;
-  }
+    flex: 1 1 100%;
+    text-align: center;
 
-  @include element('dropdown') {
-    position: absolute;
-    inset: 100% 0 auto;
-    z-index: 10;
-  }
+    & + #{current(&)} {
+      border-left: 1px solid get-var(color-dark);
 
-  @include element('sorts') {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+      @include from(desktop) {
+        border-left: none;
+      }
+    }
 
-    @include element('item') {
+    @include from(desktop) {
+      flex: 0 1 auto;
+    }
+
+    @include element('trigger') {
+      width: 100%;
+      margin: 0;
+      border: 0;
+      padding: rem(10px) 0;
       cursor: pointer;
-      padding: rem(14px) rem(20px);
-      border-bottom: 1px solid rgba(get-var(rgb-green), 0.45);
+      color: get-var(color-dark);
+      line-height: inherit;
+      font-size: 1em;
+      display: inline-block;
+      background-color: transparent;
+      text-transform: uppercase;
+      position: relative;
+      font-family: get-var(family-main);
+      @include transition(color, background-color);
 
-      &:last-child {
-        border-bottom: 0;
+      .nuxt-icon {
+        display: inline-block;
+        vertical-align: middle;
+        color: get-var(color-yellow);
+
+        svg {
+          width: rem(7.84px);
+          height: rem(4.48px);
+        }
+      }
+
+      option {
+        text-transform: none;
+        color: get-var(color-dark);
+        background-color: get-var(color-white);
+      }
+
+      @include modifier('intent') {
+        pointer-events: none;
+
+        @include from(desktop) {
+          display: none;
+        }
+      }
+
+      @include modifier('select') {
+        @include until(desktop) {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+        }
+      }
+
+      @include from(desktop) {
+        width: auto;
+        min-width: get-var(inner-width, rem(200px), $prefix: 'button');
+        padding: rem(12px) rem(20px);
+        border-radius: get-var(border-circle);
+        border: 1px solid get-var(color-dark);
+        text-transform: none;
+
+        &:hover {
+          color: get-var(color-dark);
+          background-color: get-var(color-white);
+        }
+
+        @include is('active') {
+          color: get-var(color-white);
+          background-color: get-var(color-dark);
+        }
+      }
+    }
+
+    @include modifier('filter') {
+      position: static;
+
+      @include element('trigger') {
+        @include from(desktop) {
+          display: none;
+        }
       }
     }
   }
