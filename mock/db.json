@@ -75,5 +75,28 @@
         }
       ]
     }
+  ],
+  "marquee": [
+    "#FrescoNaturalee",
+    "#QualitàNaturalee",
+    "#SaluteNaturalee",
+    "#ConvenienzaNaturalee",
+    "#EsperienzaNaturalee",
+    "#BenessereNaturalee"
+  ],
+  "topbar": [
+    "Lorem ipsum",
+    "dolor sit amet, consectetur adipiscing elit",
+    "dolor sit amet, consectetur adipiscing elit. Fusce tempus ipsum ut erat pharetra, at scelerisque lorem placerat."
+  ],
+  "copyright": [
+    {
+      "id": 1,
+      "text": "Naturalee SRL"
+    },
+    {
+      "id": 2,
+      "text": "PI IT123456789"
+    }
   ]
 }

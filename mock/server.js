@@ -10,10 +10,6 @@ server.use(middlewares)
 router.render = (request, response) => {
   let { data } = response.locals
 
-  if (request.url.indexOf('/menu/') === 0) {
-    data = data.menu
-  }
-
   const { statusCode } = response
   let code = 'generic'
   let message = 'Generic message'
@@ -45,8 +41,18 @@ router.render = (request, response) => {
   })
 }
 
-server.use(router)
 // server.use('/api', router)
+server.use(
+  jsonServer.rewriter({
+    '/v1/*': '/$1',
+    '/layout/marquee': '/marquee',
+    '/layout/topbar': '/topbar',
+    '/layout/copyright': '/copyright',
+  })
+)
+
+server.use(router)
+
 server.listen(8888, () => {
   console.log('JSON Server is running')
 })
