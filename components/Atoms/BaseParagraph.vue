@@ -46,25 +46,13 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include object(paragraph) {
-  $prefix: heading;
-
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      font-weight: get-var(weight-regular),
-      text-color: get-var(color-black),
-      font-size: 18px,
-      line-height: 28px,
-      font-family: get-var(family-text),
-    )
-  );
-
-  color: get-var(text-color, $prefix: $prefix);
-  font-weight: get-var(font-weight, $prefix: $prefix);
-  font-size: get-var(font-size, $prefix: $prefix);
-  line-height: get-var(line-height, $prefix: $prefix);
-  font-family: get-var(font-family, $prefix: $prefix);
+$prefix: 'paragraph';
+@include object($prefix) {
+  font-weight: get-var(font-weight, get-var(weight-regular), $prefix: $prefix);
+  color: get-var(text-color, get-var(color-black), $prefix: $prefix);
+  font-size: get-var(font-size, rem(18px), $prefix: $prefix);
+  line-height: get-var(line-height, rem(28px), $prefix: $prefix);
+  font-family: get-var(font-family, get-var(family-text), $prefix: $prefix);
   display: block;
 
   @include modifier('white') {
