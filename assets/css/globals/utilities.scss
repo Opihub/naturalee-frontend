@@ -1,0 +1,56 @@
+@use 'sass:map';
+
+@mixin assemble-utilities-with-sizes($media: false) {
+  @each $prop, $rule in $utilities-with-sizes {
+    @each $key, $value in $utilities-sizes {
+      @if ($media) {
+        @include from($media) {
+          @include utility(#{$prop}-#{$key}\@#{$media}) {
+            #{$rule}: rem($value) !important;
+          }
+        }
+      } @else {
+        @include utility(#{$prop}-#{$key}) {
+          #{$rule}: rem($value) !important;
+        }
+      }
+    }
+
+    @if ($media) {
+      @include from($media) {
+        @include utility(#{$prop}-custom\@#{$media}) {
+          #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+        }
+      }
+    } @else {
+      @include utility(#{$prop}-custom) {
+        #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+      }
+    }
+  }
+}
+
+@mixin assemble-utilities-without-sizes($media: false) {
+  @each $prop, $options in $utilities-without-sizes {
+    @each $value in map.get($options, values) {
+      @if ($media) {
+        @include from($media) {
+          @include utility(#{$prop}-#{$value}\@#{$media}) {
+            #{map.get($options, rule)}: $value !important;
+          }
+        }
+      } @else {
+        @include utility(#{$prop}-#{$value}) {
+          #{map.get($options, rule)}: $value !important;
+        }
+      }
+    }
+  }
+}
+
+@include assemble-utilities-with-sizes();
+@include assemble-utilities-without-sizes();
+@each $media, $_ in $responsive {
+  @include assemble-utilities-with-sizes($media);
+  @include assemble-utilities-without-sizes($media);
+}

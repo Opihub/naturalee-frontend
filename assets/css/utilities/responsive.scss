@@ -1,13 +1,41 @@
 @use 'sass:map';
+@use 'sass:meta';
 
-@mixin media($size) {
-  @if (not map.has-key($responsive, $size)) {
-    @error "#{$size} non è una media query registrata";
+@mixin from($size) {
+  @include media($size) {
+    @content;
+  }
+}
+
+@mixin until($size) {
+  @include media($size, true) {
+    @content;
+  }
+}
+
+@mixin between($from, $to) {
+  @include media($from) {
+    @include media($to, true) {
+      @content;
+    }
+  }
+}
+
+@mixin media($size, $reverse: false) {
+  @if (map.has-key($responsive, $size)) {
+    $size: map.get($responsive, $size);
+  } @else {
+    @if (not meta.type-of($size) == number) {
+      @error "#{$size} non è una media query registrata";
+    }
   }
 
-  $size: map.get($responsive, $size);
+  $query: 'min-width: #{$size}px';
+  @if ($reverse) {
+    $query: 'max-width: #{$size - $responsive-offset}px';
+  }
 
-  @media (min-width: "#{$size}px") {
+  @media (#{$query}) {
     @content;
   }
 }

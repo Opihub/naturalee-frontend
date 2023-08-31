@@ -11,6 +11,14 @@
   @return selector.simple-selectors($current);
 }
 
+@function root($selector) {
+  $list: string-split($selector, ' ');
+
+  $current: get-real-selector($list, 1);
+
+  @return selector.simple-selectors($current);
+}
+
 @function get-real-selector($list, $select: -1) {
   $current: list.nth($list, $select);
 

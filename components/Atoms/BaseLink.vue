@@ -1,21 +1,42 @@
 <template>
   <NuxtLink :class="className">
-    <Suspense>
-      <slot name="svg">
+    <Suspense v-if="svg || slots.svg">
+      <slot name="svg" :class-name="CSS_NAME_ICON">
         <NuxtIcon
-          v-if="svg"
           :name="svg"
-          :class="`${CSS_NAME}__icon`"
-          :filled="false"
+          :class="CSS_NAME_ICON"
+          :filled="svgFilled"
         />
       </slot>
+
+      <template #fallback>
+        <span class="nuxt-icon" :class="CSS_NAME_ICON">
+          <svg viewBox="0 0 50 50">
+            <g>
+              <circle
+                cx="25"
+                cy="25"
+                r="20"
+                fill="#f0f1fb"
+                stroke="#00966e"
+                stroke-width="2"
+              />
+            </g>
+          </svg>
+        </span>
+      </template>
     </Suspense>
 
-    <slot>
-      <span v-if="text">{{ text }}</span>
-    </slot>
+    <span
+      v-if="slots.default || text || arrow"
+      :class="[`${CSS_NAME}__label`, labelClassName]"
+    >
+      <slot>
+        <span v-if="text">{{ text }}</span>
+      </slot>
 
-    <ArrowSVG v-if="arrow" :class="`${CSS_NAME}__arrow`" />
+      <ArrowSVG v-if="arrow" :class="`${CSS_NAME}__arrow`" />
+    </span>
   </NuxtLink>
 </template>
 
@@ -23,11 +44,16 @@
 import ArrowSVG from 'assets/svg/arrow.svg'
 
 const CSS_NAME = 'o-link'
+const CSS_NAME_ICON = `${CSS_NAME}__icon`
 
 const props = defineProps({
   svg: {
     type: String,
     default: null,
+  },
+  svgFilled: {
+    type: Boolean,
+    default: true,
   },
   text: {
     type: String,
@@ -40,6 +66,10 @@ const props = defineProps({
   underline: {
     type: Boolean,
     default: false,
+  },
+  labelClassName: {
+    type: String,
+    default: '',
   },
   color: {
     type: String,
@@ -77,10 +107,11 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
-@include object(link) {
-  $prefix: link;
-  $svg-prefix: svg;
-  $arrow-prefix: arrow;
+$prefix: 'link';
+@include object($prefix) {
+  $svg-prefix: 'link-svg';
+  $arrow-prefix: 'arrow';
+  $label-prefix: 'link-label';
 
   @include set-vars(
     $prefix: $prefix,
@@ -108,11 +139,13 @@ const className = computed(() => {
   );
 
   text-decoration: none;
-  color: #{get-var(text-color, $prefix: $prefix)};
+  color: get-var(text-color, $prefix: $prefix);
   display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: #{get-var(gap, $prefix: $prefix)};
-  align-items: baseline;
+  gap: get-var(gap, $prefix: $prefix);
   @include transition(color);
 
   &:hover {
@@ -130,16 +163,27 @@ const className = computed(() => {
 
     svg {
       margin: 0 auto;
-      width: #{get-var(width, $prefix: $svg-prefix)};
-      height: #{get-var(height, $prefix: $svg-prefix)};
+      width: get-var(width, $prefix: $svg-prefix);
+      height: get-var(height, $prefix: $svg-prefix);
+
+      @include transition(fill);
     }
   }
 
   @include element('arrow') {
     margin: 0;
-    width: #{get-var(width, $prefix: $arrow-prefix)};
-    height: #{get-var(height, $prefix: $arrow-prefix)};
+    width: get-var(width, $prefix: $arrow-prefix);
+    height: get-var(height, $prefix: $arrow-prefix);
     align-self: baseline;
+  }
+
+  @include element('label') {
+    display: inline-flex;
+    align-items: baseline;
+    width: get-var(width, auto, $prefix: $label-prefix);
+    justify-content: get-var(disposition, center, $prefix: $label-prefix);
+    gap: get-var(gap, $prefix: $prefix);
+    @include transition(color);
   }
 
   @include modifier('white') {
@@ -182,18 +226,7 @@ const className = computed(() => {
     text-decoration: underline;
   }
 
-  @include has('arrow') {
-    @include element('icon') {
-      grid-column: 1 / 3;
-    }
-  }
-
   @include has('icon') {
-    display: inline-grid;
-    grid-template-areas:
-      '2fr'
-      '1fr 1fr';
-
     @include element('arrow') {
       align-self: center;
     }

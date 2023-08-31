@@ -4,12 +4,13 @@
     :type="type"
     :name="name"
     :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="input"
+    @blur="check"
   />
 </template>
 
 <script setup>
-defineEmits(['update:modelValue'])
+const CSS_NAME = 'o-input'
 
 const props = defineProps({
   type: {
@@ -20,7 +21,7 @@ const props = defineProps({
       return [
         'date',
         'datetime-locale',
-        'mail',
+        'email',
         'hidden',
         'month',
         'number',
@@ -56,11 +57,13 @@ const props = defineProps({
   },
   modelValue: {
     type: [String, Number, Boolean],
-    required: true,
+    default: null,
   },
 })
 
-const CSS_NAME = 'o-input'
+const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
+
+const isValid = ref(false)
 
 const className = computed(() => {
   const className = [CSS_NAME]
@@ -71,6 +74,16 @@ const className = computed(() => {
 
   if (props.borderless) {
     className.push(`${CSS_NAME}--borderless`)
+  }
+
+  if (isValid.value === true) {
+    className.push('is-valid')
+  } else if (isValid.value === false) {
+    className.push('is-invalid')
+  }
+
+  if (firstInteraction.value) {
+    className.push('is-init')
   }
 
   switch (props.width) {
@@ -90,49 +103,109 @@ const className = computed(() => {
 
   return className
 })
+
+const firstInteraction = ref(false)
+
+const input = (event) => {
+  emit('update:modelValue', event.target.value)
+
+  check(event)
+}
+
+const check = (event) => {
+  firstInteraction.value = true
+
+  let eventName = 'invalid'
+  if (event.target.checkValidity()) {
+    eventName = 'valid'
+    isValid.value = true
+  } else {
+    isValid.value = false
+  }
+
+  emit(eventName, event.target.value)
+}
 </script>
 
 <style lang="scss">
-@include object(input) {
-  $prefix: input;
-  $svg-prefix: svg;
+$prefix: 'input';
+
+%input-valid {
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      border-color: get-var(color-green),
+    )
+  );
+}
+
+%input-invalid {
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      border-color: get-var(color-red),
+    )
+  );
+}
+@include object($prefix) {
+  $svg-prefix: 'svg';
 
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      // padding: rem(14px) rem(20px),
-      // font-size: rem(20px),
       background-color: get-var(color-white),
       text-color: get-var(color-dark),
       border-width: 1px,
       border-color: get-var(color-dark),
-      width: auto,
-      max-width: 100%,
-      font-weight: get-var(weight-regular),
       radius: rem(10px),
-
-      padding: rem(8px) rem(20px),
-      font-size: rem(18px),
-      line-height: rem(35px),
     )
   );
 
-  border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
-      border-color
-    )};
+  border: get-var(border-width, $prefix: $prefix) solid
+    get-var(border-color, $prefix: $prefix);
 
-  border-radius: #{get-var(radius, $prefix: $prefix)};
-  font-size: #{get-var(font-size, $prefix: $prefix)};
-  line-height: #{get-var(line-height, $prefix: $prefix)};
-  font-weight: #{get-var(font-weight, $prefix: $prefix)};
-  padding: #{get-var(padding, $prefix: $prefix)};
-  background-color: #{get-var(background-color, $prefix: $prefix)};
-  color: #{get-var(text-color, $prefix: $prefix)};
-  width: #{get-var(width, $prefix: $prefix)};
-  max-width: #{get-var(max-width, $prefix: $prefix)};
+  border-radius: get-var(radius, $prefix: $prefix);
+  font-size: get-var(font-size, rem(18px), $prefix: $prefix);
+  line-height: get-var(line-height, rem(35px), $prefix: $prefix);
+  font-weight: get-var(font-weight, get-var(weight-regular), $prefix: $prefix);
+  padding: get-var(padding, rem(8px) rem(20px), $prefix: $prefix);
+  background-color: get-var(background-color, $prefix: $prefix);
+  color: get-var(text-color, $prefix: $prefix);
+  width: get-var(width, auto, $prefix: $prefix);
+  max-width: get-var(max-width, 100%, $prefix: $prefix);
+
+  @include transition(border-color);
+
+  &:focus {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        border-color: get-var(color-yellow),
+      )
+    );
+    outline: none;
+  }
 
   &::placeholder {
     opacity: 0.4;
+  }
+
+  @include is('init') {
+    @include is('valid') {
+      @extend %input-valid;
+    }
+
+    &:valid {
+      @extend %input-valid;
+    }
+
+    @include is('invalid') {
+      @extend %input-invalid;
+    }
+
+    &:invalid {
+      @extend %input-invalid;
+    }
   }
 
   @include modifier('rounded') {

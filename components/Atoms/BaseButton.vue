@@ -1,5 +1,5 @@
 <template>
-  <button :class="className" :type="type">
+  <component :is="is" :class="className" :type="type">
     <slot>
       <span v-if="text">{{ text }}</span>
     </slot>
@@ -9,13 +9,20 @@
         <NuxtIcon v-if="svg" :name="svg" :style="svgStyle" />
       </slot>
     </Suspense>
-  </button>
+  </component>
 </template>
 
 <script setup>
 const CSS_NAME = 'o-button'
 
 const props = defineProps({
+  as: {
+    type: String,
+    default: 'button',
+    validator(value) {
+      return ['button', 'link'].includes(value)
+    },
+  },
   svg: {
     type: String,
     default: null,
@@ -41,7 +48,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['filter', 'search'].includes(value)
+      return ['filter'].includes(value)
     },
   },
   color: {
@@ -49,10 +56,12 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['green', 'yellow', 'transparent'].includes(value)
+      return ['green', 'yellow', 'transparent', 'white'].includes(value)
     },
   },
 })
+
+const slots = useSlots()
 
 const svgStyle = computed(() => {
   let width = null
@@ -67,21 +76,24 @@ const svgStyle = computed(() => {
     }
   }
 
-  console.debug(width, height)
   return {
-    '--svg-width': width,
-    '--svg-height': height,
+    '--svg-width': typeof width === 'number' ? `${width}px` : width,
+    '--svg-height': typeof height === 'number' ? `${height}px` : height,
   }
 })
 
 const className = computed(() => {
   const className = [CSS_NAME]
 
+  if (slots.svg || props.svg) {
+    className.push(`has-svg`)
+  }
+
   if (props.scope) {
     className.push(`${CSS_NAME}--${props.scope}`)
   }
 
-  if (props.color) {
+  if (props.color && props.color !== 'white') {
     className.push(`${CSS_NAME}--${props.color}`)
   }
 
@@ -91,21 +103,21 @@ const className = computed(() => {
 
   return className
 })
+
+const is = computed(() => {
+  return props.as === 'link' ? resolveComponent('NuxtLink') : props.as
+})
 </script>
 
 <style lang="scss">
-@include object(button) {
-  $prefix: button;
-  $svg-prefix: svg;
+$prefix: 'button';
+@include object($prefix) {
+  $svg-prefix: 'svg';
 
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      padding: 12px 44px,
-      background-color: get-var(color-white),
-      text-color: get-var(color-green),
       border-width: 0,
-      font-weight: font-weight(bold),
     )
   );
 
@@ -117,20 +129,32 @@ const className = computed(() => {
     )
   );
 
+  &:focus {
+    outline: 1px solid get-var(color-yellow);
+  }
+
   border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
-      border-color
+      color-dark
     )};
   border-radius: 999em;
-  font-weight: #{get-var(font-weight, $prefix: $prefix)};
-  padding: #{get-var(padding, $prefix: $prefix)};
+  font-weight: get-var(font-weight, font-weight(bold), $prefix: $prefix);
+  padding: get-var(padding, rem(12px) rem(44px), $prefix: $prefix);
   cursor: pointer;
   text-align: center;
-  background-color: #{get-var(background-color, $prefix: $prefix)};
-  color: #{get-var(text-color, $prefix: $prefix)};
+  background-color: get-var(
+    background-color,
+    get-var(color-white),
+    $prefix: $prefix
+  );
+  color: get-var(text-color, get-var(color-green), $prefix: $prefix);
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
+  justify-content: center;
+  font-size: get-var(font-size, 1em, $prefix: $prefix);
+  line-height: get-var(line-height, inherit, $prefix: $prefix);
+  gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
+  text-transform: get-var(text-transform, uppercase, $prefix: $prefix);
+  opacity: 1;
 
   svg {
     margin: 0;
@@ -138,7 +162,11 @@ const className = computed(() => {
     height: #{get-var(height, $prefix: $svg-prefix)};
   }
 
-  @include transition(background-color, color, border-color);
+  @include has('svg') {
+    justify-content: space-between;
+  }
+
+  @include transition(background-color, color, border-color, opacity);
 
   &:hover {
     @include set-local-vars(
@@ -195,36 +223,30 @@ const className = computed(() => {
       $prefix: $prefix,
       $map: (
         background-color: transparent,
-        text-color: get-var(border-color),
+        text-color: get-var(color-dark),
         border-width: 1px,
       )
     );
 
-    @include is(active) {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
+    @include is('active') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-dark),
+          text-color: get-var(color-white),
+        )
       );
     }
 
     &:hover {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-white),
+          text-color: get-var(color-dark),
+        )
       );
     }
-  }
-
-  @include modifier('search') {
-    @include set-local-vars(
-      $prefix: $prefix,
-      $map: (
-        padding: 21px 30px,
-        font-weight: font-weight(bold),
-      )
-    );
   }
 
   @include modifier('filter') {
@@ -235,6 +257,11 @@ const className = computed(() => {
         font-weight: font-weight(medium),
       )
     );
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: no-drop;
   }
 }
 </style>

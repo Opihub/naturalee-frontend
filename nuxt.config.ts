@@ -1,4 +1,7 @@
-import { additionalData } from './utilities/globalCSS'
+import { additionalData } from './utils/globalCSS'
+import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
+const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -17,7 +20,7 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  css: ['@/assets/css/main.scss'],
+  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
   vite: {
     css: {
       preprocessorOptions: {
@@ -68,7 +71,7 @@ export default defineNuxtConfig({
     families: {
       Mulish: [400, 700, 800],
       Lato: {
-        wght: [400],
+        wght: [300, 400, 700],
         ital: [400],
       },
     },
@@ -78,5 +81,34 @@ export default defineNuxtConfig({
   },
   svgo: {
     defaultImport: 'component',
+  },
+  // @ts-ignore
+  storybook: {
+    components: {
+      NuxtImg: 'storybook/custom/components.mjs',
+    },
+    composables: {
+      'storybook/custom/composables.mjs': {
+        '#app': [
+          'useFetch',
+          'useLazyFetch',
+          'useAsyncData',
+          'useLazyAsyncData',
+          'useRuntimeConfig',
+        ],
+        '#build/storybook/composables.mjs': ['useNuxtApp'],
+      },
+    },
+    templates: [
+      {
+        src: join(runtimeDir, 'composables.mjs'),
+        filename: 'storybook/custom/composables.mjs',
+      },
+
+      {
+        src: join(runtimeDir, 'components.mjs'),
+        filename: 'storybook/custom/components.mjs',
+      },
+    ],
   },
 })
