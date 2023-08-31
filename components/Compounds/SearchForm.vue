@@ -3,7 +3,7 @@
 
   <form :class="className" method="GET" v-bind="$attrs">
     <InputField
-      v-model="value"
+      v-model="search"
       :class="`${CSS_NAME}__input`"
       type="search"
       :placeholder="placeholder"
@@ -25,13 +25,13 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-search'
 
+// Props & Emits
 const props = defineProps({
-  modelValue: {
-    type: String,
-    required: true,
-  },
   placeholder: {
     type: String,
     default: null,
@@ -45,17 +45,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+// Component life-cycle hooks
 
-const value = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emit('update:modelValue', value)
-  },
-})
+// Data
+const search = ref('')
 
+// Watcher
+
+// Computed
 const svgSize = computed(() => {
   if (props.size === 'mini') {
     return [15, 15]
@@ -73,6 +70,8 @@ const className = computed(() => {
 
   return className
 })
+
+// Methods
 </script>
 
 <style lang="scss">

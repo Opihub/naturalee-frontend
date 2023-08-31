@@ -15,7 +15,6 @@
 
     <HeaderBottomBar
       v-if="!hideBottombar"
-      :search="bottombar.search"
       :breadcrumb="bottombar.breadcrumb"
     />
     <slot />

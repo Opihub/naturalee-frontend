@@ -8,7 +8,6 @@
       />
 
       <SearchForm
-        v-model="value"
         :class="`${CSS_NAME}__search`"
         size="mini"
         placeholder="Di cosa hai bisogno?"
@@ -18,13 +17,13 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-bottom-bar'
 
-const props = defineProps({
-  search: {
-    type: String,
-    required: true,
-  },
+// Props & Emits
+defineProps({
   breadcrumb: {
     type: Array,
     default() {
@@ -33,16 +32,15 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['search'])
+// Component life-cycle hooks
 
-const value = computed({
-  get() {
-    return props.search
-  },
-  set(value) {
-    emit('search', value)
-  },
-})
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
 </script>
 
 <style lang="scss">
