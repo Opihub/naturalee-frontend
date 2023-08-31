@@ -225,6 +225,13 @@
       "quantity": 14
     }
   ],
+  "profile": {
+    "id": 1,
+    "email": "test@prova.it",
+    "username": "opiquad",
+    "firstName": "Marco",
+    "lastName": "Rossi"
+  },
   "marquee": [
     "#FrescoNaturalee",
     "#QualitàNaturalee",
