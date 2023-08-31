@@ -52,6 +52,7 @@ server.use(
     '/layout/marquee': '/marquee',
     '/layout/topbar': '/topbar',
     '/layout/copyright': '/copyright',
+    '/shop/cart/products': '/shop_cart_products',
     '/shop/categories': '/shop_categories',
   })
 )
