@@ -10,6 +10,10 @@ server.use(middlewares)
 router.render = (request, response) => {
   let { data } = response.locals
 
+  if (request.url.indexOf('/menu/') === 0) {
+    data = data.records
+  }
+
   const { statusCode } = response
   let code = 'generic'
   let message = 'Generic message'
