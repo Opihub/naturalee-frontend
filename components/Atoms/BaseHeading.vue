@@ -42,7 +42,9 @@ const className = computed(() => {
   const className = [CSS_NAME]
 
   if (props.use) {
-    className.push(`${CSS_NAME}--${props.use}`)
+    if (props.use !== 'custom') {
+      className.push(`${CSS_NAME}--${props.use}`)
+    }
   } else if (props.tag && props.tag !== 'span') {
     className.push(`${CSS_NAME}--${props.tag}`)
   }
@@ -73,11 +75,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
-        text-color: get-var(color-dark),
         font-size: 36px,
         line-height: 42px,
       )
     );
+    color: get-var(text-color, get-var(color-dark), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -95,11 +97,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
-        text-color: get-var(color-white),
         font-size: 38px,
         line-height: 44px,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -117,11 +119,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
-        text-color: get-var(color-white),
         font-size: 40px,
         line-height: 50px,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -139,11 +141,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
-        text-color: get-var(color-white),
         font-size: 30px,
         line-height: 40px,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -161,11 +163,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
-        text-color: get-var(color-green),
         font-size: 30px,
         line-height: 40px,
       )
     );
+    color: get-var(text-color, get-var(color-green), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -183,12 +185,12 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
-        text-color: get-var(color-white),
         font-size: 18px,
         line-height: 23px,
         text-transform: uppercase,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(

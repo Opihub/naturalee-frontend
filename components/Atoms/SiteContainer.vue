@@ -57,6 +57,7 @@ const className = computed(() => {
 $prefix: 'container';
 @include object($prefix) {
   width: 100%;
+  height: get-var(height, auto, $prefix: $prefix);
   margin: 0 auto;
   padding: 0 get-var(padding, get-var(container-padding), $prefix: $prefix);
   max-width: get-var(max-width, get-var(container-size), $prefix: $prefix);
@@ -67,6 +68,7 @@ $prefix: 'container';
     flex-wrap: get-var(wrap, wrap, $prefix: $prefix);
     align-items: get-var(align-items, center, $prefix: $prefix);
     justify-content: get-var(justify-content, space-between, $prefix: $prefix);
+    gap: get-var(gap, 0, $prefix: $prefix);
   }
 }
 </style>
