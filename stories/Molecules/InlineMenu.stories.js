@@ -1,4 +1,5 @@
 import InlineMenu from '@/components/Molecules/InlineMenu.vue'
+import { getFromMock } from '@/utils/mock'
 
 export default {
   title: 'Molecules/Inline Menu',
@@ -32,32 +33,7 @@ export default {
   args: {
     _background: '#00966E',
     gap: 'normal',
-    menu: [
-      {
-        id: 1,
-        title: 'Azienda',
-        url: 'azienda',
-        target: null,
-      },
-      {
-        id: 2,
-        title: 'Contatti',
-        url: 'contatti',
-        target: null,
-      },
-      {
-        id: 3,
-        title: 'FAQ',
-        url: 'faq',
-        target: null,
-      },
-      {
-        id: 4,
-        title: 'Consegna',
-        url: 'consegna',
-        target: null,
-      },
-    ],
+    menu: getFromMock('menu', 'primary'),
   },
 }
 
@@ -85,20 +61,7 @@ MainFooter.args = {
 export const Social = Template.bind({})
 Social.args = {
   gap: 'stretch',
-  menu: [
-    {
-      id: 1,
-      title: 'Facebook',
-      url: 'https://it-it.facebook.com/',
-      target: '_blank',
-    },
-    {
-      id: 2,
-      title: 'Instagram',
-      url: 'https://www.instagram.com/',
-      target: '_blank',
-    },
-  ],
+  menu: getFromMock('menu', 'socials'),
 }
 
 export const Privacy = Template.bind({})
@@ -106,30 +69,5 @@ Privacy.args = {
   gap: 'mini',
   color: 'white',
   separator: '-',
-  menu: [
-    {
-      id: 1,
-      title: 'Privacy Policy',
-      url: 'privacy-policy',
-      target: null,
-    },
-    {
-      id: 2,
-      title: 'Cookie Policy',
-      url: 'cookie-policy',
-      target: null,
-    },
-    {
-      id: 3,
-      title: 'Condizioni di vendita',
-      url: 'condizioni-di-vendita',
-      target: null,
-    },
-    {
-      id: 4,
-      title: 'R-innovazione by Opiquad.it',
-      url: '#',
-      target: null,
-    },
-  ],
+  menu: getFromMock('menu', 'privacy'),
 }

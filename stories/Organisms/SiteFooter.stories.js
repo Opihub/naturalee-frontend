@@ -1,4 +1,5 @@
 import SiteFooter from '@/components/Organisms/SiteFooter.vue'
+import getFromMock from '@/utils/mock'
 
 export default {
   title: 'Organisms/Footer',
@@ -9,76 +10,10 @@ export default {
   },
   args: {
     paymentImage: '/pagamenti-sicuri.png',
-    socialsMenu: [
-      {
-        id: 1,
-        title: 'Facebook',
-        url: 'https://it-it.facebook.com/',
-        target: '_blank',
-      },
-      {
-        id: 2,
-        title: 'Instagram',
-        url: 'https://www.instagram.com/',
-        target: '_blank',
-      },
-    ],
-    menu: [
-      {
-        id: 1,
-        title: 'Azienda',
-        url: 'azienda',
-        target: null,
-      },
-      {
-        id: 2,
-        title: 'Contatti',
-        url: 'contatti',
-        target: null,
-      },
-      {
-        id: 3,
-        title: 'FAQ',
-        url: 'faq',
-        target: null,
-      },
-      {
-        id: 4,
-        title: 'Consegna',
-        url: 'consegna',
-        target: null,
-      },
-    ],
-    copyright: [
-      {
-        id: 1,
-        text: 'Naturalee SRL',
-      },
-      {
-        id: 2,
-        text: 'PI IT123456789',
-      },
-    ],
-    privacyMenu: [
-      {
-        id: 1,
-        title: 'Privacy Policy',
-        url: 'privacy-policy',
-        target: null,
-      },
-      {
-        id: 2,
-        title: 'Cookie Policy',
-        url: 'cookie-policy',
-        target: null,
-      },
-      {
-        id: 3,
-        title: 'Condizioni di vendita',
-        url: 'condizioni-di-vendita',
-        target: null,
-      },
-    ],
+    socialsMenu: getFromMock('menu', 'socials'),
+    menu: getFromMock('menu', 'primary'),
+    copyright: getFromMock('copyright'),
+    privacyMenu: getFromMock('menu', 'privacy'),
   },
 }
 

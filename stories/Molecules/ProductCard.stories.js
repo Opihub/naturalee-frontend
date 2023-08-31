@@ -1,5 +1,6 @@
 import ProductCard from '@/components/Molecules/ProductCard.vue'
 import SVGDefinitions from '@/components/Atoms/SVGDefinitions.vue'
+import { getFromMock } from '@/utils/mock'
 
 export default {
   title: 'Molecules/Product Card',
@@ -27,14 +28,7 @@ const Template = (args) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-  product: {
-    id: 1,
-    image: 'https://picsum.photos/304/391?grayscale&blur=2',
-    title: 'Nome prodotto',
-    provenance: 'Italia',
-    slug: 'nome-prodotto',
-    link: 'verdura/nome-prodotto',
-  },
+  product: getFromMock('shop_homepage_products')[0],
 }
 
 export const WithMarker = Template.bind({})
