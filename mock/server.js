@@ -12,10 +12,12 @@ router.render = (request, response) => {
 
   const [namespace] = request.url.split('/').filter((part) => part)
 
+  console.debug(namespace)
   switch (namespace) {
     case 'menu':
       data = data.records
       break
+    case 'shop_categories_pages':
     case 'pages':
       data = data.record
       break
@@ -61,6 +63,7 @@ server.use(
     '/layout/copyright': '/copyright',
     '/shop/homepage/products': '/shop_homepage_products',
     '/shop/cart/products': '/shop_cart_products',
+    '/shop/categories/:category': '/shop_categories_pages/$1',
     '/shop/categories': '/shop_categories',
   })
 )

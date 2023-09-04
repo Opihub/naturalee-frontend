@@ -1,102 +1,104 @@
 <template>
   <section :class="CSS_NAME">
-    <ResponsiveTrigger
-      :is="SiteContainer"
-      v-if="sortable || filters.length"
-      :size="992"
-    >
-      <div :class="`${CSS_NAME}__toolbar`" class="u-mb-huge">
-        <div
-          v-if="filters.length"
-          :class="[CSS_NAME_ACTION, `${CSS_NAME_ACTION}--filter`]"
-        >
-          <button
-            :class="`${CSS_NAME_ACTION}__trigger`"
-            type="button"
-            @click="toggleOverlay(true)"
+    <ClientOnly>
+      <ResponsiveTrigger
+        :is="SiteContainer"
+        v-if="sortable || filters.length"
+        :size="992"
+      >
+        <div :class="`${CSS_NAME}__toolbar`" class="u-mb-huge">
+          <div
+            v-if="filters.length"
+            :class="[CSS_NAME_ACTION, `${CSS_NAME_ACTION}--filter`]"
           >
-            Filtra
-          </button>
+            <button
+              :class="`${CSS_NAME_ACTION}__trigger`"
+              type="button"
+              @click="toggleOverlay(true)"
+            >
+              Filtra
+            </button>
 
-          <Transition name="fade">
-            <KeepAlive>
-              <ResponsiveTrigger
-                :is="BaseOverlay"
-                v-show="isFilterOverlayOpen"
-                :size="992"
-                desktop-first
-                :class="CSS_NAME_OVERLAY"
-              >
-                <template #before>
-                  <div :class="`${CSS_NAME_OVERLAY}__header`">
-                    <span>{{ selectedFiltersMessage }}</span>
-                    <u @click="clearFilters">Azzera</u>
-                  </div>
-                </template>
+            <Transition name="fade">
+              <KeepAlive>
+                <ResponsiveTrigger
+                  :is="BaseOverlay"
+                  v-show="isFilterOverlayOpen"
+                  :size="992"
+                  desktop-first
+                  :class="CSS_NAME_OVERLAY"
+                >
+                  <template #before>
+                    <div :class="`${CSS_NAME_OVERLAY}__header`">
+                      <span>{{ selectedFiltersMessage }}</span>
+                      <u @click="clearFilters">Azzera</u>
+                    </div>
+                  </template>
 
-                <ul :class="`${CSS_NAME}__filter`">
-                  <li
-                    v-for="filter in filters"
-                    :key="filter.slug"
-                    :class="`${CSS_NAME}__filter__item`"
-                  >
-                    <BaseButton
-                      color="transparent"
-                      scope="filter"
-                      :class="{
-                        'is-active': chosenFilters.includes(filter.slug),
-                      }"
-                      @click="toggleFilter(filter.slug)"
-                      >{{ filter.text }}</BaseButton
+                  <ul :class="`${CSS_NAME}__filter`">
+                    <li
+                      v-for="filter in filters"
+                      :key="filter.slug"
+                      :class="`${CSS_NAME}__filter__item`"
                     >
-                  </li>
-                </ul>
+                      <BaseButton
+                        color="transparent"
+                        scope="filter"
+                        :class="{
+                          'is-active': chosenFilters.includes(filter.slug),
+                        }"
+                        @click="toggleFilter(filter.slug)"
+                        >{{ filter.text }}</BaseButton
+                      >
+                    </li>
+                  </ul>
 
-                <template #after>
-                  <div :class="`${CSS_NAME_OVERLAY}__footer`">
-                    <BaseButton
-                      color="transparent"
-                      scope="filter"
-                      @click="toggleOverlay(false)"
-                      >Applica
-                    </BaseButton>
-                  </div>
-                </template>
-              </ResponsiveTrigger>
-            </KeepAlive>
-          </Transition>
-        </div>
+                  <template #after>
+                    <div :class="`${CSS_NAME_OVERLAY}__footer`">
+                      <BaseButton
+                        color="transparent"
+                        scope="filter"
+                        @click="toggleOverlay(false)"
+                        >Applica
+                      </BaseButton>
+                    </div>
+                  </template>
+                </ResponsiveTrigger>
+              </KeepAlive>
+            </Transition>
+          </div>
 
-        <div v-if="sortable && orderOptions" :class="CSS_NAME_ACTION">
-          <button
-            :class="[
-              `${CSS_NAME_ACTION}__trigger`,
-              `${CSS_NAME_ACTION}__trigger--intent`,
-            ]"
-            type="button"
-          >
-            Ordina
-            <Suspense>
-              <NuxtIcon name="caret" />
-            </Suspense>
-          </button>
-          <select
-            :value="orderby"
-            :class="{
-              [`${CSS_NAME_ACTION}__trigger`]: true,
-              [`${CSS_NAME_ACTION}__trigger--select`]: true,
-              'is-active': orderby !== null,
-            }"
-            @change="changeOrder($event.target.value)"
-          >
-            <option value="">Ordina per...</option>
-            <option v-for="(name, key) in orderOptions" :key="key" :value="key">
-              {{ name }}
-            </option>
-          </select>
+          <div v-if="sortable && orderOptions" :class="CSS_NAME_ACTION">
+            <button
+              :class="[
+                `${CSS_NAME_ACTION}__trigger`,
+                `${CSS_NAME_ACTION}__trigger--intent`,
+              ]"
+              type="button"
+            >
+              Ordina
+              <Suspense>
+                <NuxtIcon name="caret" />
+              </Suspense>
+            </button>
+            <select
+              :value="orderby"
+              :class="{
+                [`${CSS_NAME_ACTION}__trigger`]: true,
+                [`${CSS_NAME_ACTION}__trigger--select`]: true,
+                'is-active': orderby !== null,
+              }"
+              @change="changeOrder($event.target.value)"
+            >
+              <option value="">Ordina per...</option>
+              <option v-for="(name, key) in orderOptions" :key="key" :value="key">
+                {{ name }}
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
-    </ResponsiveTrigger>
+      </ResponsiveTrigger>
+    </ClientOnly>
 
     <SiteContainer>
       <div v-if="products.length" class="o-row">
