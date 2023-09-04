@@ -18,8 +18,6 @@ export default defineEventHandler(async (event) => {
   try {
     const response = await useRemoteApi(`/v1/shop/categories/${category}`)
 
-    console.debug(response)
-
     return createResponse(response)
   } catch (error) {
     console.debug(error)

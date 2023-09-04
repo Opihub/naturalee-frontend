@@ -21,6 +21,9 @@ router.render = (request, response) => {
     case 'pages':
       data = data.record
       break
+    case 'products':
+      data = Array(3).fill(data).flat()
+      break
   }
 
   const { statusCode } = response
@@ -63,6 +66,7 @@ server.use(
     '/layout/copyright': '/copyright',
     '/shop/homepage/products': '/shopHomepageProducts',
     '/shop/cart/products': '/shopCartProducts',
+    '/shop/categories/:category/products': '/shopCategoriesPages/$1/products',
     '/shop/categories/:category': '/shopCategoriesPages/$1',
     '/shop/categories': '/shopCategories',
   })

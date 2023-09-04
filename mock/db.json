@@ -250,6 +250,58 @@
       }
     }
   ],
+  "products": [
+    {
+      "id": 1,
+      "image": "https://picsum.photos/300/300",
+      "title": "Anguria",
+      "provenance": "Italia",
+      "slug": "anguria",
+      "link": "frutta/anguria",
+      "shopCategoriesPageId": "frutta",
+      "category": "frutta"
+    },
+    {
+      "id": 2,
+      "image": "https://picsum.photos/300/300",
+      "title": "Melone",
+      "provenance": "Italia",
+      "slug": "melone",
+      "link": "frutta/melone",
+      "shopCategoriesPageId": "frutta",
+      "category": "frutta"
+    },
+    {
+      "id": 3,
+      "image": "https://picsum.photos/300/300",
+      "title": "Pere Williams",
+      "provenance": "Italia",
+      "slug": "pere-williams",
+      "link": "frutta/pere-williams",
+      "shopCategoriesPageId": "frutta",
+      "category": "frutta"
+    },
+    {
+      "id": 4,
+      "image": "https://picsum.photos/300/300",
+      "title": "Carciofi",
+      "provenance": "Italia",
+      "slug": "carciofi",
+      "link": "verdura/carciofi",
+      "shopCategoriesPageId": "verdura",
+      "category": "verdura"
+    },
+    {
+      "id": 5,
+      "image": "https://picsum.photos/300/300",
+      "title": "Peperoni",
+      "provenance": "Italia",
+      "slug": "peperoni",
+      "link": "verdura/peperoni",
+      "shopCategoriesPageId": "verdura",
+      "category": "verdura"
+    }
+  ],
   "menu": [
     {
       "id": "primary",
