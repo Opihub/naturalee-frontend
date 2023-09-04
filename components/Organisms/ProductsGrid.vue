@@ -91,7 +91,11 @@
               @change="changeOrder($event.target.value)"
             >
               <option value="">Ordina per...</option>
-              <option v-for="(name, key) in orderOptions" :key="key" :value="key">
+              <option
+                v-for="(name, key) in orderOptions"
+                :key="key"
+                :value="key"
+              >
                 {{ name }}
               </option>
             </select>
@@ -427,6 +431,10 @@ $prefix: 'products-grid';
 
     @include from(desktop) {
       flex: 0 1 auto;
+
+      &:last-child {
+        margin-left: auto;
+      }
     }
 
     @include element('trigger') {
