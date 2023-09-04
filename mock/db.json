@@ -1,4 +1,58 @@
 {
+  "pages": [
+    {
+      "id": "home",
+      "record": {
+        "id": 1,
+        "title": "Home",
+        "link": "",
+        "slug": "homepage",
+        "content": "",
+        "seo": {
+          "title": "Naturalee - Home",
+          "ogTitle": "Naturalee - Home",
+          "description": "Esplora una spesa Fresca e Naturalee. Ordina subito!",
+          "ogDescription": "Esplora una spesa Fresca e Naturalee. Ordina subito!"
+        },
+        "meta": {
+          "bottombar": false
+        },
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          }
+        ]
+      }
+    },
+    {
+      "id": "faq",
+      "record": {
+        "id": 2,
+        "title": "FAQ",
+        "link": "faq",
+        "slug": "faq",
+        "content": "",
+        "seo": {
+          "title": "Naturalee - FAQ",
+          "ogTitle": "Naturalee - FAQ",
+          "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+          "ogDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/faq",
+            "title": "Faq"
+          }
+        ]
+      }
+    }
+  ],
   "menu": [
     {
       "id": "primary",

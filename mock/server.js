@@ -10,8 +10,15 @@ server.use(middlewares)
 router.render = (request, response) => {
   let { data } = response.locals
 
-  if (request.url.indexOf('/menu/') === 0) {
-    data = data.records
+  const [namespace] = request.url.split('/').filter((part) => part)
+
+  switch (namespace) {
+    case 'menu':
+      data = data.records
+      break
+    case 'pages':
+      data = data.record
+      break
   }
 
   const { statusCode } = response
