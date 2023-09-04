@@ -23,9 +23,9 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     })
   }
 
-  // if (cached.value) {
-  //   return cached
-  // }
+  if (cached.value) {
+    return cached
+  }
 
   const { data, error } = await useFetch(apiUrl, {
     ...options,
