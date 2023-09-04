@@ -1,24 +1,73 @@
-import { useFetch, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
+import { useFetch, ref } from '#imports'
+import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 
-export async function useApi(url, options = {}) {
-  const config = useRuntimeConfig()
+export async function useApi(url, options = {}, innerOptions = {}) {
+  innerOptions = {
+    cache: true,
+    local: true,
+    dataOnly: false,
+    ...innerOptions,
+  }
 
-  const { data, error } = await useFetch(url, {
+  options = options || {}
+
+  const apiUrl = innerOptions.local ? `/api/${url}` : url
+
+  let cached = ref(null)
+  if (innerOptions.cache) {
+    cached = useSessionStorage(apiUrl, null, {
+      // By passing null as default it can't automatically
+      // determine which serializer to use
+      serializer: StorageSerializers.object,
+    })
+  }
+
+  // if (cached.value) {
+  //   return cached
+  // }
+
+  const { data, error } = await useFetch(apiUrl, {
     ...options,
-    baseURL: config?.public?.endpoint,
+    pick: null,
   })
 
   let responseData = data.value
   if (error.value) {
-    if (error.value.data && typeof error.value.data === 'object') {
-      responseData = error.value.data
+    const errorData = error.value?.data || {}
+    if ('data' in errorData && typeof errorData.data === 'object') {
+      /**
+       * Server error, can happen
+       */
+      responseData = errorData.data
     } else {
-      throw new Error(error.value)
+      /**
+       * Client error, must not happen
+       * Reason: calling wrong endpoint
+       */
+      throw error.value
     }
   }
 
-  const response = createResponse(responseData)
+  let response = createResponse(responseData)
 
-  return response
+  if (
+    'pick' in options &&
+    Array.isArray(options.pick) &&
+    options.pick.length > 0
+  ) {
+    response.data = Object.keys(response.data).reduce((accumulator, key) => {
+      const value = response[key]
+
+      if (options.pick.includes(key)) {
+        accumulator[key] = value
+      }
+
+      return accumulator
+    }, {})
+  }
+
+  cached = ref(innerOptions.dataOnly ? response.data : response)
+
+  return cached
 }
