@@ -17,7 +17,7 @@ router.render = (request, response) => {
     case 'menu':
       data = data.records
       break
-    case 'shop_categories_pages':
+    case 'shopCategoriesPages':
     case 'pages':
       data = data.record
       break
@@ -61,10 +61,10 @@ server.use(
     '/layout/marquee': '/marquee',
     '/layout/topbar': '/topbar',
     '/layout/copyright': '/copyright',
-    '/shop/homepage/products': '/shop_homepage_products',
-    '/shop/cart/products': '/shop_cart_products',
-    '/shop/categories/:category': '/shop_categories_pages/$1',
-    '/shop/categories': '/shop_categories',
+    '/shop/homepage/products': '/shopHomepageProducts',
+    '/shop/cart/products': '/shopCartProducts',
+    '/shop/categories/:category': '/shopCategoriesPages/$1',
+    '/shop/categories': '/shopCategories',
   })
 )
 

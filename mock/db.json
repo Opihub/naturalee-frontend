@@ -51,7 +51,7 @@
       }
     }
   ],
-  "shop_categories_pages": [
+  "shopCategoriesPages": [
     {
       "id": "verdura",
       "record": {
@@ -379,7 +379,7 @@
       ]
     }
   ],
-  "shop_categories": [
+  "shopCategories": [
     {
       "id": 1,
       "title": "Verdura",
@@ -419,7 +419,7 @@
       "image": "https://picsum.photos/id/500/304/391?grayscale&blur=2"
     }
   ],
-  "shop_homepage_products": [
+  "shopHomepageProducts": [
     {
       "id": 1,
       "image": "https://picsum.photos/300/300",
@@ -461,7 +461,7 @@
       "link": "verdura/peperoni"
     }
   ],
-  "shop_cart_products": [
+  "shopCartProducts": [
     {
       "id": 1,
       "title": "Banane Chiquita",
