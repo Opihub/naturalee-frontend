@@ -112,10 +112,7 @@
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
 
-      <span
-        v-if="canFetch && products.length"
-        ref="loader"
-        :class="`${CSS_NAME}__loader`"
+      <span v-if="isFetching" ref="loader" :class="`${CSS_NAME}__loader`"
         >Caricamento</span
       >
       <!-- <BaseButton
