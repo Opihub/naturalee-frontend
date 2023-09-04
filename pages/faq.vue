@@ -1,5 +1,7 @@
 <template>
   <main class="s-faq">
+    <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
+
     <BackgroundHolder color="white" class="u-pt-huge u-pb-large">
       <SiteContainer :max-width="1060">
         <BaseHeading tag="h1" class="u-text-center@tablet u-mb-huge"
@@ -28,23 +30,16 @@
 // Props & Emits
 
 // Component life-cycle hooks
-onMounted(async () => {
-  try {
-    const response = await useApi('faq')
-    console.debug(response.data)
-
-    if (response.success) {
-      faqs.value = response.data
-    }
-  } catch (error) {
-    console.error(error)
-    noProductsMessage.value =
-      'È avvenuto un errore durante il caricamento dei prodotti. Ci scusiamo per il disagio'
-  }
-})
 
 // Data
-const faqs = ref([])
+const faqs = await useApi(
+  'faq',
+  {},
+  {
+    dataOnly: true,
+  }
+)
+const { page } = await usePage('faq')
 
 // Watcher
 
@@ -58,8 +53,8 @@ const faqs = ref([])
   @include set-local-vars(
     $prefix: 'heading',
     $map: (
-      text-color: get-var(color-green)
+      text-color: get-var(color-green),
     )
-  )
+  );
 }
 </style>

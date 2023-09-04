@@ -59,7 +59,7 @@
       class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
       tag="section"
     >
-      <ProductCards :products="products" title="Frutta e Verdura Fresca" />
+      <ProductCards :products="products.data" title="Frutta e Verdura Fresca" />
     </BackgroundHolder>
 
     <TrackRow class="c-fifth-section">
@@ -75,14 +75,14 @@
         ><strong>Riordina<br />quando vuoi!</strong></template
       >
     </TrackRow>
-  </main>
 
-  <Teleport to="body">
-    <PostcodeModal
-      v-show="isPostcodeModalOpen"
-      @close="togglePostcodeModal(false)"
-    />
-  </Teleport>
+    <Teleport to="body">
+      <PostcodeModal
+        v-show="isPostcodeModalOpen"
+        @close="togglePostcodeModal(false)"
+      />
+    </Teleport>
+  </main>
 </template>
 
 <script setup>
@@ -95,49 +95,9 @@ const isPostcodeModalOpen = ref(false)
  *  - caricare prodotti per l'homepage
  */
 const image = ref('https://picsum.photos/1920/700?blur=3')
-const search = ref('')
-const products = ref([
-  {
-    id: 1,
-    image: 'https://picsum.photos/300/300',
-    title: 'Anguria',
-    provenance: 'Italia',
-    slug: 'anguria',
-    link: 'frutta/anguria',
-  },
-  {
-    id: 2,
-    image: 'https://picsum.photos/300/300',
-    title: 'Melone',
-    provenance: 'Italia',
-    slug: 'melone',
-    link: 'frutta/melone',
-  },
-  {
-    id: 3,
-    image: 'https://picsum.photos/300/300',
-    title: 'Pere Williams',
-    provenance: 'Italia',
-    slug: 'pere-williams',
-    link: 'frutta/pere-williams',
-  },
-  {
-    id: 4,
-    image: 'https://picsum.photos/300/300',
-    title: 'Carciofi',
-    provenance: 'Italia',
-    slug: 'carciofi',
-    link: 'verdura/carciofi',
-  },
-  {
-    id: 5,
-    image: 'https://picsum.photos/300/300',
-    title: 'Peperoni',
-    provenance: 'Italia',
-    slug: 'peperoni',
-    link: 'verdura/peperoni',
-  },
-])
+const products = await useApi('shop/homepage/products')
+
+const { page } = await usePage()
 
 const togglePostcodeModal = (status = null) => {
   isPostcodeModalOpen.value =
