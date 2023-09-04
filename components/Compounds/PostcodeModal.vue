@@ -122,7 +122,7 @@ const formData = reactive({
 const sending = ref(false)
 const matchedPostcode = ref(null)
 const savedEmail = ref(null)
-const response = ref({})
+const feedback = ref(null)
 
 const resetStatus = () => {
   sending.value = false
@@ -135,7 +135,7 @@ const checkPostcode = async () => {
   sending.value = false
   savedEmail.value = null
   matchedPostcode.value = null
-  response.value = {}
+  feedback.value = null
 
   if (!formData.postcode) {
     return
@@ -147,10 +147,12 @@ const checkPostcode = async () => {
 
   sending.value = true
 
-  response.value = await useApi('postcodes/validate', {
+  const response = await useApi('postcodes/validate', {
     method: 'POST',
     body: formData,
   })
+
+  feedback.value = response.value.data
 
   matchedPostcode.value = response.value.success
   sending.value = false
@@ -165,10 +167,16 @@ const registerEmail = async () => {
 
   sending.value = true
 
-  response.value = await useApi(`postcodes/validate/${response.data}`, {
-    method: 'POST',
-    body: formData,
-  })
+  const response = await useApi(
+    `postcodes/validate/${feedback.value}`,
+    {
+      method: 'POST',
+      body: formData,
+    },
+    {
+      cache: false,
+    }
+  )
 
   savedEmail.value = response.value.success
   sending.value = false
