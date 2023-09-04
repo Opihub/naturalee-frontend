@@ -1,4 +1,3 @@
-import { useLayoutStore } from '@/stores/layout';
 <template>
   <ol :class="CSS_NAME" itemscope itemtype="https://schema.org/BreadcrumbList">
     <template v-for="(record, index) in menu" :key="record.link">
