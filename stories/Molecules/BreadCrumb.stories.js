@@ -14,19 +14,14 @@ export default {
     _background: '#00966E',
     menu: [
       {
-        id: 1,
         title: 'Home',
-        url: '/',
-        target: null,
+        link: '/',
       },
       {
-        id: 2,
         title: 'Frutta',
-        url: 'frutta',
-        target: null,
+        link: 'frutta',
       },
       {
-        id: 3,
         title: 'Nome prodotto',
       },
     ],

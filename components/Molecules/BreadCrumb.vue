@@ -1,6 +1,7 @@
+import { useLayoutStore } from '@/stores/layout';
 <template>
   <ol :class="CSS_NAME" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <template v-for="(record, index) in menu" :key="record.id">
+    <template v-for="(record, index) in menu" :key="record.link">
       <li
         class="c-breadcrumb__item"
         itemscope
@@ -10,8 +11,7 @@
         <BaseLink
           v-if="menu.length - 1 !== index"
           itemprop="item"
-          :to="record.url"
-          :target="record.target"
+          :to="record.link"
           color="white"
         >
           <span itemprop="name">{{ record.title }}</span>
@@ -28,8 +28,12 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-breadcrumb'
 
+// Props & Emits
 defineProps({
   menu: {
     type: Array,
@@ -42,6 +46,16 @@ defineProps({
     default: '/',
   },
 })
+
+// Component life-cycle hooks
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
 </script>
 
 <style lang="scss">
