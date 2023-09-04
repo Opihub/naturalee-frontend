@@ -274,8 +274,8 @@ const fetchProducts = async () => {
       },
     })
 
-    if (response.success) {
-      const { pagination, records } = response.data
+    if (response.value.success) {
+      const { pagination, records } = response.value.data
 
       products.value = [...products.value, ...records]
       page.value = pagination?.next || page.value
@@ -286,7 +286,7 @@ const fetchProducts = async () => {
       }
     } else {
       canFetch.value = false
-      noProductsMessage.value = response.message
+      noProductsMessage.value = response.value.message
     }
   } catch (error) {
     console.error(error)
