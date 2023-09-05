@@ -51,6 +51,74 @@
       }
     }
   ],
+  "shopCategoriesProductsPages": [
+    {
+      "id": "anguria",
+      "record": {
+        "id": 1,
+        "image": "https://picsum.photos/300/300",
+        "title": "Anguria",
+        "provenance": "Italia",
+        "slug": "anguria",
+        "link": "/frutta/anguria",
+        "category": "frutta",
+        "description": "TODO",
+        "price": 9.56,
+        "discountPrice": 5.22,
+        "location": "Italia",
+        "costDescription": "Peso minimo garantito 1kg",
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/frutta",
+            "title": "Frutta"
+          },
+          {
+            "link": "/frutta/anguria",
+            "title": "Anguria"
+          }
+        ]
+      }
+    },
+    {
+      "id": "carote",
+      "record": {
+        "id": 2,
+        "image": "https://picsum.photos/300/300",
+        "title": "carote",
+        "provenance": "Italia",
+        "slug": "carote",
+        "link": "/verdura/carote",
+        "category": "verdura",
+        "description": "TODO",
+        "marker": {
+          "slug": "novita",
+          "title": "Novità",
+          "color": "#FF5600"
+        },
+        "price": 6.50,
+        "location": "Italia",
+        "costDescription": "Vaschetta da 500g",
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/verdura",
+            "title": "Verdura"
+          },
+          {
+            "link": "/verdura/carote",
+            "title": "Carote"
+          }
+        ]
+      }
+    }
+  ],
   "shopCategoriesPages": [
     {
       "id": "verdura",
