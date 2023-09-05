@@ -8,41 +8,47 @@
       />
 
       <SearchForm
-        v-model="value"
+        :search="search"
         :class="`${CSS_NAME}__search`"
         size="mini"
         placeholder="Di cosa hai bisogno?"
+        @update:search="$emit('update:search', $event)"
       />
     </SiteContainer>
   </section>
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-bottom-bar'
 
-const props = defineProps({
-  search: {
-    type: String,
-    required: true,
-  },
+// Props & Emits
+defineProps({
   breadcrumb: {
     type: Array,
     default() {
       return []
     },
   },
-})
-
-const emit = defineEmits(['search'])
-
-const value = computed({
-  get() {
-    return props.search
-  },
-  set(value) {
-    emit('search', value)
+  search: {
+    type: String,
+    default: null,
   },
 })
+
+defineEmits(['update:search'])
+
+// Component life-cycle hooks
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
 </script>
 
 <style lang="scss">

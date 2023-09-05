@@ -1,49 +1,47 @@
 <template>
   <div ref="layout" :class="CSS_NAME">
     <HeaderTopBar
-      :socials-menu="topbar.socialsMenu"
-      :primary-menu="topbar.primaryMenu"
-      :banners="topbar.banners"
+      :socials-menu="socialsMenu.data"
+      :primary-menu="primaryMenu.data"
+      :banners="topbarBanners.data"
     />
 
     <HeaderMain
-      :categories="header.categories"
-      :username="header.username"
-      :profile-menu="header.profileMenu"
-      :cart="header.cart"
+      :categories="categoriesMenu.data"
+      :username="profile.data.username"
+      :profile-menu="profileMenu.data"
+      :cart="cart.data"
     />
 
-    <HeaderBottomBar
-      v-if="!hideBottombar"
-      :search="bottombar.search"
-      :breadcrumb="bottombar.breadcrumb"
-    />
     <slot />
 
     <section class="u-pt-huge" style="background-color: var(--color-white)">
       <CategoryCards
-        v-if="categories"
+        v-if="categories && categories.data"
         class="u-mb-huge"
         :title="categoriesTitle"
-        :categories="categories"
+        :categories="categories.data"
       />
 
-      <MarqueeSlider v-if="marquee.length" :marquee="marquee" />
+      <MarqueeSlider
+        v-if="marquee && marquee.data.length"
+        :marquee="marquee.data"
+      />
     </section>
 
     <CategoriesMenu
-      v-if="header.categories"
-      ref="categoriesMenu"
+      v-if="categoriesMenu && categoriesMenu.data"
+      ref="categoriesMenuElement"
       :class="`${CSS_NAME}__categories`"
-      :categories="header.categories"
+      :categories="categoriesMenu.data"
     />
 
     <SiteFooter
-      :copyright="footer.copyright"
-      :menu="footer.menu"
-      :socials-menu="footer.socialsMenu"
-      :privacy-menu="footer.privacyMenu"
-      :payment-image="footer.paymentImage"
+      :copyright="copyrights.data"
+      :menu="primaryMenu.data"
+      :socials-menu="socialsMenu.data"
+      :privacy-menu="privacyMenu.data"
+      payment-image="/pagamenti-sicuri.png"
     >
       <template #by> R-innovazione by <u>Opiquad.it</u> </template>
     </SiteFooter>
@@ -51,64 +49,20 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'o-layout'
 
+// Props & Emits
 defineProps({
-  topbar: {
-    type: Object,
-    required: true,
-  },
-  header: {
-    type: Object,
-    required: true,
-  },
-  bottombar: {
-    type: Object,
-    required: true,
-    validator(value) {
-      return 'search' in value
-    },
-  },
-  hideBottombar: {
-    type: Boolean,
-    default: false,
-  },
   categoriesTitle: {
     type: String,
     default: null,
   },
-  categories: {
-    type: Array,
-    default() {
-      return []
-    },
-  },
-  marquee: {
-    type: Array,
-    default() {
-      return []
-    },
-  },
-  footer: {
-    type: Object,
-    required: true,
-  },
 })
 
-const layout = ref(null)
-const categoriesMenu = ref(null)
-
-const setBottomGap = () => {
-  if (!layout.value) {
-    return
-  }
-
-  layout.value.style.setProperty(
-    '--layout-bottom-gap',
-    `${categoriesMenu.value.$el.clientHeight}px`
-  )
-}
-
+// Component life-cycle hooks
 onMounted(() => {
   setBottomGap()
   window.addEventListener('resize', setBottomGap)
@@ -117,6 +71,62 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', setBottomGap)
 })
+
+// Data
+const layout = ref(null)
+const categoriesMenuElement = ref(null)
+
+const profile = await useApi('profile').catch((error) => {
+  console.error('Errore durante il carimento di "profile"', error)
+})
+const categories = await useApi('shop/categories').catch((error) => {
+  console.error('Errore durante il carimento di "shop/categories"', error)
+})
+const cart = await useApi('shop/cart/products').catch((error) => {
+  console.error('Errore durante il carimento di "shop/cart/products"', error)
+})
+
+const marquee = await useApi('layout/marquee').catch((error) => {
+  console.error('Errore durante il carimento di "layout/marquee"', error)
+})
+const topbarBanners = await useApi('layout/topbar').catch((error) => {
+  console.error('Errore durante il carimento di "layout/topbar"', error)
+})
+const copyrights = await useApi('layout/copyright').catch((error) => {
+  console.error('Errore durante il carimento di "layout/copyright"', error)
+})
+
+const primaryMenu = await useApi('menu/primary').catch((error) => {
+  console.error('Errore durante il carimento di "menu/primary"', error)
+})
+const socialsMenu = await useApi('menu/socials').catch((error) => {
+  console.error('Errore durante il carimento di "menu/socials"', error)
+})
+const profileMenu = await useApi('menu/profile').catch((error) => {
+  console.error('Errore durante il carimento di "menu/profile"', error)
+})
+const privacyMenu = await useApi('menu/privacy').catch((error) => {
+  console.error('Errore durante il carimento di "menu/privacy"', error)
+})
+const categoriesMenu = await useApi('menu/categories').catch((error) => {
+  console.error('Errore durante il carimento di "menu/categories"', error)
+})
+
+// Watcher
+
+// Computed
+
+// Methods
+const setBottomGap = () => {
+  if (!layout.value) {
+    return
+  }
+
+  layout.value.style.setProperty(
+    '--layout-bottom-gap',
+    `${categoriesMenuElement.value.$el.clientHeight}px`
+  )
+}
 </script>
 
 <style lang="scss">

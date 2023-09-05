@@ -1,8 +1,311 @@
 {
+  "pages": [
+    {
+      "id": "home",
+      "record": {
+        "id": 1,
+        "title": "Home",
+        "link": "",
+        "slug": "homepage",
+        "content": "",
+        "seo": {
+          "title": "Naturalee - Home",
+          "ogTitle": "Naturalee - Home",
+          "description": "Esplora una spesa Fresca e Naturalee. Ordina subito!",
+          "ogDescription": "Esplora una spesa Fresca e Naturalee. Ordina subito!"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          }
+        ]
+      }
+    },
+    {
+      "id": "faq",
+      "record": {
+        "id": 2,
+        "title": "FAQ",
+        "link": "faq",
+        "slug": "faq",
+        "content": "",
+        "seo": {
+          "title": "Naturalee - FAQ",
+          "ogTitle": "Naturalee - FAQ",
+          "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+          "ogDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/faq",
+            "title": "Faq"
+          }
+        ]
+      }
+    }
+  ],
+  "shopCategoriesPages": [
+    {
+      "id": "verdura",
+      "record": {
+        "id": 1,
+        "title": "Verdura fresca e sana",
+        "link": "verdura",
+        "slug": "shop/verdura",
+        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "seo": {
+          "title": "Verdura fresca e sana - Naturalee",
+          "ogTitle": "Verdura fresca e sana - Naturalee"
+        },
+        "filters": [
+          {
+            "slug": "pesche-albicocche",
+            "text": "Pesche e albicocche"
+          },
+          {
+            "slug": "frutta-esotica",
+            "text": "Frutta esotica"
+          },
+          {
+            "slug": "meloni-angurie",
+            "text": "Meloni e angurie"
+          },
+          {
+            "slug": "agrumi",
+            "text": "Agrumi"
+          },
+          {
+            "slug": "frutti-bosco",
+            "text": "Frutti di bosco"
+          },
+          {
+            "slug": "mele-pere",
+            "text": "Mele e pere"
+          },
+          {
+            "slug": "altro",
+            "text": "Altro"
+          }
+        ],
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/verdura",
+            "title": "Verdura"
+          }
+        ]
+      }
+    },
+    {
+      "id": "frutta",
+      "record": {
+        "id": 2,
+        "title": "Frutta fresca di qualità",
+        "link": "frutta",
+        "slug": "shop/frutta",
+        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "seo": {
+          "title": "Frutta fresca di qualità - Naturalee",
+          "ogTitle": "Frutta fresca di qualità - Naturalee"
+        },
+        "filters": [
+          {
+            "slug": "pesche-albicocche",
+            "text": "Pesche e albicocche"
+          },
+          {
+            "slug": "frutta-esotica",
+            "text": "Frutta esotica"
+          },
+          {
+            "slug": "meloni-angurie",
+            "text": "Meloni e angurie"
+          },
+          {
+            "slug": "agrumi",
+            "text": "Agrumi"
+          },
+          {
+            "slug": "frutti-bosco",
+            "text": "Frutti di bosco"
+          },
+          {
+            "slug": "mele-pere",
+            "text": "Mele e pere"
+          },
+          {
+            "slug": "altro",
+            "text": "Altro"
+          }
+        ],
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/frutta",
+            "title": "Frutta"
+          }
+        ]
+      }
+    },
+    {
+      "id": "esotico",
+      "record": {
+        "id": 3,
+        "title": "Sapori unici da tutto il mondo",
+        "link": "esotico",
+        "slug": "shop/esotico",
+        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "seo": {
+          "title": "Sapori unici da tutto il mondo - Naturalee",
+          "ogTitle": "Sapori unici da tutto il mondo - Naturalee"
+        },
+        "filters": [
+          {
+            "slug": "frutta-esotica",
+            "text": "Frutta esotica"
+          },
+          {
+            "slug": "altro",
+            "text": "Altro"
+          }
+        ],
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/esotico",
+            "title": "Esotico"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dispensa",
+      "record": {
+        "id": 4,
+        "title": "Dispensa fresca e selezionata",
+        "link": "dispensa",
+        "slug": "shop/dispensa",
+        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "seo": {
+          "title": "Dispensa fresca e selezionata - Naturalee",
+          "ogTitle": "Dispensa fresca e selezionata - Naturalee"
+        },
+        "filters": [
+          {
+            "slug": "altro",
+            "text": "Altro"
+          }
+        ],
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/dispensa",
+            "title": "Dispensa"
+          }
+        ]
+      }
+    },
+    {
+      "id": "aromi",
+      "record": {
+        "id": 5,
+        "title": "Aromi e Spezie",
+        "link": "aromi",
+        "slug": "shop/aromi",
+        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "seo": {
+          "title": "Aromi e Spezie - Naturalee",
+          "ogTitle": "Aromi e Spezie - Naturalee"
+        },
+        "filters": [],
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/aromi",
+            "title": "Aromi"
+          }
+        ]
+      }
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "image": "https://picsum.photos/300/300",
+      "title": "Anguria",
+      "provenance": "Italia",
+      "slug": "anguria",
+      "link": "frutta/anguria",
+      "shopCategoriesPageId": "frutta",
+      "category": "frutta"
+    },
+    {
+      "id": 2,
+      "image": "https://picsum.photos/300/300",
+      "title": "Melone",
+      "provenance": "Italia",
+      "slug": "melone",
+      "link": "frutta/melone",
+      "shopCategoriesPageId": "frutta",
+      "category": "frutta"
+    },
+    {
+      "id": 3,
+      "image": "https://picsum.photos/300/300",
+      "title": "Pere Williams",
+      "provenance": "Italia",
+      "slug": "pere-williams",
+      "link": "frutta/pere-williams",
+      "shopCategoriesPageId": "frutta",
+      "category": "frutta"
+    },
+    {
+      "id": 4,
+      "image": "https://picsum.photos/300/300",
+      "title": "Carciofi",
+      "provenance": "Italia",
+      "slug": "carciofi",
+      "link": "verdura/carciofi",
+      "shopCategoriesPageId": "verdura",
+      "category": "verdura"
+    },
+    {
+      "id": 5,
+      "image": "https://picsum.photos/300/300",
+      "title": "Peperoni",
+      "provenance": "Italia",
+      "slug": "peperoni",
+      "link": "verdura/peperoni",
+      "shopCategoriesPageId": "verdura",
+      "category": "verdura"
+    }
+  ],
   "menu": [
     {
       "id": "primary",
-      "menu": [
+      "records": [
         {
           "id": 1,
           "title": "Azienda",
@@ -31,7 +334,7 @@
     },
     {
       "id": "socials",
-      "menu": [
+      "records": [
         {
           "id": 1,
           "title": "Facebook",
@@ -48,7 +351,7 @@
     },
     {
       "id": "privacy",
-      "menu": [
+      "records": [
         {
           "id": 1,
           "title": "Privacy Policy",
@@ -66,14 +369,281 @@
           "title": "Condizioni di vendita",
           "url": "condizioni-di-vendita",
           "target": null
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "records": [
+        {
+          "id": 1,
+          "title": "Il mio profilo",
+          "url": "profilo",
+          "target": null
         },
         {
-          "id": 4,
-          "title": "R-innovazione by Opiquad.it",
-          "url": "#",
+          "id": 2,
+          "title": "I miei ordini",
+          "url": "miei-ordini",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "La mia lista",
+          "url": "miei-preferiti",
           "target": null
         }
       ]
+    },
+    {
+      "id": "categories",
+      "records": [
+        {
+          "id": 1,
+          "title": "Verdura",
+          "url": "verdura",
+          "image": "verdura"
+        },
+        {
+          "id": 2,
+          "title": "Frutta",
+          "url": "frutta",
+          "image": "frutta"
+        },
+        {
+          "id": 3,
+          "title": "Esotico",
+          "url": "esotico",
+          "image": "esotico"
+        },
+        {
+          "id": 4,
+          "title": "Aromi",
+          "url": "aromi",
+          "image": "aromi"
+        },
+        {
+          "id": 5,
+          "title": "Dispensa",
+          "url": "dispensa",
+          "image": "dispensa"
+        }
+      ]
+    }
+  ],
+  "shopCategories": [
+    {
+      "id": 1,
+      "title": "Verdura",
+      "link": "verdura",
+      "slug": "verdura",
+      "image": "https://picsum.photos/id/100/304/391?grayscale&blur=2",
+      "position": "bottom"
+    },
+    {
+      "id": 2,
+      "title": "Frutta",
+      "link": "frutta",
+      "slug": "frutta",
+      "image": "https://picsum.photos/id/200/304/391?grayscale&blur=2"
+    },
+    {
+      "id": 3,
+      "title": "Esotico",
+      "link": "esotico",
+      "slug": "esotico",
+      "image": "https://picsum.photos/id/300/304/391?grayscale&blur=2",
+      "position": "bottom"
+    },
+    {
+      "id": 4,
+      "title": "Aromi",
+      "link": "aromi",
+      "slug": "aromi",
+      "image": "https://picsum.photos/id/400/304/391?grayscale&blur=2",
+      "position": "top"
+    },
+    {
+      "id": 5,
+      "title": "Dispensa",
+      "link": "dispensa",
+      "slug": "dispensa",
+      "image": "https://picsum.photos/id/500/304/391?grayscale&blur=2"
+    }
+  ],
+  "shopHomepageProducts": [
+    {
+      "id": 1,
+      "image": "https://picsum.photos/300/300",
+      "title": "Anguria",
+      "provenance": "Italia",
+      "slug": "anguria",
+      "link": "frutta/anguria"
+    },
+    {
+      "id": 2,
+      "image": "https://picsum.photos/300/300",
+      "title": "Melone",
+      "provenance": "Italia",
+      "slug": "melone",
+      "link": "frutta/melone"
+    },
+    {
+      "id": 3,
+      "image": "https://picsum.photos/300/300",
+      "title": "Pere Williams",
+      "provenance": "Italia",
+      "slug": "pere-williams",
+      "link": "frutta/pere-williams"
+    },
+    {
+      "id": 4,
+      "image": "https://picsum.photos/300/300",
+      "title": "Carciofi",
+      "provenance": "Italia",
+      "slug": "carciofi",
+      "link": "verdura/carciofi"
+    },
+    {
+      "id": 5,
+      "image": "https://picsum.photos/300/300",
+      "title": "Peperoni",
+      "provenance": "Italia",
+      "slug": "peperoni",
+      "link": "verdura/peperoni"
+    }
+  ],
+  "shopCartProducts": [
+    {
+      "id": 1,
+      "title": "Banane Chiquita",
+      "link": "frutta/banane-chiquita",
+      "slug": "banane-chiquita",
+      "sku": "BAN-CHIQ",
+      "unit": "kg",
+      "image": "https://picsum.photos/id/102/120/120?grayscale&blur=2",
+      "price": 5.23,
+      "quantity": 3
+    },
+    {
+      "id": 2,
+      "title": "Cetrioli Verdi",
+      "link": "verdura/cetrioli-verdi",
+      "slug": "cetrioli-verdi",
+      "sku": "CET-VER",
+      "unit": "pz",
+      "image": "https://picsum.photos/id/202/120/120?grayscale&blur=2",
+      "price": 2.99,
+      "quantity": 30
+    },
+    {
+      "id": 3,
+      "title": "Carciofi",
+      "link": "verdura/carciofi",
+      "slug": "carciofi",
+      "sku": "CARCF",
+      "unit": "pz",
+      "image": "https://picsum.photos/id/302/120/120?grayscale&blur=2",
+      "price": 17.99,
+      "quantity": 2
+    },
+    {
+      "id": 4,
+      "title": "Noci di Macadamia",
+      "link": "verdura/noci-macadamia",
+      "slug": "noci-macadamia",
+      "sku": "NOC-MAC",
+      "unit": "kg",
+      "image": "https://picsum.photos/id/402/120/120?grayscale&blur=2",
+      "price": 12.99,
+      "quantity": 3
+    },
+    {
+      "id": 5,
+      "title": "Songino",
+      "link": "verdura/songino",
+      "slug": "songino",
+      "sku": "SONGINO",
+      "unit": "kg",
+      "image": "https://picsum.photos/id/502/120/120?grayscale&blur=2",
+      "price": 1.27,
+      "quantity": 14
+    }
+  ],
+  "profile": {
+    "id": 1,
+    "email": "test@prova.it",
+    "username": "opiquad",
+    "firstName": "Marco",
+    "lastName": "Rossi"
+  },
+  "marquee": [
+    "#FrescoNaturalee",
+    "#QualitàNaturalee",
+    "#SaluteNaturalee",
+    "#ConvenienzaNaturalee",
+    "#EsperienzaNaturalee",
+    "#BenessereNaturalee"
+  ],
+  "topbar": [
+    "Lorem ipsum",
+    "dolor sit amet, consectetur adipiscing elit",
+    "dolor sit amet, consectetur adipiscing elit. Fusce tempus ipsum ut erat pharetra, at scelerisque lorem placerat."
+  ],
+  "copyright": [
+    {
+      "id": 1,
+      "text": "Naturalee SRL"
+    },
+    {
+      "id": 2,
+      "text": "PI IT123456789"
+    }
+  ],
+  "faq": [
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem ipsum dolor sit?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
     }
   ]
 }

@@ -21,7 +21,6 @@ export default {
     _background: '#00966E',
     _inputWidth: '912px',
     size: 'default',
-    modelValue: '',
   },
 }
 

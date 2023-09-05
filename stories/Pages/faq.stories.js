@@ -5,34 +5,17 @@ import Layout from '@/stories/Layouts/default.stories'
 import SVGDefinitions from '@/components/Atoms/SVGDefinitions.vue'
 
 import { createResponse } from '@/server/utils/responses'
-import { random } from '@/utils/random'
+import { getFromMock } from '@/utils/mock'
 
 const foundedFAQs = {
   url: '/faq',
   method: 'GET',
   status: 200,
-  response: () => {
-    const length = random(6, 12)
-
-    return createResponse({
-      code: 'faq_found',
-      message: `Sono state trovate ${length} faq`,
-
-      data: Array.from(
-        {
-          length,
-        },
-        () => {
-          return {
-            title: 'Lorem ipsum dolor sit?',
-            content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`,
-          }
-        }
-      ),
-    })
-  },
+  response: createResponse({
+    code: 'faq_found',
+    message: `Sono state trovate ${length} faq`,
+    data: getFromMock('faq'),
+  }),
 }
 
 export default {

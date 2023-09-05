@@ -1,4 +1,5 @@
 import ProfileMenu from '@/components/Compounds/ProfileMenu.vue'
+import { getFromMock } from '@/utils/mock'
 
 export default {
   title: 'Compounds/Profile Menu',
@@ -8,26 +9,7 @@ export default {
     layout: 'padded',
   },
   args: {
-    menu: [
-      {
-        id: 1,
-        title: 'Il mio profilo',
-        url: '#',
-        target: null,
-      },
-      {
-        id: 2,
-        title: 'I miei ordini',
-        url: '#',
-        target: null,
-      },
-      {
-        id: 3,
-        title: 'La mia lista',
-        url: '#',
-        target: null,
-      },
-    ],
+    menu: getFromMock('menu', 'profile'),
   },
 }
 

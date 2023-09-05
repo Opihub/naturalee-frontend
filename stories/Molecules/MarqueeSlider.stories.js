@@ -1,4 +1,5 @@
 import MarqueeSlider from '@/components/Molecules/MarqueeSlider.vue'
+import { getFromMock } from '@/utils/mock'
 
 export default {
   title: 'Molecules/Marquee',
@@ -13,14 +14,7 @@ export default {
   },
   args: {
     _background: '#FFFFFF',
-    marquee: [
-      '#FrescoNaturalee',
-      '#QualitàNaturalee',
-      '#SaluteNaturalee',
-      '#ConvenienzaNaturalee',
-      '#EsperienzaNaturalee',
-      '#BenessereNaturalee',
-    ],
+    marquee: getFromMock('marquee'),
   },
 }
 

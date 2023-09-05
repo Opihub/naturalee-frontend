@@ -1,4 +1,5 @@
 import CategoriesMenu from '@/components/Compounds/CategoriesMenu.vue'
+import getFromMock from '@/utils/mock'
 
 export default {
   title: 'Compounds/Categories Menu',
@@ -8,38 +9,7 @@ export default {
     layout: 'padded',
   },
   args: {
-    categories: [
-      {
-        id: 1,
-        title: 'Verdura',
-        url: 'verdura',
-        image: 'verdura',
-      },
-      {
-        id: 2,
-        title: 'Frutta',
-        url: 'frutta',
-        image: 'frutta',
-      },
-      {
-        id: 3,
-        title: 'Esotico',
-        url: 'esotico',
-        image: 'esotico',
-      },
-      {
-        id: 4,
-        title: 'Aromi',
-        url: 'aromi',
-        image: 'aromi',
-      },
-      {
-        id: 5,
-        title: 'Dispensa',
-        url: 'dispensa',
-        image: 'dispensa',
-      },
-    ],
+    categories: getFromMock('menu', 'categories'),
   },
 }
 
