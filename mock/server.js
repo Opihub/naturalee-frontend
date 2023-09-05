@@ -92,6 +92,7 @@ server.use(
     '/layout/copyright': '/copyright',
     '/shop/homepage/products': '/shopHomepageProducts',
     '/shop/cart/products': '/shopCartProducts',
+    '/shop/search/products': '/shopCategoriesPages',
     '/shop/categories/:category/products': '/shopCategoriesPages/$1/products',
     '/shop/categories/:category': '/shopCategoriesPages/$1',
     '/shop/categories': '/shopCategories',

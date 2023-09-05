@@ -133,7 +133,7 @@
 // Imports
 import BaseOverlay from '@/components/Atoms/BaseOverlay.vue'
 import SiteContainer from '@/components/Atoms/SiteContainer.vue'
-import { useElementVisibility } from '@vueuse/core'
+import { useElementVisibility, useTimeoutFn } from '@vueuse/core'
 
 // Constants
 const CSS_NAME = 'c-products-grid'
@@ -147,6 +147,10 @@ const props = defineProps({
     default() {
       return []
     },
+  },
+  search: {
+    type: String,
+    default: null,
   },
   sortable: {
     type: Boolean,
@@ -188,12 +192,29 @@ const selectedFiltersMessage = ref('Nessun filtro selezionato')
 
 const orderby = ref(null)
 
+const timeout = useTimeoutFn(() => {
+  resetParams()
+
+  fetchProducts()
+}, 300)
+
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
     fetchProducts()
   }
 })
+
+watch(
+  () => props.search,
+  (current, old) => {
+    timeout.stop()
+
+    if (current !== old) {
+      timeout.start()
+    }
+  }
+)
 
 // Computed
 const cleanedChosenFilters = computed(() => {
@@ -268,14 +289,29 @@ const fetchProducts = async () => {
   isFetching.value = true
 
   try {
+    const params = {
+      limit: 12,
+    }
+
+    if (page.value > 0) {
+      params.page = page.value
+    }
+
+    if (orderby.value) {
+      params.orderby = orderby.value
+    }
+
+    if (props.search) {
+      params.search = props.search
+    }
+
+    if (cleanedChosenFilters.value.length > 0) {
+      params['filters[]'] = cleanedChosenFilters.value
+    }
+
     const response = await useApi(props.from, {
       method: 'GET',
-      params: {
-        page,
-        limit: 12,
-        orderby,
-        'filters[]': cleanedChosenFilters,
-      },
+      params,
     })
 
     if (response.value.success) {

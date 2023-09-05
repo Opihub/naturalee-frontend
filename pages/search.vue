@@ -10,6 +10,7 @@
       <ProductsGrid
         class="u-pb-huge u-pt-large"
         from="shop/search/products"
+        :search="search"
       />
     </Suspense>
   </main>
