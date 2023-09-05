@@ -83,7 +83,7 @@ const attributes = computed(() => {
 
 // Methods
 const input = (event) => {
-  emit('update:modelValue', event.target.value)
+  emit('update:modelValue', event.target.checked)
 
   check(event)
 }

@@ -133,12 +133,12 @@ const isShowingForgotPasswordForm = ref(false)
 const loginData = reactive({
   user: '',
   password: '',
-  remember: '',
+  remember: false,
 })
 const registerData = reactive({
   email: '',
   password: '',
-  acceptance: '',
+  acceptance: false,
 })
 const forgotPasswordData = reactive({
   user: '',

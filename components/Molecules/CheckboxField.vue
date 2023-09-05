@@ -4,7 +4,8 @@
       :class="`${CSS_NAME}__label`"
     >
       <BaseCheckbox
-        v-model="value"
+        v-model="updatedValue"
+        :value="value"
         :class="`${CSS_NAME}__input`"
         :name="name"
         v-bind="attributes"
@@ -61,12 +62,12 @@ const emit = defineEmits(['update:modelValue'])
 
 const attrs = useAttrs()
 
-const value = computed({
+const updatedValue = computed({
   get() {
-    return props.modelValue
+    return !!props.modelValue
   },
-  set(value) {
-    emit('update:modelValue', value)
+  set(newValue) {
+    emit('update:modelValue', !!newValue)
   },
 })
 
