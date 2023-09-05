@@ -16,13 +16,19 @@
           >
             <BaseHeading class="u-mb-small" tag="h3">Accedi</BaseHeading>
 
-            <InputField v-model="loginData.user" class="u-mb-half" type="text">
+            <InputField
+              v-model="loginData.user"
+              class="u-mb-half"
+              type="text"
+              required
+            >
               Nome utente o indirizzo email *</InputField
             >
             <InputField
               v-model="loginData.password"
               class="u-mb-tiny"
               type="password"
+              required
               >Password *</InputField
             >
 
@@ -59,6 +65,7 @@
               v-model="forgotPasswordData.user"
               class="u-mb-tiny"
               type="text"
+              required
             >
               Nome utente o indirizzo email *</InputField
             >
@@ -89,12 +96,14 @@
             v-model="registerData.email"
             class="u-mb-half"
             type="email"
+            required
             >Indirizzo email *</InputField
           >
           <InputField
             v-model="registerData.password"
             class="u-mb-tiny"
             type="password"
+            required
             >Password *</InputField
           >
 
@@ -156,17 +165,17 @@ const toggleLoginForm = (toggle = null) => {
 
 const login = () => {
   // TODO
-  console.debug(loginData)
+  console.debug({ ...loginData })
 }
 
 const register = () => {
   // TODO
-  console.debug(registerData)
+  console.debug({ ...registerData })
 }
 
 const passwordRecovery = () => {
   // TODO
-  console.debug(forgotPasswordData)
+  console.debug({ ...forgotPasswordData })
 }
 </script>
 
