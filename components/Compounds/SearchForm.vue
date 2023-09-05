@@ -1,14 +1,20 @@
 <template>
   <slot name="before" />
 
-  <form :class="className" method="GET" v-bind="$attrs">
+  <form
+    :class="className"
+    method="GET"
+    v-bind="$attrs"
+    @submit.prevent="goToSearch"
+  >
     <InputField
-      v-model="search"
+      :value="searchValue"
       :class="`${CSS_NAME}__input`"
       type="search"
       :placeholder="placeholder"
       :rounded="true"
       :borderless="true"
+      @update:model-value="updateSearch"
     />
 
     <BaseButton
@@ -36,6 +42,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  search: {
+    type: String,
+    default: null,
+  },
   size: {
     type: String,
     default: 'default',
@@ -45,10 +55,12 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['update:search'])
+
 // Component life-cycle hooks
 
 // Data
-const search = ref('')
+const searchValue = ref(props.search ? props.search : '')
 
 // Watcher
 
@@ -72,6 +84,27 @@ const className = computed(() => {
 })
 
 // Methods
+const updateSearch = (event) => {
+  if (props.search === null) {
+    searchValue.value = event
+    return
+  }
+
+  emit('update:search', event)
+}
+
+const goToSearch = async () => {
+  if (props.search !== null) {
+    return
+  }
+
+  await navigateTo({
+    path: '/search',
+    query: {
+      search: searchValue.value,
+    },
+  })
+}
 </script>
 
 <style lang="scss">

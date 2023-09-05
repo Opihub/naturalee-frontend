@@ -8,9 +8,11 @@
       />
 
       <SearchForm
+        :search="search"
         :class="`${CSS_NAME}__search`"
         size="mini"
         placeholder="Di cosa hai bisogno?"
+        @update:search="$emit('update:search', $event)"
       />
     </SiteContainer>
   </section>
@@ -30,7 +32,13 @@ defineProps({
       return []
     },
   },
+  search: {
+    type: String,
+    default: null,
+  },
 })
+
+defineEmits(['update:search'])
 
 // Component life-cycle hooks
 
