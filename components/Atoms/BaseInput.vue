@@ -4,14 +4,19 @@
     :type="type"
     :name="name"
     :value="modelValue"
+    :pattern="autoloadedPattern"
     @input="input"
     @blur="check"
   />
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'o-input'
 
+// Props & Emits
 const props = defineProps({
   type: {
     type: String,
@@ -63,7 +68,30 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
 
+// Component life-cycle hooks
+
+// Data
 const isValid = ref(false)
+const firstInteraction = ref(false)
+
+// Watcher
+
+// Computed
+const autoloadedPattern = computed(() => {
+  if (!props.type) {
+    return null
+  }
+
+  let currentPattern = null
+
+  try {
+    currentPattern = pattern(props.type)
+  } catch (error) {
+    console.warn(error)
+  }
+
+  return currentPattern
+})
 
 const className = computed(() => {
   const className = [CSS_NAME]
@@ -103,9 +131,7 @@ const className = computed(() => {
 
   return className
 })
-
-const firstInteraction = ref(false)
-
+// Methods
 const input = (event) => {
   emit('update:modelValue', event.target.value)
 
