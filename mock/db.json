@@ -45,7 +45,32 @@
           },
           {
             "link": "/faq",
-            "title": "Faq"
+            "title": "FAQ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "profile",
+      "record": {
+        "id": 3,
+        "title": "Il mio account",
+        "link": "/profile",
+        "slug": "profile",
+        "content": "",
+        "seo": {
+          "title": "Il mio account - FAQ",
+          "ogTitle": "Il mio account - FAQ"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/profile",
+            "title": "Il mio account"
           }
         ]
       }
