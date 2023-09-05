@@ -18,7 +18,7 @@
     <section class="u-pt-huge" style="background-color: var(--color-white)">
       <CategoryCards
         v-if="categories && categories.data"
-        class="u-mb-huge"
+        class="u-pb-huge"
         :title="categoriesTitle"
         :categories="categories.data"
       />
