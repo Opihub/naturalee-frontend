@@ -41,8 +41,7 @@ select,
 textarea,
 button {
   &:focus {
-    outline-offset: 1px;
-    outline: 1px solid get-var(color-yellow);
+    @extend %base-focus;
   }
 }
 
