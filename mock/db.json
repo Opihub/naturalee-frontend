@@ -5,7 +5,7 @@
       "record": {
         "id": 1,
         "title": "Home",
-        "link": "",
+        "link": "/",
         "slug": "homepage",
         "content": "",
         "seo": {
@@ -28,7 +28,7 @@
       "record": {
         "id": 2,
         "title": "FAQ",
-        "link": "faq",
+        "link": "/faq",
         "slug": "faq",
         "content": "",
         "seo": {
@@ -125,7 +125,7 @@
       "record": {
         "id": 1,
         "title": "Verdura fresca e sana",
-        "link": "verdura",
+        "link": "/verdura",
         "slug": "shop/verdura",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -179,7 +179,7 @@
       "record": {
         "id": 2,
         "title": "Frutta fresca di qualità",
-        "link": "frutta",
+        "link": "/frutta",
         "slug": "shop/frutta",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -233,7 +233,7 @@
       "record": {
         "id": 3,
         "title": "Sapori unici da tutto il mondo",
-        "link": "esotico",
+        "link": "/esotico",
         "slug": "shop/esotico",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -267,7 +267,7 @@
       "record": {
         "id": 4,
         "title": "Dispensa fresca e selezionata",
-        "link": "dispensa",
+        "link": "/dispensa",
         "slug": "shop/dispensa",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -297,7 +297,7 @@
       "record": {
         "id": 5,
         "title": "Aromi e Spezie",
-        "link": "aromi",
+        "link": "/aromi",
         "slug": "shop/aromi",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -325,7 +325,7 @@
       "title": "Anguria",
       "provenance": "Italia",
       "slug": "anguria",
-      "link": "frutta/anguria",
+      "link": "/frutta/anguria",
       "shopCategoriesPageId": "frutta",
       "category": "frutta"
     },
@@ -335,7 +335,7 @@
       "title": "Melone",
       "provenance": "Italia",
       "slug": "melone",
-      "link": "frutta/melone",
+      "link": "/frutta/melone",
       "shopCategoriesPageId": "frutta",
       "category": "frutta"
     },
@@ -345,7 +345,7 @@
       "title": "Pere Williams",
       "provenance": "Italia",
       "slug": "pere-williams",
-      "link": "frutta/pere-williams",
+      "link": "/frutta/pere-williams",
       "shopCategoriesPageId": "frutta",
       "category": "frutta"
     },
@@ -355,7 +355,7 @@
       "title": "Carciofi",
       "provenance": "Italia",
       "slug": "carciofi",
-      "link": "verdura/carciofi",
+      "link": "/verdura/carciofi",
       "shopCategoriesPageId": "verdura",
       "category": "verdura"
     },
@@ -365,7 +365,7 @@
       "title": "Peperoni",
       "provenance": "Italia",
       "slug": "peperoni",
-      "link": "verdura/peperoni",
+      "link": "/verdura/peperoni",
       "shopCategoriesPageId": "verdura",
       "category": "verdura"
     }
@@ -503,7 +503,7 @@
     {
       "id": 1,
       "title": "Verdura",
-      "link": "verdura",
+      "link": "/verdura",
       "slug": "verdura",
       "image": "https://picsum.photos/id/100/304/391?grayscale&blur=2",
       "position": "bottom"
@@ -511,14 +511,14 @@
     {
       "id": 2,
       "title": "Frutta",
-      "link": "frutta",
+      "link": "/frutta",
       "slug": "frutta",
       "image": "https://picsum.photos/id/200/304/391?grayscale&blur=2"
     },
     {
       "id": 3,
       "title": "Esotico",
-      "link": "esotico",
+      "link": "/esotico",
       "slug": "esotico",
       "image": "https://picsum.photos/id/300/304/391?grayscale&blur=2",
       "position": "bottom"
@@ -526,7 +526,7 @@
     {
       "id": 4,
       "title": "Aromi",
-      "link": "aromi",
+      "link": "/aromi",
       "slug": "aromi",
       "image": "https://picsum.photos/id/400/304/391?grayscale&blur=2",
       "position": "top"
@@ -534,7 +534,7 @@
     {
       "id": 5,
       "title": "Dispensa",
-      "link": "dispensa",
+      "link": "/dispensa",
       "slug": "dispensa",
       "image": "https://picsum.photos/id/500/304/391?grayscale&blur=2"
     }
@@ -546,7 +546,7 @@
       "title": "Anguria",
       "provenance": "Italia",
       "slug": "anguria",
-      "link": "frutta/anguria"
+      "link": "/frutta/anguria"
     },
     {
       "id": 2,
@@ -554,7 +554,7 @@
       "title": "Melone",
       "provenance": "Italia",
       "slug": "melone",
-      "link": "frutta/melone"
+      "link": "/frutta/melone"
     },
     {
       "id": 3,
@@ -562,7 +562,7 @@
       "title": "Pere Williams",
       "provenance": "Italia",
       "slug": "pere-williams",
-      "link": "frutta/pere-williams"
+      "link": "/frutta/pere-williams"
     },
     {
       "id": 4,
@@ -570,7 +570,7 @@
       "title": "Carciofi",
       "provenance": "Italia",
       "slug": "carciofi",
-      "link": "verdura/carciofi"
+      "link": "/verdura/carciofi"
     },
     {
       "id": 5,
@@ -578,14 +578,14 @@
       "title": "Peperoni",
       "provenance": "Italia",
       "slug": "peperoni",
-      "link": "verdura/peperoni"
+      "link": "/verdura/peperoni"
     }
   ],
   "shopCartProducts": [
     {
       "id": 1,
       "title": "Banane Chiquita",
-      "link": "frutta/banane-chiquita",
+      "link": "/frutta/banane-chiquita",
       "slug": "banane-chiquita",
       "sku": "BAN-CHIQ",
       "unit": "kg",
@@ -596,7 +596,7 @@
     {
       "id": 2,
       "title": "Cetrioli Verdi",
-      "link": "verdura/cetrioli-verdi",
+      "link": "/verdura/cetrioli-verdi",
       "slug": "cetrioli-verdi",
       "sku": "CET-VER",
       "unit": "pz",
@@ -607,7 +607,7 @@
     {
       "id": 3,
       "title": "Carciofi",
-      "link": "verdura/carciofi",
+      "link": "/verdura/carciofi",
       "slug": "carciofi",
       "sku": "CARCF",
       "unit": "pz",
@@ -618,7 +618,7 @@
     {
       "id": 4,
       "title": "Noci di Macadamia",
-      "link": "verdura/noci-macadamia",
+      "link": "/verdura/noci-macadamia",
       "slug": "noci-macadamia",
       "sku": "NOC-MAC",
       "unit": "kg",
@@ -629,7 +629,7 @@
     {
       "id": 5,
       "title": "Songino",
-      "link": "verdura/songino",
+      "link": "/verdura/songino",
       "slug": "songino",
       "sku": "SONGINO",
       "unit": "kg",
