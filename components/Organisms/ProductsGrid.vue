@@ -1,102 +1,108 @@
 <template>
   <section :class="CSS_NAME">
-    <ResponsiveTrigger
-      :is="SiteContainer"
-      v-if="sortable || filters.length"
-      :size="992"
-    >
-      <div :class="`${CSS_NAME}__toolbar`" class="u-mb-huge">
-        <div
-          v-if="filters.length"
-          :class="[CSS_NAME_ACTION, `${CSS_NAME_ACTION}--filter`]"
-        >
-          <button
-            :class="`${CSS_NAME_ACTION}__trigger`"
-            type="button"
-            @click="toggleOverlay(true)"
+    <ClientOnly>
+      <ResponsiveTrigger
+        :is="SiteContainer"
+        v-if="sortable || filters.length"
+        :size="992"
+      >
+        <div :class="`${CSS_NAME}__toolbar`" class="u-mb-huge">
+          <div
+            v-if="filters.length"
+            :class="[CSS_NAME_ACTION, `${CSS_NAME_ACTION}--filter`]"
           >
-            Filtra
-          </button>
+            <button
+              :class="`${CSS_NAME_ACTION}__trigger`"
+              type="button"
+              @click="toggleOverlay(true)"
+            >
+              Filtra
+            </button>
 
-          <Transition name="fade">
-            <KeepAlive>
-              <ResponsiveTrigger
-                :is="BaseOverlay"
-                v-show="isFilterOverlayOpen"
-                :size="992"
-                desktop-first
-                :class="CSS_NAME_OVERLAY"
-              >
-                <template #before>
-                  <div :class="`${CSS_NAME_OVERLAY}__header`">
-                    <span>{{ selectedFiltersMessage }}</span>
-                    <u @click="clearFilters">Azzera</u>
-                  </div>
-                </template>
+            <Transition name="fade">
+              <KeepAlive>
+                <ResponsiveTrigger
+                  :is="BaseOverlay"
+                  v-show="isFilterOverlayOpen"
+                  :size="992"
+                  desktop-first
+                  :class="CSS_NAME_OVERLAY"
+                >
+                  <template #before>
+                    <div :class="`${CSS_NAME_OVERLAY}__header`">
+                      <span>{{ selectedFiltersMessage }}</span>
+                      <u @click="clearFilters">Azzera</u>
+                    </div>
+                  </template>
 
-                <ul :class="`${CSS_NAME}__filter`">
-                  <li
-                    v-for="filter in filters"
-                    :key="filter.slug"
-                    :class="`${CSS_NAME}__filter__item`"
-                  >
-                    <BaseButton
-                      color="transparent"
-                      scope="filter"
-                      :class="{
-                        'is-active': chosenFilters.includes(filter.slug),
-                      }"
-                      @click="toggleFilter(filter.slug)"
-                      >{{ filter.text }}</BaseButton
+                  <ul :class="`${CSS_NAME}__filter`">
+                    <li
+                      v-for="filter in filters"
+                      :key="filter.slug"
+                      :class="`${CSS_NAME}__filter__item`"
                     >
-                  </li>
-                </ul>
+                      <BaseButton
+                        color="transparent"
+                        scope="filter"
+                        :class="{
+                          'is-active': chosenFilters.includes(filter.slug),
+                        }"
+                        @click="toggleFilter(filter.slug)"
+                        >{{ filter.text }}</BaseButton
+                      >
+                    </li>
+                  </ul>
 
-                <template #after>
-                  <div :class="`${CSS_NAME_OVERLAY}__footer`">
-                    <BaseButton
-                      color="transparent"
-                      scope="filter"
-                      @click="toggleOverlay(false)"
-                      >Applica
-                    </BaseButton>
-                  </div>
-                </template>
-              </ResponsiveTrigger>
-            </KeepAlive>
-          </Transition>
-        </div>
+                  <template #after>
+                    <div :class="`${CSS_NAME_OVERLAY}__footer`">
+                      <BaseButton
+                        color="transparent"
+                        scope="filter"
+                        @click="toggleOverlay(false)"
+                        >Applica
+                      </BaseButton>
+                    </div>
+                  </template>
+                </ResponsiveTrigger>
+              </KeepAlive>
+            </Transition>
+          </div>
 
-        <div v-if="sortable && orderOptions" :class="CSS_NAME_ACTION">
-          <button
-            :class="[
-              `${CSS_NAME_ACTION}__trigger`,
-              `${CSS_NAME_ACTION}__trigger--intent`,
-            ]"
-            type="button"
-          >
-            Ordina
-            <Suspense>
-              <NuxtIcon name="caret" />
-            </Suspense>
-          </button>
-          <select
-            :value="orderby"
-            :class="{
-              [`${CSS_NAME_ACTION}__trigger`]: true,
-              [`${CSS_NAME_ACTION}__trigger--select`]: true,
-              'is-active': orderby !== null,
-            }"
-            @change="changeOrder($event.target.value)"
-          >
-            <option value="">Ordina per...</option>
-            <option v-for="(name, key) in orderOptions" :key="key" :value="key">
-              {{ name }}
-            </option>
-          </select>
+          <div v-if="sortable && orderOptions" :class="CSS_NAME_ACTION">
+            <button
+              :class="[
+                `${CSS_NAME_ACTION}__trigger`,
+                `${CSS_NAME_ACTION}__trigger--intent`,
+              ]"
+              type="button"
+            >
+              Ordina
+              <Suspense>
+                <NuxtIcon name="caret" />
+              </Suspense>
+            </button>
+            <select
+              :value="orderby"
+              :class="{
+                [`${CSS_NAME_ACTION}__trigger`]: true,
+                [`${CSS_NAME_ACTION}__trigger--select`]: true,
+                'is-active': orderby !== null,
+              }"
+              @change="changeOrder($event.target.value)"
+            >
+              <option value="">Ordina per...</option>
+              <option
+                v-for="(name, key) in orderOptions"
+                :key="key"
+                :value="key"
+              >
+                {{ name }}
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
-    </ResponsiveTrigger>
+      </ResponsiveTrigger>
+    </ClientOnly>
 
     <SiteContainer>
       <div v-if="products.length" class="o-row">
@@ -110,10 +116,7 @@
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
 
-      <span
-        v-if="canFetch && products.length"
-        ref="loader"
-        :class="`${CSS_NAME}__loader`"
+      <span v-if="isFetching" ref="loader" :class="`${CSS_NAME}__loader`"
         >Caricamento</span
       >
       <!-- <BaseButton
@@ -130,7 +133,7 @@
 // Imports
 import BaseOverlay from '@/components/Atoms/BaseOverlay.vue'
 import SiteContainer from '@/components/Atoms/SiteContainer.vue'
-import { useElementVisibility } from '@vueuse/core'
+import { useElementVisibility, useTimeoutFn } from '@vueuse/core'
 
 // Constants
 const CSS_NAME = 'c-products-grid'
@@ -144,6 +147,10 @@ const props = defineProps({
     default() {
       return []
     },
+  },
+  search: {
+    type: String,
+    default: null,
   },
   sortable: {
     type: Boolean,
@@ -185,12 +192,29 @@ const selectedFiltersMessage = ref('Nessun filtro selezionato')
 
 const orderby = ref(null)
 
+const timeout = useTimeoutFn(() => {
+  resetParams()
+
+  fetchProducts()
+}, 300)
+
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
     fetchProducts()
   }
 })
+
+watch(
+  () => props.search,
+  (current, old) => {
+    timeout.stop()
+
+    if (current !== old) {
+      timeout.start()
+    }
+  }
+)
 
 // Computed
 const cleanedChosenFilters = computed(() => {
@@ -265,18 +289,33 @@ const fetchProducts = async () => {
   isFetching.value = true
 
   try {
+    const params = {
+      limit: 12,
+    }
+
+    if (page.value > 0) {
+      params.page = page.value
+    }
+
+    if (orderby.value) {
+      params.orderby = orderby.value
+    }
+
+    if (props.search) {
+      params.search = props.search
+    }
+
+    if (cleanedChosenFilters.value.length > 0) {
+      params['filters[]'] = cleanedChosenFilters.value
+    }
+
     const response = await useApi(props.from, {
       method: 'GET',
-      params: {
-        page,
-        limit: 12,
-        orderby,
-        'filters[]': cleanedChosenFilters,
-      },
+      params,
     })
 
-    if (response.success) {
-      const { pagination, records } = response.data
+    if (response.value.success) {
+      const { pagination, records } = response.value.data
 
       products.value = [...products.value, ...records]
       page.value = pagination?.next || page.value
@@ -287,7 +326,7 @@ const fetchProducts = async () => {
       }
     } else {
       canFetch.value = false
-      noProductsMessage.value = response.message
+      noProductsMessage.value = response.value.message
     }
   } catch (error) {
     console.error(error)
@@ -428,6 +467,10 @@ $prefix: 'products-grid';
 
     @include from(desktop) {
       flex: 0 1 auto;
+
+      &:last-child {
+        margin-left: auto;
+      }
     }
 
     @include element('trigger') {

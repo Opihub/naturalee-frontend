@@ -54,8 +54,6 @@ const component = computed(() => {
     ? props.is
     : resolveComponent(props.is)
 
-  console.debug(is)
-
   return is
 })
 </script>
