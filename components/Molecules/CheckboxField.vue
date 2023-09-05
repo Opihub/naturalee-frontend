@@ -126,6 +126,7 @@ $prefix: 'checkbox-field';
     position: relative;
     margin: get-var(margin, 0, $prefix: $prefix-label);
     padding: get-var(padding, 0 0 0 rem(30px), $prefix: $prefix-label);
+    cursor: pointer;
   }
 
   @include element('input') {

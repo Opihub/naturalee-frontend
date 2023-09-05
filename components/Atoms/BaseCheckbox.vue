@@ -143,6 +143,7 @@ $prefix: 'checkbox';
     appearance: none;
     padding: 0;
     pointer-events: all;
+    cursor: inherit;
     position: absolute;
     inset: 50% auto auto 50%;
     width: get-var(size, rem(20px), $prefix: $prefix);
