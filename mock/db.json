@@ -32,8 +32,8 @@
         "slug": "faq",
         "content": "",
         "seo": {
-          "title": "Naturalee - FAQ",
-          "ogTitle": "Naturalee - FAQ",
+          "title": "FAQ - Naturalee",
+          "ogTitle": "FAQ - Naturalee",
           "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
           "ogDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
         },
@@ -51,16 +51,16 @@
       }
     },
     {
-      "id": "profile",
+      "id": "my-account",
       "record": {
         "id": 3,
         "title": "Il mio account",
         "link": "/my-account",
-        "slug": "profile",
+        "slug": "my-account",
         "content": "",
         "seo": {
-          "title": "Il mio account - FAQ",
-          "ogTitle": "Il mio account - FAQ"
+          "title": "Il mio account - Naturalee",
+          "ogTitle": "Il mio account - Naturalee"
         },
         "meta": {},
         "breadcrumbs": [
@@ -71,6 +71,93 @@
           {
             "link": "/my-account",
             "title": "Il mio account"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-profile",
+      "record": {
+        "id": 4,
+        "title": "Dettagli account",
+        "link": "/my-account/profile",
+        "slug": "profile",
+        "content": "",
+        "seo": {
+          "title": "Dettagli account - Naturalee",
+          "ogTitle": "Dettagli account - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/profile",
+            "title": "Dettagli account"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-orders",
+      "record": {
+        "id": 5,
+        "title": "Ordini",
+        "link": "/my-account/orders",
+        "slug": "orders",
+        "content": "",
+        "seo": {
+          "title": "Ordini - Naturalee",
+          "ogTitle": "Ordini - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/orders",
+            "title": "Ordini"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-addresses",
+      "record": {
+        "id": 6,
+        "title": "Indirizzi",
+        "link": "/my-account/addresses",
+        "slug": "addresses",
+        "content": "",
+        "seo": {
+          "title": "Indirizzi - Naturalee",
+          "ogTitle": "Indirizzi - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/addresses",
+            "title": "Indirizzi"
           }
         ]
       }
@@ -439,6 +526,35 @@
           "title": "Instagram",
           "url": "https://www.instagram.com/",
           "target": "_blank"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "records": [
+        {
+          "id": 1,
+          "title": "Bacheca",
+          "url": "/my-account/dashboard",
+          "target": null
+        },
+        {
+          "id": 2,
+          "title": "Ordini",
+          "url": "/my-account/orders",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "Indirizzi",
+          "url": "/my-account/addresses",
+          "target": null
+        },
+        {
+          "id": 4,
+          "title": "Dettagli account",
+          "url": "/my-account/profile",
+          "target": null
         }
       ]
     },

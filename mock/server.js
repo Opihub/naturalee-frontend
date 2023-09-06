@@ -141,6 +141,9 @@ server.post('/v1/auth/password-recovery', (request, response) => {
 server.use(
   jsonServer.rewriter({
     '/v1/*': '/$1',
+    '/pages/my-account/dashboard': '/pages/my-account',
+    '/pages/:page/:subpage': '/pages/$1-$2',
+    '/pages/:main-page/': '/sitePages/$2',
     '/layout/marquee': '/marquee',
     '/layout/topbar': '/topbar',
     '/layout/copyright': '/copyright',

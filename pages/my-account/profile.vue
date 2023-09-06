@@ -1,6 +1,6 @@
 <template>
   <section>
-    dashboard
+    {{ account }}
   </section>
 </template>
 
@@ -11,9 +11,6 @@ import { useAccountStore } from '@/stores/account'
 // Constants
 
 // Define (Props, Emits, Page Meta)
-definePageMeta({
-  alias: 'dashboard'
-})
 
 // Component life-cycle hooks
 
