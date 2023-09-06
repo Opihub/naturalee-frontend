@@ -19,9 +19,15 @@
           ]"
         >
           <span
-            >Ciao <strong>{{ username }}</strong></span
+            >Ciao <strong>{{ account.username }}</strong></span
           >
-          <u>Esci</u>
+          <BaseLink
+            to="/"
+            underline
+            :class="`${CSS_NAME}__logout`"
+            @click.prevent="quit"
+            >Esci</BaseLink
+          >
         </li>
       </template>
     </InlineMenu>
@@ -29,13 +35,14 @@
 </template>
 
 <script setup>
+// Imports
+import { useAccountStore } from '@/stores/account'
+
+// Constants
 const CSS_NAME = 'c-profile-menu'
 
+// Props & Emits
 defineProps({
-  username: {
-    type: String,
-    required: true,
-  },
   menu: {
     type: Array,
     default() {
@@ -43,6 +50,28 @@ defineProps({
     },
   },
 })
+
+// Component life-cycle hooks
+
+// Composables
+const store = useAccountStore()
+const { logout } = store
+const { account } = storeToRefs(store)
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
+const quit = async () => {
+  logout()
+
+  await navigateTo({
+    path: '/',
+  })
+}
 </script>
 
 <style lang="scss">
@@ -72,6 +101,11 @@ $prefix: 'profile-menu';
     )
   );
 
+  @include element('logout') {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   @include element('item') {
     display: flex;
     flex-wrap: nowrap;
@@ -88,11 +122,6 @@ $prefix: 'profile-menu';
       font-weight: get-var(weight-regular);
       background-color: get-var(color-green);
       color: get-var(color-white);
-
-      u {
-        cursor: pointer;
-        color: get-var(color-yellow);
-      }
     }
   }
 }

@@ -8,17 +8,17 @@
         :categories="categories"
       />
 
-      <ClientOnly>
-        <ul :class="CSS_NAME_ACTIONS">
-          <li
-            :class="`${CSS_NAME_ACTIONS}__single`"
-            @mouseleave="isMiniCartMenuOpen = false"
-          >
-            <MiniCartIcon
-              :class="`${CSS_NAME_ACTIONS}__icon`"
-              :count="cart.length.toString()"
-              @mouseover="isMiniCartMenuOpen = true"
-            />
+      <ul :class="CSS_NAME_ACTIONS">
+        <li
+          :class="`${CSS_NAME_ACTIONS}__single`"
+          @mouseleave="isMiniCartMenuOpen = false"
+        >
+          <MiniCartIcon
+            :class="`${CSS_NAME_ACTIONS}__icon`"
+            :count="cart.length.toString()"
+            @mouseover="isMiniCartMenuOpen = true"
+          />
+          <ClientOnly>
             <Transition name="fade">
               <MiniCart
                 v-show="isMiniCartMenuOpen"
@@ -26,67 +26,69 @@
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
-          </li>
-          <li
-            :class="[
-              `${CSS_NAME_ACTIONS}__single`,
-              `${CSS_NAME_ACTIONS}__single--menu`,
-            ]"
-          >
-            <HamburgerMenu
-              :class="{
-                [`${CSS_NAME_ACTIONS}__icon`]: true,
-                'is-active': isMobileMenuOpen,
-              }"
-              @click="openMenuMobile"
-            />
-          </li>
-          <li
-            :class="[
-              `${CSS_NAME_ACTIONS}__single`,
-              `${CSS_NAME_ACTIONS}__single--profile`,
-            ]"
-            @mouseleave="isProfileMenuOpen = false"
-          >
-            <ProfileIcon
-              :is-logged-in="!!username"
-              :class="{
-                [`${CSS_NAME_ACTIONS}__icon`]: true,
-                'is-active': isProfileMenuOpen,
-              }"
-              @mouseover="isProfileMenuOpen = true"
-            />
+          </ClientOnly>
+        </li>
+        <li
+          :class="[
+            `${CSS_NAME_ACTIONS}__single`,
+            `${CSS_NAME_ACTIONS}__single--menu`,
+          ]"
+        >
+          <HamburgerMenu
+            :class="{
+              [`${CSS_NAME_ACTIONS}__icon`]: true,
+              'is-active': isMobileMenuOpen,
+            }"
+            @click="openMenuMobile"
+          />
+        </li>
+        <li
+          :class="[
+            `${CSS_NAME_ACTIONS}__single`,
+            `${CSS_NAME_ACTIONS}__single--profile`,
+          ]"
+          @mouseleave="isProfileMenuOpen = false"
+        >
+          <ProfileIcon
+            :is-logged-in="isLoggedIn"
+            :class="{
+              [`${CSS_NAME_ACTIONS}__icon`]: true,
+              'is-active': isProfileMenuOpen,
+            }"
+            @mouseover="isProfileMenuOpen = true"
+          />
+          <ClientOnly>
             <Transition name="fade">
               <ProfileMenu
-                v-if="username"
+                v-if="isLoggedIn"
                 v-show="isProfileMenuOpen"
                 :menu="profileMenu"
-                :username="username"
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
-          </li>
-        </ul>
-      </ClientOnly>
+          </ClientOnly>
+        </li>
+      </ul>
     </SiteContainer>
   </header>
 </template>
 
 <script setup>
+// Imports
+import { useAccountStore } from '@/stores/account'
+
+// Constants
 const CSS_NAME = 'c-header'
 const CSS_NAME_CONTAINER = `${CSS_NAME}__container`
 const CSS_NAME_ACTIONS = `${CSS_NAME}__actions`
 
+// Props & Emits
 defineProps({
   categories: {
     type: Array,
     default() {
       return []
     },
-  },
-  username: {
-    type: String,
-    default: null,
   },
   profileMenu: {
     type: Array,
@@ -108,10 +110,22 @@ const emit = defineEmits([
   'menuMobile:close',
 ])
 
+// Component life-cycle hooks
+
+// Composables
+const store = useAccountStore()
+const { isLoggedIn } = storeToRefs(store)
+
+// Data
 const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
 
+// Watcher
+
+// Computed
+
+// Methods
 const openMenuMobile = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
 
