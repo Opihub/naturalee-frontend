@@ -137,8 +137,11 @@
 // Component life-cycle hooks
 
 // Data
+const route = useRoute()
+const isShowingForgotPasswordForm = ref('forgot_password' in route.query)
+
 const { page } = await usePage('profile')
-const isShowingForgotPasswordForm = ref(false)
+
 const loginData = reactive({
   user: '',
   password: '',
