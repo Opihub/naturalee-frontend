@@ -23,7 +23,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     })
   }
 
-  if (cached.value) {
+  if (cached.value && cached.value.success) {
     return cached
   }
 
