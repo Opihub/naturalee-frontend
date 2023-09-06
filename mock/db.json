@@ -55,7 +55,7 @@
       "record": {
         "id": 3,
         "title": "Il mio account",
-        "link": "/profile",
+        "link": "/my-account",
         "slug": "profile",
         "content": "",
         "seo": {
@@ -69,7 +69,7 @@
             "title": "Home"
           },
           {
-            "link": "/profile",
+            "link": "/my-account",
             "title": "Il mio account"
           }
         ]
@@ -402,25 +402,25 @@
         {
           "id": 1,
           "title": "Azienda",
-          "url": "azienda",
+          "url": "/azienda",
           "target": null
         },
         {
           "id": 2,
           "title": "Contatti",
-          "url": "contatti",
+          "url": "/contatti",
           "target": null
         },
         {
           "id": 3,
           "title": "FAQ",
-          "url": "faq",
+          "url": "/faq",
           "target": null
         },
         {
           "id": 4,
           "title": "Consegna",
-          "url": "consegna",
+          "url": "/consegna",
           "target": null
         }
       ]
@@ -448,19 +448,19 @@
         {
           "id": 1,
           "title": "Privacy Policy",
-          "url": "privacy-policy",
+          "url": "/privacy-policy",
           "target": null
         },
         {
           "id": 2,
           "title": "Cookie Policy",
-          "url": "cookie-policy",
+          "url": "/cookie-policy",
           "target": null
         },
         {
           "id": 3,
           "title": "Condizioni di vendita",
-          "url": "condizioni-di-vendita",
+          "url": "/condizioni-di-vendita",
           "target": null
         }
       ]
@@ -471,19 +471,19 @@
         {
           "id": 1,
           "title": "Il mio profilo",
-          "url": "profilo",
+          "url": "/profile",
           "target": null
         },
         {
           "id": 2,
           "title": "I miei ordini",
-          "url": "miei-ordini",
+          "url": "/my-account/orders",
           "target": null
         },
         {
           "id": 3,
           "title": "La mia lista",
-          "url": "miei-preferiti",
+          "url": "/my-account/wishlist",
           "target": null
         }
       ]
@@ -494,31 +494,31 @@
         {
           "id": 1,
           "title": "Verdura",
-          "url": "verdura",
+          "url": "/verdura",
           "image": "verdura"
         },
         {
           "id": 2,
           "title": "Frutta",
-          "url": "frutta",
+          "url": "/frutta",
           "image": "frutta"
         },
         {
           "id": 3,
           "title": "Esotico",
-          "url": "esotico",
+          "url": "/esotico",
           "image": "esotico"
         },
         {
           "id": 4,
           "title": "Aromi",
-          "url": "aromi",
+          "url": "/aromi",
           "image": "aromi"
         },
         {
           "id": 5,
           "title": "Dispensa",
-          "url": "dispensa",
+          "url": "/dispensa",
           "image": "dispensa"
         }
       ]

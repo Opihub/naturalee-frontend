@@ -15,7 +15,7 @@
 
     <slot name="profileLink">
       <BaseLink
-        to="/profile?"
+        to="/my-account?"
         color="dark"
         underline
         @click.prevent="toggleLoginForm(false)"
@@ -53,7 +53,7 @@
 // Constants
 const CSS_NAME = 'c-password-recovery-form'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   disabled: {
     type: Boolean,

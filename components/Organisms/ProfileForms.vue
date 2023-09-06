@@ -14,7 +14,7 @@
         >
           <template #forgotLink>
             <BaseLink
-              to="/profile?forgot_password"
+              to="/my-account?forgot_password"
               color="dark"
               underline
               @click.prevent="toggleLoginForm(true)"
@@ -30,7 +30,7 @@
         >
           <template #profileLink>
             <BaseLink
-              to="/profile?"
+              to="/my-account?"
               color="dark"
               underline
               @click.prevent="toggleLoginForm(false)"
@@ -59,7 +59,7 @@
 
 // Constants
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 
 // Component life-cycle hooks
 

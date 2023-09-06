@@ -20,7 +20,7 @@
 
       <slot name="forgotLink">
         <BaseLink
-          to="/profile?forgot_password"
+          to="/my-account?forgot_password"
           color="dark"
           underline
           @click.prevent="toggleLoginForm(true)"
@@ -46,7 +46,7 @@ import { useAccountStore } from '@/stores/account'
 // Constants
 const CSS_NAME = 'c-login-form'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   disabled: {
     type: Boolean,
