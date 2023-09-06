@@ -90,7 +90,7 @@
         content-center
       >
         <form method="POST" @submit.prevent="register">
-          <BaseHeading class="u-mb-small" tag="h3">Registati</BaseHeading>
+          <BaseHeading class="u-mb-small" tag="h3">Registrati</BaseHeading>
 
           <InputField
             v-model="registerData.email"
@@ -118,8 +118,11 @@
             >
           </CheckboxField>
 
-          <BaseButton class="u-mt-large" color="green" type="submit"
-            >Registati</BaseButton
+          <BaseButton
+            class="u-mt-large"
+            color="green"
+            type="submit"
+            >Registrati</BaseButton
           >
         </form>
       </BackgroundHolder>
