@@ -12,7 +12,10 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   options = options || {}
 
-  const apiUrl = innerOptions.local ? `/api/${url}` : url
+  const apiUrl = (innerOptions.local ? `/api/${url}` : url).replaceAll(
+    /\/+/g,
+    '/'
+  )
 
   let cached = ref(null)
   if (innerOptions.cache) {
