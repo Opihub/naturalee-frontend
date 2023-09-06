@@ -18,15 +18,7 @@
     <div class="o-row s-remember-me">
       <CheckboxField v-model="formData.remember"> Ricordami </CheckboxField>
 
-      <slot name="forgotLink">
-        <BaseLink
-          to="/my-account?forgot_password"
-          color="dark"
-          underline
-          @click.prevent="toggleLoginForm(true)"
-          >Hai dimenticato la password?</BaseLink
-        >
-      </slot>
+      <slot name="forgotLink" />
     </div>
 
     <BaseButton

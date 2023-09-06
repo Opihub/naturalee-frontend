@@ -13,15 +13,7 @@
       Nome utente o indirizzo email *</InputField
     >
 
-    <slot name="profileLink">
-      <BaseLink
-        to="/my-account?"
-        color="dark"
-        underline
-        @click.prevent="toggleLoginForm(false)"
-        >Oppure torna al login</BaseLink
-      >
-    </slot>
+    <slot name="profileLink" />
 
     <BaseButton
       class="u-mt-large"
