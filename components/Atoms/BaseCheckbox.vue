@@ -23,7 +23,7 @@ import Tick from 'assets/svg/tick.svg'
 // Constants
 const CSS_NAME = 'o-checkbox'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   name: {
     type: String,

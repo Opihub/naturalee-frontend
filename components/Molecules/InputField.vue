@@ -56,7 +56,7 @@
 // Constants
 const CSS_NAME = 'c-input-field'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   name: {
     type: String,

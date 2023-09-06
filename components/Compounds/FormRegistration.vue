@@ -39,7 +39,7 @@ import { useAccountStore } from '@/stores/account'
 // Constants
 const CSS_NAME = 'c-registration-form'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   disabled: {
     type: Boolean,

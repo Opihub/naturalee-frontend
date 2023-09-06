@@ -41,7 +41,7 @@ import { useAccountStore } from '@/stores/account'
 // Constants
 const CSS_NAME = 'c-profile-menu'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   menu: {
     type: Array,

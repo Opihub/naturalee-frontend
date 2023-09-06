@@ -16,7 +16,7 @@
 // Imports
 import { useMediaQuery } from '@vueuse/core'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   is: {
     type: [String, Object],

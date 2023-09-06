@@ -24,7 +24,7 @@
 // Constants
 const CSS_NAME = 'c-bottom-bar'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   breadcrumb: {
     type: Array,

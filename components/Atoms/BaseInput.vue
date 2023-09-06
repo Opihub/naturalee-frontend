@@ -16,7 +16,7 @@
 // Constants
 const CSS_NAME = 'o-input'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   type: {
     type: String,

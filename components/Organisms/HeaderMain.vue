@@ -82,7 +82,7 @@ const CSS_NAME = 'c-header'
 const CSS_NAME_CONTAINER = `${CSS_NAME}__container`
 const CSS_NAME_ACTIONS = `${CSS_NAME}__actions`
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   categories: {
     type: Array,

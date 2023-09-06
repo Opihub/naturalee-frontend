@@ -53,7 +53,7 @@
 // Constants
 const CSS_NAME = 'o-layout'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   categoriesTitle: {
     type: String,
