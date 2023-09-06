@@ -40,6 +40,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
        * Server error, can happen
        */
       responseData = errorData.data
+      console.warn(responseData)
     } else {
       /**
        * Client error, must not happen
@@ -67,7 +68,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     }, {})
   }
 
-  cached = ref(innerOptions.dataOnly ? response.data : response)
+  cached.value = innerOptions.dataOnly ? response.data : response
 
   return cached
 }
