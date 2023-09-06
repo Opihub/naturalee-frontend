@@ -4,11 +4,7 @@
       <BaseHeading class="u-mb-small" tag="h3">Registrati</BaseHeading>
     </slot>
 
-    <InputField
-      v-model="formData.email"
-      class="u-mb-half"
-      type="email"
-      required
+    <InputField v-model="formData.email" class="u-mb-half" type="email" required
       >Indirizzo email *</InputField
     >
     <InputField
@@ -38,6 +34,7 @@
 
 <script setup>
 // Imports
+import { useAccountStore } from '@/stores/account'
 
 // Constants
 const CSS_NAME = 'c-registration-form'
@@ -46,8 +43,8 @@ const CSS_NAME = 'c-registration-form'
 defineProps({
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 const emit = defineEmits(['api:start', 'api:end'])
 
@@ -55,6 +52,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 
 // Composables
 const { sending, send } = useSender(emit)
+const store = useAccountStore()
 
 // Data
 const formData = reactive({
@@ -73,21 +71,10 @@ const register = async () => {
     return
   }
 
-  const response = await send(async () => {
-    return await useApi(
-      `auth/sign-in`,
-      {
-        method: 'POST',
-        body: formData,
-      },
-      {
-        cache: false,
-      }
-    )
-  })
+  const response = await send(async () => await store.signIn(formData))
 
   if (response.value.success) {
-    // TODO: cambiare layout
+    // TODO: cambiare layout?
   }
 }
 </script>

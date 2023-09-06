@@ -41,6 +41,7 @@
 
 <script setup>
 // Imports
+import { useAccountStore } from '@/stores/account'
 
 // Constants
 const CSS_NAME = 'c-login-form'
@@ -49,8 +50,8 @@ const CSS_NAME = 'c-login-form'
 defineProps({
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 const emit = defineEmits(['api:start', 'api:end'])
 
@@ -58,6 +59,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 
 // Composables
 const { sending, send } = useSender(emit)
+const store = useAccountStore()
 
 // Data
 const formData = reactive({
@@ -76,23 +78,10 @@ const login = async () => {
     return
   }
 
-  const response = await send(async () => {
-    return await useApi(
-      `auth/login`,
-      {
-        method: 'POST',
-        body: formData,
-      },
-      {
-        cache: false,
-      }
-    )
-  })
-
-  console.debug(response.value)
+  const response = await send(async () => await store.signUp(formData))
 
   if (response.value.success) {
-    // TODO: cambiare layout
+    // TODO: cambiare layout?
   }
 }
 </script>
