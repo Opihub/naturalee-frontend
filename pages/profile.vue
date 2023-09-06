@@ -46,7 +46,11 @@
               >
             </div>
 
-            <BaseButton class="u-mt-large" color="green" type="submit"
+            <BaseButton
+              class="u-mt-large"
+              color="green"
+              type="submit"
+              :disabled="sending"
               >Accedi</BaseButton
             >
           </form>
@@ -78,9 +82,34 @@
               >Oppure torna al login</BaseLink
             >
 
-            <BaseButton class="u-mt-large" color="green" type="submit"
+            <BaseButton
+              class="u-mt-large"
+              color="green"
+              type="submit"
+              :disabled="sending"
               >Recupera password</BaseButton
             >
+            <BaseMessage v-if="sent">
+              <template v-if="success">
+                Abbiamo inviato una mail
+                {{
+                  forgotPasswordUser.match(getEmailPattern())
+                    ? "all'indirizzo email"
+                    : "all'indirizzo email dell'utente"
+                }}
+                <b>{{ forgotPasswordUser }}</b> con il link per recuperare la
+                password.
+              </template>
+              <template v-else>
+                Ci dispiace, ma non abbiamo trovato alcun utente con
+                {{
+                  forgotPasswordUser.match(getEmailPattern())
+                    ? "indirizzo email"
+                    : "l'username"
+                }}
+                <b>{{ forgotPasswordUser }}</b>
+              </template>
+            </BaseMessage>
           </form>
         </Transition>
       </BackgroundHolder>
@@ -122,6 +151,7 @@
             class="u-mt-large"
             color="green"
             type="submit"
+            :disabled="sending"
             >Registrati</BaseButton
           >
         </form>
@@ -158,6 +188,11 @@ const registerData = reactive({
 const forgotPasswordData = reactive({
   user: '',
 })
+const forgotPasswordUser = ref(null)
+
+const sending = ref(false)
+const sent = ref(false)
+const success = ref(false)
 
 // Watcher
 
@@ -169,19 +204,84 @@ const toggleLoginForm = (toggle = null) => {
     toggle === null ? !isShowingForgotPasswordForm.value : !!toggle
 }
 
-const login = () => {
-  // TODO
-  console.debug({ ...loginData })
+const login = async () => {
+  if (sending.value) {
+    return
+  }
+
+  sending.value = true
+  sent.value = false
+
+  const response = await useApi(
+    `auth/login`,
+    {
+      method: 'POST',
+      body: loginData,
+    },
+    {
+      cache: false,
+    }
+  )
+
+  sending.value = false
+  sent.value = true
+
+  if (response.value.success) {
+    // TODO: cambiare layout
+  }
 }
 
-const register = () => {
-  // TODO
-  console.debug({ ...registerData })
+const register = async () => {
+  if (sending.value) {
+    return
+  }
+
+  sending.value = true
+  sent.value = false
+
+  const response = await useApi(
+    `auth/sign-in`,
+    {
+      method: 'POST',
+      body: registerData,
+    },
+    {
+      cache: false,
+    }
+  )
+
+  sending.value = false
+  sent.value = true
+
+  if (response.value.success) {
+    // TODO: cambiare layout
+  }
 }
 
-const passwordRecovery = () => {
-  // TODO
-  console.debug({ ...forgotPasswordData })
+const passwordRecovery = async () => {
+  if (sending.value) {
+    return
+  }
+
+  sending.value = true
+  sent.value = false
+  forgotPasswordUser.value = forgotPasswordData.user
+
+  const response = await useApi(
+    `auth/password-recovery`,
+    {
+      method: 'POST',
+      body: forgotPasswordData,
+    },
+    {
+      cache: false,
+    }
+  )
+
+  sending.value = false
+  sent.value = true
+
+  success.value = response.value.success
 }
 </script>
 

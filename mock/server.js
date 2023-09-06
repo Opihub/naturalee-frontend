@@ -4,6 +4,7 @@ const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router(path.join(__dirname, 'db.json'))
 const middlewares = jsonServer.defaults()
+const DB = require('./db.json')
 
 function random(min = 0, max = 1) {
   min = Math.ceil(min)
@@ -82,6 +83,58 @@ server.post('/v1/postcodes/validate', (request, response) => {
   }
 
   response.jsonp(createResponse(statusCode, data))
+})
+
+server.post('/v1/auth/login', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+  const { profile } = DB
+
+  if (
+    !body.user ||
+    !body.password ||
+    ![profile.email, profile.username].includes(body.user)
+  ) {
+    statusCode = 403
+  } else {
+    data = {...profile, token: "token.jwt.test"}
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.post('/v1/auth/sign-in', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+  const { profile } = DB
+
+  if (!body.email || !body.password || [profile.email].includes(body.user)) {
+    statusCode = 403
+  } else {
+    data = {...profile, token: "token.jwt.test"}
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.post('/v1/auth/password-recovery', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+  const { profile } = DB
+
+  if (
+    !body.user ||
+    ![profile.email, profile.username].includes(body.user)
+  ) {
+    statusCode = 403
+  } else {
+    data = true
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
 })
 
 // server.use('/api', router)
