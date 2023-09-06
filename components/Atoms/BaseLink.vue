@@ -1,12 +1,12 @@
 <template>
-  <NuxtLink :class="className">
+  <NuxtLink
+    :class="className"
+    active-class="is-current"
+    exact-active-class="is-exact"
+  >
     <Suspense v-if="svg || slots.svg">
       <slot name="svg" :class-name="CSS_NAME_ICON">
-        <NuxtIcon
-          :name="svg"
-          :class="CSS_NAME_ICON"
-          :filled="svgFilled"
-        />
+        <NuxtIcon :name="svg" :class="CSS_NAME_ICON" :filled="svgFilled" />
       </slot>
 
       <template #fallback>
@@ -107,6 +107,26 @@ const className = computed(() => {
 </script>
 
 <style lang="scss">
+@mixin set-active($color) {
+  // @include is('current') {
+  //   @include set-local-vars(
+  //     $prefix: $prefix,
+  //     $map: (
+  //       text-color: get-var('color-#{$color}'),
+  //     )
+  //   );
+  // }
+
+  @include is('exact') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        text-color: get-var('color-#{$color}'),
+      )
+    );
+  }
+}
+
 $prefix: 'link';
 @include object($prefix) {
   $svg-prefix: 'link-svg';
@@ -148,6 +168,8 @@ $prefix: 'link';
   gap: get-var(gap, $prefix: $prefix);
   @include transition(color);
 
+  // @include current(white);
+
   &:hover {
     @include set-local-vars(
       $prefix: $prefix,
@@ -186,6 +208,8 @@ $prefix: 'link';
     @include transition(color);
   }
 
+  @include set-active('white');
+
   @include modifier('white') {
     @include set-local-vars(
       $prefix: $prefix,
@@ -202,6 +226,8 @@ $prefix: 'link';
         )
       );
     }
+
+    @include set-active('yellow');
   }
 
   @include modifier('dark') {
@@ -216,10 +242,13 @@ $prefix: 'link';
       @include set-local-vars(
         $prefix: $prefix,
         $map: (
-          text-color: get-var(color-yellow),
+          text-color: get-var(color-green),
+          // text-color: get-var(color-yellow),
         )
       );
     }
+
+    @include set-active('green');
   }
 
   @include has('underline') {

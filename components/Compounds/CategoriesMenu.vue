@@ -5,7 +5,6 @@
     :item-class="`${CSS_NAME}__item`"
     gap="large"
     color="dark"
-    hover-color="green"
   />
 </template>
 

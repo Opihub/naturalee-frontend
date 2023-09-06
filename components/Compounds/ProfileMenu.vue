@@ -6,7 +6,6 @@
       :menu="menu"
       :arrow="true"
       color="dark"
-      hover-color="green"
       direction="vertical"
     >
       <template #before="{ itemClassName }">
