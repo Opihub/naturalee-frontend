@@ -107,7 +107,7 @@
             >Password *</InputField
           >
 
-          <CheckboxField v-model="registerData.acceptance">
+          <CheckboxField v-model="registerData.acceptance" required>
             Acconsento al
             <BaseLink
               to="/term-and-conditions"
