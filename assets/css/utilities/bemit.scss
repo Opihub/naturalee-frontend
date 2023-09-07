@@ -60,6 +60,7 @@
 }
 
 @function compose-scope($selector) {
+  // TODO: controllare se passato numero
   @return selector.append('.s-', $selector);
 }
 

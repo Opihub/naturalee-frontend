@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:meta';
 
 @mixin assemble-utilities-with-sizes($media: false) {
   @each $prop, $rule in $utilities-with-sizes {
@@ -6,12 +7,12 @@
       @if ($media) {
         @include from($media) {
           @include utility(#{$prop}-#{$key}\@#{$media}) {
-            #{$rule}: rem($value) !important;
+            #{$rule}: if(meta.type-of($value) == number, rem($value), $value) !important;
           }
         }
       } @else {
         @include utility(#{$prop}-#{$key}) {
-          #{$rule}: rem($value) !important;
+          #{$rule}: if(meta.type-of($value) == number, rem($value), $value) !important;
         }
       }
     }
