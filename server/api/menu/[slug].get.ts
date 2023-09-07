@@ -4,15 +4,14 @@ export default defineEventHandler(async (event) => {
   const slug = event.context.params?.slug
 
   if (!slug) {
-    throw createError(
-      createResponse({
-        success: false,
-        statusCode: 403,
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Missing mandatory menu slug',
+      data: {
         code: 'missing_slug',
-        message: 'Missing mandatory menu slug',
-        data: false,
-      })
-    )
+        success: false,
+      },
+    })
   }
 
   try {
@@ -21,6 +20,6 @@ export default defineEventHandler(async (event) => {
     return createResponse(response)
   } catch (error) {
     console.error(error)
-    throw createError(createResponse(error))
+    return createErrorResponse(error)
   }
 })

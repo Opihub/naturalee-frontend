@@ -4,29 +4,27 @@ export default defineEventHandler(async (event) => {
   const category = event.context.params?.category
 
   if (!category) {
-    throw createError(
-      createResponse({
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Missing mandatory category slug',
+      data: {
+        code: 'missing_category_slug',
         success: false,
-        statusCode: 403,
-        code: 'missing_slug',
-        message: 'Missing mandatory menu slug',
-        data: false,
-      })
-    )
+      },
+    })
   }
 
   const product = event.context.params?.product
 
   if (!product) {
-    throw createError(
-      createResponse({
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Missing mandatory product slug',
+      data: {
+        code: 'missing_product_slug',
         success: false,
-        statusCode: 403,
-        code: 'missing_slug',
-        message: 'Missing mandatory menu slug',
-        data: false,
-      })
-    )
+      },
+    })
   }
 
   try {
@@ -37,6 +35,6 @@ export default defineEventHandler(async (event) => {
     return createResponse(response)
   } catch (error) {
     console.error(error)
-    throw createError(createResponse(error))
+    return createErrorResponse(error)
   }
 })

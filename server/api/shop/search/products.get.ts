@@ -4,15 +4,14 @@ export default defineEventHandler(async (event) => {
   const params = getQuery(event)
 
   if (!('search' in params) || !params.search) {
-    throw createError(
-      createResponse({
-        success: false,
-        statusCode: 403,
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Parametro di ricerca mancante',
+      data: {
         code: 'missing_search',
-        message: 'Parametro di ricerca mancante',
-        data: false,
-      })
-    )
+        success: false,
+      },
+    })
   }
 
   try {
@@ -23,6 +22,6 @@ export default defineEventHandler(async (event) => {
     return createPaginatedResponse(response)
   } catch (error) {
     console.error(error)
-    throw createError(createResponse(error))
+    return createErrorResponse(error)
   }
 })
