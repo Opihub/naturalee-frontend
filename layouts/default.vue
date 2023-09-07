@@ -8,7 +8,6 @@
 
     <HeaderMain
       :categories="categoriesMenu.data"
-      :username="profile.data.username"
       :profile-menu="profileMenu.data"
       :cart="cart.data"
     />
@@ -54,7 +53,7 @@
 // Constants
 const CSS_NAME = 'o-layout'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   categoriesTitle: {
     type: String,
@@ -72,45 +71,43 @@ onUnmounted(() => {
   window.removeEventListener('resize', setBottomGap)
 })
 
-// Data
-const layout = ref(null)
-const categoriesMenuElement = ref(null)
-
-const profile = await useApi('profile').catch((error) => {
-  console.error('Errore durante il carimento di "profile"', error)
-})
+// Composables
 const categories = await useApi('shop/categories').catch((error) => {
-  console.error('Errore durante il carimento di "shop/categories"', error)
+  console.error('Errore durante il caricamento di "shop/categories"', error)
 })
 const cart = await useApi('shop/cart/products').catch((error) => {
-  console.error('Errore durante il carimento di "shop/cart/products"', error)
+  console.error('Errore durante il caricamento di "shop/cart/products"', error)
 })
 
 const marquee = await useApi('layout/marquee').catch((error) => {
-  console.error('Errore durante il carimento di "layout/marquee"', error)
+  console.error('Errore durante il caricamento di "layout/marquee"', error)
 })
 const topbarBanners = await useApi('layout/topbar').catch((error) => {
-  console.error('Errore durante il carimento di "layout/topbar"', error)
+  console.error('Errore durante il caricamento di "layout/topbar"', error)
 })
 const copyrights = await useApi('layout/copyright').catch((error) => {
-  console.error('Errore durante il carimento di "layout/copyright"', error)
+  console.error('Errore durante il caricamento di "layout/copyright"', error)
 })
 
 const primaryMenu = await useApi('menu/primary').catch((error) => {
-  console.error('Errore durante il carimento di "menu/primary"', error)
+  console.error('Errore durante il caricamento di "menu/primary"', error)
 })
 const socialsMenu = await useApi('menu/socials').catch((error) => {
-  console.error('Errore durante il carimento di "menu/socials"', error)
+  console.error('Errore durante il caricamento di "menu/socials"', error)
 })
 const profileMenu = await useApi('menu/profile').catch((error) => {
-  console.error('Errore durante il carimento di "menu/profile"', error)
+  console.error('Errore durante il caricamento di "menu/profile"', error)
 })
 const privacyMenu = await useApi('menu/privacy').catch((error) => {
-  console.error('Errore durante il carimento di "menu/privacy"', error)
+  console.error('Errore durante il caricamento di "menu/privacy"', error)
 })
 const categoriesMenu = await useApi('menu/categories').catch((error) => {
-  console.error('Errore durante il carimento di "menu/categories"', error)
+  console.error('Errore durante il caricamento di "menu/categories"', error)
 })
+
+// Data
+const layout = ref(null)
+const categoriesMenuElement = ref(null)
 
 // Watcher
 

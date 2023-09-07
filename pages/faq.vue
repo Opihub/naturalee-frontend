@@ -27,7 +27,7 @@
 
 // Constants
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 
 // Component life-cycle hooks
 

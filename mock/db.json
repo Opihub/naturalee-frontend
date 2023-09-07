@@ -32,8 +32,8 @@
         "slug": "faq",
         "content": "",
         "seo": {
-          "title": "Naturalee - FAQ",
-          "ogTitle": "Naturalee - FAQ",
+          "title": "FAQ - Naturalee",
+          "ogTitle": "FAQ - Naturalee",
           "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
           "ogDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
         },
@@ -45,7 +45,119 @@
           },
           {
             "link": "/faq",
-            "title": "Faq"
+            "title": "FAQ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account",
+      "record": {
+        "id": 3,
+        "title": "Il mio account",
+        "link": "/my-account",
+        "slug": "my-account",
+        "content": "",
+        "seo": {
+          "title": "Il mio account - Naturalee",
+          "ogTitle": "Il mio account - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-profile",
+      "record": {
+        "id": 4,
+        "title": "Dettagli account",
+        "link": "/my-account/profile",
+        "slug": "profile",
+        "content": "",
+        "seo": {
+          "title": "Dettagli account - Naturalee",
+          "ogTitle": "Dettagli account - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/profile",
+            "title": "Dettagli account"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-orders",
+      "record": {
+        "id": 5,
+        "title": "Ordini",
+        "link": "/my-account/orders",
+        "slug": "orders",
+        "content": "",
+        "seo": {
+          "title": "Ordini - Naturalee",
+          "ogTitle": "Ordini - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/orders",
+            "title": "Ordini"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-addresses",
+      "record": {
+        "id": 6,
+        "title": "Indirizzi",
+        "link": "/my-account/addresses",
+        "slug": "addresses",
+        "content": "",
+        "seo": {
+          "title": "Indirizzi - Naturalee",
+          "ogTitle": "Indirizzi - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/addresses",
+            "title": "Indirizzi"
           }
         ]
       }
@@ -377,25 +489,25 @@
         {
           "id": 1,
           "title": "Azienda",
-          "url": "azienda",
+          "url": "/azienda",
           "target": null
         },
         {
           "id": 2,
           "title": "Contatti",
-          "url": "contatti",
+          "url": "/contatti",
           "target": null
         },
         {
           "id": 3,
           "title": "FAQ",
-          "url": "faq",
+          "url": "/faq",
           "target": null
         },
         {
           "id": 4,
           "title": "Consegna",
-          "url": "consegna",
+          "url": "/consegna",
           "target": null
         }
       ]
@@ -418,24 +530,53 @@
       ]
     },
     {
+      "id": "dashboard",
+      "records": [
+        {
+          "id": 1,
+          "title": "Bacheca",
+          "url": "/my-account/dashboard",
+          "target": null
+        },
+        {
+          "id": 2,
+          "title": "Ordini",
+          "url": "/my-account/orders",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "Indirizzi",
+          "url": "/my-account/addresses",
+          "target": null
+        },
+        {
+          "id": 4,
+          "title": "Dettagli account",
+          "url": "/my-account/profile",
+          "target": null
+        }
+      ]
+    },
+    {
       "id": "privacy",
       "records": [
         {
           "id": 1,
           "title": "Privacy Policy",
-          "url": "privacy-policy",
+          "url": "/privacy-policy",
           "target": null
         },
         {
           "id": 2,
           "title": "Cookie Policy",
-          "url": "cookie-policy",
+          "url": "/cookie-policy",
           "target": null
         },
         {
           "id": 3,
           "title": "Condizioni di vendita",
-          "url": "condizioni-di-vendita",
+          "url": "/condizioni-di-vendita",
           "target": null
         }
       ]
@@ -446,19 +587,19 @@
         {
           "id": 1,
           "title": "Il mio profilo",
-          "url": "profilo",
+          "url": "/profile",
           "target": null
         },
         {
           "id": 2,
           "title": "I miei ordini",
-          "url": "miei-ordini",
+          "url": "/my-account/orders",
           "target": null
         },
         {
           "id": 3,
           "title": "La mia lista",
-          "url": "miei-preferiti",
+          "url": "/my-account/wishlist",
           "target": null
         }
       ]
@@ -469,31 +610,31 @@
         {
           "id": 1,
           "title": "Verdura",
-          "url": "verdura",
+          "url": "/verdura",
           "image": "verdura"
         },
         {
           "id": 2,
           "title": "Frutta",
-          "url": "frutta",
+          "url": "/frutta",
           "image": "frutta"
         },
         {
           "id": 3,
           "title": "Esotico",
-          "url": "esotico",
+          "url": "/esotico",
           "image": "esotico"
         },
         {
           "id": 4,
           "title": "Aromi",
-          "url": "aromi",
+          "url": "/aromi",
           "image": "aromi"
         },
         {
           "id": 5,
           "title": "Dispensa",
-          "url": "dispensa",
+          "url": "/dispensa",
           "image": "dispensa"
         }
       ]

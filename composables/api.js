@@ -12,7 +12,10 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   options = options || {}
 
-  const apiUrl = innerOptions.local ? `/api/${url}` : url
+  const apiUrl = (innerOptions.local ? `/api/${url}` : url).replaceAll(
+    /\/+/g,
+    '/'
+  )
 
   let cached = ref(null)
   if (innerOptions.cache) {
@@ -23,7 +26,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     })
   }
 
-  if (cached.value) {
+  if (cached.value && cached.value.success) {
     return cached
   }
 
@@ -40,6 +43,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
        * Server error, can happen
        */
       responseData = errorData.data
+      console.warn(responseData)
     } else {
       /**
        * Client error, must not happen
@@ -67,7 +71,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     }, {})
   }
 
-  cached = ref(innerOptions.dataOnly ? response.data : response)
+  cached.value = innerOptions.dataOnly ? response.data : response
 
   return cached
 }

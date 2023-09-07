@@ -36,7 +36,7 @@
 // Constants
 const CSS_NAME = 'c-search'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   placeholder: {
     type: String,
