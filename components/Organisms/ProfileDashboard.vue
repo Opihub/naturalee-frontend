@@ -21,7 +21,7 @@
         </template>
       </InlineMenu>
 
-      <SiteContainer :max-width="1060">
+      <SiteContainer :max-width="1060" class="u-pt-half u-pb-half">
         <slot />
       </SiteContainer>
     </div>
