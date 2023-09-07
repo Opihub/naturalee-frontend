@@ -1,8 +1,8 @@
 <template>
-  <CompleteLayout>
+  <CompleteLayout override-last-element>
     <slot />
 
-    <section class="u-pt-huge" style="background-color: var(--color-white)">
+    <BackgroundHolder class="u-pt-huge u-mt-auto" color="white">
       <CategoryCards
         v-if="categories && categories.data"
         class="u-pb-huge"
@@ -14,7 +14,7 @@
         v-if="marquee && marquee.data.length"
         :marquee="marquee.data"
       />
-    </section>
+    </BackgroundHolder>
   </CompleteLayout>
 </template>
 
@@ -51,38 +51,3 @@ const marquee = await useApi('layout/marquee').catch((error) => {
 
 // Methods
 </script>
-
-<style lang="scss">
-$prefix: 'layout';
-@include object($prefix) {
-  margin-bottom: get-var(bottom-gap, 0, $prefix: $prefix);
-
-  @include element('categories') {
-    position: fixed;
-    inset: auto 0 0;
-    z-index: 20;
-    background-color: get-var(color-white);
-
-    justify-content: space-around;
-    @include set-local-vars(
-      $prefix: 'menu',
-      $map: (
-        gap: 0,
-        font-size: rem(13px),
-        line-height: rem(16px),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'menu-item',
-      $map: (
-        padding: rem(18px) 0,
-      )
-    );
-
-    @include from(desktop) {
-      display: none;
-    }
-  }
-}
-</style>

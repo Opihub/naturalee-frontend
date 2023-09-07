@@ -14,14 +14,8 @@
 
     <slot />
 
-    <CategoriesMenu
-      v-if="categoriesMenu && categoriesMenu.data"
-      ref="categoriesMenuElement"
-      :class="`${CSS_NAME}__categories`"
-      :categories="categoriesMenu.data"
-    />
-
     <SiteFooter
+      :class="{ 'u-mt-auto': !overrideLastElement }"
       :copyright="copyrights.data"
       :menu="primaryMenu.data"
       :socials-menu="socialsMenu.data"
@@ -30,6 +24,13 @@
     >
       <template #by> R-innovazione by <u>Opiquad.it</u> </template>
     </SiteFooter>
+
+    <CategoriesMenu
+      v-if="categoriesMenu && categoriesMenu.data"
+      ref="categoriesMenuElement"
+      :class="`${CSS_NAME}__categories`"
+      :categories="categoriesMenu.data"
+    />
   </div>
 </template>
 
@@ -45,6 +46,10 @@ defineProps({
     type: String,
     default: null,
   },
+  overrideLastElement: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // Component life-cycle hooks
@@ -58,16 +63,10 @@ onUnmounted(() => {
 })
 
 // Composables
-const categories = await useApi('shop/categories').catch((error) => {
-  console.error('Errore durante il caricamento di "shop/categories"', error)
-})
 const cart = await useApi('shop/cart/products').catch((error) => {
   console.error('Errore durante il caricamento di "shop/cart/products"', error)
 })
 
-const marquee = await useApi('layout/marquee').catch((error) => {
-  console.error('Errore durante il caricamento di "layout/marquee"', error)
-})
 const topbarBanners = await useApi('layout/topbar').catch((error) => {
   console.error('Errore durante il caricamento di "layout/topbar"', error)
 })
@@ -115,6 +114,11 @@ const setBottomGap = () => {
 <style lang="scss">
 $prefix: 'layout';
 @include object($prefix) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-height: 100vh;
   margin-bottom: get-var(bottom-gap, 0, $prefix: $prefix);
 
   @include element('categories') {
