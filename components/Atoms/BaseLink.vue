@@ -67,6 +67,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  inline: {
+    type: Boolean,
+    default: false,
+  },
   labelClassName: {
     type: String,
     default: '',
@@ -76,7 +80,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['white', 'dark'].includes(value)
+      return ['white', 'dark', 'green'].includes(value)
     },
   },
 })
@@ -100,6 +104,10 @@ const className = computed(() => {
 
   if (props.underline) {
     className.push('has-underline')
+  }
+
+  if (props.inline) {
+    className.push('is-inline')
   }
 
   return className
@@ -136,6 +144,7 @@ $prefix: 'link';
   @include set-vars(
     $prefix: $prefix,
     $map: (
+      display: inline-flex,
       text-color: get-var(color-yellow),
       gap: rem(4px) rem(18px),
       font-weight: font-weight(bold),
@@ -160,7 +169,7 @@ $prefix: 'link';
 
   text-decoration: none;
   color: get-var(text-color, $prefix: $prefix);
-  display: inline-flex;
+  display: get-var(display, $prefix: $prefix);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -200,7 +209,7 @@ $prefix: 'link';
   }
 
   @include element('label') {
-    display: inline-flex;
+    display: get-var(display, $prefix: $prefix);
     align-items: baseline;
     width: get-var(width, auto, $prefix: $label-prefix);
     justify-content: get-var(disposition, center, $prefix: $label-prefix);
@@ -249,6 +258,35 @@ $prefix: 'link';
     }
 
     @include set-active('green');
+  }
+
+  @include modifier('green') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        text-color: get-var(color-green),
+      )
+    );
+
+    &:hover {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-yellow),
+        )
+      );
+    }
+
+    @include set-active('yellow');
+  }
+
+  @include is('inline') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        display: inline,
+      )
+    );
   }
 
   @include has('underline') {
