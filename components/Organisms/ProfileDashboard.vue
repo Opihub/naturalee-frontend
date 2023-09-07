@@ -21,7 +21,7 @@
         </template>
       </InlineMenu>
 
-      <SiteContainer :max-width="1060" class="u-pt-half u-pb-half">
+      <SiteContainer :max-width="1060" class="u-pt-half u-pb-half" padless>
         <slot />
       </SiteContainer>
     </div>
@@ -58,12 +58,23 @@ const { logout } = store
 <style lang="scss">
 $prefix: 'profile-dashboard';
 @include component($prefix) {
-  flex-wrap: nowrap;
+  flex-direction: column;
+
+  @include from(tablet) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
 
   @include element('menu') {
-    flex: 0 0 rem(250px);
     text-align: left;
     text-transform: uppercase;
+    margin-left: rem(30px);
+    flex: 0 0 rem(250px);
+    max-width: rem(250px);
+
+    @include from(tablet) {
+      margin-left: 0;
+    }
 
     @include element('item') {
       border-bottom: 1px solid get-var(color-white);
