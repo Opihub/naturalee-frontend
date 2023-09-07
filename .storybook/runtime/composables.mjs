@@ -29,7 +29,6 @@ export const useRuntimeConfig = () => ({
 })
 
 export function useFetch(request, arg1, arg2) {
-  console.debug('useFetch')
   const [opts = {}, autoKey] =
     typeof arg1 === 'string' ? [{}, arg1] : [arg1, arg2]
   const _key =
@@ -106,7 +105,6 @@ export function useFetch(request, arg1, arg2) {
 }
 
 export function useLazyFetch(request, arg1, arg2) {
-  console.debug('useLazyFetch')
   const [opts, autoKey] = typeof arg1 === 'string' ? [{}, arg1] : [arg1, arg2]
   return useFetch(
     request,
@@ -121,7 +119,6 @@ export function useLazyFetch(request, arg1, arg2) {
 
 const getDefault = () => null
 export function useAsyncData(...args) {
-  console.debug('useAsyncData')
   const autoKey =
     typeof args[args.length - 1] === 'string' ? args.pop() : void 0
   if (typeof args[0] !== 'string') {
@@ -267,7 +264,6 @@ export function useAsyncData(...args) {
 }
 
 export function useLazyAsyncData(...args) {
-  console.debug('useLazyAsyncData')
   const autoKey =
     typeof args[args.length - 1] === 'string' ? args.pop() : void 0
   if (typeof args[0] !== 'string') {

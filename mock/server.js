@@ -52,7 +52,7 @@ router.render = (request, response) => {
 
   const [namespace] = request.url.split('/').filter((part) => part)
 
-  console.debug(namespace)
+  console.info(namespace)
   switch (namespace) {
     case 'menu':
       data = data.records

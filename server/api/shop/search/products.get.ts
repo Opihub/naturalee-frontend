@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     return createPaginatedResponse(response)
   } catch (error) {
-    console.debug(error)
+    console.error(error)
     throw createError(createResponse(error))
   }
 })

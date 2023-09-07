@@ -6,7 +6,7 @@ export default defineEventHandler(async () => {
 
     return createResponse(response)
   } catch (error) {
-    console.debug(error)
+    console.error(error)
     return createError(createResponse(error))
   }
 })

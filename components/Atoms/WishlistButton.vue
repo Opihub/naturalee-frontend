@@ -19,7 +19,7 @@ const props = defineProps({
 })
 
 const updateWishlist = () => {
-  console.debug(props.productId)
+  console.warn(props.productId)
   // TODO
 }
 </script>
