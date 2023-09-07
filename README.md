@@ -12,6 +12,42 @@ Make sure to install the dependencies:
 npm install
 ```
 
+### Develop a component
+
+```html
+<template>
+  <!--  -->
+</template>
+
+<script setup>
+// Imports
+
+// Constants
+
+// Define (Props, Emits, Page Meta)
+
+// Component life-cycle hooks
+
+// Composables
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
+</script>
+
+<style lang="scss">
+$prefix: '';
+@include component($prefix) {
+  /* */
+}
+</style>
+
+```
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:
