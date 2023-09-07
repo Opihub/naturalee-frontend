@@ -18,6 +18,9 @@ import { useAccountStore } from '@/stores/account'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  layout: 'standard',
+})
 
 // Component life-cycle hooks
 
