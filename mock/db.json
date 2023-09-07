@@ -587,7 +587,7 @@
         {
           "id": 1,
           "title": "Il mio profilo",
-          "url": "/profile",
+          "url": "/my-account/profile",
           "target": null
         },
         {

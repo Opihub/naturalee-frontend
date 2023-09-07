@@ -61,9 +61,9 @@
         </div>
 
         <div v-if="matchedPostcode || savedEmail" :class="`${CSS_NAME}__user`">
-          <BaseButton as="link" to="login" color="green">Accedi</BaseButton>
+          <BaseButton as="link" to="/my-account?login" color="green">Accedi</BaseButton>
           oppure
-          <BaseButton as="link" to="register" color="green"
+          <BaseButton as="link" to="/my-account?register" color="green"
             >Registrati</BaseButton
           >
         </div>

@@ -7,7 +7,7 @@
 
           <BaseLink
             :class="`${CSS_NAME}__review`"
-            to="cart"
+            to="/cart"
             :underline="true"
             color="dark"
             >Modifica</BaseLink
@@ -79,7 +79,7 @@
       >
       <BaseLink
         :class="`${CSS_NAME}__review`"
-        to="cart"
+        to="/cart"
         :underline="true"
         color="dark"
         >Vai al carrello</BaseLink

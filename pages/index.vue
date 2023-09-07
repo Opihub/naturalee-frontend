@@ -16,7 +16,7 @@
           <template #after>
             <p class="u-mt-tiny">
               Non sai da dove iniziare?
-              <BaseLink to="featured" underline>Ti consigliamo noi!</BaseLink>
+              <BaseLink to="/featured" underline>Ti consigliamo noi!</BaseLink>
             </p>
           </template>
         </SearchForm>
