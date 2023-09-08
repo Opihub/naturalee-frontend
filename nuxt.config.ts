@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     },
   ],
   googleFonts: {
+    inject: true,
     download: true,
     display: 'swap',
     families: {
