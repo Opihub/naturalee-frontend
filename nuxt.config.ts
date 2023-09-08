@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
@@ -69,6 +70,9 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  i18n: {
+    vueI18n: './i18n.config.ts', // if you are using custom path, default
+  },
   googleFonts: {
     inject: false,
     outputDir: 'assets',
