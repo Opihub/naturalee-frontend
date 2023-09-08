@@ -3,17 +3,20 @@
     <ul :class="CSS_NAME_LIST">
       <li :class="`${CSS_NAME_LIST}__recap`">
         <template v-if="cart.length">
-          <span>Il tuo carrello - {{ cart.length }} prodotti</span>
+          <span>
+            {{ $t('cart.your') }} -
+            {{ $t('product', cart.length, { count: cart.length }) }}
+          </span>
 
           <BaseLink
             :class="`${CSS_NAME}__review`"
             to="/cart"
             :underline="true"
             color="dark"
-            >Modifica</BaseLink
+            >{{ $t('edit') }}</BaseLink
           >
         </template>
-        <span v-else>Non hai alcun prodotto nel carrello</span>
+        <span v-else>{{ $t('cart.empty') }}</span>
       </li>
 
       <li
