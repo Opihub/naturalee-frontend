@@ -20,7 +20,11 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
+  css: [
+    '@splidejs/vue-splide/css/core',
+    '@/assets/css/main.scss',
+    '@/assets/css/nuxt-google-fonts.css',
+  ],
   vite: {
     css: {
       preprocessorOptions: {
@@ -66,8 +70,8 @@ export default defineNuxtConfig({
     },
   ],
   googleFonts: {
-    inject: true,
-    download: true,
+    inject: false,
+    outputDir: 'assets',
     display: 'swap',
     families: {
       Mulish: [400, 700, 800],
