@@ -1,5 +1,5 @@
 <template>
-  <section :class="`${CSS_NAME}`">
+  <BackgroundHolder :class="`${CSS_NAME}`" :color="color">
     <SiteContainer :class="`${CSS_NAME}__container`">
       <BreadCrumb
         v-if="breadcrumb && breadcrumb.length"
@@ -15,7 +15,7 @@
         @update:search="$emit('update:search', $event)"
       />
     </SiteContainer>
-  </section>
+  </BackgroundHolder>
 </template>
 
 <script setup>
@@ -35,6 +35,10 @@ defineProps({
   search: {
     type: String,
     default: null,
+  },
+  color: {
+    type: String,
+    default: 'green',
   },
 })
 
@@ -66,7 +70,6 @@ $prefix: 'bottom-bar';
 
   display: flex;
   flex-wrap: wrap;
-  background-color: get-var(background-color, $prefix: $prefix);
   padding: get-var(padding, $prefix: $prefix) 0;
   position: relative;
 
