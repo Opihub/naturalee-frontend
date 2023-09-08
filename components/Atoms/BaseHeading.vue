@@ -56,18 +56,12 @@ const className = computed(() => {
 <style lang="scss">
 $prefix: 'heading';
 @include object($prefix) {
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      text-transform: none,
-    )
-  );
-
   color: get-var(text-color, $prefix: $prefix);
   font-weight: get-var(font-weight, $prefix: $prefix);
   font-size: get-var(font-size, $prefix: $prefix);
   line-height: get-var(line-height, $prefix: $prefix);
-  text-transform: get-var(text-transform, $prefix: $prefix);
+  text-transform: get-var(text-transform, none, $prefix: $prefix);
+  font-family: get-var(font-family, get-var(family-main), $prefix: $prefix);
   display: block;
 
   @include modifier('h1') {
