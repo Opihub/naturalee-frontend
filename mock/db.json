@@ -218,7 +218,7 @@
       "id": "anguria",
       "record": {
         "id": 1,
-        "image": "https://picsum.photos/300/300",
+        "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
         "title": "Anguria",
         "provenance": "Italia",
         "slug": "anguria",
@@ -249,7 +249,7 @@
       "id": "carote",
       "record": {
         "id": 2,
-        "image": "https://picsum.photos/300/300",
+        "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
         "title": "carote",
         "provenance": "Italia",
         "slug": "carote",
@@ -289,7 +289,7 @@
         "title": "Verdura fresca e sana",
         "link": "/verdura",
         "slug": "shop/verdura",
-        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "image": "https://images.placeholders.dev/?width=1920&height=300&bgColor=%23ff5600",
         "seo": {
           "title": "Verdura fresca e sana - Naturalee",
           "ogTitle": "Verdura fresca e sana - Naturalee"
@@ -343,7 +343,7 @@
         "title": "Frutta fresca di qualità",
         "link": "/frutta",
         "slug": "shop/frutta",
-        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "image": "https://images.placeholders.dev/?width=1920&height=300&bgColor=%23653818",
         "seo": {
           "title": "Frutta fresca di qualità - Naturalee",
           "ogTitle": "Frutta fresca di qualità - Naturalee"
@@ -397,7 +397,7 @@
         "title": "Sapori unici da tutto il mondo",
         "link": "/esotico",
         "slug": "shop/esotico",
-        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "image": "https://images.placeholders.dev/?width=1920&height=300&bgColor=%2300966e",
         "seo": {
           "title": "Sapori unici da tutto il mondo - Naturalee",
           "ogTitle": "Sapori unici da tutto il mondo - Naturalee"
@@ -431,7 +431,7 @@
         "title": "Dispensa fresca e selezionata",
         "link": "/dispensa",
         "slug": "shop/dispensa",
-        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "image": "https://images.placeholders.dev/?width=1920&height=300&bgColor=%23e4002b",
         "seo": {
           "title": "Dispensa fresca e selezionata - Naturalee",
           "ogTitle": "Dispensa fresca e selezionata - Naturalee"
@@ -461,7 +461,7 @@
         "title": "Aromi e Spezie",
         "link": "/aromi",
         "slug": "shop/aromi",
-        "image": "https://picsum.photos/1920/300?grayscale&blur=2",
+        "image": "https://images.placeholders.dev/?width=1920&height=300&bgColor=%23ffd100",
         "seo": {
           "title": "Aromi e Spezie - Naturalee",
           "ogTitle": "Aromi e Spezie - Naturalee"
@@ -483,7 +483,7 @@
   "products": [
     {
       "id": 1,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Anguria",
       "provenance": "Italia",
       "slug": "anguria",
@@ -496,7 +496,7 @@
     },
     {
       "id": 2,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Melone",
       "provenance": "Italia",
       "slug": "melone",
@@ -509,7 +509,7 @@
     },
     {
       "id": 3,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Pere Williams",
       "provenance": "Italia",
       "slug": "pere-williams",
@@ -522,7 +522,7 @@
     },
     {
       "id": 4,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Carciofi",
       "provenance": "Italia",
       "slug": "carciofi",
@@ -535,7 +535,7 @@
     },
     {
       "id": 5,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Peperoni",
       "provenance": "Italia",
       "slug": "peperoni",
@@ -748,7 +748,7 @@
   "shopHomepageProducts": [
     {
       "id": 1,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Anguria",
       "provenance": "Italia",
       "slug": "anguria",
@@ -756,7 +756,7 @@
     },
     {
       "id": 2,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Melone",
       "provenance": "Italia",
       "slug": "melone",
@@ -764,7 +764,7 @@
     },
     {
       "id": 3,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Pere Williams",
       "provenance": "Italia",
       "slug": "pere-williams",
@@ -772,7 +772,7 @@
     },
     {
       "id": 4,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Carciofi",
       "provenance": "Italia",
       "slug": "carciofi",
@@ -780,7 +780,7 @@
     },
     {
       "id": 5,
-      "image": "https://picsum.photos/300/300",
+      "image": "https://images.placeholders.dev/?width=300&height=300&bgColor=%2300966e&textColor=%23ffd100",
       "title": "Peperoni",
       "provenance": "Italia",
       "slug": "peperoni",

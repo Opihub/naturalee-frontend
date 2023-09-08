@@ -94,7 +94,7 @@ const isPostcodeModalOpen = ref(false)
  *  - usare video
  *  - caricare prodotti per l'homepage
  */
-const image = ref('https://picsum.photos/1920/700?blur=3')
+const image = ref('https://picsum.photos/id/1080/1920/700?blur=3')
 const products = await useApi('shop/homepage/products')
 
 const { page } = await usePage()
