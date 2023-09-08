@@ -1,5 +1,5 @@
 <template>
-  <div :class="CSS_NAME">
+  <div ref="layoutElement" :class="CSS_NAME">
     <HeaderTopBar
       :socials-menu="socialsMenu.data"
       :primary-menu="primaryMenu.data"
@@ -7,6 +7,7 @@
     />
 
     <HeaderMain
+      ref="headerElement"
       :categories="categoriesMenu.data"
       :profile-menu="profileMenu.data"
     />
@@ -54,11 +55,15 @@ defineProps({
 // Component life-cycle hooks
 onMounted(() => {
   setBottomGap()
+  setHeaderGap()
+
   window.addEventListener('resize', setBottomGap)
+  window.addEventListener('resize', setHeaderGap)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', setBottomGap)
+  window.removeEventListener('resize', setHeaderGap)
 })
 
 // Composables
@@ -86,7 +91,8 @@ const categoriesMenu = await useApi('menu/categories').catch((error) => {
 })
 
 // Data
-const layout = ref(null)
+const layoutElement = ref(null)
+const headerElement = ref(null)
 const categoriesMenuElement = ref(null)
 
 // Watcher
@@ -95,13 +101,24 @@ const categoriesMenuElement = ref(null)
 
 // Methods
 const setBottomGap = () => {
-  if (!layout.value) {
+  if (!layoutElement.value || !categoriesMenuElement.value) {
     return
   }
 
-  layout.value.style.setProperty(
+  layoutElement.value.style.setProperty(
     '--layout-bottom-gap',
     `${categoriesMenuElement.value.$el.clientHeight}px`
+  )
+}
+
+const setHeaderGap = () => {
+  if (!layoutElement.value || !headerElement.value) {
+    return
+  }
+
+  layoutElement.value.style.setProperty(
+    '--layout-header-height',
+    `${headerElement.value.$el.clientHeight}px`
   )
 }
 </script>
@@ -119,7 +136,7 @@ $prefix: 'layout';
   @include element('categories') {
     position: fixed;
     inset: auto 0 0;
-    z-index: 20;
+    z-index: get-var(z-categories);
     background-color: get-var(color-white);
 
     justify-content: space-around;
