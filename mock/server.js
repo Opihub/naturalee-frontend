@@ -149,7 +149,8 @@ server.use(
     '/layout/copyright': '/copyright',
     '/shop/homepage/products': '/shopHomepageProducts',
     '/shop/cart/products': '/shopCartProducts',
-    '/shop/search/products': '/shopCategoriesPages',
+    '/shop/search/products': '/shopCategoriesPages/verdura/products',
+    '/shop/featured/products': '/shopHomepageProducts',
     '/shop/categories/:category/products/:product':
       '/shopCategoriesProductsPages/$2',
     '/shop/categories/:category/products': '/shopCategoriesPages/$1/products',

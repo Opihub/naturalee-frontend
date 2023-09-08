@@ -186,6 +186,31 @@
           }
         ]
       }
+    },
+    {
+      "id": "featured",
+      "record": {
+        "id": 8,
+        "title": "Prodotti consigliati",
+        "link": "/featured",
+        "slug": "featured",
+        "content": "",
+        "seo": {
+          "title": "Prodotti consigliati - Naturalee",
+          "ogTitle": "Prodotti consigliati - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/featured",
+            "title": "Prodotti consigliati"
+          }
+        ]
+      }
     }
   ],
   "shopCategoriesProductsPages": [
