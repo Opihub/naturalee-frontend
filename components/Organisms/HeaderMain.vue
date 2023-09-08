@@ -15,7 +15,7 @@
         >
           <MiniCartIcon
             :class="`${CSS_NAME_ACTIONS}__icon`"
-            :count="cart.length.toString()"
+            :count="count.toString()"
             @mouseover="isMiniCartMenuOpen = true"
           />
           <ClientOnly>
@@ -23,6 +23,8 @@
               <MiniCart
                 v-show="isMiniCartMenuOpen"
                 :cart="cart"
+                :shipping-cost="shippingCost"
+                :totals="totals"
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
@@ -76,6 +78,7 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
+import { useCartStore } from '@/stores/cart'
 
 // Constants
 const CSS_NAME = 'c-header'
@@ -96,12 +99,6 @@ defineProps({
       return []
     },
   },
-  cart: {
-    type: Array,
-    default() {
-      return []
-    },
-  },
 })
 
 const emit = defineEmits([
@@ -113,10 +110,12 @@ const emit = defineEmits([
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
-const { isLoggedIn } = storeToRefs(store)
+const accountStore = useAccountStore()
+const cartStore = useCartStore()
 
 // Data
+const { isLoggedIn } = storeToRefs(accountStore)
+const { cart, count, shippingCost, totals } = storeToRefs(cartStore)
 const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
