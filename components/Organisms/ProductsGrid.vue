@@ -176,6 +176,16 @@ onMounted(() => {
   fetchProducts()
 })
 
+// Composables
+const timeout = useTimeoutFn(() => {
+  resetParams()
+
+  fetchProducts()
+}, 300)
+
+const route = useRoute()
+const router = useRouter()
+
 // Data
 const products = ref([])
 const page = ref(0)
@@ -184,21 +194,25 @@ const isFetching = ref(false)
 
 const loader = ref(null)
 const loaderIsVisible = useElementVisibility(loader)
+
 const noProductsMessage = ref('Nessun prodotto trovato')
 
-const chosenFilters = ref([])
+const chosenFilters = ref(
+  route.query['filters[]'] ? route.query['filters[]'] : []
+)
 const isFilterOverlayOpen = ref(false)
 const selectedFiltersMessage = ref('Nessun filtro selezionato')
 
-const orderby = ref(null)
-
-const timeout = useTimeoutFn(() => {
-  resetParams()
-
-  fetchProducts()
-}, 300)
+const orderby = ref(route.query.sort || null)
 
 // Watcher
+watch(orderby, () => {
+  updateQuery()
+})
+watch(() => chosenFilters.value, () => {
+  updateQuery()
+}, { deep: true })
+
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
     fetchProducts()
@@ -217,9 +231,6 @@ watch(
 )
 
 // Computed
-const cleanedChosenFilters = computed(() => {
-  return chosenFilters.value.filter((filter) => filter)
-})
 
 // Methods
 const resetParams = () => {
@@ -239,12 +250,12 @@ const clearFilters = () => {
 }
 
 const changeFiltersMessage = () => {
-  if (cleanedChosenFilters.value.length === 0) {
+  if (chosenFilters.value.length === 0) {
     selectedFiltersMessage.value = 'Nessun filtro selezionato'
-  } else if (cleanedChosenFilters.value.length === 1) {
+  } else if (chosenFilters.value.length === 1) {
     selectedFiltersMessage.value = '1 filtro selezionato'
   } else {
-    selectedFiltersMessage.value = `${cleanedChosenFilters.value.length} filtri selezionati`
+    selectedFiltersMessage.value = `${chosenFilters.value.length} filtri selezionati`
   }
 }
 
@@ -252,7 +263,9 @@ const toggleFilter = (filter) => {
   const index = chosenFilters.value.indexOf(filter)
 
   if (index > -1) {
-    delete chosenFilters.value[index]
+    chosenFilters.value = chosenFilters.value.filter(
+      (current) => current !== filter
+    )
   } else {
     chosenFilters.value.push(filter)
   }
@@ -305,8 +318,8 @@ const fetchProducts = async () => {
       params.search = props.search
     }
 
-    if (cleanedChosenFilters.value.length > 0) {
-      params['filters[]'] = cleanedChosenFilters.value
+    if (chosenFilters.value.length > 0) {
+      params['filters[]'] = chosenFilters.value
     }
 
     const response = await useApi(props.from, {
@@ -336,6 +349,12 @@ const fetchProducts = async () => {
   } finally {
     isFetching.value = false
   }
+}
+
+const updateQuery = () => {
+  router.push({
+    query: { sort: orderby.value, 'filters[]': chosenFilters.value },
+  })
 }
 </script>
 

@@ -47,10 +47,9 @@ defineEmits(['update:search'])
 
 // Component life-cycle hooks
 
-// Composables
-const { isScrolling, directions } = useScroll(window.document)
-
-// Data
+// Data & Composables
+const document = ref(globalThis.window?.document || null)
+const { isScrolling, directions } = useScroll(document)
 const { top: toTop } = toRefs(directions)
 const isShowing = ref(false)
 

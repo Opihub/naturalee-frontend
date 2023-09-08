@@ -30,14 +30,13 @@ const route = useRoute()
 const router = useRouter()
 const search = ref(route.query.search ? route.query.search : '')
 
+// Watcher
 watch(search, (search) => {
   router.push({
     path: '/search',
     query: { search },
   })
 })
-
-// Watcher
 
 // Computed
 const title = computed(() => {
