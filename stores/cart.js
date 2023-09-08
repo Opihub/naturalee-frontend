@@ -13,6 +13,10 @@ export const useCartStore = defineStore('cart', () => {
 
   const shippingCost = useSessionStorage('shippingCost', 0)
 
+  // const cart = await useApi('shop/cart/products').catch((error) => {
+  //   console.error('Errore durante il caricamento di "shop/cart/products"', error)
+  // })
+
   const count = computed(() => {
     return cart.value.length
   })

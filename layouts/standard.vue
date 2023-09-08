@@ -9,7 +9,6 @@
     <HeaderMain
       :categories="categoriesMenu.data"
       :profile-menu="profileMenu.data"
-      :cart="cart.data"
     />
 
     <slot />
@@ -63,10 +62,6 @@ onUnmounted(() => {
 })
 
 // Composables
-const cart = await useApi('shop/cart/products').catch((error) => {
-  console.error('Errore durante il caricamento di "shop/cart/products"', error)
-})
-
 const topbarBanners = await useApi('layout/topbar').catch((error) => {
   console.error('Errore durante il caricamento di "layout/topbar"', error)
 })
