@@ -1,5 +1,5 @@
 <template>
-  <section :class="`${CSS_NAME}`">
+  <BackgroundHolder :class="className" :color="color">
     <SiteContainer :class="`${CSS_NAME}__container`">
       <BreadCrumb
         v-if="breadcrumb && breadcrumb.length"
@@ -15,11 +15,12 @@
         @update:search="$emit('update:search', $event)"
       />
     </SiteContainer>
-  </section>
+  </BackgroundHolder>
 </template>
 
 <script setup>
 // Imports
+import { useScroll } from '@vueuse/core'
 
 // Constants
 const CSS_NAME = 'c-bottom-bar'
@@ -36,17 +37,42 @@ defineProps({
     type: String,
     default: null,
   },
+  color: {
+    type: String,
+    default: 'green',
+  },
 })
 
 defineEmits(['update:search'])
 
 // Component life-cycle hooks
 
+// Composables
+const { isScrolling, directions } = useScroll(window.document)
+
 // Data
+const { top: toTop } = toRefs(directions)
+const isShowing = ref(false)
 
 // Watcher
+watch(isScrolling, (scroll) => {
+  if (!scroll) {
+    return
+  }
+
+  isShowing.value = toTop.value
+})
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (isShowing.value) {
+    className.push('is-showing')
+  }
+
+  return className
+})
 
 // Methods
 </script>
@@ -66,9 +92,24 @@ $prefix: 'bottom-bar';
 
   display: flex;
   flex-wrap: wrap;
-  background-color: get-var(background-color, $prefix: $prefix);
   padding: get-var(padding, $prefix: $prefix) 0;
-  position: relative;
+  // position: relative;
+  position: sticky;
+  top: get-var(offset, 0, $prefix: $prefix);
+  z-index: get-var(z-#{$prefix});
+  @include transition(top);
+  // top: 0;
+  // transform: translateY(get-var(offset, 0, $prefix: $prefix));
+  // @include transition(transform);
+
+  @include is('showing') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        offset: get-var(header-height, 0, $prefix: 'layout'),
+      )
+    );
+  }
 
   @include element('breadcrumb') {
     @include until(tablet) {

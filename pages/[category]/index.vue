@@ -1,6 +1,6 @@
 <template>
   <main>
-    <HeaderBottomBar :breadcrumb="page.breadcrumbs" />
+    <HeaderBottomBar color="light" />
 
     <SiteTeaser
       :breadcrumb="page.breadcrumbs"

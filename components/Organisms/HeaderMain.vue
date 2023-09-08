@@ -153,8 +153,10 @@ $prefix: 'header';
   gap: get-var(gap, $prefix: $prefix);
   background-color: get-var(color-white);
   padding: 0;
-  position: relative;
-  z-index: 10;
+  // position: relative;
+  z-index: get-var(z-#{$prefix});
+  top: 0;
+  position: sticky;
 
   @include element('container') {
     display: grid;

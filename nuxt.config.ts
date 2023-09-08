@@ -20,7 +20,11 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
+  css: [
+    '@splidejs/vue-splide/css/core',
+    '@/assets/css/main.scss',
+    '@/assets/css/nuxt-google-fonts.css',
+  ],
   vite: {
     css: {
       preprocessorOptions: {
@@ -31,6 +35,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
@@ -65,9 +70,12 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  i18n: {
+    vueI18n: './i18n.config.ts', // if you are using custom path, default
+  },
   googleFonts: {
-    inject: true,
-    download: true,
+    inject: false,
+    outputDir: 'assets',
     display: 'swap',
     families: {
       Mulish: [400, 700, 800],
