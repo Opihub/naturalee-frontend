@@ -74,6 +74,14 @@ $utilities-with-sizes: (
   pb: padding-bottom,
 );
 
+$z-index: (
+  header: 30,
+  bottom-bar: 29,
+  categories: 20,
+  overlay: 110,
+  modal: 100,
+);
+
 $utilities-without-sizes: (
   text: (
     rule: text-align,

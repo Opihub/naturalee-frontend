@@ -154,7 +154,7 @@ $prefix: 'header';
   background-color: get-var(color-white);
   padding: 0;
   // position: relative;
-  z-index: 10;
+  z-index: get-var(z-#{$prefix});
   top: 0;
   position: sticky;
 
