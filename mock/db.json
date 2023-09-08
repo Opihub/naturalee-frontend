@@ -161,6 +161,31 @@
           }
         ]
       }
+    },
+    {
+      "id": "cart",
+      "record": {
+        "id": 7,
+        "title": "Carrello",
+        "link": "/cart",
+        "slug": "cart",
+        "content": "",
+        "seo": {
+          "title": "Carrello - Naturalee",
+          "ogTitle": "Carrello - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/cart",
+            "title": "Carrello"
+          }
+        ]
+      }
     }
   ],
   "shopCategoriesProductsPages": [
@@ -439,7 +464,10 @@
       "slug": "anguria",
       "link": "/frutta/anguria",
       "shopCategoriesPageId": "frutta",
-      "category": "frutta"
+      "price": 5,
+      "sku": "ANGURIA",
+      "costDescription": "Sfuso",
+      "unit": "Pz"
     },
     {
       "id": 2,
@@ -449,7 +477,10 @@
       "slug": "melone",
       "link": "/frutta/melone",
       "shopCategoriesPageId": "frutta",
-      "category": "frutta"
+      "price": 2.99,
+      "sku": "MELONE",
+      "costDescription": "Sfuso",
+      "unit": "Pz"
     },
     {
       "id": 3,
@@ -459,7 +490,10 @@
       "slug": "pere-williams",
       "link": "/frutta/pere-williams",
       "shopCategoriesPageId": "frutta",
-      "category": "frutta"
+      "price": 13.89,
+      "sku": "PERE",
+      "costDescription": "Kg",
+      "unit": "Kg"
     },
     {
       "id": 4,
@@ -469,7 +503,10 @@
       "slug": "carciofi",
       "link": "/verdura/carciofi",
       "shopCategoriesPageId": "verdura",
-      "category": "verdura"
+      "price": 17.23,
+      "sku": "CARCIOFI",
+      "costDescription": "Cassetta",
+      "unit": "Pz"
     },
     {
       "id": 5,
@@ -479,7 +516,10 @@
       "slug": "peperoni",
       "link": "/verdura/peperoni",
       "shopCategoriesPageId": "verdura",
-      "category": "verdura"
+      "price": 6.55,
+      "sku": "PEPERONI",
+      "costDescription": "Cassetta",
+      "unit": "Kg"
     }
   ],
   "menu": [

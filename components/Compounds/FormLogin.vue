@@ -16,7 +16,7 @@
     >
 
     <div class="o-row s-remember-me">
-      <CheckboxField v-model="formData.remember"> Ricordami </CheckboxField>
+      <ToggleField v-model="formData.remember"> Ricordami </ToggleField>
 
       <slot name="forgotLink" />
     </div>

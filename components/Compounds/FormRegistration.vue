@@ -15,12 +15,12 @@
       >Password *</InputField
     >
 
-    <CheckboxField v-model="formData.acceptance" required>
+    <ToggleField v-model="formData.acceptance" required>
       Acconsento al
       <BaseLink to="/term-and-conditions" color="dark" underline target="_blank"
         >trattamento dei miei dati personali</BaseLink
       >
-    </CheckboxField>
+    </ToggleField>
 
     <BaseButton
       class="u-mt-large"

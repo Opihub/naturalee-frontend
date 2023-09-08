@@ -1,9 +1,8 @@
 <template>
   <div :class="className">
-    <BaseLabel
-      :class="`${CSS_NAME}__label`"
-    >
-      <BaseCheckbox
+    <BaseLabel :class="`${CSS_NAME}__label`">
+      <component
+        :is="radio ? BaseRadio : BaseCheckbox"
         v-model="updatedValue"
         :value="value"
         :class="`${CSS_NAME}__input`"
@@ -29,8 +28,14 @@
 </template>
 
 <script setup>
-const CSS_NAME = 'c-checkbox-field'
+// Imports
+import BaseRadio from '@/components/Atoms/BaseRadio.vue';
+import BaseCheckbox from '@/components/Atoms/BaseCheckbox.vue';
 
+// Constants
+const CSS_NAME = 'c-toggle-field'
+
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   name: {
     type: String,
@@ -56,12 +61,25 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  radio: {
+    type: Boolean,
+    required: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
 
+// Component life-cycle hooks
+
+// Composables
 const attrs = useAttrs()
 
+// Data
+const isValid = ref(null)
+
+// Watcher
+
+// Computed
 const updatedValue = computed({
   get() {
     return !!props.modelValue
@@ -100,8 +118,7 @@ const className = computed(() => {
   return className
 })
 
-const isValid = ref(null)
-
+// Methods
 const hideError = () => {
   isValid.value = true
 }
@@ -112,7 +129,7 @@ const showError = () => {
 </script>
 
 <style lang="scss">
-$prefix: 'checkbox-field';
+$prefix: 'toggle-field';
 @include component($prefix) {
   $prefix-label: '#{$prefix}-label';
   $prefix-input: '#{$prefix}-input';
@@ -131,7 +148,7 @@ $prefix: 'checkbox-field';
 
   @include element('input') {
     position: absolute;
-    top: 0;
+    top: get-var(offset-top, 0, $prefix: $prefix);
     left: 0;
   }
 
