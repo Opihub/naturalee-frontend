@@ -10,8 +10,6 @@
   @each $name, $value in $variables-to-set {
     @include set-var($name, $value);
   }
-
-  @include set-media-vars(overlay-padding, $overlay-padding);
 }
 
 html {

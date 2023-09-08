@@ -71,7 +71,7 @@ $prefix: 'bottom-bar';
   display: flex;
   flex-wrap: wrap;
   padding: get-var(padding, $prefix: $prefix) 0;
-  position: relative;
+  z-index: get-var(z-#{$prefix});
 
   @include element('breadcrumb') {
     @include until(tablet) {
