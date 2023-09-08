@@ -40,7 +40,7 @@ $prefix: 'overlay';
 @include object($prefix) {
   position: fixed;
   inset: 0;
-  z-index: 110;
+  z-index: get-var(z-#{$prefix});
   background-color: get-var(color-light);
 }
 </style>
