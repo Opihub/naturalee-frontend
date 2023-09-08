@@ -7,11 +7,11 @@
       aria-label="Marquee"
     >
       <SplideSlide
-        v-for="(item, index) in marquee"
-        :key="index"
+        v-for="item in marquee"
+        :key="item.id"
         :class="`${CSS_NAME}__item`"
       >
-        {{ item }}
+        {{ item.text }}
       </SplideSlide>
     </Splide>
   </ClientOnly>

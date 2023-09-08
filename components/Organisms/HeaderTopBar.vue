@@ -11,8 +11,8 @@
             aria-label="My Favorite Images"
             @splide:mounted="updateHeight"
           >
-            <SplideSlide v-for="(banner, index) in banners" :key="index" :class="`${CSS_NAME}__banner`">
-              <span ref="slides">{{ banner }}</span>
+            <SplideSlide v-for="banner in banners" :key="banner.id" :class="`${CSS_NAME}__banner`">
+              <span ref="slides">{{ banner.text }}</span>
             </SplideSlide>
           </Splide>
         </div>

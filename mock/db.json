@@ -852,17 +852,44 @@
     "lastName": "Rossi"
   },
   "marquee": [
-    "#FrescoNaturalee",
-    "#QualitàNaturalee",
-    "#SaluteNaturalee",
-    "#ConvenienzaNaturalee",
-    "#EsperienzaNaturalee",
-    "#BenessereNaturalee"
+    {
+      "id": 1,
+      "text": "#FrescoNaturalee"
+    },
+    {
+      "id": 2,
+      "text": "#QualitàNaturalee"
+    },
+    {
+      "id": 3,
+      "text": "#SaluteNaturalee"
+    },
+    {
+      "id": 4,
+      "text": "#ConvenienzaNaturalee"
+    },
+    {
+      "id": 5,
+      "text": "#EsperienzaNaturalee"
+    },
+    {
+      "id": 6,
+      "text": "#BenessereNaturalee"
+    }
   ],
   "topbar": [
-    "Lorem ipsum",
-    "dolor sit amet, consectetur adipiscing elit",
-    "dolor sit amet, consectetur adipiscing elit. Fusce tempus ipsum ut erat pharetra, at scelerisque lorem placerat."
+    {
+      "id": 1,
+      "text": "Lorem ipsum"
+    },
+    {
+      "id": 2,
+      "text": "dolor sit amet, consectetur adipiscing elit"
+    },
+    {
+      "id": 3,
+      "text": "dolor sit amet, consectetur adipiscing elit. Fusce tempus ipsum ut erat pharetra, at scelerisque lorem placerat."
+    }
   ],
   "copyright": [
     {
