@@ -34,8 +34,9 @@
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
             data-title="Quantità / U"
           >
-            {{ product.quantity }}
-            {{ product.unit }}
+            <BaseCounter v-model="product.quantity">
+              <template #after><span class="u-ml-tiny">{{ product.unit }}</span></template>
+            </BaseCounter>
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
@@ -195,9 +196,9 @@ $prefix: 'cart-table';
         @include typography(20px, 24px);
       }
 
-    @include object('cross') {
-      display: block;
-    }
+      @include object('cross') {
+        display: block;
+      }
     }
   }
 }
