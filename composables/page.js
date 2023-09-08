@@ -1,6 +1,6 @@
 import { ref } from '#imports'
 import { useApi } from '@/composables/api'
-// import { usePageSeo } from '@/composables/usePageSeo'
+import { usePageSeo } from '@/composables/seo'
 import { useSlug } from '@/composables/slug'
 
 export const usePage = async (slug = null, namespace = 'pages') => {
@@ -11,7 +11,9 @@ export const usePage = async (slug = null, namespace = 'pages') => {
 
   page.value = response.value.data
 
-  // usePageSeo(page.value)
+  if (page.value) {
+    usePageSeo(page.value)
+  }
 
   return {
     page,
