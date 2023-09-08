@@ -130,7 +130,7 @@ $prefix: 'profile';
     )
   );
 
-  @include component('checkbox-field') {
+  @include component('toggle-field') {
     @include typography(13px, 18px);
   }
 }
