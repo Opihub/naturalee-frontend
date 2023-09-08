@@ -40,7 +40,16 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   validate: async (route) => {
-    return isCategory(route.params.category)
+    if (!isCategory(route.params.category)) {
+      return false
+    }
+
+    const { response } = await usePage(
+      route.params.product,
+      `shop/categories/${route.params.category}/products`
+    )
+
+    return response.value.success
   },
 })
 
