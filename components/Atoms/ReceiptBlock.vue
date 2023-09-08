@@ -1,6 +1,6 @@
 <template>
   <div :class="CSS_NAME">
-    <div :class="`${CSS_NAME}__holder`">
+    <div :class="`${CSS_NAME}__holder`" v-bind="$attrs">
       <slot />
     </div>
   </div>
