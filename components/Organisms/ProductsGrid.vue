@@ -140,7 +140,7 @@ const CSS_NAME = 'c-products-grid'
 const CSS_NAME_OVERLAY = `${CSS_NAME}__overlay`
 const CSS_NAME_ACTION = `${CSS_NAME}__action`
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   filters: {
     type: Array,

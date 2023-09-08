@@ -53,6 +53,7 @@ $weights: (
 );
 
 $utilities-sizes: (
+  auto: auto,
   none: 0,
   micro: 4,
   mini: 8,
@@ -66,6 +67,8 @@ $utilities-sizes: (
 
 $utilities-with-sizes: (
   mt: margin-top,
+  ml: margin-left,
+  mr: margin-right,
   mb: margin-bottom,
   pt: padding-top,
   pb: padding-bottom,

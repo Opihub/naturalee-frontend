@@ -5,7 +5,7 @@
       "record": {
         "id": 1,
         "title": "Home",
-        "link": "",
+        "link": "/",
         "slug": "homepage",
         "content": "",
         "seo": {
@@ -28,12 +28,12 @@
       "record": {
         "id": 2,
         "title": "FAQ",
-        "link": "faq",
+        "link": "/faq",
         "slug": "faq",
         "content": "",
         "seo": {
-          "title": "Naturalee - FAQ",
-          "ogTitle": "Naturalee - FAQ",
+          "title": "FAQ - Naturalee",
+          "ogTitle": "FAQ - Naturalee",
           "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
           "ogDescription": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
         },
@@ -45,7 +45,144 @@
           },
           {
             "link": "/faq",
-            "title": "Faq"
+            "title": "FAQ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account",
+      "record": {
+        "id": 3,
+        "title": "Il mio account",
+        "link": "/my-account",
+        "slug": "my-account",
+        "content": "",
+        "seo": {
+          "title": "Il mio account - Naturalee",
+          "ogTitle": "Il mio account - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-profile",
+      "record": {
+        "id": 4,
+        "title": "Dettagli account",
+        "link": "/my-account/profile",
+        "slug": "profile",
+        "content": "",
+        "seo": {
+          "title": "Dettagli account - Naturalee",
+          "ogTitle": "Dettagli account - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/profile",
+            "title": "Dettagli account"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-orders",
+      "record": {
+        "id": 5,
+        "title": "Ordini",
+        "link": "/my-account/orders",
+        "slug": "orders",
+        "content": "",
+        "seo": {
+          "title": "Ordini - Naturalee",
+          "ogTitle": "Ordini - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/orders",
+            "title": "Ordini"
+          }
+        ]
+      }
+    },
+    {
+      "id": "my-account-addresses",
+      "record": {
+        "id": 6,
+        "title": "Indirizzi",
+        "link": "/my-account/addresses",
+        "slug": "addresses",
+        "content": "",
+        "seo": {
+          "title": "Indirizzi - Naturalee",
+          "ogTitle": "Indirizzi - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/my-account",
+            "title": "Il mio account"
+          },
+          {
+            "link": "/my-account/addresses",
+            "title": "Indirizzi"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cart",
+      "record": {
+        "id": 7,
+        "title": "Carrello",
+        "link": "/cart",
+        "slug": "cart",
+        "content": "",
+        "seo": {
+          "title": "Carrello - Naturalee",
+          "ogTitle": "Carrello - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/cart",
+            "title": "Carrello"
           }
         ]
       }
@@ -125,7 +262,7 @@
       "record": {
         "id": 1,
         "title": "Verdura fresca e sana",
-        "link": "verdura",
+        "link": "/verdura",
         "slug": "shop/verdura",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -179,7 +316,7 @@
       "record": {
         "id": 2,
         "title": "Frutta fresca di qualità",
-        "link": "frutta",
+        "link": "/frutta",
         "slug": "shop/frutta",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -233,7 +370,7 @@
       "record": {
         "id": 3,
         "title": "Sapori unici da tutto il mondo",
-        "link": "esotico",
+        "link": "/esotico",
         "slug": "shop/esotico",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -267,7 +404,7 @@
       "record": {
         "id": 4,
         "title": "Dispensa fresca e selezionata",
-        "link": "dispensa",
+        "link": "/dispensa",
         "slug": "shop/dispensa",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -297,7 +434,7 @@
       "record": {
         "id": 5,
         "title": "Aromi e Spezie",
-        "link": "aromi",
+        "link": "/aromi",
         "slug": "shop/aromi",
         "image": "https://picsum.photos/1920/300?grayscale&blur=2",
         "seo": {
@@ -325,9 +462,12 @@
       "title": "Anguria",
       "provenance": "Italia",
       "slug": "anguria",
-      "link": "frutta/anguria",
+      "link": "/frutta/anguria",
       "shopCategoriesPageId": "frutta",
-      "category": "frutta"
+      "price": 5,
+      "sku": "ANGURIA",
+      "costDescription": "Sfuso",
+      "unit": "Pz"
     },
     {
       "id": 2,
@@ -335,9 +475,12 @@
       "title": "Melone",
       "provenance": "Italia",
       "slug": "melone",
-      "link": "frutta/melone",
+      "link": "/frutta/melone",
       "shopCategoriesPageId": "frutta",
-      "category": "frutta"
+      "price": 2.99,
+      "sku": "MELONE",
+      "costDescription": "Sfuso",
+      "unit": "Pz"
     },
     {
       "id": 3,
@@ -345,9 +488,12 @@
       "title": "Pere Williams",
       "provenance": "Italia",
       "slug": "pere-williams",
-      "link": "frutta/pere-williams",
+      "link": "/frutta/pere-williams",
       "shopCategoriesPageId": "frutta",
-      "category": "frutta"
+      "price": 13.89,
+      "sku": "PERE",
+      "costDescription": "Kg",
+      "unit": "Kg"
     },
     {
       "id": 4,
@@ -355,9 +501,12 @@
       "title": "Carciofi",
       "provenance": "Italia",
       "slug": "carciofi",
-      "link": "verdura/carciofi",
+      "link": "/verdura/carciofi",
       "shopCategoriesPageId": "verdura",
-      "category": "verdura"
+      "price": 17.23,
+      "sku": "CARCIOFI",
+      "costDescription": "Cassetta",
+      "unit": "Pz"
     },
     {
       "id": 5,
@@ -365,9 +514,12 @@
       "title": "Peperoni",
       "provenance": "Italia",
       "slug": "peperoni",
-      "link": "verdura/peperoni",
+      "link": "/verdura/peperoni",
       "shopCategoriesPageId": "verdura",
-      "category": "verdura"
+      "price": 6.55,
+      "sku": "PEPERONI",
+      "costDescription": "Cassetta",
+      "unit": "Kg"
     }
   ],
   "menu": [
@@ -377,25 +529,25 @@
         {
           "id": 1,
           "title": "Azienda",
-          "url": "azienda",
+          "url": "/azienda",
           "target": null
         },
         {
           "id": 2,
           "title": "Contatti",
-          "url": "contatti",
+          "url": "/contatti",
           "target": null
         },
         {
           "id": 3,
           "title": "FAQ",
-          "url": "faq",
+          "url": "/faq",
           "target": null
         },
         {
           "id": 4,
           "title": "Consegna",
-          "url": "consegna",
+          "url": "/consegna",
           "target": null
         }
       ]
@@ -418,24 +570,53 @@
       ]
     },
     {
+      "id": "dashboard",
+      "records": [
+        {
+          "id": 1,
+          "title": "Bacheca",
+          "url": "/my-account/dashboard",
+          "target": null
+        },
+        {
+          "id": 2,
+          "title": "Ordini",
+          "url": "/my-account/orders",
+          "target": null
+        },
+        {
+          "id": 3,
+          "title": "Indirizzi",
+          "url": "/my-account/addresses",
+          "target": null
+        },
+        {
+          "id": 4,
+          "title": "Dettagli account",
+          "url": "/my-account/profile",
+          "target": null
+        }
+      ]
+    },
+    {
       "id": "privacy",
       "records": [
         {
           "id": 1,
           "title": "Privacy Policy",
-          "url": "privacy-policy",
+          "url": "/privacy-policy",
           "target": null
         },
         {
           "id": 2,
           "title": "Cookie Policy",
-          "url": "cookie-policy",
+          "url": "/cookie-policy",
           "target": null
         },
         {
           "id": 3,
           "title": "Condizioni di vendita",
-          "url": "condizioni-di-vendita",
+          "url": "/condizioni-di-vendita",
           "target": null
         }
       ]
@@ -446,19 +627,19 @@
         {
           "id": 1,
           "title": "Il mio profilo",
-          "url": "profilo",
+          "url": "/my-account/profile",
           "target": null
         },
         {
           "id": 2,
           "title": "I miei ordini",
-          "url": "miei-ordini",
+          "url": "/my-account/orders",
           "target": null
         },
         {
           "id": 3,
           "title": "La mia lista",
-          "url": "miei-preferiti",
+          "url": "/my-account/wishlist",
           "target": null
         }
       ]
@@ -469,31 +650,31 @@
         {
           "id": 1,
           "title": "Verdura",
-          "url": "verdura",
+          "url": "/verdura",
           "image": "verdura"
         },
         {
           "id": 2,
           "title": "Frutta",
-          "url": "frutta",
+          "url": "/frutta",
           "image": "frutta"
         },
         {
           "id": 3,
           "title": "Esotico",
-          "url": "esotico",
+          "url": "/esotico",
           "image": "esotico"
         },
         {
           "id": 4,
           "title": "Aromi",
-          "url": "aromi",
+          "url": "/aromi",
           "image": "aromi"
         },
         {
           "id": 5,
           "title": "Dispensa",
-          "url": "dispensa",
+          "url": "/dispensa",
           "image": "dispensa"
         }
       ]
@@ -503,7 +684,7 @@
     {
       "id": 1,
       "title": "Verdura",
-      "link": "verdura",
+      "link": "/verdura",
       "slug": "verdura",
       "image": "https://picsum.photos/id/100/304/391?grayscale&blur=2",
       "position": "bottom"
@@ -511,14 +692,14 @@
     {
       "id": 2,
       "title": "Frutta",
-      "link": "frutta",
+      "link": "/frutta",
       "slug": "frutta",
       "image": "https://picsum.photos/id/200/304/391?grayscale&blur=2"
     },
     {
       "id": 3,
       "title": "Esotico",
-      "link": "esotico",
+      "link": "/esotico",
       "slug": "esotico",
       "image": "https://picsum.photos/id/300/304/391?grayscale&blur=2",
       "position": "bottom"
@@ -526,7 +707,7 @@
     {
       "id": 4,
       "title": "Aromi",
-      "link": "aromi",
+      "link": "/aromi",
       "slug": "aromi",
       "image": "https://picsum.photos/id/400/304/391?grayscale&blur=2",
       "position": "top"
@@ -534,7 +715,7 @@
     {
       "id": 5,
       "title": "Dispensa",
-      "link": "dispensa",
+      "link": "/dispensa",
       "slug": "dispensa",
       "image": "https://picsum.photos/id/500/304/391?grayscale&blur=2"
     }
@@ -546,7 +727,7 @@
       "title": "Anguria",
       "provenance": "Italia",
       "slug": "anguria",
-      "link": "frutta/anguria"
+      "link": "/frutta/anguria"
     },
     {
       "id": 2,
@@ -554,7 +735,7 @@
       "title": "Melone",
       "provenance": "Italia",
       "slug": "melone",
-      "link": "frutta/melone"
+      "link": "/frutta/melone"
     },
     {
       "id": 3,
@@ -562,7 +743,7 @@
       "title": "Pere Williams",
       "provenance": "Italia",
       "slug": "pere-williams",
-      "link": "frutta/pere-williams"
+      "link": "/frutta/pere-williams"
     },
     {
       "id": 4,
@@ -570,7 +751,7 @@
       "title": "Carciofi",
       "provenance": "Italia",
       "slug": "carciofi",
-      "link": "verdura/carciofi"
+      "link": "/verdura/carciofi"
     },
     {
       "id": 5,
@@ -578,14 +759,14 @@
       "title": "Peperoni",
       "provenance": "Italia",
       "slug": "peperoni",
-      "link": "verdura/peperoni"
+      "link": "/verdura/peperoni"
     }
   ],
   "shopCartProducts": [
     {
       "id": 1,
       "title": "Banane Chiquita",
-      "link": "frutta/banane-chiquita",
+      "link": "/frutta/banane-chiquita",
       "slug": "banane-chiquita",
       "sku": "BAN-CHIQ",
       "unit": "kg",
@@ -596,7 +777,7 @@
     {
       "id": 2,
       "title": "Cetrioli Verdi",
-      "link": "verdura/cetrioli-verdi",
+      "link": "/verdura/cetrioli-verdi",
       "slug": "cetrioli-verdi",
       "sku": "CET-VER",
       "unit": "pz",
@@ -607,7 +788,7 @@
     {
       "id": 3,
       "title": "Carciofi",
-      "link": "verdura/carciofi",
+      "link": "/verdura/carciofi",
       "slug": "carciofi",
       "sku": "CARCF",
       "unit": "pz",
@@ -618,7 +799,7 @@
     {
       "id": 4,
       "title": "Noci di Macadamia",
-      "link": "verdura/noci-macadamia",
+      "link": "/verdura/noci-macadamia",
       "slug": "noci-macadamia",
       "sku": "NOC-MAC",
       "unit": "kg",
@@ -629,7 +810,7 @@
     {
       "id": 5,
       "title": "Songino",
-      "link": "verdura/songino",
+      "link": "/verdura/songino",
       "slug": "songino",
       "sku": "SONGINO",
       "unit": "kg",

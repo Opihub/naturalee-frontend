@@ -12,7 +12,7 @@
 // Constants
 const CSS_NAME = 'o-overlay'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   maxWidth: {
     type: [Number, String],

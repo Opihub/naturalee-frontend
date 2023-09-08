@@ -33,7 +33,7 @@
       >
     </div>
 
-    <BaseButton class="u-mb-tiny u-mt-half" color="green"
+    <BaseButton class="u-mb-tiny u-mt-half" color="green" @click="add"
       >Aggiungi al carrello</BaseButton
     >
 
@@ -44,8 +44,13 @@
 </template>
 
 <script setup>
+// Imports
+import { useCartStore } from '@/stores/cart'
+
+// Constants
 const CSS_CLASS = 'c-product-card'
 
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   product: {
     type: Object,
@@ -61,6 +66,18 @@ const props = defineProps({
   },
 })
 
+// Component life-cycle hooks
+
+// Composables
+const store = useCartStore()
+
+// Data
+// TODO: aggiungere counter
+const quantity = ref(1)
+
+// Watcher
+
+// Computed
 const fit = computed(() => {
   const { image } = props.product
   if (image) {
@@ -69,6 +86,11 @@ const fit = computed(() => {
 
   return 'contain'
 })
+
+// Methods
+const add = () => {
+  store.addToCart(props.product, quantity.value)
+}
 </script>
 
 <style lang="scss">

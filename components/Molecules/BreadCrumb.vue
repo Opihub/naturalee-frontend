@@ -32,7 +32,7 @@
 // Constants
 const CSS_NAME = 'c-breadcrumb'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   menu: {
     type: Array,

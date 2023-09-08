@@ -4,6 +4,7 @@ import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 
 export async function useApi(url, options = {}, innerOptions = {}) {
   innerOptions = {
+    version: 1,
     cache: true,
     local: true,
     dataOnly: false,
@@ -12,22 +13,41 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   options = options || {}
 
-  const apiUrl = innerOptions.local ? `/api/${url}` : url
+  const apiUrl = (complete = false) => {
+    let path = '/'
+    const paths = [url]
+
+    if (innerOptions.version) {
+      paths.unshift(`v${innerOptions.version}`)
+    }
+
+    if (innerOptions.local) {
+      paths.unshift('api')
+    }
+
+    path += paths.join('/').replaceAll(/\/+/g, '/')
+
+    if (complete && options.params) {
+      path += '?' + (new URLSearchParams(options.params)).toString()
+    }
+
+    return path
+  }
 
   let cached = ref(null)
   if (innerOptions.cache) {
-    cached = useSessionStorage(apiUrl, null, {
+    cached = useSessionStorage(apiUrl(true), null, {
       // By passing null as default it can't automatically
       // determine which serializer to use
       serializer: StorageSerializers.object,
     })
   }
 
-  if (cached.value) {
+  if (cached.value && cached.value.success) {
     return cached
   }
 
-  const { data, error } = await useFetch(apiUrl, {
+  const { data, error } = await useFetch(apiUrl(), {
     ...options,
     pick: null,
   })
@@ -40,6 +60,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
        * Server error, can happen
        */
       responseData = errorData.data
+      console.warn(responseData)
     } else {
       /**
        * Client error, must not happen
@@ -67,7 +88,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     }, {})
   }
 
-  cached = ref(innerOptions.dataOnly ? response.data : response)
+  cached.value = innerOptions.dataOnly ? response.data : response
 
   return cached
 }

@@ -1,7 +1,7 @@
-import { isError } from 'h3'
+import { isError, createError } from 'h3'
 
-export function createResponse(input) {
-  if (isError(input)) {
+export function createResponse(input, error = false) {
+  if (isError(input) || error) {
     return {
       success: false,
       statusCode: input.statusCode || 400,
@@ -18,6 +18,14 @@ export function createResponse(input) {
     message: input.message || 'Generic Message',
     data: typeof input.data !== 'undefined' ? input.data : {},
   }
+}
+
+export function createErrorResponse(error) {
+  return createError({
+    statusCode: error.statusCode,
+    statusMessage: error.statusMessage,
+    data: createResponse(error, true),
+  })
 }
 
 export function createPaginatedResponse(input) {

@@ -7,7 +7,7 @@
 
           <BaseLink
             :class="`${CSS_NAME}__review`"
-            to="cart"
+            to="/cart"
             :underline="true"
             color="dark"
             >Modifica</BaseLink
@@ -79,7 +79,7 @@
       >
       <BaseLink
         :class="`${CSS_NAME}__review`"
-        to="cart"
+        to="/cart"
         :underline="true"
         color="dark"
         >Vai al carrello</BaseLink
@@ -95,7 +95,7 @@ const CSS_NAME_LIST_PRODUCT = `${CSS_NAME_LIST}__product`
 const CSS_NAME_TOTALS = `${CSS_NAME}__totals`
 const CSS_NAME_TOTALS_CALCULATION = `${CSS_NAME_TOTALS}__calculation`
 
-const props = defineProps({
+defineProps({
   cart: {
     type: Array,
     default() {
@@ -106,18 +106,10 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-})
-
-const totals = computed(() => {
-  let totals = props.shippingCost
-
-  if (props.cart.length) {
-    totals += props.cart.reduce((accumulator, product) => {
-      return accumulator + product.price * product.quantity
-    }, 0)
-  }
-
-  return totals
+  totals: {
+    type: Number,
+    default: 0,
+  },
 })
 </script>
 

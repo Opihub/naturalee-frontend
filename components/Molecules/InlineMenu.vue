@@ -88,13 +88,6 @@ const props = defineProps({
       return ['white', 'dark'].includes(value)
     },
   },
-  hoverColor: {
-    type: String,
-    default: 'yellow',
-    validator(value) {
-      return ['yellow', 'green'].includes(value)
-    },
-  },
 })
 
 const style = computed(() => {
@@ -120,10 +113,6 @@ const className = computed(() => {
 
   if (props.color) {
     className.push(`${CSS_NAME}--${props.color}`)
-  }
-
-  if (props.hoverColor && props.hoverColor !== 'yellow') {
-    className.push(`${CSS_NAME}--hover-${props.hoverColor}`)
   }
 
   if (
@@ -232,15 +221,6 @@ $prefix: 'menu';
     );
   }
 
-  @include modifier('hover-green') {
-    @include set-local-vars(
-      $prefix: $prefix,
-      $map: (
-        hover-text-color: get-var(color-green),
-      )
-    );
-  }
-
   @include element('item') {
     @include element('text') {
       width: get-var(width, auto, $prefix: $item-prefix);
@@ -250,10 +230,6 @@ $prefix: 'menu';
       width: get-var(width, auto, $prefix: $item-prefix);
       height: get-var(height, auto, $prefix: $item-prefix);
       padding: get-var(padding, 0, $prefix: $item-prefix);
-
-      &:hover {
-        color: get-var(hover-text-color, inherit, $prefix: $prefix);
-      }
     }
 
     @include has('no-link') {

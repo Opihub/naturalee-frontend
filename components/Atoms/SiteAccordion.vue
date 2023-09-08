@@ -31,7 +31,7 @@
 // Constants
 const CSS_NAME = 'o-accordion'
 
-// Props & Emits
+// Define (Props, Emits, Page Meta)
 defineProps({
   title: {
     type: String,

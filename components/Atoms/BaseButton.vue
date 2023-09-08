@@ -146,6 +146,7 @@ $prefix: 'button';
     get-var(color-white),
     $prefix: $prefix
   );
+  font-family: get-var(font-family, get-var(family-main), $prefix: $prefix);
   color: get-var(text-color, get-var(color-green), $prefix: $prefix);
   display: inline-flex;
   align-items: center;

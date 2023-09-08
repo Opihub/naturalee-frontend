@@ -9,6 +9,7 @@ const cssGlobals = [
   '@/assets/css/utilities/variables.scss',
   '@/assets/css/utilities/vue-transition.scss',
   '@/assets/css/variables/compounds.scss',
+  '@/assets/css/globals/extends.scss',
 ]
 
 export const additionalData = cssGlobals.reduce(
