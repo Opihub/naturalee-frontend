@@ -35,7 +35,9 @@
             data-title="Quantità / U"
           >
             <BaseCounter v-model="product.quantity">
-              <template #after><span class="u-ml-tiny">{{ product.unit }}</span></template>
+              <template #after
+                ><span class="u-ml-tiny">{{ product.unit }}</span></template
+              >
             </BaseCounter>
           </td>
           <td
@@ -56,12 +58,15 @@
     <template #footer>
       <tr :class="`${CSS_NAME}__footer`">
         <td colspan="7" align="right">
-          <!-- <BaseButton class="u-mr-half" color="green" @click="clearCart"
-            >Aggiorna il carrello</BaseButton
-          > -->
-          <BaseButton color="green" @click="clearCart"
-            >Svuota carrello</BaseButton
+          <button
+            :class="`${CSS_NAME}__empty`"
+            type="button"
+            color="green"
+            :disabled="count <= 0"
+            @click="clearCart"
           >
+            Svuota carrello
+          </button>
         </td>
       </tr>
     </template>
@@ -150,6 +155,35 @@ $prefix: 'cart-table';
           padding-right: get-var(x-offset, $prefix: $prefix);
         }
       }
+    }
+  }
+
+  @include element('empty') {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background-color: transparent;
+    font-weight: get-var(weight-bold);
+    text-transform: uppercase;
+    text-decoration: underline;
+    color: get-var(color-black);
+    text-decoration-color: get-var(color-green);
+    text-underline-offset: rem(8px);
+    text-decoration-thickness: 2px;
+    cursor: pointer;
+    @include typography(16px, 28px);
+    @include transition(color, text-decoration-color);
+    outline-offset: 3px;
+
+    &:hover {
+      color: get-var(color-green);
+      text-decoration-color: get-var(color-yellow);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: get-var(color-light);
+      text-decoration-color: get-var(color-light);
     }
   }
 
