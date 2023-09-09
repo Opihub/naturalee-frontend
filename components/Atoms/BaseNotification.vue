@@ -1,17 +1,23 @@
 <template>
-  <div :class="className">
+  <div :id="id" :class="className">
     <slot>{{ message }}</slot>
+    <CrossButton :class="`${CSS_NAME}__close`" @click="removeNotification(id)" />
   </div>
 </template>
 
 <script setup>
 // Imports
+import { useNotificationsStore } from '@/stores/notifications'
 
 // Constants
 const CSS_NAME = 'o-notification'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
   message: {
     type: String,
     default: null,
@@ -56,6 +62,7 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
+const store = useNotificationsStore()
 
 // Data
 
@@ -112,6 +119,7 @@ const className = computed(() => {
 })
 
 // Methods
+const { removeNotification } = store
 </script>
 
 <style lang="scss">
@@ -129,6 +137,13 @@ $prefix: 'notification';
     )
   );
 
+  @include set-local-vars(
+    $prefix: 'cross',
+    $map: (
+      color: get-var(text-color, get-var(color-black), $prefix: $prefix),
+    )
+  );
+
   position: get-var(position, fixed, $prefix: $prefix);
   z-index: get-var(z-#{$prefix});
   inset: get-var(top, $prefix: $prefix) get-var(right, $prefix: $prefix)
@@ -139,7 +154,7 @@ $prefix: 'notification';
   );
   border-radius: rem(5px);
   margin: rem(15px);
-  padding: rem(15px) rem(20px);
+  padding: rem(15px) rem(50px) rem(15px) rem(20px);
   color: get-var(text-color, get-var(color-black), $prefix: $prefix);
   background-color: get-var(
     background-color,
@@ -148,6 +163,13 @@ $prefix: 'notification';
   );
   font-weight: get-var(weight-regular);
   @include typography(16px, 22px);
+
+  @include element('close') {
+    position: absolute;
+    right: rem(15px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
   @include is('success') {
     @include set-local-vars(

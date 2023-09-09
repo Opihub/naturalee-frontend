@@ -9,6 +9,7 @@
     <template v-if="notifications.length">
       <BaseNotification
         v-for="(notification, index) in notifications"
+        :id="notification.id"
         :key="index"
         :status="notification.status"
         >{{ notification.message }}</BaseNotification

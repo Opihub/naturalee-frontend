@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate, ref } from '#imports'
-import { useTimeoutFn, promiseTimeout, useTimeout } from '@vueuse/core'
+import { useTimeoutFn } from '@vueuse/core'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const notifications = ref([])
@@ -17,30 +17,26 @@ export const useNotificationsStore = defineStore('notifications', () => {
     console.debug(notification, time)
 
     if (time > 0) {
-      await removeNotification(notification, time)
+      await removeNotification(notification.id, time)
     }
+
+    return notification.id
   }
 
-  const removeNotification = async (notification, time = 3000) => {
-    const { start } = useTimeoutFn(() => {
-      console.debug(notification)
+  const removeNotification = async (id, time = 0) => {
+    const callback = () => {
+      notifications.value = notifications.value.filter((item) => item.id !== id)
+    }
 
-      notifications.value = notifications.value.filter(
-        (item) => item.id !== notification.id
-      )
-      console.debug(notifications.value)
-    }, time)
+    if (time <= 0) {
+      callback()
 
-    start()
+      return
+    }
 
-    // const ready = useTimeout(time)
-    // await promiseTimeout(time)
+    const { start } = useTimeoutFn(callback, time)
 
-    // console.debug(notification)
-
-    // notifications.value = notifications.value.filter(
-    //   (item) => item !== notification
-    // )
+    await start()
   }
 
   const clearAll = () => {
