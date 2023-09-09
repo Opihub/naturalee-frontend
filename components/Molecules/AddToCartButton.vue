@@ -8,6 +8,7 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useNotificationsStore } from '@/stores/notifications'
+import { useI18n } from 'vue-i18n'
 
 // Constants
 const CSS_NAME = 'c-add-to-cart'
@@ -37,6 +38,7 @@ const props = defineProps({
 // Composables
 const cartStore = useCartStore()
 const notifications = useNotificationsStore()
+const { t } = useI18n()
 
 // Data
 const color = ref('green')
@@ -53,7 +55,12 @@ const className = computed(() => {
 // Methods
 const add = () => {
   notifications.notify({
-    message: `${props.product.title} aggiunto al carrello`,
+    message: t('cart.addedToCart', props.quantity, {
+      named: {
+        name: props.product.title,
+        count: props.quantity,
+      }
+    }),
     status: 'success',
   })
 

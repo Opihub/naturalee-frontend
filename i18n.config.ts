@@ -8,6 +8,8 @@ export default defineI18nConfig(() => ({
       cart: {
         your: 'Il tuo carrello',
         empty: 'Non hai alcun prodotto nel carrello',
+        addedToCart:
+          '{count} {name} aggiunto al carrello | {count} {name} aggiunti al carrello',
       },
     },
   },
