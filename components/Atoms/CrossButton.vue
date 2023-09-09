@@ -1,6 +1,8 @@
 <template>
   <button :class="CSS_NAME" type="button">
-    <span :class="`${CSS_NAME}__times`">&times;</span>
+    <span :class="`${CSS_NAME}__scale`">
+      <span :class="`${CSS_NAME}__times`"> &times; </span>
+    </span>
   </button>
 </template>
 
@@ -44,7 +46,21 @@ $prefix: 'cross';
   margin: 0;
   border: 0;
   cursor: pointer;
-  transform: scale(#{get-var(scale, $prefix: $prefix)});
+
+  &:focus {
+    outline-offset: calc(
+      (
+          get-var(width, rem(10px), $prefix: $prefix) *
+            get-var(scale, $prefix: $prefix) -
+            get-var(width, rem(10px), $prefix: $prefix)
+        ) / 2
+    );
+  }
+
+  @include element('scale') {
+    display: block;
+    transform: scale(#{get-var(scale, $prefix: $prefix)});
+  }
 
   @include element('times') {
     font-size: 0;
