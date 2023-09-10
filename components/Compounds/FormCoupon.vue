@@ -29,7 +29,7 @@
 // Imports
 
 // Constants
-const CSS_NAME = 'c-search'
+const CSS_NAME = 'c-coupon-form'
 
 // Define (Props, Emits, Page Meta)
 defineProps({
@@ -64,7 +64,7 @@ const applyCoupon = () => {
 </script>
 
 <style lang="scss">
-$prefix: 'search';
+$prefix: 'coupon-form';
 @include component($prefix) {
   @include set-local-vars(
     $prefix: 'button',
