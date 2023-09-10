@@ -32,7 +32,7 @@ export const useCartStore = defineStore('cart', () => {
   // })
 
   const count = computed(() => {
-    return cart.value.length
+    return cart.value?.length || 0
   })
 
   const subTotals = computed(() => {

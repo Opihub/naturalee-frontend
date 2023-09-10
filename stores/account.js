@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate, skipHydrate, computed } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
+import { useCartStore } from '@/stores/cart'
 
 export const useAccountStore = defineStore('account', () => {
   const account = useLocalStorage('account', null, {
@@ -88,7 +89,11 @@ export const useAccountStore = defineStore('account', () => {
     account.value = user
   }
 
-  function logout() {
+  async function logout() {
+    const cart = useCartStore()
+
+    await cart.clearCart()
+
     account.value = null
     token.value = null
   }
