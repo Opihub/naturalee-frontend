@@ -4,7 +4,10 @@
       <BaseHeading tag="span" use="custom">Totale carrello</BaseHeading>
     </div>
 
-    <div :class="[`${CSS_NAME}__coupon`, `${CSS_NAME}__block`]"></div>
+    <div :class="[`${CSS_NAME}__coupon`, `${CSS_NAME}__block`]">
+      <span>{{ $t('coupon.formTitle') }}</span>
+      <FormCoupon class="u-mt-mini" :placeholder="$t('coupon.formPlaceholder')" />
+    </div>
 
     <div :class="`${CSS_NAME}__body`">
       <span>Subtotale</span>
@@ -98,6 +101,8 @@ $prefix: 'cart-resume';
   );
 
   font-family: get-var(family-text);
+  font-weight: get-var(weight-regular);
+  @include typography(18px, 28px);
 
   @include element('block') {
     padding: rem(20px) get-var(padding, $prefix: $prefix);
@@ -136,8 +141,6 @@ $prefix: 'cart-resume';
     display: grid;
     gap: rem(20px);
     grid-template-columns: 1fr auto;
-    font-weight: get-var(weight-regular);
-    @include typography(18px, 28px);
 
     & > * {
       &:nth-child(even) {

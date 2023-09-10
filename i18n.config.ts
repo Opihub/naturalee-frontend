@@ -17,6 +17,10 @@ export default defineI18nConfig(() => ({
         removedFromCart:
           '{name} rimosso dal carrello | Prodotti rimossi dal carrello',
       },
+      coupon: {
+        formTitle: 'Hai un codice sconto?',
+        formPlaceholder: 'Codice promozionale',
+      },
     },
   },
 }))
