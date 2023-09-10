@@ -7,8 +7,6 @@
 <script setup>
 // Imports
 import { useCartStore } from '@/stores/cart'
-import { useNotificationsStore } from '@/stores/notifications'
-import { useI18n } from 'vue-i18n'
 
 // Constants
 const CSS_NAME = 'c-add-to-cart'
@@ -39,8 +37,6 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Composables
 const { sending, send } = useSender(emit)
 const cartStore = useCartStore()
-const notifications = useNotificationsStore()
-const { t } = useI18n()
 
 // Data
 const color = ref('green')
@@ -60,20 +56,8 @@ const add = async () => {
     return
   }
 
-  const success = await send(
+  await send(
     async () => await cartStore.addToCart(props.product, props.quantity)
   )
-
-  if (success) {
-    notifications.notify({
-      message: t('cart.addedToCart', props.quantity, {
-        named: {
-          name: props.product.title,
-          count: props.quantity,
-        },
-      }),
-      status: 'success',
-    })
-  }
 }
 </script>

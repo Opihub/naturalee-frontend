@@ -12,10 +12,16 @@ import {
 } from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useAccountStore } from '@/stores/account'
+import { useNotificationsStore } from '@/stores/notifications'
+import { useI18n } from 'vue-i18n'
 
 export const useCartStore = defineStore('cart', () => {
   const profile = useAccountStore()
+  const notifications = useNotificationsStore()
+
+  const { notify } = notifications
   const { isLoggedIn } = storeToRefs(profile)
+  const { t } = useI18n()
 
   const cart = useLocalStorage('cart', [], {
     serializer: StorageSerializers.object,
@@ -49,6 +55,11 @@ export const useCartStore = defineStore('cart', () => {
 
   function clearCart() {
     cart.value = []
+
+    notify({
+      message: t('cart.cleared'),
+      status: 'warning',
+    })
   }
 
   function addToCart(product, quantity = 1) {
@@ -60,6 +71,17 @@ export const useCartStore = defineStore('cart', () => {
     if (existingProduct) {
       const index = cart.value.indexOf(existingProduct)
       cart.value[index].quantity += quantity
+
+      notify({
+        // message: t('cart.quantityUpdated'),
+        message: t('cart.addedToCart', quantity, {
+          named: {
+            name: title,
+            count: quantity,
+          },
+        }),
+        status: 'success',
+      })
 
       return
     }
@@ -75,15 +97,38 @@ export const useCartStore = defineStore('cart', () => {
       costDescription,
       image,
     })
+
+    notify({
+      message: t('cart.addedToCart', 1, {
+        named: {
+          name: title,
+          count: quantity,
+        },
+      }),
+      status: 'success',
+    })
   }
 
-  function updateCartQuantity(product, quantity) {
+  function updateCartQuantity(product, quantity, server = false) {
     const { id } = product
     const existingProduct = pickProduct(id)
 
     if (existingProduct) {
       const index = cart.value.indexOf(existingProduct)
+      const diff = cart.value[index].quantity - quantity
       cart.value[index].quantity = quantity
+
+      notify({
+        message: !server
+          ? t('cart.quantityUpdated')
+          : t('cart.addedToCart', diff, {
+              named: {
+                name: product.title,
+                count: diff,
+              },
+            }),
+        status: 'success',
+      })
 
       return
     }
@@ -91,32 +136,48 @@ export const useCartStore = defineStore('cart', () => {
     addToCart(product, quantity)
   }
 
-  function removeFromCart(product, quantity) {
-    const existingProduct = pickProduct(product.id)
+  // function removeFromCart(product, quantity) {
+  //   const existingProduct = pickProduct(product.id)
 
-    if (!existingProduct) {
-      console.warn('Prodotto assente nel carrello')
-      return
-    }
+  //   if (!existingProduct) {
+  //     notify({
+  //       message: t('cart.missingProduct'),
+  //       status: 'warning',
+  //     })
+  //     return
+  //   }
 
-    if (existingProduct.quantity - quantity <= 0) {
-      deleteFromCart(product)
-      return
-    }
+  //   if (existingProduct.quantity - quantity <= 0) {
+  //     deleteFromCart(product)
+  //     return
+  //   }
 
-    const index = cart.value.indexOf(existingProduct)
-    cart.value[index].quantity -= quantity
-  }
+  //   const index = cart.value.indexOf(existingProduct)
+  //   cart.value[index].quantity -= quantity
+  // }
 
   function deleteFromCart(product) {
     const existingProduct = pickProduct(product.id)
 
     if (!existingProduct) {
-      console.warn('Prodotto assente nel carrello')
+      notify({
+        message: t('cart.missingProduct'),
+        status: 'warning',
+      })
+
       return
     }
 
     cart.value = cart.value.filter((item) => item !== existingProduct)
+
+    notify({
+      message: t('cart.removedFromCart', 1, {
+        named: {
+          name: product.title,
+        },
+      }),
+      status: 'warning',
+    })
   }
 
   async function remoteClearCart() {
@@ -134,11 +195,15 @@ export const useCartStore = defineStore('cart', () => {
       if (response.value.success) {
         clearCart()
       } else {
-        console.debug(response.value)
         throw new Error(response)
       }
     } catch (error) {
-      console.error(error.value)
+      console.error(error)
+
+      notify({
+        message: JSON.stringify(error.value),
+        status: 'danger',
+      })
     }
   }
 
@@ -168,17 +233,57 @@ export const useCartStore = defineStore('cart', () => {
       if (response.value.success) {
         // se si chiama il server, la quantità restituita sovrascriverà quella attuale,
         // a meno che il prodotto richiesto non sia presente nel carrello
-        updateCartQuantity(product, response.value.data.quantity)
-
-        return true
+        updateCartQuantity(product, response.value.data.quantity, true)
       } else {
         throw new Error(response)
       }
     } catch (error) {
       console.error(error)
+
+      notify({
+        message: JSON.stringify(error.value),
+        status: 'danger',
+      })
+    }
+  }
+
+  async function remoteDeleteFromCart(product) {
+    if (!isLoggedIn.value) {
+      deleteFromCart(product)
+
+      return true
     }
 
-    return false
+    try {
+      const response = await useApi(
+        'shop/cart/remove',
+        {
+          method: 'DELETE',
+          body: {
+            id: product.id,
+            variantId: product.variantId,
+          },
+        },
+        {
+          cache: false,
+        }
+      )
+
+      if (response.value.success) {
+        // se si chiama il server, la quantità restituita sovrascriverà quella attuale,
+        // a meno che il prodotto richiesto non sia presente nel carrello
+        deleteFromCart(product)
+      } else {
+        throw new Error(response)
+      }
+    } catch (error) {
+      console.error(error)
+
+      notify({
+        message: JSON.stringify(error.value),
+        status: 'danger',
+      })
+    }
   }
 
   return {
@@ -188,11 +293,9 @@ export const useCartStore = defineStore('cart', () => {
     totals,
     subTotals,
     pickProduct,
+    deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
-    updateCartQuantity,
-    removeFromCart,
-    deleteFromCart,
   }
 })
 
