@@ -1,0 +1,25 @@
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@mixin animation(
+  $name,
+  $time: 300ms,
+  $function: linear,
+  $delay: 0s,
+  $iteration: infinite,
+  $direction: normal,
+  $fill: both
+) {
+  animation: $name $time $function $delay $iteration $direction;
+  animation-fill-mode: $fill;
+}
+
+@mixin spinner($properties...) {
+  @include animation(spinner, $properties...);
+}
