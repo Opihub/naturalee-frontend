@@ -119,6 +119,29 @@ export const useCartStore = defineStore('cart', () => {
     cart.value = cart.value.filter((item) => item !== existingProduct)
   }
 
+  async function remoteClearCart() {
+    if (!isLoggedIn.value) {
+      clearCart()
+
+      return
+    }
+
+    try {
+      const response = await useApi('shop/cart/clear', null, {
+        cache: false,
+      })
+
+      if (response.value.success) {
+        clearCart()
+      } else {
+        console.debug(response.value)
+        throw new Error(response)
+      }
+    } catch (error) {
+      console.error(error.value)
+    }
+  }
+
   async function remoteAddToCart(product, quantity = 1) {
     if (!isLoggedIn.value) {
       addToCart(product, quantity)
@@ -165,7 +188,7 @@ export const useCartStore = defineStore('cart', () => {
     totals,
     subTotals,
     pickProduct,
-    clearCart,
+    clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
     updateCartQuantity,
     removeFromCart,
