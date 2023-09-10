@@ -12,14 +12,12 @@ import {
 } from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useAccountStore } from '@/stores/account'
-import { useNotificationsStore } from '@/stores/notifications'
 import { useI18n } from 'vue-i18n'
+import { notify } from '@/utils/notify'
 
 export const useCartStore = defineStore('cart', () => {
   const profile = useAccountStore()
-  const notifications = useNotificationsStore()
 
-  const { notify } = notifications
   const { isLoggedIn } = storeToRefs(profile)
   const { t } = useI18n()
 

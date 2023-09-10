@@ -14,8 +14,6 @@ export const useNotificationsStore = defineStore('notifications', () => {
 
     notifications.value.push(notification)
 
-    console.debug(notification, time)
-
     if (time > 0) {
       await removeNotification(notification.id, time)
     }
