@@ -33,9 +33,13 @@
       >
     </div>
 
-    <BaseButton class="u-mb-tiny u-mt-half" color="green" @click="add"
-      >Aggiungi al carrello</BaseButton
-    >
+    <BaseCounter v-model="quantity" class="u-mt-half" />
+
+    <AddToCartButton
+      class="u-mb-tiny u-mt-half"
+      :product="product"
+      :quantity="quantity"
+    />
 
     <BaseLink underline color="dark" :to="product.link"
       >Vai alla scheda prodotto</BaseLink
@@ -45,7 +49,6 @@
 
 <script setup>
 // Imports
-import { useCartStore } from '@/stores/cart'
 
 // Constants
 const CSS_CLASS = 'c-product-card'
@@ -69,7 +72,6 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
-const store = useCartStore()
 
 // Data
 // TODO: aggiungere counter
@@ -88,9 +90,6 @@ const fit = computed(() => {
 })
 
 // Methods
-const add = () => {
-  store.addToCart(props.product, quantity.value)
-}
 </script>
 
 <style lang="scss">

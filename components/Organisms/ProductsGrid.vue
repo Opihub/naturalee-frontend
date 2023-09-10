@@ -172,9 +172,6 @@ const props = defineProps({
 })
 
 // Component life-cycle hooks
-onMounted(() => {
-  fetchProducts()
-})
 
 // Composables
 const timeout = useTimeoutFn(() => {
@@ -356,6 +353,9 @@ const updateQuery = () => {
     query: { sort: orderby.value, 'filters[]': chosenFilters.value },
   })
 }
+
+// On created
+await fetchProducts()
 </script>
 
 <style lang="scss">

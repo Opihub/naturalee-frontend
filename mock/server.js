@@ -12,6 +12,19 @@ function random(min = 0, max = 1) {
   return Math.floor(Math.random() * (max - min) + min) // The maximum is exclusive and the minimum is inclusive
 }
 
+function makeid(length) {
+  let result = ''
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  let counter = 0
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    counter += 1
+  }
+  return result
+}
+
 function createResponse(statusCode, data) {
   let code = 'generic'
   let message = 'Generic message'
@@ -98,7 +111,7 @@ server.post('/v1/auth/login', (request, response) => {
   ) {
     statusCode = 403
   } else {
-    data = {...profile, token: "token.jwt.test"}
+    data = { ...profile, token: 'token.jwt.test' }
   }
 
   response.status(statusCode).jsonp(createResponse(statusCode, data))
@@ -113,7 +126,7 @@ server.post('/v1/auth/sign-in', (request, response) => {
   if (!body.email || !body.password || [profile.email].includes(body.user)) {
     statusCode = 403
   } else {
-    data = {...profile, token: "token.jwt.test"}
+    data = { ...profile, token: 'token.jwt.test' }
   }
 
   response.status(statusCode).jsonp(createResponse(statusCode, data))
@@ -125,16 +138,58 @@ server.post('/v1/auth/password-recovery', (request, response) => {
   let data = false
   const { profile } = DB
 
-  if (
-    !body.user ||
-    ![profile.email, profile.username].includes(body.user)
-  ) {
+  if (!body.user || ![profile.email, profile.username].includes(body.user)) {
     statusCode = 403
   } else {
     data = true
   }
 
   response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.get('/v1/shop/cart/clear', (request, response) => {
+  response.jsonp(createResponse(200, true))
+})
+
+server.post('/v1/shop/cart/add', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+
+  const { id, quantity } = body
+
+  if (!id || !quantity) {
+    statusCode = 403
+  } else {
+    data = {
+      id,
+      variationId: id,
+      quantity: random(1, 5) + quantity,
+      key: makeid(40),
+    }
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.delete('/v1/shop/cart/remove', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+
+  const { id } = body
+
+  if (!id) {
+    statusCode = 403
+  } else {
+    data = true
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.post('/v1/shop/cart/update', (request, response) => {
+  response.jsonp(createResponse(200, true))
 })
 
 // server.use('/api', router)
