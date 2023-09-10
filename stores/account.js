@@ -48,7 +48,7 @@ export const useAccountStore = defineStore('account', () => {
     )
 
     if (response.value.success) {
-      login(response.value.data)
+      await login(response.value.data)
     } else {
       console.warn(response)
     }
@@ -69,7 +69,7 @@ export const useAccountStore = defineStore('account', () => {
     )
 
     if (response.value.success) {
-      login(response.value.data)
+      await login(response.value.data)
     } else {
       console.warn(response)
     }
@@ -77,7 +77,8 @@ export const useAccountStore = defineStore('account', () => {
     return response
   }
 
-  function login(profile) {
+  async function login(profile) {
+
     // TODO: verificare coi dati reali
     const user = { ...profile }
 

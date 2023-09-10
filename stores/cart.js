@@ -21,16 +21,14 @@ export const useCartStore = defineStore('cart', () => {
   const { isLoggedIn } = storeToRefs(profile)
   const { t } = useI18n()
 
+  // State
   const cart = useLocalStorage('cart', [], {
     serializer: StorageSerializers.object,
   })
 
   const shippingCost = useSessionStorage('shippingCost', 0)
 
-  // const cart = await useApi('shop/cart/products').catch((error) => {
-  //   console.error('Errore durante il caricamento di "shop/cart/products"', error)
-  // })
-
+  // Getters
   const count = computed(() => {
     return cart.value?.length || 0
   })
@@ -47,8 +45,24 @@ export const useCartStore = defineStore('cart', () => {
     return subTotals.value + shippingCost.value
   })
 
+  // Actions
   function pickProduct(id) {
     return cart.value.find((product) => product.id === id)
+  }
+
+  async function load() {
+    const response = await useApi('shop/cart/products', null, {
+      cache: false
+    }).catch((error) => {
+      console.error(
+        'Errore durante il caricamento di "shop/cart/products"',
+        error
+      )
+    })
+
+    if (response.value.success) {
+      cart.value = response.value.data
+    }
   }
 
   function clearCart() {
@@ -297,6 +311,7 @@ export const useCartStore = defineStore('cart', () => {
     count,
     totals,
     subTotals,
+    load,
     pickProduct,
     deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,
