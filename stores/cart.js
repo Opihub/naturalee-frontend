@@ -1,12 +1,22 @@
-import { defineStore, acceptHMRUpdate, skipHydrate, computed } from '#imports'
+import {
+  defineStore,
+  acceptHMRUpdate,
+  skipHydrate,
+  computed,
+  storeToRefs,
+} from '#imports'
 import {
   useLocalStorage,
   useSessionStorage,
   StorageSerializers,
 } from '@vueuse/core'
-// import { useApi } from '@/composables/api'
+import { useApi } from '@/composables/api'
+import { useAccountStore } from '@/stores/account'
 
 export const useCartStore = defineStore('cart', () => {
+  const profile = useAccountStore()
+  const { isLoggedIn } = storeToRefs(profile)
+
   const cart = useLocalStorage('cart', [], {
     serializer: StorageSerializers.object,
   })
@@ -44,6 +54,7 @@ export const useCartStore = defineStore('cart', () => {
   function addToCart(product, quantity = 1) {
     const { id, price, title, link, sku, unit, costDescription, image } =
       product
+
     const existingProduct = pickProduct(id)
 
     if (existingProduct) {
@@ -108,6 +119,45 @@ export const useCartStore = defineStore('cart', () => {
     cart.value = cart.value.filter((item) => item !== existingProduct)
   }
 
+  async function remoteAddToCart(product, quantity = 1) {
+    if (!isLoggedIn.value) {
+      addToCart(product, quantity)
+
+      return true
+    }
+
+    try {
+      const response = await useApi(
+        'shop/cart/add',
+        {
+          method: 'POST',
+          body: {
+            quantity,
+            id: product.id,
+            variantId: product.variantId,
+          },
+        },
+        {
+          cache: false,
+        }
+      )
+
+      if (response.value.success) {
+        // se si chiama il server, la quantità restituita sovrascriverà quella attuale,
+        // a meno che il prodotto richiesto non sia presente nel carrello
+        updateCartQuantity(product, response.value.data.quantity)
+
+        return true
+      } else {
+        throw new Error(response)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+    return false
+  }
+
   return {
     cart: skipHydrate(cart),
     shippingCost: skipHydrate(shippingCost),
@@ -116,7 +166,7 @@ export const useCartStore = defineStore('cart', () => {
     subTotals,
     pickProduct,
     clearCart,
-    addToCart,
+    addToCart: remoteAddToCart,
     updateCartQuantity,
     removeFromCart,
     deleteFromCart,

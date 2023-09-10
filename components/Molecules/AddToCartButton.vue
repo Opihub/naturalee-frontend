@@ -32,10 +32,12 @@ const props = defineProps({
     default: 1,
   },
 })
+const emit = defineEmits(['api:start', 'api:end'])
 
 // Component life-cycle hooks
 
 // Composables
+const { sending, send } = useSender(emit)
 const cartStore = useCartStore()
 const notifications = useNotificationsStore()
 const { t } = useI18n()
@@ -53,17 +55,25 @@ const className = computed(() => {
 })
 
 // Methods
-const add = () => {
-  notifications.notify({
-    message: t('cart.addedToCart', props.quantity, {
-      named: {
-        name: props.product.title,
-        count: props.quantity,
-      }
-    }),
-    status: 'success',
-  })
+const add = async () => {
+  if (sending.value) {
+    return
+  }
 
-  cartStore.addToCart(props.product, props.quantity)
+  const success = await send(
+    async () => await cartStore.addToCart(props.product, props.quantity)
+  )
+
+  if (success) {
+    notifications.notify({
+      message: t('cart.addedToCart', props.quantity, {
+        named: {
+          name: props.product.title,
+          count: props.quantity,
+        },
+      }),
+      status: 'success',
+    })
+  }
 }
 </script>
