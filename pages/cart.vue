@@ -10,7 +10,7 @@ import { useCartStore } from '@/stores/cart';
           <BaseMessage v-else>{{ $t('cart.empty') }}</BaseMessage>
         </SiteContainer>
 
-        <SiteContainer :max-width="520" padless>
+        <SiteContainer v-if="count" :max-width="520" padless>
           <CartResume />
         </SiteContainer>
       </div>
