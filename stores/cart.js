@@ -60,6 +60,8 @@ export const useCartStore = defineStore('cart', () => {
       message: t('cart.cleared'),
       status: 'warning',
     })
+
+    return true
   }
 
   function addToCart(product, quantity = 1) {
@@ -83,7 +85,7 @@ export const useCartStore = defineStore('cart', () => {
         status: 'success',
       })
 
-      return
+      return true
     }
 
     cart.value.push({
@@ -107,6 +109,8 @@ export const useCartStore = defineStore('cart', () => {
       }),
       status: 'success',
     })
+
+    return true
   }
 
   function updateCartQuantity(product, quantity, server = false) {
@@ -130,10 +134,10 @@ export const useCartStore = defineStore('cart', () => {
         status: 'success',
       })
 
-      return
+      return true
     }
 
-    addToCart(product, quantity)
+    return addToCart(product, quantity)
   }
 
   // function removeFromCart(product, quantity) {
@@ -144,16 +148,17 @@ export const useCartStore = defineStore('cart', () => {
   //       message: t('cart.missingProduct'),
   //       status: 'warning',
   //     })
-  //     return
+  //     return false
   //   }
 
   //   if (existingProduct.quantity - quantity <= 0) {
-  //     deleteFromCart(product)
-  //     return
+  //     return deleteFromCart(product)
   //   }
 
   //   const index = cart.value.indexOf(existingProduct)
   //   cart.value[index].quantity -= quantity
+
+  //   return true
   // }
 
   function deleteFromCart(product) {
@@ -165,7 +170,7 @@ export const useCartStore = defineStore('cart', () => {
         status: 'warning',
       })
 
-      return
+      return false
     }
 
     cart.value = cart.value.filter((item) => item !== existingProduct)
@@ -178,13 +183,13 @@ export const useCartStore = defineStore('cart', () => {
       }),
       status: 'warning',
     })
+
+    return true
   }
 
   async function remoteClearCart() {
     if (!isLoggedIn.value) {
-      clearCart()
-
-      return
+      return clearCart()
     }
 
     try {
@@ -193,7 +198,7 @@ export const useCartStore = defineStore('cart', () => {
       })
 
       if (response.value.success) {
-        clearCart()
+        return clearCart()
       } else {
         throw new Error(response)
       }
@@ -205,13 +210,13 @@ export const useCartStore = defineStore('cart', () => {
         status: 'danger',
       })
     }
+
+    return false
   }
 
   async function remoteAddToCart(product, quantity = 1) {
     if (!isLoggedIn.value) {
-      addToCart(product, quantity)
-
-      return true
+      return addToCart(product, quantity)
     }
 
     try {
@@ -233,7 +238,7 @@ export const useCartStore = defineStore('cart', () => {
       if (response.value.success) {
         // se si chiama il server, la quantità restituita sovrascriverà quella attuale,
         // a meno che il prodotto richiesto non sia presente nel carrello
-        updateCartQuantity(product, response.value.data.quantity, true)
+        return updateCartQuantity(product, response.value.data.quantity, true)
       } else {
         throw new Error(response)
       }
@@ -245,13 +250,13 @@ export const useCartStore = defineStore('cart', () => {
         status: 'danger',
       })
     }
+
+    return false
   }
 
   async function remoteDeleteFromCart(product) {
     if (!isLoggedIn.value) {
-      deleteFromCart(product)
-
-      return true
+      return deleteFromCart(product)
     }
 
     try {
@@ -272,7 +277,7 @@ export const useCartStore = defineStore('cart', () => {
       if (response.value.success) {
         // se si chiama il server, la quantità restituita sovrascriverà quella attuale,
         // a meno che il prodotto richiesto non sia presente nel carrello
-        deleteFromCart(product)
+        return deleteFromCart(product)
       } else {
         throw new Error(response)
       }
@@ -284,6 +289,8 @@ export const useCartStore = defineStore('cart', () => {
         status: 'danger',
       })
     }
+
+    return false
   }
 
   return {
