@@ -6,10 +6,8 @@ import { useCartStore } from '@/stores/cart';
     <SiteContainer class="u-pt-huge u-pb-huge">
       <div class="o-row">
         <SiteContainer :max-width="1060" padless>
-          <Transition name="fade" mode="out-in">
-            <CartTable v-if="count" />
-            <BaseMessage v-else>{{ $t('cart.empty') }}</BaseMessage>
-          </Transition>
+          <CartTable v-if="count" />
+          <BaseMessage v-else>{{ $t('cart.empty') }}</BaseMessage>
         </SiteContainer>
 
         <SiteContainer :max-width="520" padless>
