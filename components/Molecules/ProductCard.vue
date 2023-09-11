@@ -8,7 +8,7 @@
     />
 
     <WishlistButton
-      :product-id="product.id"
+      :product="product"
       :class="`${CSS_CLASS}__wishlist`"
     />
 

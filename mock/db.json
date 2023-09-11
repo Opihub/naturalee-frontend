@@ -211,6 +211,32 @@
           }
         ]
       }
+    },
+    {
+      "id": "wishlist",
+      "record": {
+        "id": 8,
+        "title": "La mia lista dei preferiti",
+        "link": "/wishlist",
+        "slug": "wishlist",
+        "image": "https://images.placeholders.dev/?width=1920&height=300&bgColor=%23ff5600",
+        "content": "",
+        "seo": {
+          "title": "La mia lista dei preferiti - Naturalee",
+          "ogTitle": "La mia lista dei preferiti - Naturalee"
+        },
+        "meta": {},
+        "breadcrumbs": [
+          {
+            "link": "/",
+            "title": "Home"
+          },
+          {
+            "link": "/wishlist",
+            "title": "La mia lista dei preferiti"
+          }
+        ]
+      }
     }
   ],
   "shopCategoriesProductsPages": [
@@ -643,6 +669,12 @@
           "title": "Dettagli account",
           "url": "/my-account/profile",
           "target": null
+        },
+        {
+          "id": 5,
+          "title": "La mia lista",
+          "url": "/wishlist",
+          "target": null
         }
       ]
     },
@@ -687,7 +719,7 @@
         {
           "id": 3,
           "title": "La mia lista",
-          "url": "/my-account/wishlist",
+          "url": "/wishlist",
           "target": null
         }
       ]
