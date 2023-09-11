@@ -91,6 +91,14 @@ export default defineI18nConfig(() => ({
         formTitle: 'Hai un codice sconto?',
         formPlaceholder: 'Codice promozionale',
       },
+      wishlist: {
+        added: '{name} aggiunto ai preferiti',
+        removed: '{name} rimosso dai preferiti',
+        missingProduct: 'Prodotto non trovato nei preferiti',
+        alreadyPresent: '{name} già presente nei preferiti',
+        cleared: 'La wishlist è stata svuotata',
+        empty: 'Non hai alcun prodotto nella wishlist',
+      },
     },
   },
 }))
