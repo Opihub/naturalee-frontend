@@ -36,9 +36,23 @@ export const useWishlistStore = defineStore('wishlist', () => {
   })
 
   // Actions
+  async function load() {
+    const response = await useApi('shop/wishlist/products', null, {
+      cache: false,
+    }).catch((error) => {
+      console.error(
+        'Errore durante il caricamento di "shop/wishlist/products"',
+        error
+      )
+    })
+
+    if (response.value.success) {
+      wishlist.value = response.value.data
+    }
+  }
+
   function addToWishlist(product) {
-    const { id, price, title, link, sku, unit, costDescription, image } =
-      product
+    const { id, title } = product
 
     const existingProduct = pick.value(id)
 
@@ -55,16 +69,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
       return true
     }
 
-    wishlist.value.push({
-      id,
-      price,
-      title,
-      link,
-      sku,
-      unit,
-      costDescription,
-      image,
-    })
+    wishlist.value.push(product)
 
     notify({
       message: t('wishlist.added', {
