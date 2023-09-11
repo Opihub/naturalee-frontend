@@ -21,31 +21,44 @@
     <div
       :class="{ [`${CSS_NAME}__input`]: true, 'u-mt-micro': !!slots.default }"
     >
-      <BaseInput
-        v-model="value"
-        :class="{
-          [`${CSS_NAME}__input__element`]: true,
-          'has-right-blank': type === 'password',
-        }"
-        :type="changedType"
-        :name="name"
-        v-bind="attributes"
-        @valid="hideError"
-        @invalid="showError"
-      />
+      <template v-if="type === 'select'">
+        <BaseSelect
+          v-model="value"
+          :class="`${CSS_NAME}__input__element`"
+          :type="changedType"
+          :name="name"
+          v-bind="attributes"
+          @valid="hideError"
+          @invalid="showError"
+        />
+      </template>
+      <template v-else>
+        <BaseInput
+          v-model="value"
+          :class="{
+            [`${CSS_NAME}__input__element`]: true,
+            'has-right-blank': type === 'password',
+          }"
+          :type="changedType"
+          :name="name"
+          v-bind="attributes"
+          @valid="hideError"
+          @invalid="showError"
+        />
 
-      <button
-        v-if="type === 'password'"
-        type="button"
-        :class="`${CSS_NAME}__input__toggle`"
-        @click="isPasswordVisible = !isPasswordVisible"
-      >
-        <Transition mode="out-in">
-          <NuxtIcon v-if="!isPasswordVisible" name="eye-off" />
-          <!-- Correggere in eye-on -->
-          <NuxtIcon v-else name="caret" />
-        </Transition>
-      </button>
+        <button
+          v-if="type === 'password'"
+          type="button"
+          :class="`${CSS_NAME}__input__toggle`"
+          @click="isPasswordVisible = !isPasswordVisible"
+        >
+          <Transition mode="out-in">
+            <NuxtIcon v-if="!isPasswordVisible" name="eye-off" />
+            <!-- Correggere in eye-on -->
+            <NuxtIcon v-else name="caret" />
+          </Transition>
+        </button>
+      </template>
     </div>
   </div>
 </template>
@@ -168,6 +181,8 @@ const attributes = computed(() => {
   // Senza di ciò, il campo perderebbe il pattern siccome cambierebbe in "text"
   if (props.type === 'password' && !attributes?.pattern) {
     attributes.pattern = pattern('password')
+  } else if (props.type === 'select') {
+    attributes.type = null
   }
 
   return attributes
