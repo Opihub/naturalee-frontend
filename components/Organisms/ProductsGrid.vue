@@ -134,6 +134,7 @@
 import BaseOverlay from '@/components/Atoms/BaseOverlay.vue'
 import SiteContainer from '@/components/Atoms/SiteContainer.vue'
 import { useElementVisibility, useTimeoutFn } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 // Constants
 const CSS_NAME = 'c-products-grid'
@@ -159,9 +160,11 @@ const props = defineProps({
   orderOptions: {
     type: Object,
     default() {
+      const { t } = useI18n()
+
       return {
-        asc: $t('asc'),
-        desc: $t('desc'),
+        asc: t('asc'),
+        desc: t('desc'),
       }
     },
   },
@@ -206,9 +209,13 @@ const orderby = ref(route.query.sort || null)
 watch(orderby, () => {
   updateQuery()
 })
-watch(() => chosenFilters.value, () => {
-  updateQuery()
-}, { deep: true })
+watch(
+  () => chosenFilters.value,
+  () => {
+    updateQuery()
+  },
+  { deep: true }
+)
 
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
