@@ -1,6 +1,7 @@
+import { useFetch, ref, storeToRefs } from '#imports'
 import { createResponse } from '@/server/utils/responses'
-import { useFetch, ref } from '#imports'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
+import { useAccountStore } from '@/stores/account'
 
 export async function useApi(url, options = {}, innerOptions = {}) {
   innerOptions = {
@@ -12,6 +13,9 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   }
 
   options = options || {}
+
+  const auth = useAccountStore()
+  const { token, isLoggedIn } = storeToRefs(auth)
 
   const apiUrl = (complete = false) => {
     let path = '/'
@@ -28,7 +32,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     path += paths.join('/').replaceAll(/\/+/g, '/')
 
     if (complete && options.params) {
-      path += '?' + (new URLSearchParams(options.params)).toString()
+      path += '?' + new URLSearchParams(options.params).toString()
     }
 
     return path
@@ -49,6 +53,10 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   const { data, error } = await useFetch(apiUrl(), {
     ...options,
+    headers: {
+      Authorization: isLoggedIn.value ? `Bearer ${token.value}` : '',
+      ...options?.headers,
+    },
     pick: null,
   })
 
