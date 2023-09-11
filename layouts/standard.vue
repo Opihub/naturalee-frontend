@@ -17,7 +17,7 @@
     <SiteFooter
       :class="{ 'u-mt-auto': !overrideLastElement }"
       :copyright="copyrights.data"
-      :menu="primaryMenu.data"
+      :menu="footerMenu.data"
       :socials-menu="socialsMenu.data"
       :privacy-menu="privacyMenu.data"
       payment-image="/pagamenti-sicuri.png"
@@ -76,6 +76,9 @@ const copyrights = await useApi('layout/copyright').catch((error) => {
 
 const primaryMenu = await useApi('menu/primary').catch((error) => {
   console.error('Errore durante il caricamento di "menu/primary"', error)
+})
+const footerMenu = await useApi('menu/footer').catch((error) => {
+  console.error('Errore durante il caricamento di "menu/footer"', error)
 })
 const socialsMenu = await useApi('menu/socials').catch((error) => {
   console.error('Errore durante il caricamento di "menu/socials"', error)
