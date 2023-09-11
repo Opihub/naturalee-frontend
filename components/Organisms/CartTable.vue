@@ -5,10 +5,10 @@
         <th colspan="2">
           Prodotto <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
         </th>
-        <th>Tipologia</th>
-        <th>Prezzo</th>
-        <th>Quantità / U</th>
-        <th colspan="2">Subtotale</th>
+        <th>{{ $t('cart.type') }}</th>
+        <th>{{ $t('cart.price') }}</th>
+        <th>{{ $t('cart.qty') }}</th>
+        <th colspan="2">{{ $t('cart.subTotals') }}</th>
       </tr>
     </template>
 
@@ -49,7 +49,7 @@
         </tr>
       </template>
       <tr v-else>
-        <td colspan="7">carrello vuoto</td>
+        <td colspan="7">{{ $t('cart.clear') }}</td>
       </tr>
     </template>
     <template #footer>
@@ -58,9 +58,9 @@
           <!-- <BaseButton class="u-mr-half" color="green" @click="clearCart"
             >Aggiorna il carrello</BaseButton
           > -->
-          <BaseButton color="green" @click="clearCart"
-            >Svuota carrello</BaseButton
-          >
+          <BaseButton color="green" @click="clearCart">{{
+            $t('cart.clearCart')
+          }}</BaseButton>
         </td>
       </tr>
     </template>
@@ -195,9 +195,9 @@ $prefix: 'cart-table';
         @include typography(20px, 24px);
       }
 
-    @include object('cross') {
-      display: block;
-    }
+      @include object('cross') {
+        display: block;
+      }
     }
   }
 }

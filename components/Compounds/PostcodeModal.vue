@@ -4,7 +4,7 @@
       <BaseHeading
         tag="span"
         :class="[`${CSS_NAME}__heading`, `${CSS_NAME}__heading--header`]"
-        >Verifica se il tuo indirizzo è coperto dal servizio</BaseHeading
+        >{{ $t('shipping.checkPostCode') }}</BaseHeading
       >
     </template>
 
@@ -18,30 +18,30 @@
         <InputField
           v-model="formData.postcode"
           name="postcode"
-          error="CAP non valido"
+          :error="$t('shipping.invalidPostCode')"
           pattern="\d{5}"
           error-after
           rounded
           required
-          >CAP</InputField
+          >{{ $t('shipping.cap') }}</InputField
         >
 
         <InputField
           v-model="formData.address"
           :class="`${CSS_NAME}__form__address`"
           name="address"
-          error="L'indirizzo di consegna è obbligatorio"
+          :error="$t('shipping.shippingAddressRequired')"
           error-after
           rounded
           required
-          >Indirizzo di consegna</InputField
+          >{{ $t('shipping.shippingAddress') }}</InputField
         >
 
         <BaseButton
           :disabled="sending"
           color="green"
           type="submit"
-          text="Verifica indirizzo"
+          :text="$('shipping.checkAddress')"
         />
       </form>
 
@@ -61,11 +61,13 @@
         </div>
 
         <div v-if="matchedPostcode || savedEmail" :class="`${CSS_NAME}__user`">
-          <BaseButton as="link" to="/my-account?login" color="green">Accedi</BaseButton>
+          <BaseButton as="link" to="/my-account?login" color="green">{{
+            $t('form.login')
+          }}</BaseButton>
           oppure
-          <BaseButton as="link" to="/my-account?register" color="green"
-            >Registrati</BaseButton
-          >
+          <BaseButton as="link" to="/my-account?register" color="green">{{
+            $t('form.singUp')
+          }}</BaseButton>
         </div>
         <form
           v-else
@@ -77,17 +79,17 @@
             v-model="formData.email"
             name="email"
             type="email"
-            error="Inserisci un indirizzo e-mail valido"
+            :error="$t('form.validEmail')"
             rounded
             required
-            >Indirizzo e-mail</InputField
+            >{{ $t('form.toMailAddress') }}</InputField
           >
 
           <BaseButton
             :disabled="sending"
             color="green"
             type="submit"
-            text="Notificami"
+            :text="$t('form.Notify')"
           />
         </form>
         <Transition name="fade">
@@ -95,13 +97,13 @@
             <BaseHeading
               tag="h4"
               :class="`${CSS_NAME}__heading`"
-              text="Oh, no!"
+              :text="$t('form.errorMessage1')"
             />
 
             <BaseParagraph
               v-if="feedbackMessage"
               class="u-mb-micro"
-              text="È avvenuto un errore durante il salvataggio… Riprova ad inviare il form"
+              :text="$t('form.errorMessage2')"
             />
           </BaseMessage>
         </Transition>

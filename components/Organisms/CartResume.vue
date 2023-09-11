@@ -7,12 +7,15 @@
     <div :class="[`${CSS_NAME}__coupon`, `${CSS_NAME}__block`]"></div>
 
     <div :class="`${CSS_NAME}__body`">
-      <span>Subtotale</span>
+      <span>{{ $t('cart.subTotals') }}</span>
       <PriceHolder :price="subTotals" />
 
-      <span>Spedizione</span>
+      <span>{{ $t('cart.shipping') }}</span>
       <div :class="`${CSS_NAME}__shipping`">
-        <div v-if="shippingMethods.length" :class="[`${CSS_NAME}__shipping__method`, 'u-mb-half']">
+        <div
+          v-if="shippingMethods.length"
+          :class="[`${CSS_NAME}__shipping__method`, 'u-mb-half']"
+        >
           <ToggleField
             v-for="method in shippingMethods"
             :key="method.id"
@@ -26,12 +29,12 @@
         </div>
 
         <div>
-          <span>Spedizione a <b>MILANO</b></span>
+          <span>{{ $t('cart.shippingTo', { city: 'milano' }) }}</span>
           <button class=""></button>
         </div>
       </div>
 
-      <span :class="`${CSS_NAME}__body__totals`">Totale</span>
+      <span :class="`${CSS_NAME}__body__totals`">{{ $t('cart.totals') }}</span>
       <PriceHolder
         :class="[
           `${CSS_NAME}__body__totals`,
@@ -42,9 +45,9 @@
     </div>
 
     <div :class="[`${CSS_NAME}__footer`, `${CSS_NAME}__block`]">
-      <BaseButton color="green" @click="$emit('confirm')"
-        >Procedi con l'ordine</BaseButton
-      >
+      <BaseButton color="green" @click="$emit('confirm')">{{
+        $t('cart.proceed')
+      }}</BaseButton>
     </div>
   </ReceiptBlock>
 </template>

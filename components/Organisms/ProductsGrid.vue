@@ -16,7 +16,7 @@
               type="button"
               @click="toggleOverlay(true)"
             >
-              Filtra
+              {{ $t('filter') }}
             </button>
 
             <Transition name="fade">
@@ -31,7 +31,7 @@
                   <template #before>
                     <div :class="`${CSS_NAME_OVERLAY}__header`">
                       <span>{{ selectedFiltersMessage }}</span>
-                      <u @click="clearFilters">Azzera</u>
+                      <u @click="clearFilters">{{ $t('clearFilters') }}</u>
                     </div>
                   </template>
 
@@ -59,7 +59,7 @@
                         color="transparent"
                         scope="filter"
                         @click="toggleOverlay(false)"
-                        >Applica
+                        >{{ $t('apply') }}
                       </BaseButton>
                     </div>
                   </template>
@@ -160,8 +160,8 @@ const props = defineProps({
     type: Object,
     default() {
       return {
-        asc: 'Prezzo crescente',
-        desc: 'Prezzo decrescente',
+        asc: $t('asc'),
+        desc: $t('desc'),
       }
     },
   },

@@ -3,16 +3,18 @@
     <legend><slot /></legend>
 
     <fieldset>
-      <InputField v-model="user.firstName" type="text" name="firstName"
-        >Nome</InputField
-      >
-      <InputField v-model="user.lastName" type="text" name="lastName"
-        >Cognome</InputField
-      >
-      <InputField v-model="user.age" type="number" :min="0">Età</InputField>
+      <InputField v-model="user.firstName" type="text" name="firstName">{{
+        $t('form.name')
+      }}</InputField>
+      <InputField v-model="user.lastName" type="text" name="lastName">{{
+        $t('form.surname')
+      }}</InputField>
+      <InputField v-model="user.age" type="number" :min="0">{{
+        $t('form.age')
+      }}</InputField>
     </fieldset>
 
-    <BaseButton type="submit">Invia</BaseButton>
+    <BaseButton type="submit">{{ $t('form.submit') }}</BaseButton>
   </form>
 </template>
 

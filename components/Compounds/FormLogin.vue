@@ -1,22 +1,26 @@
 <template>
   <form :class="CSS_NAME" method="POST" @submit.prevent="login">
     <slot name="header">
-      <BaseHeading class="u-mb-small" tag="h3">Accedi</BaseHeading>
+      <BaseHeading class="u-mb-small" tag="h3">{{
+        $t('form.login')
+      }}</BaseHeading>
     </slot>
 
     <InputField v-model="formData.user" class="u-mb-half" type="text" required>
-      Nome utente o indirizzo email *</InputField
+      {{ $t('form.userField') }}</InputField
     >
     <InputField
       v-model="formData.password"
       class="u-mb-tiny"
       type="password"
       required
-      >Password *</InputField
+      >{{ $t('form.passwordField') }}</InputField
     >
 
     <div class="o-row s-remember-me">
-      <ToggleField v-model="formData.remember"> Ricordami </ToggleField>
+      <ToggleField v-model="formData.remember">
+        {{ $t('form.remember') }}
+      </ToggleField>
 
       <slot name="forgotLink" />
     </div>
@@ -26,7 +30,7 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >Accedi</BaseButton
+      >{{ $t('form.login') }}</BaseButton
     >
   </form>
 </template>

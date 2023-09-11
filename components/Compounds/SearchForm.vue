@@ -23,7 +23,7 @@
       color="yellow"
       svg="search"
       :svg-size="svgSize"
-      >Cerca</BaseButton
+      >{{ $t('search') }}</BaseButton
     >
   </form>
 
