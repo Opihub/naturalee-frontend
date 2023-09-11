@@ -38,6 +38,7 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
+import { useCartStore } from '@/stores/cart'
 
 // Constants
 const CSS_NAME = 'c-login-form'
@@ -56,6 +57,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Composables
 const { sending, send } = useSender(emit)
 const store = useAccountStore()
+const cart = useCartStore()
 
 // Data
 const formData = reactive({
@@ -77,7 +79,7 @@ const login = async () => {
   const response = await send(async () => await store.signUp(formData))
 
   if (response.value.success) {
-    // TODO: cambiare layout?
+    cart.load()
   }
 }
 </script>

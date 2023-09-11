@@ -4,45 +4,20 @@
       <BaseHeading tag="span" use="custom">Totale carrello</BaseHeading>
     </div>
 
-    <div :class="[`${CSS_NAME}__coupon`, `${CSS_NAME}__block`]"></div>
-
-    <div :class="`${CSS_NAME}__body`">
-      <span>{{ $t('cart.subTotals') }}</span>
-      <PriceHolder :price="subTotals" />
-
-      <span>{{ $t('cart.shipping') }}</span>
-      <div :class="`${CSS_NAME}__shipping`">
-        <div
-          v-if="shippingMethods.length"
-          :class="[`${CSS_NAME}__shipping__method`, 'u-mb-half']"
-        >
-          <ToggleField
-            v-for="method in shippingMethods"
-            :key="method.id"
-            radio
-            class="u-mb-tiny"
-            :value="method.id"
-            :model-value="selectedShippingMethods === method.id"
-            @update:model-value="selectedShippingMethods = method.id"
-            >{{ method.title }}</ToggleField
-          >
-        </div>
-
-        <div>
-          <span>{{ $t('cart.shippingTo', { city: 'milano' }) }}</span>
-          <button class=""></button>
-        </div>
-      </div>
-
-      <span :class="`${CSS_NAME}__body__totals`">{{ $t('cart.totals') }}</span>
-      <PriceHolder
-        :class="[
-          `${CSS_NAME}__body__totals`,
-          `${CSS_NAME}__body__totals--price`,
-        ]"
-        :price="subTotals"
+    <div :class="[`${CSS_NAME}__coupon`, `${CSS_NAME}__block`]">
+      <span>{{ $t('coupon.formTitle') }}</span>
+      <FormCoupon
+        class="u-mt-mini"
+        :placeholder="$t('coupon.formPlaceholder')"
       />
     </div>
+
+    <TotalsRecap
+      class="u-pt-half u-pb-half"
+      :class="`${CSS_NAME}__body`"
+      :sub-totals="subTotals"
+      :total-class-name="`${CSS_NAME}__body__totals`"
+    />
 
     <div :class="[`${CSS_NAME}__footer`, `${CSS_NAME}__block`]">
       <BaseButton color="green" @click="$emit('confirm')">{{
@@ -69,19 +44,6 @@ const store = useCartStore()
 
 // Data
 const { subTotals } = storeToRefs(store)
-const shippingMethods = ref([
-  {
-    id: 'free',
-    title: 'Spedizione gratuita',
-    price: 0,
-  },
-  {
-    id: 'pick-up',
-    title: 'Ritiro in sede',
-    price: 0,
-  },
-])
-const selectedShippingMethods = ref(shippingMethods.value[0].id)
 
 // Watcher
 
@@ -101,6 +63,8 @@ $prefix: 'cart-resume';
   );
 
   font-family: get-var(family-text);
+  font-weight: get-var(weight-regular);
+  @include typography(18px, 28px);
 
   @include element('block') {
     padding: rem(20px) get-var(padding, $prefix: $prefix);
@@ -134,13 +98,6 @@ $prefix: 'cart-resume';
         offset-top: rem(4px),
       )
     );
-
-    padding: rem(20px) 0;
-    display: grid;
-    gap: rem(20px);
-    grid-template-columns: 1fr auto;
-    font-weight: get-var(weight-regular);
-    @include typography(18px, 28px);
 
     & > * {
       &:nth-child(even) {

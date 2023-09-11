@@ -5,16 +5,17 @@ import { useCartStore } from '@/stores/cart';
 
     <SiteContainer class="u-pt-huge u-pb-huge">
       <div class="o-row">
-        <SiteContainer :max-width="1060" padless>
-          <Transition name="fade" mode="out-in">
-            <CartTable v-if="count" />
-            <BaseMessage v-else>{{ $t('cart.empty') }}</BaseMessage>
-          </Transition>
-        </SiteContainer>
+        <template v-if="!isEmpty">
+          <SiteContainer :max-width="1060" padless>
+            <CartTable />
+          </SiteContainer>
 
-        <SiteContainer :max-width="520" padless>
-          <CartResume />
-        </SiteContainer>
+          <SiteContainer :max-width="520" padless>
+            <CartResume />
+          </SiteContainer>
+        </template>
+
+        <BaseMessage v-else :message="$t('cart.empty')" />
       </div>
     </SiteContainer>
   </main>
@@ -22,7 +23,7 @@ import { useCartStore } from '@/stores/cart';
 
 <script setup>
 // Imports
-import { useCartStore } from '@/stores/cart';
+import { useCartStore } from '@/stores/cart'
 
 // Constants
 
@@ -35,7 +36,7 @@ const { page } = await usePage('cart')
 const store = useCartStore()
 
 // Data
-const { count } = storeToRefs(store)
+const { isEmpty } = storeToRefs(store)
 
 // Watcher
 

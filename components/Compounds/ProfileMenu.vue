@@ -65,7 +65,7 @@ const { account } = storeToRefs(store)
 
 // Methods
 const quit = async () => {
-  logout()
+  await logout()
 
   await navigateTo({
     path: '/',

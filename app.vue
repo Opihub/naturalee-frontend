@@ -5,17 +5,19 @@
     <NuxtPage />
   </NuxtLayout>
 
-  <TransitionGroup id="notifications" name="fade" tag="div">
-    <template v-if="notifications.length">
-      <BaseNotification
-        v-for="(notification, index) in notifications"
-        :id="notification.id"
-        :key="index"
-        :status="notification.status"
-        >{{ notification.message }}</BaseNotification
-      >
-    </template>
-  </TransitionGroup>
+  <ClientOnly>
+    <TransitionGroup id="notifications" name="fade" tag="div">
+      <template v-if="notifications.length">
+        <BaseNotification
+          v-for="(notification, index) in notifications"
+          :id="notification.id"
+          :key="index"
+          :status="notification.status"
+          >{{ notification.message }}</BaseNotification
+        >
+      </template>
+    </TransitionGroup>
+  </ClientOnly>
 </template>
 
 <script setup>
