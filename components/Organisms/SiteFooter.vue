@@ -3,7 +3,7 @@
     <SiteContainer :class="CSS_NAME_NAVIGATION">
       <div :class="[`${CSS_NAME_NAVIGATION}__links`, `${CSS_NAME}__left`]">
         <SiteLogo :alt="true" />
-        <InlineMenu gap="mini" :menu="socialsMenu" />
+        <InlineMenu :menu="socialsMenu" />
       </div>
 
       <InlineMenu :menu="menu" :class="`${CSS_NAME_NAVIGATION}__menu`" />
@@ -135,6 +135,18 @@ $prefix: 'footer';
 
   @include element('left') {
     justify-self: start;
+
+    svg {
+      fill: currentColor;
+
+      @include set-local-vars(
+        $prefix: 'link-svg',
+        $map: (
+          width: auto,
+          height: rem(24px),
+        )
+      );
+    }
   }
 
   @include element('right') {
