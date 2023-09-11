@@ -41,7 +41,7 @@
           :disabled="sending"
           color="green"
           type="submit"
-          :text="$('shipping.checkAddress')"
+          :text="$t('shipping.checkAddress')"
         />
       </form>
 
