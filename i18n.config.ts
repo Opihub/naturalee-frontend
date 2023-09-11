@@ -36,7 +36,7 @@ export default defineI18nConfig(() => ({
         mailField: 'Indirizzo email *',
         passwordField: 'Password *',
         login: 'Accedi',
-        singUp: 'Registrati',
+        signUp: 'Registrati',
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',

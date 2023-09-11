@@ -66,7 +66,7 @@
           }}</BaseButton>
           oppure
           <BaseButton as="link" to="/my-account?register" color="green">{{
-            $t('form.singUp')
+            $t('form.signUp')
           }}</BaseButton>
         </div>
         <form

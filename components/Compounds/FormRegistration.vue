@@ -2,7 +2,7 @@
   <form :class="CSS_NAME" method="POST" @submit.prevent="register">
     <slot name="header">
       <BaseHeading class="u-mb-small" tag="h3">{{
-        $t('form.singUp')
+        $t('form.signUp')
       }}</BaseHeading>
     </slot>
 
@@ -37,7 +37,7 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >{{ $t('form.singUp') }}</BaseButton
+      >{{ $t('form.signUp') }}</BaseButton
     >
   </form>
 </template>
