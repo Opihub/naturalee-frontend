@@ -25,7 +25,7 @@
             underline
             :class="`${CSS_NAME}__logout`"
             @click.prevent="quit"
-            >Esci</BaseLink
+            >{{ $t('form.logout') }}</BaseLink
           >
         </li>
       </template>

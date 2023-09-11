@@ -18,7 +18,7 @@
               color="dark"
               underline
               @click.prevent="toggleLoginForm(true)"
-              >Hai dimenticato la password?</BaseLink
+              >{{ $t('form.forgetPassw') }}</BaseLink
             >
           </template>
         </FormLogin>
@@ -34,7 +34,7 @@
               color="dark"
               underline
               @click.prevent="toggleLoginForm(false)"
-              >Oppure torna al login</BaseLink
+              >{{ $t('form.returnToLogin') }}</BaseLink
             >
           </template>
         </FormPasswordRecovery>

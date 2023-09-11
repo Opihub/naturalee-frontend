@@ -1,16 +1,17 @@
 <template>
   <form :class="CSS_NAME" method="POST" @submit.prevent="passwordRecovery">
     <slot name="header">
-      <BaseHeading class="u-mb-small" tag="h3">Recupera password</BaseHeading>
+      <BaseHeading class="u-mb-small" tag="h3">{{
+        $t('form.passwordRecovery')
+      }}</BaseHeading>
     </slot>
 
-    <BaseParagraph class="u-mb-small"
-      >Hai perso la password? Inserisci il tuo nome utente o l'indirizzo email.
-      Riceverai tramite email un link per generarne una nuova.</BaseParagraph
-    >
+    <BaseParagraph class="u-mb-small">{{
+      $t('form.passwordRecoveryMsg')
+    }}</BaseParagraph>
 
     <InputField v-model="formData.user" class="u-mb-tiny" type="text" required>
-      Nome utente o indirizzo email *</InputField
+      {{ $t('form.userField') }}</InputField
     >
 
     <slot name="profileLink" />
@@ -20,20 +21,33 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >Recupera password</BaseButton
+      >{{ $t('form.passwordRecovery') }}</BaseButton
     >
     <BaseMessage v-if="sent">
       <template v-if="success">
-        Abbiamo inviato una mail
+        <!-- Abbiamo inviato una mail
         {{
           isEmail ? "all'indirizzo email" : "all'indirizzo email dell'utente"
         }}
-        <b>{{ user }}</b> con il link per recuperare la password.
+        <b>{{ user }}</b> con il link per recuperare la password. -->
+        {{
+          //TODO: fare check se funzionare
+          $t('form.passwordRecoveryMsgSent', {
+            is_Email: isEmail ? $t('form.toEmail') : $t('form.toUserEmail'),
+            userParam: user,
+          })
+        }}
       </template>
       <template v-else>
-        Ci dispiace, ma non abbiamo trovato alcun utente con
+        <!-- Ci dispiace, ma non abbiamo trovato alcun utente con
         {{ isEmail ? 'indirizzo email' : "l'username" }}
-        <b>{{ user }}</b>
+        <b>{{ user }}</b> -->
+        {{
+          $t('form.noUserFound', {
+            is_Email: isEmail ? $t('form.toMailAddress') : $t('form.toUser'),
+            userParam: user,
+          })
+        }}
       </template>
     </BaseMessage>
   </form>
@@ -49,8 +63,8 @@ const CSS_NAME = 'c-password-recovery-form'
 defineProps({
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 const emit = defineEmits(['api:start', 'api:end'])
 

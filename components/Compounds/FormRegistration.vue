@@ -1,24 +1,34 @@
 <template>
   <form :class="CSS_NAME" method="POST" @submit.prevent="register">
     <slot name="header">
-      <BaseHeading class="u-mb-small" tag="h3">Registrati</BaseHeading>
+      <BaseHeading class="u-mb-small" tag="h3">{{
+        $t('form.singUp')
+      }}</BaseHeading>
     </slot>
 
-    <InputField v-model="formData.email" class="u-mb-half" type="email" required
-      >Indirizzo email *</InputField
+    <InputField
+      v-model="formData.email"
+      class="u-mb-half"
+      type="email"
+      required
+      >{{ $t('form.mailField') }}</InputField
     >
     <InputField
       v-model="formData.password"
       class="u-mb-tiny"
       type="password"
       required
-      >Password *</InputField
+      >{{ $t('form.passwordField') }}</InputField
     >
 
     <ToggleField v-model="formData.acceptance" required>
-      Acconsento al
-      <BaseLink to="/term-and-conditions" color="dark" underline target="_blank"
-        >trattamento dei miei dati personali</BaseLink
+      {{ $t('form.consentTo') }}
+      <BaseLink
+        to="/term-and-conditions"
+        color="dark"
+        underline
+        target="_blank"
+        >{{ $t('form.acceptance') }}</BaseLink
       >
     </ToggleField>
 
@@ -27,7 +37,7 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >Registrati</BaseButton
+      >{{ $t('form.singUp') }}</BaseButton
     >
   </form>
 </template>

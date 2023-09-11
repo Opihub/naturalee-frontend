@@ -40,9 +40,9 @@
             product.title
           }}</span>
         </span>
-        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`"
-          >Cod. {{ product.sku }}</span
-        >
+        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">{{
+          $t('cart.productCode', { sku: product.sku })
+        }}</span>
 
         <PriceHolder
           :class="`${CSS_NAME_LIST_PRODUCT}__price`"
@@ -53,17 +53,17 @@
 
     <div v-if="cart.length" :class="CSS_NAME_TOTALS">
       <dl :class="`${CSS_NAME_TOTALS}__calculation`">
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
-          >Spese di consegna</span
-        >
+        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+          $t('cart.shippingCost')
+        }}</span>
         <PriceHolder
           :class="`${CSS_NAME_TOTALS_CALCULATION}__price`"
           :price="shippingCost"
         />
 
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
-          >Totale dell'ordine</span
-        >
+        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+          $t('cart.orderTotal')
+        }}</span>
         <PriceHolder
           :class="[
             `${CSS_NAME_TOTALS_CALCULATION}__price`,
@@ -72,20 +72,20 @@
           :price="totals"
         >
           <template #after>
-            <small>IVA Inc</small>
+            <small>{{ $t('cart.fee') }}</small>
           </template>
         </PriceHolder>
       </dl>
 
-      <BaseButton :class="`${CSS_NAME}__submit`" color="green"
-        >Procedere con l'ordine</BaseButton
-      >
+      <BaseButton :class="`${CSS_NAME}__submit`" color="green">{{
+        $t('cart.proceed')
+      }}</BaseButton>
       <BaseLink
         :class="`${CSS_NAME}__review`"
         to="/cart"
         :underline="true"
         color="dark"
-        >Vai al carrello</BaseLink
+        >{{ $t('cart.goToCart') }}</BaseLink
       >
     </div>
   </PopupContainer>
