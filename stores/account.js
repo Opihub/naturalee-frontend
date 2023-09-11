@@ -78,7 +78,6 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function login(profile) {
-
     // TODO: verificare coi dati reali
     const user = { ...profile }
 

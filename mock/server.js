@@ -274,6 +274,7 @@ server.use(
     '/layout/topbar': '/topbar',
     '/layout/copyright': '/copyright',
     '/shop/homepage/products': '/shopHomepageProducts',
+    '/shop/wishlist/products': '/shopCartProducts',
     '/shop/cart/products': '/shopCartProducts',
     '/shop/search/products': '/shopCategoriesPages/verdura/products',
     '/shop/featured/products': '/shopHomepageProducts',

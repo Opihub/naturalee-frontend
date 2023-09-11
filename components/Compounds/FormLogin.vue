@@ -39,6 +39,7 @@
 // Imports
 import { useAccountStore } from '@/stores/account'
 import { useCartStore } from '@/stores/cart'
+import { useWishlistStore } from '@/stores/wishlist'
 
 // Constants
 const CSS_NAME = 'c-login-form'
@@ -58,6 +59,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 const { sending, send } = useSender(emit)
 const store = useAccountStore()
 const cart = useCartStore()
+const wishlist = useWishlistStore()
 
 // Data
 const formData = reactive({
@@ -80,6 +82,7 @@ const login = async () => {
 
   if (response.value.success) {
     cart.load()
+    wishlist.load()
   }
 }
 </script>

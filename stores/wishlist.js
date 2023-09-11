@@ -238,6 +238,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     isEmpty,
     has: pick,
     pick,
+    load,
     add: remoteAddToWishlist,
     remove: remoteRemoveFromWishlist,
     clear: remoteClearWishlist,
