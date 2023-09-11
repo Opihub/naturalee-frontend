@@ -21,6 +21,11 @@ export default defineI18nConfig(() => ({
         formTitle: 'Hai un codice sconto?',
         formPlaceholder: 'Codice promozionale',
       },
+      shipping: {
+        city: 'Città',
+        province: 'Provincia',
+        postcode: 'CAP',
+      },
     },
   },
 }))

@@ -33,6 +33,10 @@ export const useCartStore = defineStore('cart', () => {
     return cart.value?.length || 0
   })
 
+  const isEmpty = computed(() => {
+    return count.value <= 0
+  })
+
   const subTotals = computed(() => {
     return cart.value.reduce((accumulator, product) => {
       accumulator += product.quantity * product.price
@@ -308,6 +312,7 @@ export const useCartStore = defineStore('cart', () => {
   return {
     cart: skipHydrate(cart),
     shippingCost: skipHydrate(shippingCost),
+    isEmpty,
     count,
     totals,
     subTotals,

@@ -98,6 +98,37 @@ server.post('/v1/postcodes/validate', (request, response) => {
   response.jsonp(createResponse(statusCode, data))
 })
 
+server.post('/v1/shop/checkout/validate/shipping', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = []
+
+  if (
+    !body.city ||
+    !body.country ||
+    !body.state ||
+    !body.postcode ||
+    isNaN(body.postcode)
+  ) {
+    statusCode = 403
+  } else {
+    data = [
+      {
+        id: 'free',
+        title: 'Spedizione gratuita',
+        price: 0,
+      },
+      {
+        id: 'pick-up',
+        title: 'Ritiro in sede',
+        price: 0,
+      },
+    ]
+  }
+
+  response.jsonp(createResponse(statusCode, data))
+})
+
 server.post('/v1/auth/login', (request, response) => {
   const { body } = request
   let { statusCode } = response
