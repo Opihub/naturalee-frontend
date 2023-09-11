@@ -140,7 +140,7 @@ import { useI18n } from 'vue-i18n'
 const CSS_NAME = 'c-products-grid'
 const CSS_NAME_OVERLAY = `${CSS_NAME}__overlay`
 const CSS_NAME_ACTION = `${CSS_NAME}__action`
-const DEFAULT_LIMIT = 2
+const DEFAULT_LIMIT = 12
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
