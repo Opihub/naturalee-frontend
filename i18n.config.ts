@@ -50,6 +50,7 @@ export default defineI18nConfig(() => ({
         submit: 'Invia',
         name: 'Nome',
         surname: 'Cognome',
+        displayName: 'Nome Visualizzato *',
         age: 'Età',
         forgetPassw: 'Hai dimenticato la password?',
         passwordRecoveryMsg:
@@ -72,6 +73,12 @@ export default defineI18nConfig(() => ({
           'È avvenuto un errore durante il salvataggio… Riprova ad inviare il form',
         errorMessage3: 'Oh, no!',
         returnToLogin: 'Oppure torna al login',
+        saveChanges: 'Salva le modifiche',
+        displayNameMsg: 'Questo è il modo in cui il tuo nome verrà visualizzato nella sezione dell\'account e nelle recensioni',
+        oldPassw: 'Password attuale (lascia in bianco per non modificare)',
+        newPassw: 'Nuova password (lascia in bianco per non modificare)',
+        newPasswCheck: 'Conferma nuova password',
+        updatePassw: 'Modifica password',
       },
       shipping: {
         checkPostCode: 'Verifica se il tuo indirizzo è coperto dal servizio',
@@ -90,6 +97,14 @@ export default defineI18nConfig(() => ({
       coupon: {
         formTitle: 'Hai un codice sconto?',
         formPlaceholder: 'Codice promozionale',
+      },
+      wishlist: {
+        added: '{name} aggiunto ai preferiti',
+        removed: '{name} rimosso dai preferiti',
+        missingProduct: 'Prodotto non trovato nei preferiti',
+        alreadyPresent: '{name} già presente nei preferiti',
+        cleared: 'La wishlist è stata svuotata',
+        empty: 'Non hai alcun prodotto nella wishlist',
       },
     },
   },

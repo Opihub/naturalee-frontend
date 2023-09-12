@@ -116,7 +116,7 @@
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
 
-      <span v-if="isFetching" ref="loader" :class="`${CSS_NAME}__loader`"
+      <span v-if="showLoader" ref="loader" :class="`${CSS_NAME}__loader`"
         >Caricamento</span
       >
       <!-- <BaseButton
@@ -140,6 +140,7 @@ import { useI18n } from 'vue-i18n'
 const CSS_NAME = 'c-products-grid'
 const CSS_NAME_OVERLAY = `${CSS_NAME}__overlay`
 const CSS_NAME_ACTION = `${CSS_NAME}__action`
+const DEFAULT_LIMIT = 12
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
@@ -170,7 +171,13 @@ const props = defineProps({
   },
   from: {
     type: String,
-    required: true,
+    default: null,
+  },
+  use: {
+    type: Array,
+    default() {
+      return []
+    },
   },
 })
 
@@ -235,6 +242,17 @@ watch(
 )
 
 // Computed
+const showLoader = computed(() => {
+  if (isFetching.value) {
+    return true
+  }
+
+  if (props.use) {
+    return products.value.length < props.use.length
+  }
+
+  return false
+})
 
 // Methods
 const resetParams = () => {
@@ -295,6 +313,34 @@ const toggleOverlay = (status = null) => {
 }
 
 const fetchProducts = async () => {
+  if (!props.from) {
+    if (!props.use) {
+      noProductsMessage.value =
+        'È avvenuto un errore durante il caricamento dei prodotti. Ci scusiamo per il disagio'
+      return
+    }
+
+    let last = false
+    const records = props.use.slice(
+      page.value * DEFAULT_LIMIT,
+      (page.value + 1) * DEFAULT_LIMIT
+    )
+
+    page.value += 1
+
+    products.value = [...products.value, ...records]
+
+    if (records.length < DEFAULT_LIMIT) {
+      last = true
+    }
+
+    if (last) {
+      stopLazyLoad()
+    }
+
+    return
+  }
+
   if (!canFetch.value) {
     return
   }
@@ -307,7 +353,7 @@ const fetchProducts = async () => {
 
   try {
     const params = {
-      limit: 12,
+      limit: DEFAULT_LIMIT,
     }
 
     if (page.value > 0) {

@@ -178,10 +178,6 @@ server.post('/v1/auth/password-recovery', (request, response) => {
   response.status(statusCode).jsonp(createResponse(statusCode, data))
 })
 
-server.get('/v1/shop/cart/clear', (request, response) => {
-  response.jsonp(createResponse(200, true))
-})
-
 server.post('/v1/shop/cart/add', (request, response) => {
   const { body } = request
   let { statusCode } = response
@@ -219,9 +215,53 @@ server.delete('/v1/shop/cart/remove', (request, response) => {
   response.status(statusCode).jsonp(createResponse(statusCode, data))
 })
 
+server.get('/v1/shop/cart/clear', (request, response) => {
+  response.jsonp(createResponse(200, true))
+})
+
 server.post('/v1/shop/cart/update', (request, response) => {
   response.jsonp(createResponse(200, true))
 })
+
+server.post('/v1/shop/wishlist/add', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+
+  const { id } = body
+
+  if (!id) {
+    statusCode = 403
+  } else {
+    data = {
+      id,
+      variationId: id,
+    }
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.delete('/v1/shop/wishlist/remove', (request, response) => {
+  const { body } = request
+  let { statusCode } = response
+  let data = false
+
+  const { id } = body
+
+  if (!id) {
+    statusCode = 403
+  } else {
+    data = true
+  }
+
+  response.status(statusCode).jsonp(createResponse(statusCode, data))
+})
+
+server.get('/v1/shop/wishlist/clear', (request, response) => {
+  response.jsonp(createResponse(200, true))
+})
+
 
 // server.use('/api', router)
 server.use(
@@ -234,6 +274,7 @@ server.use(
     '/layout/topbar': '/topbar',
     '/layout/copyright': '/copyright',
     '/shop/homepage/products': '/shopHomepageProducts',
+    '/shop/wishlist/products': '/shopCartProducts',
     '/shop/cart/products': '/shopCartProducts',
     '/shop/search/products': '/shopCategoriesPages/verdura/products',
     '/shop/featured/products': '/shopHomepageProducts',

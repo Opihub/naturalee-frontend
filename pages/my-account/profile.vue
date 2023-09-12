@@ -1,6 +1,6 @@
 <template>
   <section>
-    {{ account }}
+    <FormUpdateUserDetails :userData="account" />
   </section>
 </template>
 
@@ -19,7 +19,6 @@ const store = useAccountStore()
 
 // Data
 const { account } = storeToRefs(store)
-
 // Watcher
 
 // Computed
