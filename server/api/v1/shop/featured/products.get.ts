@@ -1,14 +1,10 @@
 import { useRemoteApi } from '@/server/utils/remoteApi'
 
 export default defineEventHandler(async (event) => {
-  const params = getQuery(event)
-
   try {
-    const response = await useRemoteApi(`/v1/shop/featured/products`, {
-      params,
-    })
+    const response = await useRemoteApi(event, '/v1/shop/featured/products')
 
-    return createPaginatedResponse(response)
+    return createResponse(response)
   } catch (error) {
     console.error(error)
     return createErrorResponse(error)

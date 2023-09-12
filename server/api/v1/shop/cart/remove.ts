@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/shop/cart/remove', {
+    const response = await useRemoteApi(event, '/v1/shop/cart/remove', {
       method: 'DELETE',
       body,
     })

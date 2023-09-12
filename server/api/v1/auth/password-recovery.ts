@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/auth/password-recovery', {
+    const response = await useRemoteApi(event, '/v1/auth/password-recovery', {
       method: 'POST',
       body,
     })

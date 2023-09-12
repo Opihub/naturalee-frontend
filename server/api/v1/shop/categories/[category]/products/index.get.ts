@@ -15,9 +15,12 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi(`/v1/shop/categories/${category}/products`)
+    const response = await useRemoteApi(
+      event,
+      `/v1/shop/categories/${category}/products`
+    )
 
-    return createPaginatedResponse(response)
+    return createResponse(response)
   } catch (error) {
     console.error(error)
     return createErrorResponse(error)

@@ -15,11 +15,9 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi(`/v1/shop/search/products`, {
-      params,
-    })
+    const response = await useRemoteApi(event, '/v1/shop/search/products')
 
-    return createPaginatedResponse(response)
+    return createResponse(response)
   } catch (error) {
     console.error(error)
     return createErrorResponse(error)
