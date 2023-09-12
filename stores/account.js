@@ -93,6 +93,14 @@ export const useAccountStore = defineStore('account', () => {
     token.value = null
   }
 
+  function updateUser(profile) {
+    delete profile.oldPassword
+    delete profile.newPassword
+    delete profile.newPasswordCheck
+    const user = { ...profile }
+    account.value = user
+  }
+
   return {
     token: skipHydrate(token),
     account: skipHydrate(account),
@@ -102,6 +110,7 @@ export const useAccountStore = defineStore('account', () => {
     signUp,
     login,
     logout,
+    updateUser,
   }
 })
 
