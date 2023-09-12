@@ -136,9 +136,9 @@ server.post('/v1/auth/login', (request, response) => {
   const { profile } = DB
 
   if (
-    !body.user ||
+    !body.username ||
     !body.password ||
-    ![profile.email, profile.username].includes(body.user)
+    ![profile.email, profile.username].includes(body.username)
   ) {
     statusCode = 403
   } else {
