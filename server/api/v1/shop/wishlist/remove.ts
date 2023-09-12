@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/shop/wishlist/remove', {
+    const response = await useRemoteApi(event, '/v1/shop/wishlist/remove', {
       method: 'DELETE',
       body,
     })

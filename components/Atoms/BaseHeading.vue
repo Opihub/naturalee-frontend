@@ -23,7 +23,7 @@ const props = defineProps({
     type: String,
     default: 'h1',
     validator(value) {
-      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span'].includes(value)
+      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'small', 'div', 'p'].includes(value)
     },
   },
   /**
@@ -45,7 +45,7 @@ const className = computed(() => {
     if (props.use !== 'custom') {
       className.push(`${CSS_NAME}--${props.use}`)
     }
-  } else if (props.tag && props.tag !== 'span') {
+  } else if (props.tag && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(props.tag)) {
     className.push(`${CSS_NAME}--${props.tag}`)
   }
 
