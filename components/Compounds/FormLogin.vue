@@ -6,7 +6,7 @@
       }}</BaseHeading>
     </slot>
 
-    <InputField v-model="formData.user" class="u-mb-half" type="text" required>
+    <InputField v-model="formData.username" class="u-mb-half" type="text" required>
       {{ $t('form.userField') }}</InputField
     >
     <InputField
@@ -63,7 +63,7 @@ const wishlist = useWishlistStore()
 
 // Data
 const formData = reactive({
-  user: '',
+  username: '',
   password: '',
   remember: false,
 })
@@ -80,10 +80,23 @@ const login = async () => {
 
   const response = await send(async () => await store.signUp(formData))
 
-  if (response.value.success) {
+  const message = {
+    status: 'danger',
+    message: 'È avvenuto un errore durante il login',
+  }
+
+  console.debug(response.value)
+  if (response.value.success && response.value.data.token) {
+    message.status = 'success'
+    message.message = 'Login avvenuto con successo'
+
     cart.load()
     wishlist.load()
+  } else {
+    message.message = response.value.message
   }
+
+  notify(message)
 }
 </script>
 

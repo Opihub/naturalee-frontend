@@ -4,7 +4,7 @@ import { getPasswordPattern } from '@/utils/pattern'
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (!body.user) {
+  if (!body.username) {
     throw createError({
       statusCode: 403,
       statusMessage: 'È obbligatorio inserire il nome utente o la mail',
