@@ -24,7 +24,7 @@
 
           <div>
             <BaseButton color="green">Aggiungi al carrello</BaseButton>
-            <WishlistButton :product-id="page.id" />
+            <WishlistButton :product-id="page" />
           </div>
         </div>
       </div>

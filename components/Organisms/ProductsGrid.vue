@@ -389,7 +389,10 @@ const fetchProducts = async () => {
       }
     } else {
       canFetch.value = false
-      noProductsMessage.value = response.value.message
+      noProductsMessage.value =
+        response.value.code === 'category_products_not_found'
+          ? 'Nessun prodotto trovato per la categoria corrente.'
+          : response.value.message
     }
   } catch (error) {
     console.error(error)
