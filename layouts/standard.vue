@@ -1,5 +1,5 @@
 <template>
-  <div ref="layoutElement" :class="CSS_NAME">
+  <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
       :socials-menu="socialsMenu.data"
       :primary-menu="primaryMenu.data"
@@ -14,15 +14,16 @@
 
     <slot />
 
-    <SiteFooter
-      :class="{ 'u-mt-auto': !overrideLastElement }"
-      :copyright="copyrights.data"
-      :menu="footerMenu.data"
-      :socials-menu="socialsMenu.data"
-      :privacy-menu="privacyMenu.data"
-      payment-image="/pagamenti-sicuri.png"
-    >
-      <template #by> R-innovazione by <u>Opiquad.it</u> </template>
+    <SiteFooter :class="{ 'u-mt-auto': !overrideLastElement }">
+      <FooterNavigation
+        :socials-menu="socialsMenu.data"
+        :menu="footerMenu.data"
+      />
+
+      <FooterCopyrights
+        :copyright="copyrights.data"
+        :privacy-menu="privacyMenu.data"
+      />
     </SiteFooter>
 
     <CategoriesMenu
@@ -31,7 +32,7 @@
       :class="`${CSS_NAME}__categories`"
       :categories="categoriesMenu.data"
     />
-  </div>
+  </LayoutWrapper>
 </template>
 
 <script setup>
@@ -129,13 +130,6 @@ const setHeaderGap = () => {
 <style lang="scss">
 $prefix: 'layout';
 @include object($prefix) {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  min-height: 100vh;
-  margin-bottom: get-var(bottom-gap, 0, $prefix: $prefix);
-
   @include element('categories') {
     position: fixed;
     inset: auto 0 0;
