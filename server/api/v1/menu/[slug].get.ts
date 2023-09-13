@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi(`/v1/menu/${slug}`)
+    const response = await useRemoteApi(event, `/v1/menu/${slug}`)
 
     return createResponse(response)
   } catch (error) {

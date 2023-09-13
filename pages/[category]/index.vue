@@ -10,7 +10,7 @@
 
     <Suspense>
       <ProductsGrid
-      class="u-pb-huge u-pt-medium"
+        class="u-pb-huge u-pt-medium"
         :from="`shop/categories/${$route.params.category}/products`"
         :filters="page.filters"
         sortable

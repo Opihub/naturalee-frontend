@@ -4,7 +4,7 @@ import { getPasswordPattern } from '@/utils/pattern'
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (!body.user) {
+  if (!body.username) {
     throw createError({
       statusCode: 403,
       statusMessage: 'È obbligatorio inserire il nome utente o la mail',
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/auth/login', {
+    const response = await useRemoteApi(event, '/v1/auth/login', {
       method: 'POST',
       body,
     })
