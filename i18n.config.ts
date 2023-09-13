@@ -48,6 +48,8 @@ export default defineI18nConfig(() => ({
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',
+        submitContact: 'Invia richiesta',
+        message: 'Descrivi brevemente la tua richiesta*',
         name: 'Nome',
         surname: 'Cognome',
         displayName: 'Nome Visualizzato *',

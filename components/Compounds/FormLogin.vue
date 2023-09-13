@@ -6,7 +6,12 @@
       }}</BaseHeading>
     </slot>
 
-    <InputField v-model="formData.username" class="u-mb-half" type="text" required>
+    <InputField
+      v-model="formData.username"
+      class="u-mb-half"
+      type="text"
+      required
+    >
       {{ $t('form.userField') }}</InputField
     >
     <InputField
