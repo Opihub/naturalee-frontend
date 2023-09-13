@@ -1,4 +1,4 @@
-import { additionalData } from './utilities/globalCSS'
+import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
@@ -20,7 +20,11 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
+  css: [
+    '@splidejs/vue-splide/css/core',
+    '@/assets/css/main.scss',
+    '@/assets/css/nuxt-google-fonts.css',
+  ],
   vite: {
     css: {
       preprocessorOptions: {
@@ -31,6 +35,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
@@ -65,8 +70,12 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  i18n: {
+    vueI18n: './i18n.config.ts', // if you are using custom path, default
+  },
   googleFonts: {
-    download: true,
+    inject: false,
+    outputDir: 'assets',
     display: 'swap',
     families: {
       Mulish: [400, 700, 800],
@@ -87,7 +96,24 @@ export default defineNuxtConfig({
     components: {
       NuxtImg: 'storybook/custom/components.mjs',
     },
+    composables: {
+      'storybook/custom/composables.mjs': {
+        '#app': [
+          'useFetch',
+          'useLazyFetch',
+          'useAsyncData',
+          'useLazyAsyncData',
+          'useRuntimeConfig',
+        ],
+        '#build/storybook/composables.mjs': ['useNuxtApp'],
+      },
+    },
     templates: [
+      {
+        src: join(runtimeDir, 'composables.mjs'),
+        filename: 'storybook/custom/composables.mjs',
+      },
+
       {
         src: join(runtimeDir, 'components.mjs'),
         filename: 'storybook/custom/components.mjs',

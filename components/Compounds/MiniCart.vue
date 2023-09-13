@@ -3,17 +3,20 @@
     <ul :class="CSS_NAME_LIST">
       <li :class="`${CSS_NAME_LIST}__recap`">
         <template v-if="cart.length">
-          <span>Il tuo carrello - {{ cart.length }} prodotti</span>
+          <span>
+            {{ $t('cart.your') }} -
+            {{ $t('product', cart.length, { count: cart.length }) }}
+          </span>
 
           <BaseLink
             :class="`${CSS_NAME}__review`"
-            to="cart"
+            to="/cart"
             :underline="true"
             color="dark"
-            >Modifica</BaseLink
+            >{{ $t('edit') }}</BaseLink
           >
         </template>
-        <span v-else>Non hai alcun prodotto nel carrello</span>
+        <span v-else>{{ $t('cart.empty') }}</span>
       </li>
 
       <li
@@ -37,9 +40,9 @@
             product.title
           }}</span>
         </span>
-        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`"
-          >Cod. {{ product.sku }}</span
-        >
+        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">{{
+          $t('cart.productCode', { sku: product.sku })
+        }}</span>
 
         <PriceHolder
           :class="`${CSS_NAME_LIST_PRODUCT}__price`"
@@ -50,17 +53,17 @@
 
     <div v-if="cart.length" :class="CSS_NAME_TOTALS">
       <dl :class="`${CSS_NAME_TOTALS}__calculation`">
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
-          >Spese di consegna</span
-        >
+        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+          $t('cart.shippingCost')
+        }}</span>
         <PriceHolder
           :class="`${CSS_NAME_TOTALS_CALCULATION}__price`"
           :price="shippingCost"
         />
 
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
-          >Totale dell'ordine</span
-        >
+        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+          $t('cart.orderTotal')
+        }}</span>
         <PriceHolder
           :class="[
             `${CSS_NAME_TOTALS_CALCULATION}__price`,
@@ -69,20 +72,20 @@
           :price="totals"
         >
           <template #after>
-            <small>IVA Inc</small>
+            <small>{{ $t('cart.fee') }}</small>
           </template>
         </PriceHolder>
       </dl>
 
-      <BaseButton :class="`${CSS_NAME}__submit`" color="green"
-        >Procedere con l'ordine</BaseButton
-      >
+      <BaseButton :class="`${CSS_NAME}__submit`" color="green">{{
+        $t('cart.proceed')
+      }}</BaseButton>
       <BaseLink
         :class="`${CSS_NAME}__review`"
-        to="cart"
+        to="/cart"
         :underline="true"
         color="dark"
-        >Vai al carrello</BaseLink
+        >{{ $t('cart.goToCart') }}</BaseLink
       >
     </div>
   </PopupContainer>
@@ -95,7 +98,7 @@ const CSS_NAME_LIST_PRODUCT = `${CSS_NAME_LIST}__product`
 const CSS_NAME_TOTALS = `${CSS_NAME}__totals`
 const CSS_NAME_TOTALS_CALCULATION = `${CSS_NAME_TOTALS}__calculation`
 
-const props = defineProps({
+defineProps({
   cart: {
     type: Array,
     default() {
@@ -106,18 +109,10 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-})
-
-const totals = computed(() => {
-  let totals = props.shippingCost
-
-  if (props.cart.length) {
-    totals += props.cart.reduce((accumulator, product) => {
-      return accumulator + product.price * product.quantity
-    }, 0)
-  }
-
-  return totals
+  totals: {
+    type: Number,
+    default: 0,
+  },
 })
 </script>
 

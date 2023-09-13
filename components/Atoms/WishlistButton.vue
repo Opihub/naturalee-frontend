@@ -1,5 +1,5 @@
 <template>
-  <button type="button" :class="CSS_NAME" @click="updateWishlist">
+  <button type="button" :class="className" @click="() => update(product)">
     <Suspense>
       <WishlistIcon :class="`${CSS_NAME}__icon`" />
     </Suspense>
@@ -7,21 +7,51 @@
 </template>
 
 <script setup>
+// Imports
 import WishlistIcon from 'assets/svg/wishlist-icon.svg'
+import { useWishlistStore } from '@/stores/wishlist'
 
+// Constants
 const CSS_NAME = 'o-wishlist-button'
 
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
-  productId: {
-    type: Number,
+  product: {
+    type: Object,
     required: true,
+    validator(value) {
+      return (
+        'id' in value &&
+        'title' in value &&
+        'provenance' in value &&
+        'link' in value
+      )
+    },
   },
 })
 
-const updateWishlist = () => {
-  console.debug(props.productId)
-  // TODO
-}
+// Component life-cycle hooks
+
+// Composables
+const wishlist = useWishlistStore()
+
+// Data
+
+// Watcher
+
+// Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (wishlist.has(props.product.id)) {
+    className.push('is-active')
+  }
+
+  return className
+})
+
+// Methods
+const { update } = wishlist
 </script>
 
 <style lang="scss">

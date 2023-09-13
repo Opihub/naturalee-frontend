@@ -14,7 +14,6 @@ $black: #000000;
 
 $text-color: $dark;
 $background-color: $light;
-$border-color: #707070;
 
 $font-family: (
   main: (
@@ -54,6 +53,7 @@ $weights: (
 );
 
 $utilities-sizes: (
+  auto: auto,
   none: 0,
   micro: 4,
   mini: 8,
@@ -67,9 +67,20 @@ $utilities-sizes: (
 
 $utilities-with-sizes: (
   mt: margin-top,
+  ml: margin-left,
+  mr: margin-right,
   mb: margin-bottom,
   pt: padding-top,
   pb: padding-bottom,
+);
+
+$z-index: (
+  notification: 200,
+  header: 30,
+  bottom-bar: 29,
+  categories: 20,
+  overlay: 110,
+  modal: 100,
 );
 
 $utilities-without-sizes: (

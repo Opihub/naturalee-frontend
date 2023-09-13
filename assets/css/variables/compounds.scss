@@ -1,10 +1,4 @@
-$overlay-padding: (
-  mobile: rem(16px),
-  tablet: rem(30px),
-  desktop: rem(50px) rem(50px) rem(30px) rem(50px),
-);
-
-$blur: 10px;
+@use "sass:map";
 
 $variables-to-set: (
   font-size: $font-size,
@@ -32,8 +26,14 @@ $variables-to-set: (
   rgb-text-color: hex-to-rgb($text-color),
   text-color: $text-color,
   background-color: $background-color,
-  border-color: $border-color,
   container-width: rem($container-width),
   container-padding: rem($container-padding),
   container-size: calc(#{get-var(container-width)} + #{get-var(container-padding)} * 2),
+
+  z-header: map.get($z-index, header),
+  z-notification: map.get($z-index, notification),
+  z-bottom-bar: map.get($z-index, bottom-bar),
+  z-categories: map.get($z-index, categories),
+  z-overlay: map.get($z-index, overlay),
+  z-modal: map.get($z-index, modal),
 );

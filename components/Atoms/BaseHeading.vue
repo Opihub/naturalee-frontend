@@ -23,7 +23,7 @@ const props = defineProps({
     type: String,
     default: 'h1',
     validator(value) {
-      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span'].includes(value)
+      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'small', 'div', 'p'].includes(value)
     },
   },
   /**
@@ -33,7 +33,7 @@ const props = defineProps({
     type: String,
     default: null,
     validator(value) {
-      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(value)
+      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'custom'].includes(value)
     },
   },
 })
@@ -42,8 +42,10 @@ const className = computed(() => {
   const className = [CSS_NAME]
 
   if (props.use) {
-    className.push(`${CSS_NAME}--${props.use}`)
-  } else if (props.tag && props.tag !== 'span') {
+    if (props.use !== 'custom') {
+      className.push(`${CSS_NAME}--${props.use}`)
+    }
+  } else if (props.tag && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(props.tag)) {
     className.push(`${CSS_NAME}--${props.tag}`)
   }
 
@@ -54,18 +56,12 @@ const className = computed(() => {
 <style lang="scss">
 $prefix: 'heading';
 @include object($prefix) {
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      text-transform: none,
-    )
-  );
-
   color: get-var(text-color, $prefix: $prefix);
   font-weight: get-var(font-weight, $prefix: $prefix);
   font-size: get-var(font-size, $prefix: $prefix);
   line-height: get-var(line-height, $prefix: $prefix);
-  text-transform: get-var(text-transform, $prefix: $prefix);
+  text-transform: get-var(text-transform, none, $prefix: $prefix);
+  font-family: get-var(font-family, get-var(family-main), $prefix: $prefix);
   display: block;
 
   @include modifier('h1') {
@@ -73,11 +69,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
-        text-color: get-var(color-dark),
         font-size: 36px,
         line-height: 42px,
       )
     );
+    color: get-var(text-color, get-var(color-dark), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -95,11 +91,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
-        text-color: get-var(color-white),
         font-size: 38px,
         line-height: 44px,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -117,11 +113,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
-        text-color: get-var(color-white),
         font-size: 40px,
         line-height: 50px,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -139,11 +135,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
-        text-color: get-var(color-white),
         font-size: 30px,
         line-height: 40px,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -161,11 +157,11 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-bold),
-        text-color: get-var(color-green),
         font-size: 30px,
         line-height: 40px,
       )
     );
+    color: get-var(text-color, get-var(color-green), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(
@@ -183,12 +179,12 @@ $prefix: 'heading';
       $prefix: $prefix,
       $map: (
         font-weight: get-var(weight-extrabold),
-        text-color: get-var(color-white),
         font-size: 18px,
         line-height: 23px,
         text-transform: uppercase,
       )
     );
+    color: get-var(text-color, get-var(color-white), $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(

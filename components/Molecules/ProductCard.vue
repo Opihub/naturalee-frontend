@@ -7,10 +7,7 @@
       :color="product.marker.color"
     />
 
-    <WishlistButton
-      :product-id="product.id"
-      :class="`${CSS_CLASS}__wishlist`"
-    />
+    <WishlistButton :product="product" :class="`${CSS_CLASS}__wishlist`" />
 
     <ProductImage
       :class="[`${CSS_CLASS}__thumbnail`, 'u-mb-half']"
@@ -18,7 +15,7 @@
       :size="fit"
     />
 
-    <div :class="`${CSS_CLASS}__body`">
+    <div :class="[`${CSS_CLASS}__body`, 'u-mb-large']">
       <BaseHeading
         tag="span"
         :class="`${CSS_CLASS}__title`"
@@ -28,14 +25,28 @@
       <BaseHeading
         tag="span"
         :class="`${CSS_CLASS}__provenance`"
-        class="u-mb-micro"
+        class="u-mb-tiny"
         >{{ product.provenance }}</BaseHeading
       >
+
+      <PriceHolder class="u-mb-mini" :price="product.price">
+        <template #after>
+          <small class="u-ml-micro">/ {{ product.unit }}</small>
+        </template>
+      </PriceHolder>
+
+      <BaseHeading tag="small" :class="`${CSS_CLASS}__cost`">
+        {{ product.descriptionCost }}
+      </BaseHeading>
     </div>
 
-    <BaseButton class="u-mb-tiny u-mt-half" color="green"
-      >Aggiungi al carrello</BaseButton
-    >
+    <BaseCounter v-model="quantity" class="u-mt-auto" />
+
+    <AddToCartButton
+      class="u-mb-tiny u-mt-half"
+      :product="product"
+      :quantity="quantity"
+    />
 
     <BaseLink underline color="dark" :to="product.link"
       >Vai alla scheda prodotto</BaseLink
@@ -44,8 +55,12 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_CLASS = 'c-product-card'
 
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   product: {
     type: Object,
@@ -61,6 +76,17 @@ const props = defineProps({
   },
 })
 
+// Component life-cycle hooks
+
+// Composables
+
+// Data
+// TODO: aggiungere counter
+const quantity = ref(1)
+
+// Watcher
+
+// Computed
 const fit = computed(() => {
   const { image } = props.product
   if (image) {
@@ -69,6 +95,8 @@ const fit = computed(() => {
 
   return 'contain'
 })
+
+// Methods
 </script>
 
 <style lang="scss">
@@ -121,7 +149,7 @@ $prefix: 'product-card';
 
   @include element('thumbnail') {
     margin: 0 auto;
-    max-width: get-var(width, rem(240px), $prefix: $prefix);
+    max-width: get-var(width, rem(300px), $prefix: $prefix);
   }
 }
 </style>

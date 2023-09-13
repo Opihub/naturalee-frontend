@@ -1,14 +1,20 @@
 <template>
   <slot name="before" />
 
-  <form :class="className" method="GET" v-bind="$attrs">
+  <form
+    :class="className"
+    method="GET"
+    v-bind="$attrs"
+    @submit.prevent="goToSearch"
+  >
     <InputField
-      v-model="value"
+      :value="searchValue"
       :class="`${CSS_NAME}__input`"
       type="search"
       :placeholder="placeholder"
       :rounded="true"
       :borderless="true"
+      @update:model-value="updateSearch"
     />
 
     <BaseButton
@@ -17,7 +23,7 @@
       color="yellow"
       svg="search"
       :svg-size="svgSize"
-      >Cerca</BaseButton
+      >{{ $t('search') }}</BaseButton
     >
   </form>
 
@@ -25,14 +31,18 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-search'
 
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
-  modelValue: {
-    type: String,
-    required: true,
-  },
   placeholder: {
+    type: String,
+    default: null,
+  },
+  search: {
     type: String,
     default: null,
   },
@@ -45,17 +55,16 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:search'])
 
-const value = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emit('update:modelValue', value)
-  },
-})
+// Component life-cycle hooks
 
+// Data
+const searchValue = ref(props.search ? props.search : '')
+
+// Watcher
+
+// Computed
 const svgSize = computed(() => {
   if (props.size === 'mini') {
     return [15, 15]
@@ -73,6 +82,29 @@ const className = computed(() => {
 
   return className
 })
+
+// Methods
+const updateSearch = (event) => {
+  if (props.search === null) {
+    searchValue.value = event
+    return
+  }
+
+  emit('update:search', event)
+}
+
+const goToSearch = async () => {
+  if (props.search !== null) {
+    return
+  }
+
+  await navigateTo({
+    path: '/search',
+    query: {
+      search: searchValue.value,
+    },
+  })
+}
 </script>
 
 <style lang="scss">

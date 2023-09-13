@@ -129,8 +129,12 @@ $prefix: 'button';
     )
   );
 
+  &:focus {
+    outline: 1px solid get-var(color-yellow);
+  }
+
   border: #{get-var(border-width, $prefix: $prefix)} solid #{get-var(
-      border-color
+      color-dark
     )};
   border-radius: 999em;
   font-weight: get-var(font-weight, font-weight(bold), $prefix: $prefix);
@@ -142,6 +146,7 @@ $prefix: 'button';
     get-var(color-white),
     $prefix: $prefix
   );
+  font-family: get-var(font-family, get-var(family-main), $prefix: $prefix);
   color: get-var(text-color, get-var(color-green), $prefix: $prefix);
   display: inline-flex;
   align-items: center;
@@ -150,6 +155,7 @@ $prefix: 'button';
   line-height: get-var(line-height, inherit, $prefix: $prefix);
   gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
   text-transform: get-var(text-transform, uppercase, $prefix: $prefix);
+  opacity: 1;
 
   svg {
     margin: 0;
@@ -161,7 +167,7 @@ $prefix: 'button';
     justify-content: space-between;
   }
 
-  @include transition(background-color, color, border-color);
+  @include transition(background-color, color, border-color, opacity);
 
   &:hover {
     @include set-local-vars(
@@ -218,24 +224,28 @@ $prefix: 'button';
       $prefix: $prefix,
       $map: (
         background-color: transparent,
-        text-color: get-var(border-color),
+        text-color: get-var(color-dark),
         border-width: 1px,
       )
     );
 
-    @include is(active) {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
+    @include is('active') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-dark),
+          text-color: get-var(color-white),
+        )
       );
     }
 
     &:hover {
-      @include set-local-var(
-        background-color,
-        get-var(color-white),
-        $prefix: $prefix
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-white),
+          text-color: get-var(color-dark),
+        )
       );
     }
   }
@@ -248,6 +258,11 @@ $prefix: 'button';
         font-weight: font-weight(medium),
       )
     );
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: no-drop;
   }
 }
 </style>

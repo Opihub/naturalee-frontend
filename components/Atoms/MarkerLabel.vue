@@ -9,7 +9,6 @@
 
 <script setup>
 import MarkerPlaceholder from 'assets/svg/marker-placeholder.svg'
-import { invertColor } from '@/utilities/color'
 
 const CSS_NAME = 'o-marker'
 
@@ -65,3 +64,4 @@ $prefix: 'marker';
   }
 }
 </style>
+../../utils/color

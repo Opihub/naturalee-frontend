@@ -1,7 +1,11 @@
 <template>
   <section :class="className">
     <SiteContainer :class="`${CSS_NAME}__container`">
-      <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="mini" />
+      <InlineMenu
+        :menu="socialsMenu"
+        :class="`${CSS_NAME}__left`"
+        gap="mini"
+      />
 
       <ClientOnly>
         <div v-if="banners && banners.length" :class="`${CSS_NAME}__center`">
@@ -11,8 +15,12 @@
             aria-label="My Favorite Images"
             @splide:mounted="updateHeight"
           >
-            <SplideSlide v-for="(banner, index) in banners" :key="index" :class="`${CSS_NAME}__banner`">
-              <span ref="slides">{{ banner }}</span>
+            <SplideSlide
+              v-for="banner in banners"
+              :key="banner.id"
+              :class="`${CSS_NAME}__banner`"
+            >
+              <span ref="slides">{{ banner.text }}</span>
             </SplideSlide>
           </Splide>
         </div>
@@ -134,6 +142,18 @@ $prefix: 'topbar';
     grid-column: 1 / 2;
     justify-self: start;
     margin-right: auto;
+
+    svg {
+      fill: currentColor;
+
+      @include set-local-vars(
+        $prefix: 'link-svg',
+        $map: (
+          width: auto,
+          height: rem(15px),
+        )
+      );
+    }
 
     @include until(tablet) {
       display: none;
