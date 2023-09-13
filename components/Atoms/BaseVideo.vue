@@ -2,7 +2,7 @@
   <component
     :is="component"
     ref="playerElement"
-    :class="className"
+    :class="CSS_NAME"
     :src="src"
   />
 </template>
@@ -98,16 +98,6 @@ const component = computed(() => {
   return 'div'
 })
 
-const className = computed(() => {
-  const className = [CSS_NAME]
-
-  if (props.background) {
-    className.push(`${CSS_NAME}--background`)
-  }
-
-  return className
-})
-
 // Methods
 </script>
 
@@ -116,8 +106,5 @@ const className = computed(() => {
 
 $prefix: 'video';
 @include object($prefix) {
-  @include modifier('background') {
-    pointer-events: none;
-  }
 }
 </style>
