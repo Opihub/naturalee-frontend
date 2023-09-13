@@ -1,5 +1,5 @@
 <template>
-  <main class="s-wip">
+  <main>
     <WorkInProgress />
   </main>
 </template>
@@ -11,19 +11,12 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  layout: 'standard',
-  alias: [
-    '/contatti',
-    '/azienda',
-    '/consegna',
-    '/privacy-policy',
-    '/cookie-policy',
-    '/term-and-conditions',
-    '/condizioni-di-vendita',
-  ],
+  layout: 'green',
 })
 
 // Component life-cycle hooks
+
+// Composables
 
 // Data
 
@@ -35,8 +28,4 @@ definePageMeta({
 </script>
 
 <style lang="scss">
-@include scope('wip') {
-  flex: 1 1 100%;
-  display: flex;
-}
 </style>

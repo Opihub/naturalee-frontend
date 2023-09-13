@@ -2,6 +2,8 @@
   <main>
     <HeaderBottomBar :breadcrumb="page.breadcrumbs" />
 
+    <WorkInProgress />
+
     <SiteContainer class="u-pt-huge u-pb-huge">
       <div class="o-row">
         <div class="o-row__column _image">
@@ -24,7 +26,7 @@
 
           <div>
             <BaseButton color="green">Aggiungi al carrello</BaseButton>
-            <WishlistButton :product-id="page" />
+            <WishlistButton :product="page" />
           </div>
         </div>
       </div>
@@ -107,7 +109,7 @@ const { page } = await usePage(
   @include set-local-vars(
     $prefix: 'heading',
     $map: (
-      text-color: get-var(color-black)
+      text-color: get-var(color-black),
     )
   );
 }
