@@ -1,8 +1,6 @@
 <template>
   <main class="s-wip">
-    <SiteContainer flex>
-      <BaseHeading>Work in progress</BaseHeading>
-    </SiteContainer>
+    <WorkInProgress />
   </main>
 </template>
 
@@ -40,17 +38,5 @@ definePageMeta({
 @include scope('wip') {
   flex: 1 1 100%;
   display: flex;
-
-  @include set-local-vars(
-    $prefix: 'container',
-    $map: (
-      align-items: center,
-      justify-content: center,
-    )
-  );
-
-  @include object('container') {
-    align-self: center;
-  }
 }
 </style>
