@@ -109,7 +109,7 @@ const setBottomGap = () => {
     return
   }
 
-  layoutElement.value.style.setProperty(
+  getElement(layoutElement).style.setProperty(
     '--layout-bottom-gap',
     `${categoriesMenuElement.value.$el.clientHeight}px`
   )
@@ -120,7 +120,7 @@ const setHeaderGap = () => {
     return
   }
 
-  layoutElement.value.style.setProperty(
+  getElement(layoutElement).style.setProperty(
     '--layout-header-height',
     `${headerElement.value.$el.clientHeight}px`
   )
