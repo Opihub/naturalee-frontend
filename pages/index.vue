@@ -207,6 +207,13 @@ const togglePostcodeModal = (status = null) => {
         margin: rem(120px),
       )
     );
+
+    @include set-local-vars(
+      $prefix: 'content-row-parallax',
+      $map: (
+        offset: rem(60px) 0 0,
+      )
+    );
   }
 
   @include component('fourth-section') {
