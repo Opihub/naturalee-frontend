@@ -102,7 +102,7 @@ $prefix: 'background';
   background-position: get-var(position, center, $prefix: $prefix);
   background-size: get-var(size, cover, $prefix: $prefix);
   background-repeat: get-var(repeat, no-repeat, $prefix: $prefix);
-  overflow: get-var(overflow, auto, $prefix: $prefix);
+  overflow: get-var(overflow, visible, $prefix: $prefix);
 
   @include modifier('centered') {
     display: flex;
