@@ -7,10 +7,7 @@
       :color="product.marker.color"
     />
 
-    <WishlistButton
-      :product="product"
-      :class="`${CSS_CLASS}__wishlist`"
-    />
+    <WishlistButton :product="product" :class="`${CSS_CLASS}__wishlist`" />
 
     <ProductImage
       :class="[`${CSS_CLASS}__thumbnail`, 'u-mb-half']"
@@ -18,7 +15,7 @@
       :size="fit"
     />
 
-    <div :class="`${CSS_CLASS}__body`">
+    <div :class="[`${CSS_CLASS}__body`, 'u-mb-large']">
       <BaseHeading
         tag="span"
         :class="`${CSS_CLASS}__title`"
@@ -28,12 +25,22 @@
       <BaseHeading
         tag="span"
         :class="`${CSS_CLASS}__provenance`"
-        class="u-mb-micro"
+        class="u-mb-tiny"
         >{{ product.provenance }}</BaseHeading
       >
+
+      <PriceHolder class="u-mb-mini" :price="product.price">
+        <template #after>
+          <small class="u-ml-micro">/ {{ product.unit }}</small>
+        </template>
+      </PriceHolder>
+
+      <BaseHeading tag="small" :class="`${CSS_CLASS}__cost`">
+        {{ product.descriptionCost }}
+      </BaseHeading>
     </div>
 
-    <BaseCounter v-model="quantity" class="u-mt-half" />
+    <BaseCounter v-model="quantity" class="u-mt-auto" />
 
     <AddToCartButton
       class="u-mb-tiny u-mt-half"
@@ -142,7 +149,7 @@ $prefix: 'product-card';
 
   @include element('thumbnail') {
     margin: 0 auto;
-    max-width: get-var(width, rem(240px), $prefix: $prefix);
+    max-width: get-var(width, rem(300px), $prefix: $prefix);
   }
 }
 </style>

@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/postcodes/validate', {
+    const response = await useRemoteApi(event, '/v1/postcodes/validate', {
       method: 'POST',
       body,
     })

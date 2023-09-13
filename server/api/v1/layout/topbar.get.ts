@@ -1,8 +1,8 @@
 import { useRemoteApi } from '@/server/utils/remoteApi'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   try {
-    const response = await useRemoteApi(`/v1/layout/topbar`)
+    const response = await useRemoteApi(event, '/v1/layout/topbar')
 
     return createResponse(response)
   } catch (error) {

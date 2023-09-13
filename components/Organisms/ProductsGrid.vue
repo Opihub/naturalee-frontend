@@ -140,7 +140,7 @@ import { useI18n } from 'vue-i18n'
 const CSS_NAME = 'c-products-grid'
 const CSS_NAME_OVERLAY = `${CSS_NAME}__overlay`
 const CSS_NAME_ACTION = `${CSS_NAME}__action`
-const DEFAULT_LIMIT = 2
+const DEFAULT_LIMIT = 12
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
@@ -389,7 +389,10 @@ const fetchProducts = async () => {
       }
     } else {
       canFetch.value = false
-      noProductsMessage.value = response.value.message
+      noProductsMessage.value =
+        response.value.code === 'category_products_not_found'
+          ? 'Nessun prodotto trovato per la categoria corrente.'
+          : response.value.message
     }
   } catch (error) {
     console.error(error)
