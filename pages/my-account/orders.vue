@@ -1,6 +1,6 @@
 <template>
   <section>
-    Ordini
+    <WorkInProgress />
   </section>
 </template>
 
