@@ -72,7 +72,7 @@ export default defineNuxtConfig({
   ],
   i18n: {
     compilation: {
-      jit: false,
+      jit: process.env?.COMPILATED_TRANSLATION ? false : true,
     },
     vueI18n: './i18n.config.ts', // if you are using custom path, default
   },
