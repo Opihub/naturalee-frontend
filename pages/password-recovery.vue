@@ -21,6 +21,7 @@
           class="u-mb-tiny"
           type="password"
           name="password"
+          required
           >{{ $t('form.password.new') }}</InputField
         >
 
@@ -29,6 +30,7 @@
           class="u-mb-tiny"
           type="password"
           name="confirmPassword"
+          required
           >{{ $t('form.password.check') }}</InputField
         >
 
@@ -47,6 +49,10 @@
             $t('form.password.save')
           }}</BaseButton>
         </div>
+
+        <BaseMessage v-if="showMessage" class="u-mt-half" :status="feedback.status">{{
+          feedback.message
+        }}</BaseMessage>
       </form>
     </SiteContainer>
   </main>
@@ -65,7 +71,11 @@ definePageMeta({
 
     const { token, login } = route.query
 
-    if (!login || !token || token.match(getPasswordRecoveryTokenPattern()).length <= 0) {
+    if (
+      !login ||
+      !token ||
+      token.match(getPasswordRecoveryTokenPattern()).length <= 0
+    ) {
       return false
     }
 
@@ -95,7 +105,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 
 // Composables
 const route = useRoute()
-const { sending, send } = useSender(emit)
+const { sending, sent, send } = useSender(emit)
 
 // Data
 const token = ref(route.query.token)
@@ -104,6 +114,12 @@ const formData = reactive({
   password: '',
   confirmPassword: '',
 })
+const feedback = reactive({
+  status: 'danger',
+  message:
+    'È avvenuto un errore durante il reset delle password. Si prega di riprovare',
+})
+const showMessage = ref(false)
 
 // Watcher
 
@@ -118,7 +134,48 @@ const randomizePassword = () => {
 }
 
 const updatePassword = async () => {
+  console.debug('test')
+
   if (sending.value) {
+    return
+  }
+
+  showMessage.value = false
+
+  let success = true
+  feedback.status = 'danger'
+  feedback.message =
+    'È avvenuto un errore durante il reset delle password. Si prega di riprovare'
+
+  if (!formData.password) {
+    success = false
+    feedback.message = 'Password mancante'
+  }
+
+  if (!formData.confirmPassword) {
+    success = false
+    feedback.message = 'Password di conferma mancante'
+  }
+
+  if (!formData.password.match(getPasswordPattern())) {
+    success = false
+    feedback.message =
+      'La password inserita non rispetta i canoni standard di sicurezza'
+  }
+
+  if (!formData.confirmPassword.match(getPasswordPattern())) {
+    success = false
+    feedback.message =
+      'La password di conferma inserita non rispetta i canoni standard di sicurezza'
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    success = false
+    feedback.message = 'Le password inserite non combaciano'
+  }
+
+  if (!success) {
+    showMessage.value = true
     return
   }
 
@@ -139,7 +196,20 @@ const updatePassword = async () => {
     )
   })
 
-  console.debug(response)
+  if (response.value.success) {
+    await notify({
+      status: 'success',
+      message:
+        'Password resettata con successo!',
+    }, 5000)
+
+    await navigateTo({
+      path: '/my-account',
+    })
+  } else {
+    showMessage.value = true
+    feedback.message = response.value.message
+  }
 }
 </script>
 
