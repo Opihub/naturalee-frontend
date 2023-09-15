@@ -10,7 +10,12 @@
       }}</BaseParagraph>
     </slot>
 
-    <InputField v-model="formData.user" class="u-mb-tiny" type="text" required>
+    <InputField
+      v-model="formData.username"
+      class="u-mb-tiny"
+      type="text"
+      required
+    >
       {{ $t('form.userField') }}</InputField
     >
 
@@ -18,7 +23,7 @@
 
     <BaseButton
       class="u-mt-large"
-      color="green"
+    <BaseMessage v-if="sent" class="u-mt-half">
       type="submit"
       :disabled="sending || disabled"
       >{{ $t('form.password.recovery') }}</BaseButton
@@ -77,7 +82,7 @@ const { sending, sent, send } = useSender(emit)
 const user = ref(null)
 const success = ref(false)
 const formData = reactive({
-  user: '',
+  username: '',
 })
 
 // Watcher
@@ -93,11 +98,11 @@ const passwordRecovery = async () => {
     return
   }
 
-  user.value = formData.user
+  user.value = formData.username
 
   const response = await send(async () => {
     return await useApi(
-      `auth/password-recovery`,
+      `auth/password-recovery/request`,
       {
         method: 'POST',
         body: formData,
