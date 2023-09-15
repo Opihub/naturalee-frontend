@@ -2,13 +2,13 @@
   <form :class="CSS_NAME" method="POST" @submit.prevent="passwordRecovery">
     <slot name="header">
       <BaseHeading class="u-mb-small" tag="h3">{{
-        $t('form.passwordRecovery')
+        $t('form.password.recovery')
       }}</BaseHeading>
-    </slot>
 
-    <BaseParagraph class="u-mb-small">{{
-      $t('form.passwordRecoveryMsg')
-    }}</BaseParagraph>
+      <BaseParagraph class="u-mb-small">{{
+        $t('form.password.recoveryDisclaimer')
+      }}</BaseParagraph>
+    </slot>
 
     <InputField v-model="formData.user" class="u-mb-tiny" type="text" required>
       {{ $t('form.userField') }}</InputField
@@ -21,7 +21,7 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >{{ $t('form.passwordRecovery') }}</BaseButton
+      >{{ $t('form.password.recovery') }}</BaseButton
     >
     <BaseMessage v-if="sent">
       <template v-if="success">
@@ -32,7 +32,7 @@
         <b>{{ user }}</b> con il link per recuperare la password. -->
         {{
           //TODO: fare check se funzionare
-          $t('form.passwordRecoveryMsgSent', {
+          $t('form.password.recoverySent', {
             is_Email: isEmail ? $t('form.toEmail') : $t('form.toUserEmail'),
             userParam: user,
           })

@@ -18,7 +18,7 @@
               color="dark"
               underline
               @click.prevent="toggleLoginForm(true)"
-              >{{ $t('form.forgetPassw') }}</BaseLink
+              >{{ $t('form.password.forget') }}</BaseLink
             >
           </template>
         </FormLogin>

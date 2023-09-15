@@ -42,7 +42,6 @@ export default defineI18nConfig(() => ({
       form: {
         userField: 'Nome utente o indirizzo email *',
         mailField: 'Indirizzo email *',
-        passwordField: 'Password *',
         login: 'Accedi',
         signUp: 'Registrati',
         logout: 'Esci',
@@ -52,16 +51,10 @@ export default defineI18nConfig(() => ({
         surname: 'Cognome',
         displayName: 'Nome Visualizzato *',
         age: 'Età',
-        forgetPassw: 'Hai dimenticato la password?',
-        passwordRecoveryMsg:
-          "Hai perso la password? Inserisci il tuo nome utente o l'indirizzo email.<br/>Riceverai tramite email un link per generarne una nuova.",
-        passwordRecoveryMsgSent:
-          'Abbiamo inviato una mail {is_Email} <b>{userParam}</b> con il link per recuperare la password.',
-        passwordRecovery: 'Recupera password',
         toEmail: "all'indirizzo email",
         toUserEmail: "all'indirizzo email dell'utente",
         noUserFound:
-          'Ci dispiace, ma non abbiamo trovato alcun utente con {is_Email} <b>{userParam}</b>',
+        'Ci dispiace, ma non abbiamo trovato alcun utente con {is_Email} <b>{userParam}</b>',
         toMailAddress: 'indirizzo email',
         toUser: "l'username",
         consentTo: 'Acconsento al',
@@ -74,11 +67,25 @@ export default defineI18nConfig(() => ({
         errorMessage3: 'Oh, no!',
         returnToLogin: 'Oppure torna al login',
         saveChanges: 'Salva le modifiche',
-        displayNameMsg: 'Questo è il modo in cui il tuo nome verrà visualizzato nella sezione dell\'account e nelle recensioni',
-        oldPassw: 'Password attuale (lascia in bianco per non modificare)',
-        newPassw: 'Nuova password (lascia in bianco per non modificare)',
-        newPasswCheck: 'Conferma nuova password',
-        updatePassw: 'Modifica password',
+        displayNameMsg:
+        "Questo è il modo in cui il tuo nome verrà visualizzato nella sezione dell'account e nelle recensioni",
+        password: {
+          field: 'Password *',
+          forget: 'Hai dimenticato la password?',
+          recovery: 'Recupera password',
+          recoveryInstruction: 'Inserisci la tua nuova password qui di seguito oppure generane una.',
+          recoveryDisclaimer:
+            "Hai perso la password? Inserisci il tuo nome utente o l'indirizzo email.<br/>Riceverai tramite email un link per generarne una nuova.",
+          recoverySent:
+            'Abbiamo inviato una mail {is_Email} <b>{userParam}</b> con il link per recuperare la password.',
+          old: 'Password attuale',
+          new: 'Nuova password',
+          check: 'Conferma nuova password',
+          save: 'Salva password',
+          update: 'Modifica password',
+          generate: 'Genera Password',
+        },
+        leaveBlank: 'lascia in bianco per non modificare',
       },
       shipping: {
         checkPostCode: 'Verifica se il tuo indirizzo è coperto dal servizio',
