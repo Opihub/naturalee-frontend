@@ -50,7 +50,7 @@
         v-model="formData.oldPassword"
         class="o-row__column u-mb-tiny"
         type="password"
-        >{{ $t('form.oldPassword') }} ({{ $t('form.leaveBlank') }})</InputField
+        >{{ $t('form.password.old') }} ({{ $t('form.leaveBlank') }})</InputField
       >
       <InputField
         v-model="formData.newPassword"
