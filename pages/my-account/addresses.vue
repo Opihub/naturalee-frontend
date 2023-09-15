@@ -1,6 +1,6 @@
 <template>
   <section>
-    Indirizzi
+    <WorkInProgress />
   </section>
 </template>
 

@@ -92,10 +92,10 @@ export const useAccountStore = defineStore('account', () => {
   async function logout() {
     const cart = useCartStore()
 
-    await cart.clearCart()
-
     account.value = null
     token.value = null
+
+    await cart.clearCart()
   }
 
   function updateUser(profile) {

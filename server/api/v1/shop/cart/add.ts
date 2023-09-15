@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/shop/cart/add', {
+    const response = await useRemoteApi(event, '/v1/shop/cart/add', {
       method: 'POST',
       body,
     })

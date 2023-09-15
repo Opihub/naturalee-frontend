@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi(
+    const response = await useRemoteApi(event,
       `/v1/shop/categories/${category}/products/${product}`
     )
 

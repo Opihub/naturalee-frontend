@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/auth/login', {
+    const response = await useRemoteApi(event, '/v1/auth/login', {
       method: 'POST',
       body,
     })

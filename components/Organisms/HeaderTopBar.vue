@@ -4,7 +4,6 @@
       <InlineMenu
         :menu="socialsMenu"
         :class="`${CSS_NAME}__left`"
-        color="yellow"
         gap="mini"
       />
 
