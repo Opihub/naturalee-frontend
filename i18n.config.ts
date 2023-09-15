@@ -114,6 +114,27 @@ export default defineI18nConfig(() => ({
         cleared: 'La wishlist è stata svuotata',
         empty: 'Non hai alcun prodotto nella wishlist',
       },
+      common: {
+        date: 'Data',
+        actions: 'Azioni',
+        totals: 'Totale',
+      },
+      orders: {
+        name: 'Ordine | Ordini',
+        statusLabel: 'Stato',
+        status: {
+          pending: 'In attesa di pagamento',
+          processing: 'In lavorazione',
+          'on-hold': 'In sospeso',
+          completed: 'Completato',
+          cancelled: 'Annullato',
+          refunded: 'Rimborsato',
+          failed: 'Fallito',
+          'checkout-draft': 'Bozza',
+        },
+        empty: 'Non hai ancora alcun ordine',
+        reorder: 'Riordina',
+      },
     },
   },
 }))
