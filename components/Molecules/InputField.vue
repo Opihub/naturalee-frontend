@@ -49,13 +49,16 @@
         <button
           v-if="type === 'password'"
           type="button"
-          :class="`${CSS_NAME}__input__toggle`"
+          :class="{
+            [`${CSS_NAME}__input__toggle`]: true,
+            'is-on': isPasswordVisible,
+            'is-off': !isPasswordVisible,
+          }"
           @click="isPasswordVisible = !isPasswordVisible"
         >
           <Transition mode="out-in">
-            <NuxtIcon v-if="!isPasswordVisible" name="eye-off" />
-            <!-- Correggere in eye-on -->
-            <NuxtIcon v-else name="caret" />
+            <NuxtIcon v-if="!isPasswordVisible" name="eye-off" filled />
+            <NuxtIcon v-else name="eye-on" filled />
           </Transition>
         </button>
       </template>
@@ -270,10 +273,13 @@ $prefix: 'input-field';
       border-radius: 0;
       display: block;
       cursor: pointer;
+      opacity: 0.6;
 
       svg {
         width: rem(17.341px);
         height: rem(14.861px);
+        stroke: get-var(color-black);
+        fill: get-var(color-black);
       }
     }
   }
