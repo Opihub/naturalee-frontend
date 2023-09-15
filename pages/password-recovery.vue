@@ -32,14 +32,18 @@
           >{{ $t('form.password.check') }}</InputField
         >
 
-        <input v-model="key" type="hidden" name="key" />
+        <input v-model="token" type="hidden" name="token" />
         <input v-model="login" type="hidden" name="login" />
 
         <div class="o-row u-mt-large">
-          <BaseButton type="button" color="yellow" @click="randomizePassword">{{
-            $t('form.password.generate')
-          }}</BaseButton>
-          <BaseButton type="submit" color="green">{{
+          <BaseButton
+            type="button"
+            color="yellow"
+            :disabled="sending"
+            @click="randomizePassword"
+            >{{ $t('form.password.generate') }}</BaseButton
+          >
+          <BaseButton type="submit" color="green" :disabled="sending">{{
             $t('form.password.save')
           }}</BaseButton>
         </div>
@@ -56,12 +60,32 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'standard',
-  validate: (route) => {
+  validate: async (route) => {
     // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
 
     const { token, login } = route.query
 
-    return !!login && !!token && token.match(/[a-zA-Z0-9]{20}/).length > 0
+    if (!login || !token || token.match(getPasswordRecoveryTokenPattern()).length <= 0) {
+      return false
+    }
+
+    const response = await useApi(
+      `auth/password-recovery/validate-token`,
+      {
+        method: 'POST',
+        body: {
+          token,
+          login,
+        },
+      },
+      {
+        cache: false,
+      }
+    )
+
+    // TODO: trovare un modo di ritornare gli errori
+
+    return response.value.success
   },
 })
 
@@ -93,7 +117,30 @@ const randomizePassword = () => {
   formData.confirmPassword = newPassword
 }
 
-const updatePassword = async () => {}
+const updatePassword = async () => {
+  if (sending.value) {
+    return
+  }
+
+  const response = await send(async () => {
+    return await useApi(
+      `auth/password-recovery/confirm`,
+      {
+        method: 'POST',
+        body: {
+          ...formData,
+          token,
+          login,
+        },
+      },
+      {
+        cache: false,
+      }
+    )
+  })
+
+  console.debug(response)
+}
 </script>
 
 <style lang="scss" scoped>
