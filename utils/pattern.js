@@ -12,6 +12,10 @@ export function getEmailPattern() {
   return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
 }
 
+export function getPasswordRecoveryTokenPattern() {
+  return /^[a-zA-Z0-9]{20}$/
+}
+
 export function pattern(pattern, custom = false) {
   if (pattern instanceof RegExp) {
     return pattern.toString().replace(/^\/(.*)\/$/, '$1')
