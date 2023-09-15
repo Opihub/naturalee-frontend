@@ -59,9 +59,9 @@ definePageMeta({
   validate: (route) => {
     // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
 
-    const { key, login } = route.query
+    const { token, login } = route.query
 
-    return !!login && !!key && key.match(/[a-zA-Z0-9]{20}/).length > 0
+    return !!login && !!token && token.match(/[a-zA-Z0-9]{20}/).length > 0
   },
 })
 
@@ -74,7 +74,7 @@ const route = useRoute()
 const { sending, send } = useSender(emit)
 
 // Data
-const key = ref(route.query.key)
+const token = ref(route.query.token)
 const login = ref(route.query.login)
 const formData = reactive({
   password: '',
