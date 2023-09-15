@@ -3,7 +3,7 @@ import { useRemoteApi } from '@/server/utils/remoteApi'
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (!body.user) {
+  if (!body.username) {
     throw createError({
       statusCode: 403,
       statusMessage: 'È obbligatorio inserire il nome utente o la mail',
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi(event, '/v1/auth/password-recovery', {
+    const response = await useRemoteApi(event, '/v1/auth/password-recovery/request', {
       method: 'POST',
       body,
     })

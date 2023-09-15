@@ -43,26 +43,26 @@
       >
       <slot name="header">
         <BaseHeading class="u-mt-large s-password" tag="h6">{{
-          $t('form.updatePassw')
+          $t('form.password.update')
         }}</BaseHeading>
       </slot>
       <InputField
         v-model="formData.oldPassword"
         class="o-row__column u-mb-tiny"
         type="password"
-        >{{ $t('form.oldPassw') }}</InputField
+        >{{ $t('form.password.old') }} ({{ $t('form.leaveBlank') }})</InputField
       >
       <InputField
         v-model="formData.newPassword"
         class="o-row__column u-mb-tiny"
         type="password"
-        >{{ $t('form.newPassw') }}</InputField
+        >{{ $t('form.password.new') }} ({{ $t('form.leaveBlank') }})</InputField
       >
       <InputField
         v-model="formData.newPasswordCheck"
         class="o-row__column u-mb-tiny"
         type="password"
-        >{{ $t('form.newPasswCheck') }}</InputField
+        >{{ $t('form.password.check') }}</InputField
       >
     </div>
     <BaseButton
