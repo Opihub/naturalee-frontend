@@ -51,8 +51,10 @@
           </td>
         </tr>
       </template>
-      <tr v-else>
-        <td colspan="7">{{ $t('cart.clear') }}</td>
+      <tr v-else :class="CSS_NAME_ITEM">
+        <td :class="CSS_NAME_ITEM_CELL" colspan="7" align="center">
+          {{ $t('cart.empty') }}
+        </td>
       </tr>
     </template>
     <template #footer>

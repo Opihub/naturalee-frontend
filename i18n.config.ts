@@ -23,7 +23,6 @@ export default defineI18nConfig(() => ({
           '{count} {name} aggiunto al carrello | {count} {name} aggiunti al carrello',
         removedFromCart:
           '{name} rimosso dal carrello | Prodotti rimossi dal carrello',
-        clear: 'carrello vuoto',
         clearCart: 'Svuota carrello',
         productCode: 'Cod. {sku}',
         shippingCost: 'Spese di consegna',
