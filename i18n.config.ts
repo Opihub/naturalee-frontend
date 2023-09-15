@@ -54,7 +54,7 @@ export default defineI18nConfig(() => ({
         toEmail: "all'indirizzo email",
         toUserEmail: "all'indirizzo email dell'utente",
         noUserFound:
-        'Ci dispiace, ma non abbiamo trovato alcun utente con {is_Email} <b>{userParam}</b>',
+          'Ci dispiace, ma non abbiamo trovato alcun utente con {field} {userParam}',
         toMailAddress: 'indirizzo email',
         toUser: "l'username",
         consentTo: 'Acconsento al',
@@ -68,16 +68,17 @@ export default defineI18nConfig(() => ({
         returnToLogin: 'Oppure torna al login',
         saveChanges: 'Salva le modifiche',
         displayNameMsg:
-        "Questo è il modo in cui il tuo nome verrà visualizzato nella sezione dell'account e nelle recensioni",
+          "Questo è il modo in cui il tuo nome verrà visualizzato nella sezione dell'account e nelle recensioni",
         password: {
           field: 'Password *',
           forget: 'Hai dimenticato la password?',
           recovery: 'Recupera password',
-          recoveryInstruction: 'Inserisci la tua nuova password qui di seguito oppure generane una.',
+          recoveryInstruction:
+            'Inserisci la tua nuova password qui di seguito oppure generane una.',
           recoveryDisclaimer:
-            "Hai perso la password? Inserisci il tuo nome utente o l'indirizzo email.<br/>Riceverai tramite email un link per generarne una nuova.",
+            "Hai perso la password? Inserisci il tuo nome utente o l'indirizzo email. Riceverai tramite email un link per generarne una nuova.",
           recoverySent:
-            'Abbiamo inviato una mail {is_Email} <b>{userParam}</b> con il link per recuperare la password.',
+            'Abbiamo inviato una mail {field} {userParam} con il link per recuperare la password.',
           old: 'Password attuale',
           new: 'Nuova password',
           check: 'Conferma nuova password',

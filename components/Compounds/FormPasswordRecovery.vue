@@ -5,9 +5,9 @@
         $t('form.password.recovery')
       }}</BaseHeading>
 
-      <BaseParagraph class="u-mb-small">{{
-        $t('form.password.recoveryDisclaimer')
-      }}</BaseParagraph>
+      <BaseParagraph class="u-mb-small">
+        {{ $t('form.password.recoveryDisclaimer') }}
+      </BaseParagraph>
     </slot>
 
     <InputField
@@ -23,33 +23,24 @@
 
     <BaseButton
       class="u-mt-large"
-    <BaseMessage v-if="sent" class="u-mt-half">
+      color="green"
       type="submit"
       :disabled="sending || disabled"
       >{{ $t('form.password.recovery') }}</BaseButton
     >
-    <BaseMessage v-if="sent">
+    <BaseMessage v-if="sent" class="u-mt-half">
       <template v-if="success">
-        <!-- Abbiamo inviato una mail
         {{
-          isEmail ? "all'indirizzo email" : "all'indirizzo email dell'utente"
-        }}
-        <b>{{ user }}</b> con il link per recuperare la password. -->
-        {{
-          //TODO: fare check se funzionare
           $t('form.password.recoverySent', {
-            is_Email: isEmail ? $t('form.toEmail') : $t('form.toUserEmail'),
+            field: isEmail ? $t('form.toEmail') : $t('form.toUserEmail'),
             userParam: user,
           })
         }}
       </template>
       <template v-else>
-        <!-- Ci dispiace, ma non abbiamo trovato alcun utente con
-        {{ isEmail ? 'indirizzo email' : "l'username" }}
-        <b>{{ user }}</b> -->
         {{
           $t('form.noUserFound', {
-            is_Email: isEmail ? $t('form.toMailAddress') : $t('form.toUser'),
+            field: isEmail ? $t('form.toMailAddress') : $t('form.toUser'),
             userParam: user,
           })
         }}
