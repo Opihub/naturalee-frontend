@@ -24,7 +24,6 @@
         v-model="formData.username"
         class="o-row__column u-mb-half"
         type="text"
-        required
       >
         {{ $t('form.displayName') }}</InputField
       >
@@ -59,7 +58,7 @@
         >{{ $t('form.password.new') }} ({{ $t('form.leaveBlank') }})</InputField
       >
       <InputField
-        v-model="formData.newPasswordCheck"
+        v-model="formData.confirmPassword"
         class="o-row__column u-mb-tiny"
         type="password"
         >{{ $t('form.password.check') }}</InputField
@@ -80,17 +79,24 @@ import { useAccountStore } from '@/stores/account'
 
 const CSS_NAME = 'c-profile-update-form'
 // Define (Props, Emits, Page Meta)
-const { userData } = defineProps(['userData'])
-
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: true,
+    validator(value) {
+      return 'username' in value && 'email' in value
+    },
+  },
+})
 //form data
 const formData = reactive({
-  firstName: userData.firstName,
-  lastName: userData.lastName,
-  username: userData.username,
-  email: userData.email,
+  firstName: props.userData.firstName,
+  lastName: props.userData.lastName,
+  //username: props.userData.username,
+  email: props.userData.email,
   oldPassword: '',
   newPassword: '',
-  newPasswordCheck: '',
+  confirmPassword: '',
 })
 
 const emit = defineEmits(['api:start', 'api:end'])
@@ -103,22 +109,9 @@ const updateAccount = async () => {
   if (sending.value) {
     return
   }
-  const { oldPassword, newPassword, newPasswordCheck } = formData
 
   const response = await send(async () => await update.updateUser(formData))
-
-  if (
-    oldPassword !== '' &&
-    oldPassword &&
-    newPassword !== '' &&
-    newPassword &&
-    newPasswordCheck !== '' &&
-    newPasswordCheck
-  ) {
-    if (newPassword === newPasswordCheck) {
-      console.log('match')
-    }
-  }
+  console.log(response)
 }
 </script>
 

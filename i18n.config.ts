@@ -13,6 +13,16 @@ export default defineI18nConfig(() => ({
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
       product: '{count} prodotto | {count} prodotti',
+      company: {
+        name:'Naturalee srl',
+        address:'Via Lorem impsum. 123',
+        city:'20100 Milano (MI)',
+        state: 'Italy',
+        pIva: 'PI IT 0000000000',
+        cf: 'CF 0000000000',
+        rea: 'REA MI 00000',
+        capSoc: 'Cap. Soc. €00.000,00 int.ver',
+      },
       cart: {
         your: 'Il tuo carrello',
         empty: 'Non hai alcun prodotto nel carrello',
@@ -47,6 +57,8 @@ export default defineI18nConfig(() => ({
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',
+        submitContact: 'Invia richiesta',
+        message: 'Descrivi brevemente la tua richiesta*',
         name: 'Nome',
         surname: 'Cognome',
         displayName: 'Nome Visualizzato *',
@@ -87,6 +99,13 @@ export default defineI18nConfig(() => ({
           generate: 'Genera Password',
         },
         leaveBlank: 'lascia in bianco per non modificare',
+        phone: 'Telefono',
+        contactUs: 'Contattaci',
+        moreInfo: 'Per maggiori informaziobi, per richiedere un preventivo o qualsiasi altra richiesta non esitare a contattarci',
+        privacyPolicy: {
+          term1: 'Autorizzo il trattamento dei dati personali in conformità all\'informativa sulla',
+          term2: ', ai sensi del GDPR, General Data Protection Regulation UE 2016/679'
+        },
       },
       shipping: {
         checkPostCode: 'Verifica se il tuo indirizzo è coperto dal servizio',

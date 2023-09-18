@@ -162,7 +162,6 @@ const props = defineProps({
     type: Object,
     default() {
       const { t } = useI18n()
-
       return {
         asc: t('asc'),
         desc: t('desc'),

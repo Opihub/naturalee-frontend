@@ -1,17 +1,13 @@
-$prefix-row: 'row';
-@include object($prefix-row) {
-  display: flex;
-  flex-wrap: wrap;
-  gap: get-var(gap, rem(20px), $prefix: $prefix-row);
-
-  @include element('column') {
-    width: calc(
-      100% / get-var(columns, 1, $prefix: $prefix-row) -
-        (
-          get-var(gap, rem(20px), $prefix: $prefix-row) *
-            (get-var(columns, 1, $prefix: $prefix-row) - 1) /
-            get-var(columns, 1, $prefix: $prefix-row)
-        )
-    );
+@mixin layout($parent, $child) {
+  @include object($parent) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: get-var(gap, rem(20px), $prefix: $parent);
+    @include element($child) {
+      width: get-var(width, calc(100% / get-var(columns, 1, $prefix: $parent) - (get-var(gap, rem(20px), $prefix: $parent) * (get-var(columns, 1, $prefix: $parent) - 1) / get-var(columns, 1, $prefix: $parent))), $prefix: $child);
+    }
+    @content;
   }
 }
+
+@include layout('row', 'column'); 
