@@ -1,9 +1,11 @@
 <template>
-  <form :class="CSS_NAME" method="POST" @submit.prevent="">
-    <div class="o-row s-name">
+  <FormWrapper :class="CSS_NAME" method="POST" @submit.prevent="submitForm()">
+    <template
+      #default="{ columnFullClassName, columnHalfClassName, columnClassName }"
+    >
       <InputField
         v-model="formData.firstName"
-        class="o-row__column u-mb-half"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
         required
       >
@@ -12,18 +14,15 @@
 
       <InputField
         v-model="formData.lastName"
-        class="o-row__column u-mb-half"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
         required
       >
         {{ $t('form.surname') }}*</InputField
       >
-    </div>
-
-    <div class="o-row">
       <InputField
         v-model="formData.email"
-        class="o-row__column s-email"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
         required
       >
@@ -31,87 +30,81 @@
       >
 
       <InputField
+        v-model="formData.phone"
+        :class="[columnClassName, columnHalfClassName]"
+        type="tel"
+      >
+        {{ $t('form.phone') }}*</InputField
+      >
+
+      <InputField
         v-model="formData.message"
-        class="o-row__column u-mb-tiny"
+        :class="[columnClassName, columnFullClassName]"
         type="textarea"
+        rows="4"
         >{{ $t('form.message') }}</InputField
       >
-      <ToggleField v-model="formData.remember">
-        {{ $t('form.login') }}
+
+      <ToggleField v-model="formData.acceptance" required>
+        {{ $t('form.privacyPolicy.term1') }}
+        <BaseLink
+          to="/term-and-conditions"
+          color="dark"
+          underline
+          target="_blank"
+        >
+          privacy policy</BaseLink
+        >
+        {{ $t('form.privacyPolicy.term2') }}
       </ToggleField>
-    </div>
-    <BaseButton
-      class="u-mt-large"
-      color="green"
-      type="submit"
-      :disabled="sending || disabled"
-      >{{ $t('form.submitContact') }}</BaseButton
-    >
-  </form>
+
+      <BaseButton color="green" type="submit" :disabled="sending">{{
+        $t('form.submitContact')
+      }}</BaseButton>
+    </template>
+    <!-- <div class="o-form__column">test</div> -->
+  </FormWrapper>
 </template>
 
 <script setup>
-// import { useAccountStore } from '@/stores/account'
+import { useApi } from '@/composables/api'
 
-// const CSS_NAME = 'c-profile-update-form'
-// // Define (Props, Emits, Page Meta)
-// const props = defineProps({
-//   userData: {
-//     type: Object,
-//     required: true,
-//     validator(value) {
-//       return 'username' in value && 'email' in value
-//     },
-//   },
-// })
+const CSS_NAME = 'c-form'
+
 //form data
 const formData = reactive({
   firstName: '',
   lastName: '',
   email: '',
+  phone: '',
   message: '',
+  acceptance: false,
 })
 
-// const emit = defineEmits(['api:start', 'api:end'])
+const emit = defineEmits(['api:start', 'api:end'])
 
-// const { sending, send } = useSender(emit)
+const { sending, send } = useSender(emit)
 
-// const update = useAccountStore()
+const submitForm = async () => {
+  if (sending.value) {
+    return
+  }
 
-// const updateAccount = async () => {
-//   if (sending.value) {
-//     return
-//   }
-
-//   const response = await send(async () => await update.updateUser({ formData }))
-// }
+  const response = await send(
+    async () =>
+      await useApi(
+        `form/contacts`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+        {
+          cache: false,
+        }
+      )
+  )
+  console.log(response)
+}
 </script>
 
-<style lang="scss">
-@include from(tablet) {
-  @include scope('name') {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 2,
-      )
-    );
-  }
-  @include scope('password') {
-    @include set-local-vars(
-      $prefix: 'heading',
-      $map: (
-        text-color: get-var(color-black),
-      )
-    );
-  }
-  .o-row.row-update-user {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 1,
-      )
-    );
-  }
-}
-</style>
+<style lang="scss"></style>

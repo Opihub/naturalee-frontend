@@ -139,7 +139,7 @@ export const useAccountStore = defineStore('account', () => {
         cache: false,
       }
     )
-    //console.log(response)
+
     delete user.oldPassword
     delete user.newPassword
     delete user.confirmPassword

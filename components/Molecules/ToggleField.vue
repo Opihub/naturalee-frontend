@@ -29,8 +29,8 @@
 
 <script setup>
 // Imports
-import BaseRadio from '@/components/Atoms/BaseRadio.vue';
-import BaseCheckbox from '@/components/Atoms/BaseCheckbox.vue';
+import BaseRadio from '@/components/Atoms/BaseRadio.vue'
+import BaseCheckbox from '@/components/Atoms/BaseCheckbox.vue'
 
 // Constants
 const CSS_NAME = 'c-toggle-field'
@@ -137,6 +137,7 @@ $prefix: 'toggle-field';
 
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   @include element('label') {
     order: 1;
