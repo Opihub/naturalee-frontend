@@ -10,6 +10,9 @@
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'orders-list'
+})
 
 // Component life-cycle hooks
 onMounted(async () => {

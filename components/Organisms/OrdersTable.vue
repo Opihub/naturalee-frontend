@@ -14,7 +14,7 @@
       <template v-if="orders.length > 0">
         <tr v-for="order in orders" :key="order.id" :class="CSS_NAME_ITEM">
           <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('orders.name')">
-            <b>{{ orderId(order) }}</b>
+            <b>{{ id(order) }}</b>
           </td>
           <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('common.date')">
             {{ orderDate(order) }}
@@ -35,15 +35,18 @@
             <div class="o-row">
               <BaseButton
                 as="link"
-                :to="order.link"
+                :to="`/my-account/orders/${order.id}/view`"
                 :class="`${CSS_NAME_ITEM}__view`"
                 color="green"
               >
                 <NuxtIcon name="eye-on" filled />
               </BaseButton>
-              <BaseButton as="link" :to="order.link" color="green">{{
-                $t('orders.reorder')
-              }}</BaseButton>
+              <BaseButton
+                as="link"
+                :to="`/my-account/orders/${order.id}/reorder`"
+                color="green"
+                >{{ $t('orders.reorder') }}</BaseButton
+              >
             </div>
           </td>
         </tr>
@@ -83,8 +86,8 @@ defineProps({
 // Watcher
 
 // Computed
-const orderId = computed(() => (order) => {
-  return `#${order.id.toString().padStart(7, '0')}`
+const id = computed(() => (order) => {
+  return orderId(order.id)
 })
 
 const orderDate = computed(() => (order) => {
