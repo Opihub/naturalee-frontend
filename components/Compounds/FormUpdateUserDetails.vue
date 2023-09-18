@@ -1,9 +1,15 @@
 <template>
-  <form :class="CSS_NAME" method="POST" @submit.prevent="updateAccount()">
-    <div class="o-row s-name">
+  <FormWrapper
+    :class="CSS_NAME"
+    method="POST"
+    @submit.prevent="updateAccount()"
+  >
+    <template
+      #default="{ columnFullClassName, columnHalfClassName, columnClassName }"
+    >
       <InputField
         v-model="formData.firstName"
-        class="o-row__column u-mb-half"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
         required
       >
@@ -12,26 +18,24 @@
 
       <InputField
         v-model="formData.lastName"
-        class="o-row__column u-mb-half"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
         required
       >
         {{ $t('form.surname') }}*</InputField
       >
-    </div>
-    <div class="o-row row-update-user">
+
       <InputField
         v-model="formData.username"
-        class="o-row__column u-mb-half"
+        :class="[columnClassName, columnFullClassName]"
         type="text"
       >
         {{ $t('form.displayName') }}</InputField
       >
-    </div>
-    <base-heading tag="span" class="u-mb-half">{{
-      $t('form.displayNameMsg')
-    }}</base-heading>
-    <div class="o-row">
+      <base-heading tag="span" class="u-mb-half">{{
+        $t('form.displayNameMsg')
+      }}</base-heading>
+
       <InputField
         v-model="formData.email"
         class="o-row__column s-email"
@@ -63,15 +67,15 @@
         type="password"
         >{{ $t('form.password.check') }}</InputField
       >
-    </div>
-    <BaseButton
-      class="u-mt-large"
-      color="green"
-      type="submit"
-      :disabled="sending || disabled"
-      >{{ $t('form.saveChanges') }}</BaseButton
-    >
-  </form>
+      <BaseButton
+        class="u-mt-large"
+        color="green"
+        type="submit"
+        :disabled="sending"
+        >{{ $t('form.saveChanges') }}</BaseButton
+      >
+    </template>
+  </FormWrapper>
 </template>
 
 <script setup>
@@ -116,30 +120,12 @@ const updateAccount = async () => {
 </script>
 
 <style lang="scss">
-@include from(tablet) {
-  @include scope('name') {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 2,
-      )
-    );
-  }
-  @include scope('password') {
-    @include set-local-vars(
-      $prefix: 'heading',
-      $map: (
-        text-color: get-var(color-black),
-      )
-    );
-  }
-  .o-row.row-update-user {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 1,
-      )
-    );
-  }
+@include scope('password') {
+  @include set-local-vars(
+    $prefix: 'heading',
+    $map: (
+      text-color: get-var(color-black),
+    )
+  );
 }
 </style>

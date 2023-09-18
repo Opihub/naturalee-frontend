@@ -54,14 +54,20 @@ $prefix: 'contacts';
   @include object('row') {
     @include object('container') {
       @include object('background') {
-        padding: 50px;
+        padding: 25px;
+        @include from('tablet') {
+          padding: 50px;
+        }
         border-radius: 30px;
       }
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
       @include from('tablet') {
         flex-direction: row;
+        gap: 4em;
       }
     }
     @include element('container') {

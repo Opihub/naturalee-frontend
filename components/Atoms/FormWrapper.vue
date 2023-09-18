@@ -1,6 +1,7 @@
 <template>
   <form :class="className" :style="style">
     <slot
+      :class-name="CSS_NAME"
       :column-class-name="CSS_FORM_FIELD"
       :column-full-class-name="CSS_FORM_FIELD_FULL"
       :column-half-class-name="CSS_FORM_FIELD_HALF"
@@ -63,6 +64,11 @@ const className = computed(() => {
 
 <style lang="scss">
 $prefix: 'form';
+@include object($prefix) {
+  @include until('tablet') {
+    justify-content: center;
+  }
+}
 @include layout($prefix, 'field') {
   @include from('tablet') {
     @include set-local-vars(

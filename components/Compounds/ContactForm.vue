@@ -1,5 +1,5 @@
 <template>
-  <FormWrapper :class="CSS_NAME" method="POST" @submit.prevent="submitForm()">
+  <FormWrapper method="POST" @submit.prevent="submitForm()">
     <template
       #default="{ columnFullClassName, columnHalfClassName, columnClassName }"
     >
@@ -68,8 +68,6 @@
 
 <script setup>
 import { useApi } from '@/composables/api'
-
-const CSS_NAME = 'c-form'
 
 //form data
 const formData = reactive({
