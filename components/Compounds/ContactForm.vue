@@ -61,8 +61,10 @@
       <BaseButton color="green" type="submit" :disabled="sending">{{
         $t('form.submitContact')
       }}</BaseButton>
+      <BaseMessage v-if="feedback.status" :status="feedback.status">{{
+        feedback.message
+      }}</BaseMessage>
     </template>
-    <!-- <div class="o-form__column">test</div> -->
   </FormWrapper>
 </template>
 
@@ -79,9 +81,14 @@ const formData = reactive({
   acceptance: false,
 })
 
+const feedback = reactive({
+  status: null,
+  message: null,
+})
+
 const emit = defineEmits(['api:start', 'api:end'])
 
-const { sending, send } = useSender(emit)
+const { sending, send, sent } = useSender(emit)
 
 const submitForm = async () => {
   if (sending.value) {
@@ -101,7 +108,24 @@ const submitForm = async () => {
         }
       )
   )
-  console.log(response)
+  if (sent) {
+    feedback.status =
+      response.value.data.status == 'mail_sent' ? 'success' : 'danger'
+    feedback.message = response.value.data.message
+
+    const inputs = document.querySelectorAll('.o-input.is-valid')
+    Array.from(inputs).forEach((input) => {
+      input.classList.remove('is-valid', 'is-init')
+    })
+    if (feedback.status == 'mail_sent') {
+      formData.firstName = ''
+      formData.lastName = ''
+      formData.email = ''
+      formData.phone = ''
+      formData.message = ''
+      formData.acceptance = false
+    }
+  }
 }
 </script>
 

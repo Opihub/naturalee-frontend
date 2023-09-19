@@ -79,7 +79,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function login(profile) {
-    // TODO: verificare coi dati reali
+    // TODO: prova a cambiare con try catch
     const user = { ...profile }
 
     if (user.token) {
@@ -101,6 +101,19 @@ export const useAccountStore = defineStore('account', () => {
 
   async function updateUser(profile) {
     const user = { ...profile }
+
+    if (
+      user.oldPassword === '' &&
+      (user.newPassword !== '' || user.confirmPassword !== '')
+    ) {
+      return {
+        value: {
+          success: false,
+          message: 'La passowrd corrente è errata',
+        },
+      }
+    }
+
     if (
       user.oldPassword === '' &&
       !user.oldPassword &&
@@ -122,10 +135,20 @@ export const useAccountStore = defineStore('account', () => {
         !user.newPassword.match(getPasswordPattern()) &&
         !user.confirmPassword.match(getPasswordPattern())
       ) {
-        return 'Wrong password pattern'
+        return {
+          value: {
+            success: false,
+            message: 'La password non è nel formato richiesto',
+          },
+        }
       }
       if (user.newPassword !== user.confirmPassword) {
-        return 'Password does not match'
+        return {
+          value: {
+            success: false,
+            message: 'Le passwword non corrispondono',
+          },
+        }
       }
     }
 

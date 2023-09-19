@@ -74,11 +74,15 @@
         :disabled="sending"
         >{{ $t('form.saveChanges') }}</BaseButton
       >
+      <BaseMessage v-if="feedback.status" :status="feedback.status">{{
+        feedback.message
+      }}</BaseMessage>
     </template>
   </FormWrapper>
 </template>
 
 <script setup>
+// Imports
 import { useAccountStore } from '@/stores/account'
 
 const CSS_NAME = 'c-profile-update-form'
@@ -103,9 +107,14 @@ const formData = reactive({
   confirmPassword: '',
 })
 
+const feedback = reactive({
+  status: null,
+  message: null,
+})
+
 const emit = defineEmits(['api:start', 'api:end'])
 
-const { sending, send } = useSender(emit)
+const { sending, send, sent } = useSender(emit)
 
 const update = useAccountStore()
 
@@ -115,7 +124,25 @@ const updateAccount = async () => {
   }
 
   const response = await send(async () => await update.updateUser(formData))
-  console.log(response)
+
+  if (sent) {
+    if (response.value.success) {
+      feedback.status = 'success'
+      feedback.message = response.value.message
+
+      formData.firstName = response.value.data.firstName
+      formData.lastName = response.value.data.lastName
+      formData.email = response.value.data.email
+      formData.oldPassword = ''
+      formData.newPassword = ''
+      formData.confirmPassword = ''
+    } else {
+      notify({
+        message: response.value.message,
+        status: 'danger',
+      })
+    }
+  }
 }
 </script>
 
