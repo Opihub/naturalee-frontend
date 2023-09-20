@@ -12,7 +12,8 @@ export default defineI18nConfig(() => ({
       apply: 'Applica',
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
-      product: '{count} prodotto | {count} prodotti',
+      productCount: '{count} @:product',
+      product: 'prodotto | prodotti',
       cart: {
         your: 'Il tuo carrello',
         empty: 'Non hai alcun prodotto nel carrello',
@@ -30,9 +31,6 @@ export default defineI18nConfig(() => ({
         fee: 'IVA Inc',
         proceed: "Procedere con l'ordine",
         goToCart: 'Vai al carrello',
-        subTotals: 'Subtotale',
-        totals: 'Totale',
-        shipping: 'Spedizione',
         shippingTo: 'Spedizione a <b>city</b>',
         type: 'Tipologia',
         price: 'Prezzo',
@@ -102,6 +100,7 @@ export default defineI18nConfig(() => ({
         recommended: 'Prodotti consigliati',
       },
       coupon: {
+        name: 'Coupon',
         formTitle: 'Hai un codice sconto?',
         formPlaceholder: 'Codice promozionale',
       },
@@ -117,8 +116,11 @@ export default defineI18nConfig(() => ({
         date: 'Data',
         actions: 'Azioni',
         totals: 'Totale',
+        subTotals: 'Subtotale',
       },
       orders: {
+        shipping: 'Spedizione',
+        payment: 'Metodo di pagamento',
         name: 'Ordine | Ordini',
         statusLabel: 'Stato',
         status: {
@@ -133,6 +135,17 @@ export default defineI18nConfig(() => ({
         },
         empty: 'Non hai ancora alcun ordine',
         reorder: 'Riordina',
+        details: 'Dettagli ordine',
+        createdAt:
+          "L'ordine {id} è stato creato il {date} ed è attualmente {status}.",
+      },
+      addresses: {
+        billing: 'Indirizzo di fatturazione',
+        shipping: 'Indirizzo di spedizione',
+        cf: 'CF',
+        vat: 'P. IVA',
+        sdi: 'SDI',
+        pec: 'PEC',
       },
     },
   },
