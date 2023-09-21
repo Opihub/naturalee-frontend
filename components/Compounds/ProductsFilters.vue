@@ -273,7 +273,9 @@ $prefix-filter: '#{$prefix}-filter';
       }
 
       @include from(desktop) {
-        border-left: none;
+        &::before {
+          content: none;
+        }
       }
     }
 
