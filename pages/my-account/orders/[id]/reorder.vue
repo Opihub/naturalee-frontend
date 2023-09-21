@@ -1,24 +1,29 @@
 <template>
   <section>
-    <WorkInProgress />
+    <Suspense>
+      <ProductsGrid
+        class="u-pb-huge u-pt-none u-pt-medium@desktop"
+        :from="`shop/orders/${$route.params.id}/products`"
+      />
+    </Suspense>
   </section>
 </template>
 
 <script setup>
 // Imports
-import { useAccountStore } from '@/stores/account'
 
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'order-products'
+})
 
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
 
 // Data
-const { account } = storeToRefs(store)
 
 // Watcher
 

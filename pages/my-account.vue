@@ -25,11 +25,12 @@ definePageMeta({
 // Component life-cycle hooks
 
 // Composables
-const page = ref({})
 const store = useAccountStore()
 const route = useRoute()
+const router = useRouter()
 
 // Data
+const page = ref({})
 const { isLoggedIn } = storeToRefs(store)
 const breadcrumbs = ref(page.value?.breadcrumbs || [])
 
@@ -37,10 +38,36 @@ const breadcrumbs = ref(page.value?.breadcrumbs || [])
 watch(
   () => route.path,
   async () => {
-    const { page: response } = await usePage(route.path)
+    let path = route.path
+    const isOrderChild = ['order-products', 'order-view'].includes(route.name)
+
+    if (isOrderChild) {
+      const orderRoute = router.resolve({
+        name: 'orders-list',
+      })
+
+      path = orderRoute.path
+    }
+
+    const { page: response } = await usePage(path)
 
     page.value = response.value
-    breadcrumbs.value = page.value?.breadcrumbs || breadcrumbs.value
+    // breadcrumbs.value = page.value?.breadcrumbs || breadcrumbs.value
+    const newBreadcrumbs = page.value?.breadcrumbs || breadcrumbs.value
+    breadcrumbs.value = [...newBreadcrumbs]
+
+    if (isOrderChild) {
+      const alreadyExists = breadcrumbs.value.some((breadcrumb) => {
+        return breadcrumb.link === route.path
+      })
+
+      if (!alreadyExists) {
+        breadcrumbs.value.push({
+          link: route.path,
+          title: orderId(route.params.id)
+        })
+      }
+    }
   },
   { immediate: true }
 )

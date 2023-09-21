@@ -27,8 +27,8 @@ $variables-to-set: (
   text-color: $text-color,
   background-color: $background-color,
   container-width: rem($container-width),
-  container-padding: rem($container-padding),
-  container-size: calc(#{get-var(container-width)} + #{get-var(container-padding)} * 2),
+  container-default-padding: rem($container-padding),
+  container-size: calc(#{get-var(container-width)} + #{get-var(container-default-padding)} * 2),
 
   z-header: map.get($z-index, header),
   z-notification: map.get($z-index, notification),

@@ -3,3 +3,7 @@ export function isCategory(category = null) {
     category
   )
 }
+
+export function orderId(id) {
+  return `#${id.toString().padStart(7, '0')}`
+}
