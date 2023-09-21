@@ -3,12 +3,12 @@
     <template #head>
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
-          Prodotto <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
+          {{ $t('product', count) }} <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
         </th>
         <th>{{ $t('cart.type') }}</th>
         <th>{{ $t('cart.price') }}</th>
         <th>{{ $t('cart.qty') }}</th>
-        <th colspan="2">{{ $t('cart.subTotals') }}</th>
+        <th colspan="2">{{ $t('common.subTotals') }}</th>
       </tr>
     </template>
 
@@ -18,21 +18,21 @@
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" data-title="Prodotto">
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('product')">
             {{ product.title }}
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" data-title="Tipologia">
-            {{ product.costDescription }}
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('cart.type')">
+            {{ product.selling }}
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Prezzo"
+            :data-title="$t('cart.price')"
           >
             <PriceHolder :price="product.price" />
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Quantità / U"
+            :data-title="$t('cart.qty')"
           >
             <BaseCounter v-model="product.quantity">
               <template #after
@@ -42,7 +42,7 @@
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Subtotale"
+            :data-title="$t('common.subTotals')"
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>
@@ -69,9 +69,6 @@
           >
             {{ $t('cart.clearCart') }}
           </button>
-          <!-- <BaseButton class="u-mr-half" color="green" @click="clearCart"
-            >Aggiorna il carrello</BaseButton
-          > -->
         </td>
       </tr>
     </template>
