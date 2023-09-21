@@ -20,7 +20,7 @@
     />
 
     <div :class="[`${CSS_NAME}__footer`, `${CSS_NAME}__block`]">
-      <BaseButton color="green" @click="$emit('confirm')">{{
+      <BaseButton as="link" color="green" to="/checkout">{{
         $t('cart.proceed')
       }}</BaseButton>
     </div>
@@ -35,7 +35,6 @@ import { useCartStore } from '@/stores/cart'
 const CSS_NAME = 'c-cart-resume'
 
 // Define (Props, Emits, Page Meta)
-defineEmits(['confirm'])
 
 // Component life-cycle hooks
 

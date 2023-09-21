@@ -77,7 +77,7 @@
         </PriceHolder>
       </dl>
 
-      <BaseButton :class="`${CSS_NAME}__submit`" color="green">{{
+      <BaseButton as="link" :class="`${CSS_NAME}__submit`" color="green" to="/checkout">{{
         $t('cart.proceed')
       }}</BaseButton>
       <BaseLink
