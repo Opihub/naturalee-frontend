@@ -59,7 +59,7 @@ $prefix: 'container';
   width: 100%;
   height: get-var(height, auto, $prefix: $prefix);
   margin: get-var(margin, 0 auto, $prefix: $prefix);
-  padding: 0 get-var(padding, get-var(container-padding), $prefix: $prefix);
+  padding: 0 get-var(padding, get-var(container-default-padding), $prefix: $prefix);
   max-width: get-var(max-width, get-var(container-size), $prefix: $prefix);
 
   @include modifier('flex') {
