@@ -109,17 +109,6 @@ const chosenFilters = ref(
 const orderby = ref(route.query.sort || null)
 
 // Watcher
-watch(orderby, () => {
-  updateQuery()
-})
-watch(
-  () => chosenFilters.value,
-  () => {
-    updateQuery()
-  },
-  { deep: true }
-)
-
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
     fetchProducts()
@@ -143,11 +132,11 @@ const showLoader = computed(() => {
     return true
   }
 
-  if (props.use) {
+  if (props.use && props.use.length) {
     return products.value.length < props.use.length
   }
 
-  return false
+  return canFetch.value
 })
 
 // Methods
@@ -190,6 +179,8 @@ const changeOrder = (order) => {
 }
 
 const fetchProducts = async () => {
+  updateQuery()
+
   if (!props.from) {
     if (!props.use) {
       noProductsMessage.value =
@@ -259,9 +250,9 @@ const fetchProducts = async () => {
 
       products.value = [...products.value, ...records]
       page.value = pagination?.next || page.value
-      canFetch.value = pagination.last !== true
 
-      if (pagination.last) {
+      if (!pagination.next) {
+        canFetch.value = false
         stopLazyLoad()
       }
     } else {
