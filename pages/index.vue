@@ -7,7 +7,7 @@
       content-center
     >
       <template #back>
-        <BaseVideo src="assets/video/homepage.mp4" background />
+        <BaseVideo :src="HomeVideo" background />
       </template>
 
       <template #default="{ className }">
@@ -96,6 +96,7 @@
 
 <script setup>
 // Imports
+import HomeVideo from 'assets/video/homepage.mp4'
 
 // Constants
 
