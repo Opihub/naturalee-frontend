@@ -1,6 +1,6 @@
 <template>
   <BackgroundHolder :class="CSS_NAME" tag="section" :color="color">
-    <SiteContainer flex>
+    <SiteContainer flex :style="style">
       <div :class="`${CSS_NAME}__content`">
         <BaseHeading
           v-if="slots['sup-title']"
@@ -17,12 +17,14 @@
           ><slot name="title"
         /></BaseHeading>
 
-        <BaseParagraph v-if="slots.default" color="white"
+        <BaseParagraph
+          v-if="slots.default"
+          :color="color == 'white' ? 'black' : 'white'"
           ><slot
         /></BaseParagraph>
 
         <BaseButton
-          v-if="button.text"
+          v-if="button?.text"
           :as="button.to ? 'link' : 'button'"
           :target="button.target || null"
           :color="button.color || 'yellow'"
@@ -75,9 +77,18 @@ const props = defineProps({
   button: {
     type: Object,
     default: null,
+    required: false,
     validator(value) {
       return 'text' in value
     },
+  },
+  flipped: {
+    type: Boolean,
+    default: false,
+  },
+  borderRadius: {
+    type: String,
+    default: null,
   },
 })
 
@@ -109,12 +120,25 @@ const parallaxElement = ref(null)
 // Watcher
 
 // Computed
+const style = computed(() => {
+  const style = {}
 
+  if (props.flipped) {
+    style['--container-direction'] = 'row-reverse'
+  }
+  if (props.borderRadius) {
+    style['--image-border-radius'] = props.borderRadius
+  }
+  return style
+})
 // Methods
 </script>
 
 <style lang="scss">
 $prefix: 'content-row';
+@include object('container') {
+  flex-direction: get-var(container-direction);
+}
 @include component($prefix) {
   $prefix-parallax: '#{$prefix}-parallax';
   @include set-local-vars(
@@ -162,7 +186,7 @@ $prefix: 'content-row';
 
     @include from(tablet) {
       order: 2;
-      margin-left: auto;
+      margin-left: get-var(parallax-margin-left, auto);
       max-width: get-var(width, rem(925px), $prefix: $prefix-parallax);
     }
 
@@ -170,6 +194,7 @@ $prefix: 'content-row';
       @include from(tablet) {
         position: absolute;
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
+        border-radius: get-var(image-border-radius, 0);
       }
     }
   }
