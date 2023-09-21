@@ -7,8 +7,14 @@ export default defineI18nConfig(() => ({
       quantity: 'Quantità',
       search: 'Cerca',
       searchMsg: 'Di cosa hai bisogno?',
-      filter: 'Filtra',
-      clearFilters: 'Azzera',
+      filters: {
+        label: 'Filtra',
+        clear: 'Azzera',
+        selected:
+          'Nessun filtro selezionato | {count} filtro selezionato | {count} filtri selezionati',
+        order: 'Ordina',
+        orderBy: 'Ordina per...',
+      },
       apply: 'Applica',
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
@@ -117,6 +123,7 @@ export default defineI18nConfig(() => ({
         actions: 'Azioni',
         totals: 'Totale',
         subTotals: 'Subtotale',
+        loading: 'Caricamento',
       },
       orders: {
         shipping: 'Spedizione',

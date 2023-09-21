@@ -8,7 +8,7 @@
 
     <Suspense>
       <ProductsGrid
-        class="u-pb-huge u-pt-large"
+        class="u-pb-huge u-pt-none u-pt-medium@desktop"
         from="shop/search/products"
         :search="search"
       />

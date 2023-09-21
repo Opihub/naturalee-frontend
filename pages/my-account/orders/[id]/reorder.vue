@@ -1,6 +1,11 @@
 <template>
   <section>
-    {{ $route.params.id }} - {{ order }}
+    <Suspense>
+      <ProductsGrid
+        class="u-pb-huge u-pt-none u-pt-medium@desktop"
+        :from="`shop/orders/${$route.params.id}/products`"
+      />
+    </Suspense>
   </section>
 </template>
 
@@ -17,8 +22,6 @@ definePageMeta({
 // Component life-cycle hooks
 
 // Composables
-const route = useRoute()
-const order = await useApi(`shop/orders/${route.params.id}/products`)
 
 // Data
 
