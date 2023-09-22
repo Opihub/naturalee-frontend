@@ -4,14 +4,14 @@
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
           {{
-            $t('productCount', products.length, {
+            $t('products.count', products.length, {
               count: products.length,
             })
           }}
         </th>
-        <th>{{ $t('cart.type') }}</th>
-        <th>{{ $t('cart.price') }}</th>
-        <th>{{ $t('cart.qty') }}</th>
+        <th>{{ $t('products.type') }}</th>
+        <th>{{ $t('products.price') }}</th>
+        <th>{{ $t('company.quantity') }}</th>
         <th>{{ $t('common.subTotals') }}</th>
       </tr>
     </template>
@@ -21,21 +21,21 @@
         <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
           <ProductImage :src="product.image" :alt="product.title" />
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('productCount')">
+        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.count')">
           {{ product.selling }}
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('cart.type')">
+        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
           {{ product.costDescription }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('cart.price')"
+          :data-title="$t('products.price')"
         >
           <PriceHolder :price="product.price" />
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('cart.qty')"
+          :data-title="$t('company.quantity')"
         >
           {{ `${product.quantity} ${product.unit}` }}
         </td>

@@ -5,7 +5,7 @@
         <template v-if="cart.length">
           <span>
             {{ $t('cart.your') }} -
-            {{ $t('product', cart.length, { count: cart.length }) }}
+            {{ $t('products.label', cart.length, { count: cart.length }) }}
           </span>
 
           <BaseLink

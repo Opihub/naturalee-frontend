@@ -3,11 +3,11 @@
     <template #head>
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
-          {{ $t('product', count) }} <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
+          {{ $t('products.label', count) }} <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
         </th>
-        <th>{{ $t('cart.type') }}</th>
-        <th>{{ $t('cart.price') }}</th>
-        <th>{{ $t('cart.qty') }}</th>
+        <th>{{ $t('products.type') }}</th>
+        <th>{{ $t('products.price') }}</th>
+        <th>{{ $t('company.quantity') }}</th>
         <th colspan="2">{{ $t('common.subTotals') }}</th>
       </tr>
     </template>
@@ -18,21 +18,21 @@
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('product')">
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.label')">
             {{ product.title }}
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('cart.type')">
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
             {{ product.selling }}
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('cart.price')"
+            :data-title="$t('products.price')"
           >
             <PriceHolder :price="product.price" />
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('cart.qty')"
+            :data-title="$t('company.quantity')"
           >
             <BaseCounter v-model="product.quantity">
               <template #after
