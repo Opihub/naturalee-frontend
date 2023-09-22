@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
     <SiteContainer flex class="u-mt-huge" :max-width="1370">
       <BaseVideo src="assets/video/azienda.mp4" :aspect-ratio="ratio" />
@@ -111,160 +111,180 @@ const cards = [
 </script>
 
 <style lang="scss" scoped>
-@include component('first-section') {
-  margin-top: 100px;
-  @include set-local-vars(
-    $prefix: 'content-row',
-    $map: (
-      margin: rem(100px),
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'container',
-    $map: (
-      justify-content: start,
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'parallax',
-    $map: (
-      margin-left: 0,
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'content-row-parallax',
-    $map: (
-      offset: rem(-55px) 0 0,
-    )
-  );
-}
-@include component('second-section') {
-  position: relative;
-
-  @include from('tablet') {
-    text-align: center;
-  }
-
-  padding-top: rem(60px);
-  padding-bottom: rem(60px);
-
-  @media screen and (max-width: 375px) {
-    & h1 {
+@include scope('azienda') {
+  @include component('first-section') {
+    margin-top: 100px;
+    @include object('container') {
       @include set-local-vars(
-        $prefix: 'heading',
+        $prefix: 'container',
         $map: (
-          font-size: rem(30px),
+          direction: row-reverse,
         )
       );
     }
-  }
-  @include set-local-vars(
-    $prefix: 'custom',
-    $map: (
-      pt: rem(140px),
-      pb: rem(120px),
-    )
-  );
-  @include object('circular-text') {
-    font-weight: 400;
-    top: rem(50px);
-    right: calc(rem(100px) - 4vw);
-    @include from('tablet') {
-      top: rem(120px);
-      right: rem(100px);
-    }
-  }
-}
-@include component('third-section') {
-  @include object('row') {
-    @include from('full') {
-      flex-wrap: nowrap;
-    }
     @include set-local-vars(
-      $prefix: 'row',
+      $prefix: 'content-row',
       $map: (
-        gap: rem(30px),
+        margin: rem(100px),
       )
     );
+    @include set-local-vars(
+      $prefix: 'container',
+      $map: (
+        justify-content: start,
+      )
+    );
+    @include set-local-vars(
+      $prefix: 'parallax',
+      $map: (
+        margin-left: 0,
+      )
+    );
+    @include set-local-vars(
+      $prefix: 'content-row-parallax',
+      $map: (
+        offset: rem(-55px) 0 0,
+      )
+    );
+  }
+  @include component('second-section') {
+    position: relative;
+
     @include from('tablet') {
+      text-align: center;
+    }
+
+    padding-top: rem(60px);
+    padding-bottom: rem(60px);
+
+    @media screen and (max-width: 375px) {
+      & h1 {
+        @include set-local-vars(
+          $prefix: 'heading',
+          $map: (
+            font-size: rem(30px),
+          )
+        );
+      }
+    }
+    @include set-local-vars(
+      $prefix: 'custom',
+      $map: (
+        pt: rem(140px),
+        pb: rem(120px),
+      )
+    );
+    @include object('circular-text') {
+      font-weight: 400;
+      top: rem(50px);
+      right: calc(rem(100px) - 4vw);
+      @include from('tablet') {
+        top: rem(120px);
+        right: rem(100px);
+      }
+    }
+  }
+  @include component('third-section') {
+    @include object('row') {
+      @include from('full') {
+        flex-wrap: nowrap;
+      }
       @include set-local-vars(
         $prefix: 'row',
         $map: (
-          gap: rem(128px),
+          gap: rem(30px),
+        )
+      );
+      @include from('tablet') {
+        @include set-local-vars(
+          $prefix: 'row',
+          $map: (
+            gap: rem(128px),
+          )
+        );
+      }
+      justify-content: center;
+    }
+    text-align: center;
+    position: relative;
+    @include object('heading') {
+      @include set-local-vars(
+        $prefix: 'heading',
+        $map: (
+          'text-color': color-black,
         )
       );
     }
-    justify-content: center;
   }
-  text-align: center;
-  position: relative;
-  @include object('heading') {
+  @include component('fourth-section') {
+    @include object('container') {
+      @include component('content-row') {
+        background-color: red;
+        @include element('parallax') {
+          display: flex !important;
+          align-items: center !important;
+        }
+      }
+    }
+    margin-top: rem(100px);
+    @include set-local-vars(
+      $prefix: 'content-row',
+      $map: (
+        margin: rem(100px),
+      )
+    );
+    @include set-local-vars(
+      $prefix: 'container',
+      $map: (
+        justify-content: space-around,
+      )
+    );
+    @include set-local-vars(
+      $prefix: 'container',
+      $map: (
+        align-items: center,
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'parallax',
+      $map: (
+        margin-left: 0,
+      )
+    );
     @include set-local-vars(
       $prefix: 'heading',
       $map: (
         'text-color': color-black,
       )
     );
+    @include set-local-vars(
+      $prefix: 'paragraph',
+      $map: (
+        'text-color': color-black,
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'content-row-content',
+      $map: (
+        width: rem(537px),
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'content-row-parallax',
+      $map: (
+        width: rem(790px),
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'image',
+      $map: (
+        border-radius: rem(50px),
+      )
+    );
   }
-}
-@include component('fourth-section') {
-  margin-top: rem(100px);
-  @include set-local-vars(
-    $prefix: 'content-row',
-    $map: (
-      margin: rem(100px),
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'container',
-    $map: (
-      justify-content: space-around,
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'container',
-    $map: (
-      align-items: center,
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'parallax',
-    $map: (
-      margin-left: 0,
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'heading',
-    $map: (
-      'text-color': color-black,
-    )
-  );
-  @include set-local-vars(
-    $prefix: 'paragraph',
-    $map: (
-      'text-color': color-black,
-    )
-  );
-
-  @include set-local-vars(
-    $prefix: 'content-row-content',
-    $map: (
-      width: rem(537px),
-    )
-  );
-
-  @include set-local-vars(
-    $prefix: 'content-row-parallax',
-    $map: (
-      width: rem(790px),
-    )
-  );
-
-  @include set-local-vars(
-    $prefix: 'image',
-    $map: (
-      border-radius: rem(50px),
-    )
-  );
 }
 </style>
