@@ -55,6 +55,10 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function load() {
+    if (!isLoggedIn.value) {
+      return cart.value
+    }
+
     const response = await useApi('shop/cart/products', null, {
       cache: false
     }).catch((error) => {
@@ -64,9 +68,13 @@ export const useCartStore = defineStore('cart', () => {
       )
     })
 
-    if (response.value.success) {
-      cart.value = response.value.data
+    if (!response.value.success) {
+      throw new Error(response)
     }
+
+    cart.value = response.value.data
+
+    return cart.value
   }
 
   function clearCart() {
