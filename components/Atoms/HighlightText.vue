@@ -71,7 +71,10 @@ $prefix: 'highlight-text';
     border-bottom-right-radius: 90px 90px;
     border-top-left-radius: 80px 80px;
     border-bottom-left-radius: 80px 80px;
-    transform: translate(-50%, 40%) rotateX(60deg);
+    transform: translate(-50%, 0) rotateX(60deg);
+    @include from('desktop') {
+      transform: translate(-50%, 40%) rotateX(60deg);
+    }
     z-index: -1;
   }
 }

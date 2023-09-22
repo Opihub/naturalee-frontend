@@ -22,7 +22,7 @@
     </ContentRow>
     <BackgroundHolder tag="section" color="white">
       <SiteContainer
-        class="c-second-section u-pt-huge u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
+        class="c-second-section u-pt-huge@tablet u-pb-huge@tablet u-pt-custom@tablet u-pb-custom@tablet"
         :max-width="790"
       >
         <BaseHeading>
@@ -38,7 +38,7 @@
         </BaseParagraph>
       </SiteContainer>
     </BackgroundHolder>
-    <SiteContainer class="c-third-section u-pt-huge u-pb-huge">
+    <SiteContainer class="c-third-section u-pt-huge u-pb-huge@tablet">
       <BaseHeading class="u-pb-huge" tag="h2">
         Amet consectetur adipisicing</BaseHeading
       >
@@ -139,6 +139,25 @@ const cards = [
   );
 }
 @include component('second-section') {
+  position: relative;
+
+  @include from('tablet') {
+    text-align: center;
+  }
+
+  padding-top: rem(60px);
+  padding-bottom: rem(60px);
+
+  @media screen and (max-width: 375px) {
+    & h1 {
+      @include set-local-vars(
+        $prefix: 'heading',
+        $map: (
+          font-size: rem(30px),
+        )
+      );
+    }
+  }
   @include set-local-vars(
     $prefix: 'custom',
     $map: (
@@ -146,17 +165,36 @@ const cards = [
       pb: rem(120px),
     )
   );
-  text-align: center;
-  position: relative;
   @include object('circular-text') {
-    top: rem(120px);
-    right: rem(100px);
     font-weight: 400;
+    top: rem(50px);
+    right: calc(rem(100px) - 4vw);
+    @include from('tablet') {
+      top: rem(120px);
+      right: rem(100px);
+    }
   }
 }
 @include component('third-section') {
   @include object('row') {
-    flex-wrap: nowrap;
+    @include from('full') {
+      flex-wrap: nowrap;
+    }
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        gap: rem(30px),
+      )
+    );
+    @include from('tablet') {
+      @include set-local-vars(
+        $prefix: 'row',
+        $map: (
+          gap: rem(128px),
+        )
+      );
+    }
+    justify-content: center;
   }
   text-align: center;
   position: relative;

@@ -49,18 +49,31 @@ $prefix: 'circular-text';
   position: absolute;
   z-index: 3;
   & [style*='--index'] {
-    --inner-angle: calc((360 / var(--total)) * 0.7deg);
+    --inner-angle: calc((360 / var(--total)) * 0.65deg);
+    @include from('tablet') {
+      --inner-angle: calc((360 / var(--total)) * 0.7deg);
+    }
     --character-width: 1.5; /* In "ch" units */
     --radius: calc(
       (var(--character-width, 1) / sin(var(--inner-angle))) * -1ch
     );
-    font-size: get-var(circular-font-size, rem(18));
+    font-size: get-var(circular-font-size, rem(10px));
+    @include from('tablet') {
+      font-size: get-var(circular-font-size, rem(12px));
+    }
+    @include from('desktop') {
+      font-size: get-var(circular-font-size, rem(18px));
+    }
     position: absolute;
     top: 30%;
     left: 50%;
     color: $red;
-    transform: rotate(calc(var(--inner-angle) * var(--index) - 70deg))
+    transform: rotate(calc(var(--inner-angle) * var(--index) - 55deg))
       translateY(var(--radius, -5ch));
+    @include from('tablet') {
+      transform: rotate(calc(var(--inner-angle) * var(--index) - 70deg))
+        translateY(var(--radius, -5ch));
+    }
   }
 }
 </style>
