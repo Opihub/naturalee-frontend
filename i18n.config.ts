@@ -47,6 +47,7 @@ export default defineI18nConfig(() => ({
         fee: 'IVA Inc',
         proceed: "Procedere con l'ordine",
         goToCart: 'Vai al carrello',
+        total: 'Totale carrello',
         shippingTo: 'Spedizione a <b>city</b>',
         type: 'Tipologia',
         price: 'Prezzo',
