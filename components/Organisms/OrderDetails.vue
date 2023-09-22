@@ -11,8 +11,8 @@
         </th>
         <th>{{ $t('products.type') }}</th>
         <th>{{ $t('products.price') }}</th>
-        <th>{{ $t('company.quantity') }}</th>
-        <th>{{ $t('common.subTotals') }}</th>
+        <th>{{ $t('products.quantity') }}</th>
+        <th>{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
@@ -35,13 +35,13 @@
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('company.quantity')"
+          :data-title="$t('products.quantity')"
         >
           {{ `${product.quantity} ${product.unit}` }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('common.subTotals')"
+          :data-title="$t('common.subTotal')"
         >
           <PriceHolder :price="product.price * product.quantity" />
         </td>
@@ -51,10 +51,10 @@
       <tr :class="CSS_NAME_ITEM">
         <td
           :class="CSS_NAME_ITEM_CELL"
-          :data-title="$t('common.subTotals')"
+          :data-title="$t('common.subTotal')"
           colspan="3"
         >
-          {{ $t('common.subTotals') }}:
+          {{ $t('common.subTotal') }}:
         </td>
         <td :class="CSS_NAME_ITEM_CELL" colspan="3">
           <PriceHolder :price="subTotal" />
@@ -93,10 +93,10 @@
       <tr :class="CSS_NAME_ITEM">
         <td
           :class="CSS_NAME_ITEM_CELL"
-          :data-title="$t('common.totals')"
+          :data-title="$t('common.total')"
           colspan="3"
         >
-          {{ $t('common.totals') }}:
+          {{ $t('common.total') }}:
         </td>
         <td :class="CSS_NAME_ITEM_CELL" colspan="3">
           <PriceHolder :price="granTotal" />
@@ -121,6 +121,10 @@ const props = defineProps({
     default() {
       return []
     },
+  },
+  subTotal: {
+    type: Number,
+    default: null,
   },
   shipping: {
     type: Object,
@@ -149,11 +153,9 @@ const props = defineProps({
 // Watcher
 
 // Computed
-const subTotal = computed(() => {
-  return props.products.reduce((total, current) => {
-    return total + current.price * current.quantity
-  }, 0)
-})
+const { subTotal } = props.subTotal
+  ? ref(props.subTotal)
+  : useTotal(props.products)
 
 const granTotal = computed(() => {
   return subTotal.value + props.shipping.cost || 0

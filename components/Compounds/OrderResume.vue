@@ -1,50 +1,62 @@
 <template>
   <ReceiptBlock :class="CSS_NAME">
     <template #header>
-      <BaseHeading tag="span" use="custom">{{ $t('cart.total') }}</BaseHeading>
+      <BaseHeading tag="span" use="custom" :text="heading" />
     </template>
 
     <template #default="{ className }">
-      <div :class="[`${CSS_NAME}__coupon`, className]">
-        <span>{{ $t('coupon.formTitle') }}</span>
-        <FormCoupon
-          class="u-mt-mini"
-          :placeholder="$t('coupon.formPlaceholder')"
-        />
-      </div>
+      <slot name="before" :class-name="[`${CSS_NAME}__row`, className]" />
 
-      <TotalsRecap
+      <TotalRecap
         class="u-pt-half u-pb-half"
         :class="`${CSS_NAME}__body`"
-        :sub-totals="subTotals"
-        :total-class-name="`${CSS_NAME}__body__totals`"
+        :sub-total="subTotal"
+        :total-class-name="`${CSS_NAME}__body__total`"
+        :without-sub-total="withoutSubTotal"
+        :without-shipping="withoutShipping"
+        :without-payment="withoutPayment"
       />
 
-      <div :class="[`${CSS_NAME}__footer`, className]">
-        <BaseButton as="link" color="green" to="/checkout">{{
-          $t('cart.proceed')
-        }}</BaseButton>
-      </div>
+      <slot name="after" :class-name="[`${CSS_NAME}__footer`, className]" />
     </template>
   </ReceiptBlock>
 </template>
 
 <script setup>
 // Imports
-import { useCartStore } from '@/stores/cart'
 
 // Constants
-const CSS_NAME = 'c-cart-resume'
+const CSS_NAME = 'c-order-resume'
 
 // Define (Props, Emits, Page Meta)
+defineProps({
+  heading: {
+    type: String,
+    required: true,
+  },
+  subTotal: {
+    type: Number,
+    required: true,
+  },
+  withoutSubTotal: {
+    type: Boolean,
+    default: false,
+  },
+  withoutShipping: {
+    type: Boolean,
+    default: false,
+  },
+  withoutPayment: {
+    type: Boolean,
+    default: true,
+  },
+})
 
 // Component life-cycle hooks
 
 // Composables
-const store = useCartStore()
 
 // Data
-const { subTotals } = storeToRefs(store)
 
 // Watcher
 
@@ -54,9 +66,9 @@ const { subTotals } = storeToRefs(store)
 </script>
 
 <style lang="scss">
-$prefix: 'cart-resume';
+$prefix: 'order-resume';
 @include component($prefix) {
-  @include element('coupon') {
+  @include element('row') {
     border-bottom: 2px solid get-var(color-light);
   }
 
@@ -78,7 +90,7 @@ $prefix: 'cart-resume';
       }
     }
 
-    @include element('totals') {
+    @include element('total') {
       font-weight: get-var(weight-bold);
       border-top: 2px solid get-var(color-light);
       padding-top: rem(20px);

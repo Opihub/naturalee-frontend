@@ -7,8 +7,8 @@
         </th>
         <th>{{ $t('products.type') }}</th>
         <th>{{ $t('products.price') }}</th>
-        <th>{{ $t('company.quantity') }}</th>
-        <th colspan="2">{{ $t('common.subTotals') }}</th>
+        <th>{{ $t('products.quantity') }}</th>
+        <th colspan="2">{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
@@ -32,7 +32,7 @@
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('company.quantity')"
+            :data-title="$t('products.quantity')"
           >
             <BaseCounter v-model="product.quantity">
               <template #after
@@ -42,7 +42,7 @@
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('common.subTotals')"
+            :data-title="$t('common.subTotal')"
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>

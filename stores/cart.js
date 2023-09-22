@@ -11,6 +11,7 @@ import {
   StorageSerializers,
 } from '@vueuse/core'
 import { useApi } from '@/composables/api'
+import { useTotal } from '@/composables/total'
 import { useAccountStore } from '@/stores/account'
 import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
@@ -37,16 +38,8 @@ export const useCartStore = defineStore('cart', () => {
     return count.value <= 0
   })
 
-  const subTotals = computed(() => {
-    return cart.value.reduce((accumulator, product) => {
-      accumulator += product.quantity * product.price
-
-      return accumulator
-    }, 0)
-  })
-
-  const totals = computed(() => {
-    return subTotals.value + shippingCost.value
+  const { subTotal, granTotal: total } = useTotal(cart.value, {
+    shipping: shippingCost.value
   })
 
   // Actions
@@ -322,8 +315,8 @@ export const useCartStore = defineStore('cart', () => {
     shippingCost: skipHydrate(shippingCost),
     isEmpty,
     count,
-    totals,
-    subTotals,
+    total,
+    subTotal,
     load,
     pickProduct,
     deleteFromCart: remoteDeleteFromCart,

@@ -11,7 +11,26 @@ import { useCartStore } from '@/stores/cart';
           </SiteContainer>
 
           <SiteContainer :max-width="520" padless>
-            <CartResume />
+            <OrderResume :sub-total="subTotal" :heading="$t('cart.total')">
+              <template #before="{ className }">
+                <div :class="className">
+                  <span>{{ $t('coupon.formTitle') }}</span>
+
+                  <FormCoupon
+                    class="u-mt-mini"
+                    :placeholder="$t('coupon.formPlaceholder')"
+                  />
+                </div>
+              </template>
+
+              <template #after="{ className }">
+                <div :class="className">
+                  <BaseButton as="link" color="green" to="/checkout">{{
+                    $t('cart.proceed')
+                  }}</BaseButton>
+                </div>
+              </template>
+            </OrderResume>
           </SiteContainer>
         </template>
 
@@ -36,7 +55,7 @@ const { page } = await usePage('cart')
 const store = useCartStore()
 
 // Data
-const { isEmpty } = storeToRefs(store)
+const { isEmpty, subTotal } = storeToRefs(store)
 
 // Watcher
 

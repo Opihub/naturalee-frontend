@@ -18,12 +18,17 @@ export default defineI18nConfig(() => ({
       apply: 'Applica',
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
-      productCount: '{count} @:product',
-      product: 'prodotto | prodotti',
+      products: {
+        count: '{count} @:product',
+        label: 'prodotto | prodotti',
+        type: 'Tipologia',
+        price: 'Prezzo',
+        quantity: 'Quantità',
+      },
       company: {
-        name:'Naturalee srl',
-        address:'Via Lorem impsum. 123',
-        city:'20100 Milano (MI)',
+        name: 'Naturalee srl',
+        address: 'Via Lorem impsum. 123',
+        city: '20100 Milano (MI)',
         state: 'Italy',
         pIva: 'PI IT 0000000000',
         cf: 'CF 0000000000',
@@ -49,9 +54,6 @@ export default defineI18nConfig(() => ({
         goToCart: 'Vai al carrello',
         total: 'Totale carrello',
         shippingTo: 'Spedizione a <b>city</b>',
-        type: 'Tipologia',
-        price: 'Prezzo',
-        qty: 'Quantità / U',
       },
       form: {
         userField: 'Nome utente o indirizzo email *',
@@ -105,10 +107,13 @@ export default defineI18nConfig(() => ({
         leaveBlank: 'lascia in bianco per non modificare',
         phone: 'Telefono',
         contactUs: 'Contattaci',
-        moreInfo: 'Per maggiori informaziobi, per richiedere un preventivo o qualsiasi altra richiesta non esitare a contattarci',
+        moreInfo:
+          'Per maggiori informazioni, per richiedere un preventivo o qualsiasi altra richiesta non esitare a contattarci',
         privacyPolicy: {
-          term1: 'Autorizzo il trattamento dei dati personali in conformità all\'informativa sulla',
-          term2: ', ai sensi del GDPR, General Data Protection Regulation UE 2016/679'
+          term1:
+            "Autorizzo il trattamento dei dati personali in conformità all'informativa sulla",
+          term2:
+            ', ai sensi del GDPR, General Data Protection Regulation UE 2016/679',
         },
       },
       shipping: {
@@ -121,9 +126,6 @@ export default defineI18nConfig(() => ({
         city: 'Città',
         province: 'Provincia',
         postcode: 'CAP',
-      },
-      products: {
-        recommended: 'Prodotti consigliati',
       },
       coupon: {
         name: 'Coupon',
@@ -141,11 +143,15 @@ export default defineI18nConfig(() => ({
       common: {
         date: 'Data',
         actions: 'Azioni',
-        totals: 'Totale',
-        subTotals: 'Subtotale',
+        total: 'Totale',
+        subTotal: 'Subtotale',
         loading: 'Caricamento',
       },
+      checkout: {
+        payment: 'Pagamento',
+      },
       orders: {
+        your: 'Il tuo ordine',
         shipping: 'Spedizione',
         payment: 'Metodo di pagamento',
         name: 'Ordine | Ordini',

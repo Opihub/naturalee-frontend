@@ -5,7 +5,7 @@
         <th>{{ $t('orders.name') }}</th>
         <th>{{ $t('common.date') }}</th>
         <th>{{ $t('orders.statusLabel') }}</th>
-        <th>{{ $t('common.totals') }}</th>
+        <th>{{ $t('common.total') }}</th>
         <th>{{ $t('common.actions') }}</th>
       </tr>
     </template>
@@ -25,7 +25,7 @@
           >
             {{ orderStatus(order) }}
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('common.totals')">
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('common.total')">
             <PriceHolder :price="order.total" />
           </td>
           <td
