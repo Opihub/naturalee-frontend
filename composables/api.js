@@ -53,9 +53,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     return cached
   }
 
-  console.debug(config?.public?.endpoint)
-  console.debug(apiUrl(true))
-
   const { data, error } = await useFetch(apiUrl(), {
     ...options,
     baseURL: innerOptions.local ? null : config?.public?.endpoint,
@@ -69,12 +66,19 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   let responseData = data.value
   if (error.value) {
     const errorData = error.value?.data || {}
-    if ('data' in errorData && typeof errorData.data === 'object') {
+
+    if (
+      'data' in errorData &&
+      'success' in errorData &&
+      'code' in errorData &&
+      'message' in errorData &&
+      'statusCode' in errorData
+    ) {
       /**
        * Server error, can happen
        */
-      responseData = errorData.data
-      console.warn(responseData)
+      responseData = errorData
+      console.warn('errore previsto generato dal server:', responseData)
     } else {
       /**
        * Client error, must not happen
