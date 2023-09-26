@@ -31,7 +31,7 @@
         Modifica indirizzo
       </InlineButton>
 
-      <FormShipping
+      <FormShippingAddress
         v-show="isShippingFormOpen"
         class="u-mt-half"
         @update="updateShippingAddress"
