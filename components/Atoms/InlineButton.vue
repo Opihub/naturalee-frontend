@@ -14,18 +14,18 @@ const CSS_NAME = 'o-button'
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   underline: {
-    type: Boolean,
+    type: [Boolean, String],
     default: false,
-  },
-  color: {
-    type: String,
-    default: null,
     validator(value) {
+      if (typeof value === 'boolean') {
+        return value
+      }
+
       // The value must match one of these strings
       return ['black', 'green', 'yellow', 'white'].includes(value)
     },
   },
-  underlineColor: {
+  color: {
     type: String,
     default: null,
     validator(value) {
@@ -51,8 +51,9 @@ const className = computed(() => {
     className.push('is-underline')
   }
 
-  if (props.underlineColor) {
-    className.push(`${CSS_NAME}--underline-${props.underlineColor}`)
+  if (props.underline) {
+    const color = typeof props.underline === 'string' ? props.underline : 'black'
+    className.push(`${CSS_NAME}--underline-${color}`)
   }
 
   return className
