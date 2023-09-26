@@ -1,13 +1,41 @@
-@mixin layout($parent, $child) {
-  @include object($parent) {
+@mixin layout($parent, $child, $sub: null) {
+  %row {
     display: flex;
     flex-wrap: wrap;
-    gap: get-var(gap, rem(20px), $prefix: $parent);
-    @include element($child) {
-      width: get-var(width, calc(100% / get-var(columns, 1, $prefix: $parent) - (get-var(gap, rem(20px), $prefix: $parent) * (get-var(columns, 1, $prefix: $parent) - 1) / get-var(columns, 1, $prefix: $parent))), $prefix: $child);
+    gap: get-var(column-gap, get-var(gap, rem(20px), $prefix: $parent), $prefix: $parent) get-var(row-gap, get-var(gap, rem(20px), $prefix: $parent), $prefix: $parent);
+  }
+
+  @include object($parent) {
+    @extend %row;
+
+    @if ($sub) {
+      #{compose-element(compose-object($parent), $sub)} {
+        @extend %row;
+      }
     }
+
+    @include element($child) {
+      width: get-var(
+        width,
+        calc(
+          (
+              100% / get-var(columns, 1, $prefix: $parent) *
+                get-var(size, 1, $prefix: $child)
+            ) -
+            (
+              get-var(column-gap, get-var(gap, rem(20px), $prefix: $parent), $prefix: $parent) *
+                (
+                  get-var(columns, 1, $prefix: $parent) -
+                    get-var(size, 1, $prefix: $child)
+                ) / get-var(columns, 1, $prefix: $parent)
+            )
+        ),
+        $prefix: $child
+      );
+    }
+
     @content;
   }
 }
 
-@include layout('row', 'column'); 
+@include layout('row', 'column');
