@@ -23,13 +23,13 @@
       <span v-else>
         Inserisci il tuo indirizzo per visualizzare le opzioni di spedizione.
       </span>
-      <button
+      <InlineButton
         :class="[`${CSS_NAME}__form__toggle`, 'u-mt-micro']"
-        type="button"
+        underline="green"
         @click.prevent="isShippingFormOpen = !isShippingFormOpen"
       >
         Modifica indirizzo
-      </button>
+      </InlineButton>
 
       <FormShipping
         v-show="isShippingFormOpen"
@@ -69,7 +69,7 @@ const isShippingFormOpen = ref(false)
 
 // Methods
 const updateShippingAddress = (shipping) => {
-  shippingData.value = {...shipping.data}
+  shippingData.value = { ...shipping.data }
   shippingMethods.value = shipping.methods
 
   selectedShippingMethods.value = shippingMethods.value[0].id
@@ -95,31 +95,14 @@ $prefix: 'shipping';
     justify-content: space-between;
 
     @include element('toggle') {
-      border: 0;
-      border-radius: 0;
-      padding: 0;
-      background-color: transparent;
-      font-weight: get-var(weight-regular);
-      text-decoration: underline;
-      color: get-var(color-black);
-      text-decoration-color: get-var(color-green);
-      text-underline-offset: rem(4px);
-      text-decoration-thickness: 1px;
-      cursor: pointer;
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          font-family: get-var(family-text),
+        )
+      );
+
       @include typography(15px, 18px);
-      @include transition(color, text-decoration-color);
-      outline-offset: 3px;
-
-      &:hover {
-        color: get-var(color-green);
-        text-decoration-color: get-var(color-yellow);
-      }
-
-      &:disabled {
-        cursor: not-allowed;
-        color: get-var(color-light);
-        text-decoration-color: get-var(color-light);
-      }
     }
   }
 }
