@@ -1,6 +1,6 @@
 <template>
   <BackgroundHolder :class="CSS_NAME" tag="section" :color="color">
-    <SiteContainer flex :style="style">
+    <SiteContainer :style="style" flipped>
       <div :class="`${CSS_NAME}__content`">
         <BaseHeading
           v-if="slots['sup-title']"
@@ -82,10 +82,6 @@ const props = defineProps({
       return 'text' in value
     },
   },
-  flipped: {
-    type: Boolean,
-    default: false,
-  },
   borderRadius: {
     type: String,
     default: null,
@@ -123,9 +119,6 @@ const parallaxElement = ref(null)
 const style = computed(() => {
   const style = {}
 
-  if (props.flipped) {
-    style['--container-direction'] = 'row-reverse'
-  }
   if (props.borderRadius) {
     style['--image-border-radius'] = props.borderRadius
   }
@@ -136,9 +129,6 @@ const style = computed(() => {
 
 <style lang="scss">
 $prefix: 'content-row';
-@include object('container') {
-  flex-direction: get-var(container-direction);
-}
 @include component($prefix) {
   $prefix-parallax: '#{$prefix}-parallax';
   @include set-local-vars(
@@ -191,10 +181,10 @@ $prefix: 'content-row';
     }
 
     @include element('image') {
+      border-radius: get-var(image-border-radius, 0);
       @include from(tablet) {
         position: absolute;
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
-        border-radius: get-var(image-border-radius, 0);
       }
     }
   }
