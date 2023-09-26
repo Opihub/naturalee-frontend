@@ -2,7 +2,7 @@
   <main class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
     <SiteContainer flex class="u-mt-huge" :max-width="1370">
-      <BaseVideo src="assets/video/azienda.mp4" :aspect-ratio="ratio" />
+      <BaseVideo :src="AziendaVideo" :aspect-ratio="ratio" />
     </SiteContainer>
     <ContentRow
       class="c-first-section"
@@ -23,7 +23,7 @@
     <BackgroundHolder tag="section" color="white">
       <SiteContainer
         class="c-second-section u-pt-huge@tablet u-pb-huge@tablet u-pt-custom@tablet u-pb-custom@tablet"
-        :max-width="790"
+        :max-width="830"
       >
         <BaseHeading>
           Amet consectetur
@@ -31,10 +31,11 @@
           <CircularText text="Lorem ipsum dolor sit amet" />
         </BaseHeading>
         <BaseParagraph class="u-mt-large">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
-          optio tenetur pariatur sapiente, iste voluptate alias culpa eligendi?
-          Magnam assumenda saepe voluptatum expedita facere ipsum voluptatibus.
-          Non distinctio nemo fuga?
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse.
         </BaseParagraph>
       </SiteContainer>
     </BackgroundHolder>
@@ -74,11 +75,12 @@
 
 <script setup>
 // Imports
+import AziendaVideo from 'assets/video/azienda.mp4'
 
 // Constants
 const { page } = await usePage('azienda')
 const ratio = [16, 8.8]
-const cards = [
+const cards = ref([
   {
     image: '/azienda/delivery_1.png',
     heading: 'Amet consectetur',
@@ -97,7 +99,7 @@ const cards = [
     paragraph:
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusimod tempor incididunt ut dolore magna aliqua. Ut enim ad minim veniam',
   },
-]
+])
 // Define (Props, Emits, Page Meta)
 
 // Component life-cycle hooks
