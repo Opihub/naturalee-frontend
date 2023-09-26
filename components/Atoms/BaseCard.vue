@@ -1,6 +1,6 @@
 <template>
   <div :class="className" :style="style">
-    <div :class="`${CSS_NAME} ${CSS_NAME}__image`">
+    <div v-if="image" :class="`${CSS_NAME} ${CSS_NAME}__image`">
       <NuxtImg :src="image" />
     </div>
     <div

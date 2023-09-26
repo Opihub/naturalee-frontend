@@ -52,6 +52,7 @@ watch(
     const { page: response } = await usePage(path)
 
     page.value = response.value
+    console.log(page)
     // breadcrumbs.value = page.value?.breadcrumbs || breadcrumbs.value
     const newBreadcrumbs = page.value?.breadcrumbs || breadcrumbs.value
     breadcrumbs.value = [...newBreadcrumbs]
@@ -64,7 +65,7 @@ watch(
       if (!alreadyExists) {
         breadcrumbs.value.push({
           link: route.path,
-          title: orderId(route.params.id)
+          title: orderId(route.params.id),
         })
       }
     }
