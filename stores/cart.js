@@ -244,7 +244,7 @@ export const useCartStore = defineStore('cart', () => {
           body: {
             quantity,
             id: product.id,
-            variantId: product.variantId,
+            variationId: product.variationId,
           },
         },
         {
@@ -283,7 +283,7 @@ export const useCartStore = defineStore('cart', () => {
           method: 'DELETE',
           body: {
             id: product.id,
-            variantId: product.variantId,
+            variationId: product.variationId,
           },
         },
         {
