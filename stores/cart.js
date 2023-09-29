@@ -39,12 +39,12 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   const { subTotal, granTotal: total } = useTotal(cart.value, {
-    shipping: shippingCost.value
+    shipping: shippingCost.value,
   })
 
   // Actions
   function pickProduct(id) {
-    return cart.value.find((product) => product.id === id)
+    return cart.value.find((product) => product.variationId === id)
   }
 
   async function load() {
@@ -53,7 +53,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     const response = await useApi('shop/cart/products', null, {
-      cache: false
+      cache: false,
     }).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/cart/products"',
@@ -82,10 +82,20 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function addToCart(product, quantity = 1) {
-    const { id, price, title, link, sku, unit, costDescription, image } =
-      product
+    const {
+      id,
+      variationId,
+      key,
+      price,
+      title,
+      link,
+      sku,
+      unit,
+      costDescription,
+      image,
+    } = product
 
-    const existingProduct = pickProduct(id)
+    const existingProduct = pickProduct(variationId)
 
     if (existingProduct) {
       const index = cart.value.indexOf(existingProduct)
@@ -107,6 +117,8 @@ export const useCartStore = defineStore('cart', () => {
 
     cart.value.push({
       id,
+      variationId,
+      key,
       price,
       quantity,
       title,
@@ -131,12 +143,12 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function updateCartQuantity(product, quantity, server = false) {
-    const { id } = product
+    const { variationId: id } = product
     const existingProduct = pickProduct(id)
 
     if (existingProduct) {
       const index = cart.value.indexOf(existingProduct)
-      const diff = cart.value[index].quantity - quantity
+      const diff = quantity - cart.value[index].quantity
       cart.value[index].quantity = quantity
 
       notify({
@@ -179,7 +191,8 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
-    const existingProduct = pickProduct(product.id)
+    const { variationId: id } = product
+    const existingProduct = pickProduct(id)
 
     if (!existingProduct) {
       notify({
@@ -210,20 +223,25 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     try {
-      const response = await useApi('shop/cart/clear', null, {
-        cache: false,
-      })
+      const response = await useApi(
+        'shop/cart/clear',
+        {
+          method: 'DELETE',
+        },
+        {
+          cache: false,
+        }
+      )
 
       if (response.value.success) {
         return clearCart()
       } else {
-        throw new Error(response)
+        console.error(response.value)
+        throw new Error(response.value.message)
       }
     } catch (error) {
-      console.error(error)
-
       notify({
-        message: JSON.stringify(error.value),
+        message: error.message,
         status: 'danger',
       })
     }
@@ -255,15 +273,21 @@ export const useCartStore = defineStore('cart', () => {
       if (response.value.success) {
         // se si chiama il server, la quantità restituita sovrascriverà quella attuale,
         // a meno che il prodotto richiesto non sia presente nel carrello
-        return updateCartQuantity(product, response.value.data.quantity, true)
+        return updateCartQuantity(
+          {
+            ...product,
+            key: response.value.data.key,
+          },
+          response.value.data.quantity,
+          true
+        )
       } else {
-        throw new Error(response)
+        console.error(response.value)
+        throw new Error(response.value.message)
       }
     } catch (error) {
-      console.error(error)
-
       notify({
-        message: JSON.stringify(error.value),
+        message: error.message,
         status: 'danger',
       })
     }
@@ -282,6 +306,7 @@ export const useCartStore = defineStore('cart', () => {
         {
           method: 'DELETE',
           body: {
+            key: product.key,
             id: product.id,
             variationId: product.variationId,
           },
@@ -296,13 +321,12 @@ export const useCartStore = defineStore('cart', () => {
         // a meno che il prodotto richiesto non sia presente nel carrello
         return deleteFromCart(product)
       } else {
-        throw new Error(response)
+        console.error(response.value)
+        throw new Error(response.value.message)
       }
     } catch (error) {
-      console.error(error)
-
       notify({
-        message: JSON.stringify(error.value),
+        message: error.message,
         status: 'danger',
       })
     }
