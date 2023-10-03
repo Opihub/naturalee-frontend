@@ -11,7 +11,7 @@
         :class="CSS_NAME"
         :options="SPLIDE_OPTIONS"
         :has-track="false"
-        :aria-label="$t('products.recommended')"
+        :aria-label="title"
       >
         <SplideTrack>
           <SplideSlide v-for="product in products" :key="product.id">

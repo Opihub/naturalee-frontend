@@ -9,7 +9,7 @@
     }}</BaseParagraph>
     <BaseHeading>{{ $t('orders.details') }}</BaseHeading>
 
-    <OrderResume
+    <OrderDetails
       class="u-mb-huge u-mt-medium"
       :products="order.products"
       :shipping="_shipping"

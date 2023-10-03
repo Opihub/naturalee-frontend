@@ -1,7 +1,14 @@
 <template>
-  <div :class="CSS_NAME">
+  <div :class="[CSS_NAME, containerClass]">
     <div :class="`${CSS_NAME}__holder`" v-bind="$attrs">
-      <slot />
+      <div
+        v-if="slots.header"
+        :class="[`${CSS_NAME}__head`, `${CSS_NAME}__block`]"
+      >
+        <slot name="header" />
+      </div>
+
+      <slot :class-name="CSS_NAME_BLOCK" />
     </div>
   </div>
 </template>
@@ -11,12 +18,23 @@
 
 // Constants
 const CSS_NAME = 'o-receipt'
+const CSS_NAME_BLOCK = `${CSS_NAME}__block`
 
 // Define (Props, Emits, Page Meta)
+defineOptions({
+  inheritAttrs: false,
+})
+defineProps({
+  containerClass: {
+    type: String,
+    default: null,
+  },
+})
 
 // Component life-cycle hooks
 
 // Composables
+const slots = useSlots()
 
 // Data
 
@@ -66,6 +84,34 @@ $prefix: 'receipt';
 
   @include element('holder') {
     background-color: get-var(color-white);
+  }
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding: rem(40px),
+    )
+  );
+
+  font-family: get-var(family-text);
+  font-weight: get-var(weight-regular);
+  @include typography(18px, 28px);
+
+  @include element('block') {
+    padding: rem(20px) get-var(padding, $prefix: $prefix);
+  }
+
+  @include element('head') {
+    @include set-local-vars(
+      $prefix: 'heading',
+      $map: (
+        text-transform: uppercase,
+      )
+    );
+
+    padding-top: rem(10px);
+    font-weight: get-var(weight-bold);
+    @include typography(16px, 20px);
+    border-bottom: 2px solid get-var(color-light);
   }
 }
 </style>

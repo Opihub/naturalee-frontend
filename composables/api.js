@@ -1,13 +1,15 @@
-import { useFetch, ref, storeToRefs } from '#imports'
+import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
 
 export async function useApi(url, options = {}, innerOptions = {}) {
+  const config = useRuntimeConfig()
+
   innerOptions = {
     version: 1,
     cache: true,
-    local: true,
+    local: false,
     dataOnly: false,
     ...innerOptions,
   }
@@ -18,16 +20,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const { token, isLoggedIn } = storeToRefs(auth)
 
   const apiUrl = (complete = false) => {
-    if (!innerOptions.local) {
-      let path = url
-
-      if (complete && options.params) {
-        path += '?' + new URLSearchParams(options.params).toString()
-      }
-
-      return path
-    }
-
     let path = '/'
     const paths = [url]
 
@@ -35,7 +27,9 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       paths.unshift(`v${innerOptions.version}`)
     }
 
-    paths.unshift('api')
+    if (innerOptions.local) {
+      paths.unshift('api')
+    }
 
     path += paths.join('/').replaceAll(/\/+/g, '/')
 
@@ -61,6 +55,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   const { data, error } = await useFetch(apiUrl(), {
     ...options,
+    baseURL: innerOptions.local ? null : config?.public?.endpoint,
     headers: {
       Authorization: isLoggedIn.value ? `Bearer ${token.value}` : '',
       ...options?.headers,
@@ -71,12 +66,19 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   let responseData = data.value
   if (error.value) {
     const errorData = error.value?.data || {}
-    if ('data' in errorData && typeof errorData.data === 'object') {
+
+    if (
+      'data' in errorData &&
+      'success' in errorData &&
+      'code' in errorData &&
+      'message' in errorData &&
+      'statusCode' in errorData
+    ) {
       /**
        * Server error, can happen
        */
-      responseData = errorData.data
-      console.warn(responseData)
+      responseData = errorData
+      console.warn('errore previsto generato dal server:', responseData)
     } else {
       /**
        * Client error, must not happen
