@@ -5,7 +5,7 @@
         <template v-if="cart.length">
           <span>
             {{ $t('cart.your') }} -
-            {{ $t('products.label', cart.length, { count: cart.length }) }}
+            {{ $t('products.count', cart.length, { count: cart.length }) }}
           </span>
 
           <BaseLink
@@ -77,9 +77,13 @@
         </PriceHolder>
       </dl>
 
-      <BaseButton as="link" :class="`${CSS_NAME}__submit`" color="green" to="/checkout">{{
-        $t('cart.proceed')
-      }}</BaseButton>
+      <BaseButton
+        as="link"
+        :class="`${CSS_NAME}__submit`"
+        color="green"
+        to="/checkout"
+        >{{ $t('cart.proceed') }}</BaseButton
+      >
       <BaseLink
         :class="`${CSS_NAME}__review`"
         to="/cart"
@@ -229,6 +233,9 @@ $prefix: 'mini-cart';
         font-weight: get-var(weight-light);
         @include typography(11px, 13px);
         @include letter-spacing(12);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       @include element('price') {
