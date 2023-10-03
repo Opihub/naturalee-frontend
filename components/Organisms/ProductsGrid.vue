@@ -272,9 +272,21 @@ const fetchProducts = async () => {
 }
 
 const updateQuery = () => {
-  router.push({
-    query: { sort: orderby.value, 'filters[]': chosenFilters.value },
-  })
+  const query = {}
+
+  if (props.search) {
+    query.search = props.search
+  }
+
+  if (orderby.value) {
+    query.sort = orderby.value
+  }
+
+  if (chosenFilters.value && chosenFilters.value.length > 0) {
+    query['filters[]'] = chosenFilters.value
+  }
+
+  router.push({query})
 }
 
 // On created
