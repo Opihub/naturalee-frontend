@@ -46,6 +46,7 @@
       class="u-mb-tiny u-mt-half"
       :product="product"
       :quantity="quantity"
+      :disabled="product.price <= 0"
     />
 
     <BaseLink underline color="dark" :to="product.link"
