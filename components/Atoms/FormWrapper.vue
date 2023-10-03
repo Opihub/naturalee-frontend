@@ -6,12 +6,8 @@
       :column-class-name="CSS_FORM_FIELD"
       :column-full-class-name="CSS_FORM_FIELD_FULL"
       :column-half-class-name="CSS_FORM_FIELD_HALF"
-<<<<<<< HEAD
-      :column-one-third-class-name="CSS_FORM_FIELD_ONE_THIRD"
-=======
       :column-third-class-name="CSS_FORM_FIELD_THIRD"
       :column-quarter-class-name="CSS_FORM_FIELD_QUARTER"
->>>>>>> origin/checkout
     />
   </form>
 </template>
@@ -25,12 +21,8 @@ const CSS_FORM_FIELD = `${CSS_NAME}__field`
 const CSS_FORM_FIELDSET = `${CSS_NAME}__fieldset`
 const CSS_FORM_FIELD_FULL = `${CSS_FORM_FIELD}--full`
 const CSS_FORM_FIELD_HALF = `${CSS_FORM_FIELD}--half`
-<<<<<<< HEAD
-const CSS_FORM_FIELD_ONE_THIRD = `${CSS_FORM_FIELD}--one_third`
-=======
 const CSS_FORM_FIELD_THIRD = `${CSS_FORM_FIELD}--third`
 const CSS_FORM_FIELD_QUARTER = `${CSS_FORM_FIELD}--quarter`
->>>>>>> origin/checkout
 
 // Define (Props, Emits, Page Meta)
 
@@ -55,28 +47,6 @@ $prefix-fieldset: 'fieldset';
   @include until(tablet) {
     justify-content: center;
   }
-<<<<<<< HEAD
-}
-@include layout($prefix, 'field') {
-  @include from('tablet') {
-    @include element('field') {
-      @include modifier('one_third') {
-        @include set-local-vars(
-          $prefix: 'form',
-          $map: (
-            columns: 3,
-          )
-        );
-      }
-      @include modifier('half') {
-        @include set-local-vars(
-          $prefix: 'form',
-          $map: (
-            columns: 2,
-          )
-        );
-      }
-=======
 
   @include element($prefix-fieldset) {
     width: 100%;
@@ -122,7 +92,6 @@ $prefix-fieldset: 'fieldset';
         );
       }
 
->>>>>>> origin/checkout
       @include modifier('full') {
         @include set-local-vars(
           $prefix: $prefix-field,
