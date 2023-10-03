@@ -4,22 +4,24 @@
     <div class="o-row row-contacts">
       <SiteContainer>
         <SiteContainer class="o-row__container o-row__container--left" padless>
-          <slot name="header">
-            <BaseHeading class="u-mb-small" tag="h3">{{
-              $t('form.contactUs')
-            }}</BaseHeading>
-          </slot>
+          <BaseHeading id="company-info" class="u-mb-small" tag="h3">{{
+            $t('form.contactUs')
+          }}</BaseHeading>
+
           <BaseParagraph class="u-mb-small">{{
             $t('form.moreInfo')
           }}</BaseParagraph>
+
           <BaseHeading class="u-mt-huge" tag="h6">{{
             $t('company.name')
           }}</BaseHeading>
+
           <BaseParagraph class="u-mb-small"
             >{{ $t('company.address') }} <br />
             {{ $t('company.city') }}<br />
             {{ $t('company.state') }}</BaseParagraph
           >
+
           <BaseParagraph class="u-mb-small"
             >{{ $t('company.pIva') }} <br />
             {{ $t('company.cf') }}<br />
@@ -27,6 +29,7 @@
             {{ $t('company.capSoc') }}
           </BaseParagraph>
         </SiteContainer>
+
         <SiteContainer class="o-row__container o-row__container--right" padless>
           <BackgroundHolder tag="div" color="white" content-center>
             <ContactForm />
