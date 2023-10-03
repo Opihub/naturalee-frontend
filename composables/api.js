@@ -18,6 +18,16 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const { token, isLoggedIn } = storeToRefs(auth)
 
   const apiUrl = (complete = false) => {
+    if (!innerOptions.local) {
+      let path = url
+
+      if (complete && options.params) {
+        path += '?' + new URLSearchParams(options.params).toString()
+      }
+
+      return path
+    }
+
     let path = '/'
     const paths = [url]
 
@@ -25,9 +35,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       paths.unshift(`v${innerOptions.version}`)
     }
 
-    if (innerOptions.local) {
-      paths.unshift('api')
-    }
+    paths.unshift('api')
 
     path += paths.join('/').replaceAll(/\/+/g, '/')
 

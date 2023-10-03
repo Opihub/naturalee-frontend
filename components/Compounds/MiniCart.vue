@@ -24,12 +24,12 @@
         :key="product.id"
         :class="CSS_NAME_LIST_PRODUCT"
       >
-        <NuxtImg
+        <ProductImage
           :class="`${CSS_NAME_LIST_PRODUCT}__image`"
           :src="product.image"
+          :alt="product.title"
           :width="80"
           :height="80"
-          :alt="product.title"
         />
 
         <span :class="`${CSS_NAME_LIST_PRODUCT}__description`">
@@ -92,12 +92,16 @@
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-mini-cart'
 const CSS_NAME_LIST = `${CSS_NAME}__list`
 const CSS_NAME_LIST_PRODUCT = `${CSS_NAME_LIST}__product`
 const CSS_NAME_TOTALS = `${CSS_NAME}__totals`
 const CSS_NAME_TOTALS_CALCULATION = `${CSS_NAME_TOTALS}__calculation`
 
+// Define (Props, Emits, Page Meta)
 defineProps({
   cart: {
     type: Array,
@@ -114,6 +118,18 @@ defineProps({
     default: 0,
   },
 })
+
+// Component life-cycle hooks
+
+// Composables
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
 </script>
 
 <style lang="scss">
@@ -164,6 +180,7 @@ $prefix: 'mini-cart';
       align-items: end;
       column-gap: get-var(product-bound, $prefix: $prefix);
       row-gap: rem(8px);
+      padding: rem(8px) 0;
 
       grid-template:
         'image description price' auto

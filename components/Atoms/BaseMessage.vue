@@ -16,7 +16,7 @@ const props = defineProps({
     type: String,
     default: null,
     validator(value) {
-      return ['success', 'danger'].includes(value)
+      return [null, 'success', 'danger', 'warning', 'info'].includes(value)
     },
   },
   color: {
@@ -32,7 +32,7 @@ const className = computed(() => {
   const className = [CSS_NAME]
 
   if (props.status) {
-    className.push(`${CSS_NAME}--${props.status}`)
+    className.push(`is-${props.status}`)
   }
 
   if (props.color && props.color !== 'white') {
@@ -50,13 +50,58 @@ $prefix: 'message';
   display: block;
   padding: get-var(padding, rem(15px) rem(20px), $prefix: $prefix);
   border-radius: get-var(radius, rem(10px), $prefix: $prefix);
-  background-color: get-var(background, get-var(color-white), $prefix: $prefix);
+  color: get-var(text-color, get-var(color-black), $prefix: $prefix);
+  background-color: get-var(
+    background-color,
+    get-var(color-white),
+    $prefix: $prefix
+  );
 
   @include modifier('light') {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
         background: get-var(color-light),
+      )
+    );
+  }
+
+  @include is('success') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-green),
+        text-color: get-var(color-white),
+      )
+    );
+  }
+
+  @include is('danger') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-red),
+        text-color: get-var(color-white),
+      )
+    );
+  }
+
+  @include is('warning') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-yellow),
+        text-color: get-var(color-black),
+      )
+    );
+  }
+
+  @include is('info') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-brown),
+        text-color: get-var(color-white),
       )
     );
   }

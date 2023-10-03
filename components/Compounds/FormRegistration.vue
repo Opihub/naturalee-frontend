@@ -18,7 +18,7 @@
       class="u-mb-tiny"
       type="password"
       required
-      >{{ $t('form.passwordField') }}</InputField
+      >{{ $t('form.password.field') }}</InputField
     >
 
     <ToggleField v-model="formData.acceptance" required>

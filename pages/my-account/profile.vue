@@ -1,6 +1,6 @@
 <template>
   <section>
-    <FormUpdateUserDetails :userData="account" />
+    <FormUpdateUserDetails :user-data="account" />
   </section>
 </template>
 

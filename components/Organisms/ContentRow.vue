@@ -1,6 +1,6 @@
 <template>
   <BackgroundHolder :class="CSS_NAME" tag="section" :color="color">
-    <SiteContainer flex>
+    <SiteContainer :style="style" flipped>
       <div :class="`${CSS_NAME}__content`">
         <BaseHeading
           v-if="slots['sup-title']"
@@ -17,12 +17,14 @@
           ><slot name="title"
         /></BaseHeading>
 
-        <BaseParagraph v-if="slots.default" color="white"
+        <BaseParagraph
+          v-if="slots.default"
+          :color="color == 'white' ? 'black' : 'white'"
           ><slot
         /></BaseParagraph>
 
         <BaseButton
-          v-if="button.text"
+          v-if="button?.text"
           :as="button.to ? 'link' : 'button'"
           :target="button.target || null"
           :color="button.color || 'yellow'"
@@ -32,16 +34,26 @@
       </div>
 
       <div :class="[`${CSS_NAME}__parallax`, 'u-mb-large', 'u-mb-none@tablet']">
-        <NuxtImg :class="`${CSS_NAME}__parallax__image`" :src="image" />
+        <NuxtImg
+          ref="parallaxElement"
+          :class="`${CSS_NAME}__parallax__image`"
+          :src="image"
+        />
       </div>
     </SiteContainer>
   </BackgroundHolder>
 </template>
 
 <script setup>
+// Imports
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Constants
 const CSS_NAME = 'c-content-row'
 
-defineProps({
+// Define (Props, Emits, Page Meta)
+const props = defineProps({
   color: {
     type: String,
     default: 'green',
@@ -58,21 +70,67 @@ defineProps({
     type: String,
     required: true,
   },
+  offset: {
+    type: Number,
+    default: 0.075,
+  },
   button: {
     type: Object,
     default: null,
+    required: false,
     validator(value) {
       return 'text' in value
     },
   },
+  borderRadius: {
+    type: String,
+    default: null,
+  },
 })
 
+// Component life-cycle hooks
+onMounted(() => {
+  gsap.registerPlugin(ScrollTrigger)
+
+  const parallax = getElement(parallaxElement)
+
+  // https://greensock.com/forums/topic/24712-how-to-create-parallax-effect-with-gsap/
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    })
+    .to(parallax, { y: parallax.offsetHeight * props.offset, ease: 'none' }, 0)
+})
+
+// Composables
 const slots = useSlots()
+const parallaxElement = ref(null)
+
+// Data
+
+// Watcher
+
+// Computed
+const style = computed(() => {
+  const style = {}
+
+  if (props.borderRadius) {
+    style['--image-border-radius'] = props.borderRadius
+  }
+  return style
+})
+// Methods
 </script>
 
 <style lang="scss">
 $prefix: 'content-row';
 @include component($prefix) {
+  $prefix-parallax: '#{$prefix}-parallax';
   @include set-local-vars(
     $prefix: 'container',
     $map: (
@@ -114,16 +172,19 @@ $prefix: 'content-row';
     width: 100%;
     order: 1;
     align-self: stretch;
+    position: relative;
 
     @include from(tablet) {
       order: 2;
-      margin-left: auto;
-      max-width: get-var(parallax-width, rem(925px), $prefix: $prefix);
+      margin-left: get-var(parallax-margin-left, auto);
+      max-width: get-var(width, rem(925px), $prefix: $prefix-parallax);
     }
 
     @include element('image') {
+      border-radius: get-var(image-border-radius, 0);
       @include from(tablet) {
         position: absolute;
+        margin: get-var(offset, 0, $prefix: $prefix-parallax);
       }
     }
   }
