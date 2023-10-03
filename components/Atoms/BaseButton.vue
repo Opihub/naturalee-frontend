@@ -56,7 +56,7 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['green', 'yellow', 'transparent', 'white'].includes(value)
+      return ['black', 'green', 'yellow', 'transparent', 'white'].includes(value)
     },
   },
 })

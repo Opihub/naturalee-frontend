@@ -5,7 +5,7 @@
         <template v-if="cart.length">
           <span>
             {{ $t('cart.your') }} -
-            {{ $t('product', cart.length, { count: cart.length }) }}
+            {{ $t('products.count', cart.length, { count: cart.length }) }}
           </span>
 
           <BaseLink
@@ -24,12 +24,12 @@
         :key="product.id"
         :class="CSS_NAME_LIST_PRODUCT"
       >
-        <NuxtImg
+        <ProductImage
           :class="`${CSS_NAME_LIST_PRODUCT}__image`"
           :src="product.image"
+          :alt="product.title"
           :width="80"
           :height="80"
-          :alt="product.title"
         />
 
         <span :class="`${CSS_NAME_LIST_PRODUCT}__description`">
@@ -40,9 +40,9 @@
             product.title
           }}</span>
         </span>
-        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`"
-          >Cod. {{ product.sku }}</span
-        >
+        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">{{
+          $t('cart.productCode', { sku: product.sku })
+        }}</span>
 
         <PriceHolder
           :class="`${CSS_NAME_LIST_PRODUCT}__price`"
@@ -51,53 +51,61 @@
       </li>
     </ul>
 
-    <div v-if="cart.length" :class="CSS_NAME_TOTALS">
-      <dl :class="`${CSS_NAME_TOTALS}__calculation`">
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
-          >Spese di consegna</span
-        >
+    <div v-if="cart.length" :class="CSS_NAME_TOTAL">
+      <dl :class="`${CSS_NAME_TOTAL}__calculation`">
+        <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
+          $t('cart.shippingCost')
+        }}</span>
         <PriceHolder
-          :class="`${CSS_NAME_TOTALS_CALCULATION}__price`"
+          :class="`${CSS_NAME_TOTAL_CALCULATION}__price`"
           :price="shippingCost"
         />
 
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`"
-          >Totale dell'ordine</span
-        >
+        <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
+          $t('cart.orderTotal')
+        }}</span>
         <PriceHolder
           :class="[
-            `${CSS_NAME_TOTALS_CALCULATION}__price`,
-            `${CSS_NAME_TOTALS_CALCULATION}__price--final`,
+            `${CSS_NAME_TOTAL_CALCULATION}__price`,
+            `${CSS_NAME_TOTAL_CALCULATION}__price--final`,
           ]"
-          :price="totals"
+          :price="total"
         >
           <template #after>
-            <small>IVA Inc</small>
+            <small>{{ $t('cart.fee') }}</small>
           </template>
         </PriceHolder>
       </dl>
 
-      <BaseButton :class="`${CSS_NAME}__submit`" color="green"
-        >Procedere con l'ordine</BaseButton
+      <BaseButton
+        as="link"
+        :class="`${CSS_NAME}__submit`"
+        color="green"
+        to="/checkout"
+        >{{ $t('cart.proceed') }}</BaseButton
       >
       <BaseLink
         :class="`${CSS_NAME}__review`"
         to="/cart"
         :underline="true"
         color="dark"
-        >Vai al carrello</BaseLink
+        >{{ $t('cart.goToCart') }}</BaseLink
       >
     </div>
   </PopupContainer>
 </template>
 
 <script setup>
+// Imports
+
+// Constants
 const CSS_NAME = 'c-mini-cart'
 const CSS_NAME_LIST = `${CSS_NAME}__list`
 const CSS_NAME_LIST_PRODUCT = `${CSS_NAME_LIST}__product`
-const CSS_NAME_TOTALS = `${CSS_NAME}__totals`
-const CSS_NAME_TOTALS_CALCULATION = `${CSS_NAME_TOTALS}__calculation`
+const CSS_NAME_TOTAL = `${CSS_NAME}__total`
+const CSS_NAME_TOTAL_CALCULATION = `${CSS_NAME_TOTAL}__calculation`
 
+// Define (Props, Emits, Page Meta)
 defineProps({
   cart: {
     type: Array,
@@ -109,11 +117,23 @@ defineProps({
     type: Number,
     default: 0,
   },
-  totals: {
+  total: {
     type: Number,
     default: 0,
   },
 })
+
+// Component life-cycle hooks
+
+// Composables
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
 </script>
 
 <style lang="scss">
@@ -164,6 +184,7 @@ $prefix: 'mini-cart';
       align-items: end;
       column-gap: get-var(product-bound, $prefix: $prefix);
       row-gap: rem(8px);
+      padding: rem(8px) 0;
 
       grid-template:
         'image description price' auto
@@ -212,6 +233,9 @@ $prefix: 'mini-cart';
         font-weight: get-var(weight-light);
         @include typography(11px, 13px);
         @include letter-spacing(12);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       @include element('price') {
@@ -227,7 +251,7 @@ $prefix: 'mini-cart';
     }
   }
 
-  @include element('totals') {
+  @include element('total') {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

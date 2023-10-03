@@ -15,7 +15,7 @@
               :class="itemLinkClassName"
               color="dark"
               @click.prevent="logout"
-              >Esci</BaseLink
+              >{{ $t('form.logout') }}</BaseLink
             >
           </li>
         </template>

@@ -1,16 +1,22 @@
 <template>
   <form :class="CSS_NAME" method="POST" @submit.prevent="passwordRecovery">
     <slot name="header">
-      <BaseHeading class="u-mb-small" tag="h3">Recupera password</BaseHeading>
+      <BaseHeading class="u-mb-small" tag="h3">{{
+        $t('form.password.recovery')
+      }}</BaseHeading>
+
+      <BaseParagraph class="u-mb-small">
+        {{ $t('form.password.recoveryDisclaimer') }}
+      </BaseParagraph>
     </slot>
 
-    <BaseParagraph class="u-mb-small"
-      >Hai perso la password? Inserisci il tuo nome utente o l'indirizzo email.
-      Riceverai tramite email un link per generarne una nuova.</BaseParagraph
+    <InputField
+      v-model="formData.username"
+      class="u-mb-tiny"
+      type="text"
+      required
     >
-
-    <InputField v-model="formData.user" class="u-mb-tiny" type="text" required>
-      Nome utente o indirizzo email *</InputField
+      {{ $t('form.userField') }}</InputField
     >
 
     <slot name="profileLink" />
@@ -20,20 +26,24 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >Recupera password</BaseButton
+      >{{ $t('form.password.recovery') }}</BaseButton
     >
-    <BaseMessage v-if="sent">
+    <BaseMessage v-if="sent" class="u-mt-half">
       <template v-if="success">
-        Abbiamo inviato una mail
         {{
-          isEmail ? "all'indirizzo email" : "all'indirizzo email dell'utente"
+          $t('form.password.recoverySent', {
+            field: isEmail ? $t('form.toEmail') : $t('form.toUserEmail'),
+            userParam: user,
+          })
         }}
-        <b>{{ user }}</b> con il link per recuperare la password.
       </template>
       <template v-else>
-        Ci dispiace, ma non abbiamo trovato alcun utente con
-        {{ isEmail ? 'indirizzo email' : "l'username" }}
-        <b>{{ user }}</b>
+        {{
+          $t('form.noUserFound', {
+            field: isEmail ? $t('form.toMailAddress') : $t('form.toUser'),
+            userParam: user,
+          })
+        }}
       </template>
     </BaseMessage>
   </form>
@@ -49,8 +59,8 @@ const CSS_NAME = 'c-password-recovery-form'
 defineProps({
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 const emit = defineEmits(['api:start', 'api:end'])
 
@@ -63,7 +73,7 @@ const { sending, sent, send } = useSender(emit)
 const user = ref(null)
 const success = ref(false)
 const formData = reactive({
-  user: '',
+  username: '',
 })
 
 // Watcher
@@ -79,11 +89,11 @@ const passwordRecovery = async () => {
     return
   }
 
-  user.value = formData.user
+  user.value = formData.username
 
   const response = await send(async () => {
     return await useApi(
-      `auth/password-recovery`,
+      `auth/password-recovery/request`,
       {
         method: 'POST',
         body: formData,

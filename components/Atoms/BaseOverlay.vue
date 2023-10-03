@@ -18,20 +18,6 @@ defineProps({
     type: [Number, String],
     default: '100%',
   },
-  size: {
-    type: Number,
-    required: true,
-  },
-  desktopFirst: {
-    type: Boolean,
-    default: false,
-  },
-  props: {
-    type: Object,
-    default() {
-      return {}
-    },
-  },
 })
 </script>
 

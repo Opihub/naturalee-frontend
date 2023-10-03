@@ -11,7 +11,7 @@
         :search="search"
         :class="`${CSS_NAME}__search`"
         size="mini"
-        placeholder="Di cosa hai bisogno?"
+        :placeholder="$t('searchMsg')"
         @update:search="$emit('update:search', $event)"
       />
     </SiteContainer>

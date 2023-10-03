@@ -3,12 +3,12 @@
     <template #head>
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
-          Prodotto <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
+          {{ $t('products.label', count) }} <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
         </th>
-        <th>Tipologia</th>
-        <th>Prezzo</th>
-        <th>Quantità / U</th>
-        <th colspan="2">Subtotale</th>
+        <th>{{ $t('products.type') }}</th>
+        <th>{{ $t('products.price') }}</th>
+        <th>{{ $t('products.quantity') }}</th>
+        <th colspan="2">{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
@@ -18,21 +18,21 @@
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" data-title="Prodotto">
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.label')">
             {{ product.title }}
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" data-title="Tipologia">
-            {{ product.costDescription }}
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
+            {{ product.selling }}
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Prezzo"
+            :data-title="$t('products.price')"
           >
             <PriceHolder :price="product.price" />
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Quantità / U"
+            :data-title="$t('products.quantity')"
           >
             <BaseCounter v-model="product.quantity">
               <template #after
@@ -42,7 +42,7 @@
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Subtotale"
+            :data-title="$t('common.subTotal')"
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>
@@ -51,8 +51,10 @@
           </td>
         </tr>
       </template>
-      <tr v-else>
-        <td colspan="7">carrello vuoto</td>
+      <tr v-else :class="CSS_NAME_ITEM">
+        <td :class="CSS_NAME_ITEM_CELL" colspan="7" align="center">
+          {{ $t('cart.empty') }}
+        </td>
       </tr>
     </template>
     <template #footer>
@@ -65,7 +67,7 @@
             :disabled="count <= 0"
             @click="clearCart"
           >
-            Svuota carrello
+            {{ $t('cart.clearCart') }}
           </button>
         </td>
       </tr>

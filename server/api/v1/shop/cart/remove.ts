@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  if (body.variantId && isNaN(body.variantId)) {
+  if (body.variationId && isNaN(body.variationId)) {
     throw createError({
       statusCode: 403,
       statusMessage: 'ID tipologia prodotto errato',
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await useRemoteApi('/v1/shop/cart/remove', {
+    const response = await useRemoteApi(event, '/v1/shop/cart/remove', {
       method: 'DELETE',
       body,
     })

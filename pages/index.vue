@@ -3,24 +3,33 @@
     <BackgroundHolder
       class="c-first-section"
       tag="section"
+      color="green"
       content-center
-      :image="image"
     >
-      <SiteContainer :max-width="912">
-        <SearchForm placeholder="Inizia la tua spesa">
-          <template #before>
-            <BaseHeading class="u-mb-half" tag="h4"
-              >Esplora una spesa Fresca e Naturalee. Ordina subito!</BaseHeading
-            >
-          </template>
-          <template #after>
-            <p class="u-mt-tiny">
-              Non sai da dove iniziare?
-              <BaseLink to="/featured" underline>Ti consigliamo noi!</BaseLink>
-            </p>
-          </template>
-        </SearchForm>
-      </SiteContainer>
+      <template #back>
+        <BaseVideo :src="HomeVideo" background />
+      </template>
+
+      <template #default="{ className }">
+        <SiteContainer :max-width="912" :class="className">
+          <SearchForm placeholder="Inizia la tua spesa">
+            <template #before>
+              <BaseHeading class="u-mb-half" tag="h4"
+                >Esplora una spesa Fresca e Naturalee. Ordina
+                subito!</BaseHeading
+              >
+            </template>
+            <template #after>
+              <p class="u-mt-tiny">
+                Non sai da dove iniziare?
+                <BaseLink to="/featured" underline
+                  >Ti consigliamo noi!</BaseLink
+                >
+              </p>
+            </template>
+          </SearchForm>
+        </SiteContainer>
+      </template>
     </BackgroundHolder>
 
     <BackgroundHolder
@@ -86,19 +95,28 @@
 </template>
 
 <script setup>
+// Imports
+import HomeVideo from 'assets/video/homepage.mp4'
+
+// Constants
+
+// Define (Props, Emits, Page Meta)
+
+// Component life-cycle hooks
+
+// Composables
+await usePage()
+
+// Data
 const isPostcodeModalOpen = ref(false)
 
-/**
- * TODO:
- *  - spostare background via API
- *  - usare video
- *  - caricare prodotti per l'homepage
- */
-const image = ref('https://picsum.photos/id/1080/1920/700?blur=3')
 const products = await useApi('shop/homepage/products')
 
-const { page } = await usePage()
+// Watcher
 
+// Computed
+
+// Methods
 const togglePostcodeModal = (status = null) => {
   isPostcodeModalOpen.value =
     status !== null ? !!status : !isPostcodeModalOpen.value
@@ -116,8 +134,33 @@ const togglePostcodeModal = (status = null) => {
       )
     );
 
+    @include set-local-vars(
+      $prefix: 'background',
+      $map: (
+        overflow: hidden,
+      )
+    );
+
     text-align: center;
     color: get-var(color-white);
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    &::before {
+      background-color: rgba(get-var(rgb-black), 0.36);
+    }
+
+    &::after {
+      background-color: rgba(get-var(rgb-green), 0.2);
+    }
 
     p {
       @include typography(16px, 20px);
@@ -163,6 +206,13 @@ const togglePostcodeModal = (status = null) => {
       $prefix: 'content-row',
       $map: (
         margin: rem(120px),
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'content-row-parallax',
+      $map: (
+        offset: rem(60px) 0 0,
       )
     );
   }

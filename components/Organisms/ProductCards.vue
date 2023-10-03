@@ -11,7 +11,7 @@
         :class="CSS_NAME"
         :options="SPLIDE_OPTIONS"
         :has-track="false"
-        aria-label="Prodotti consigliati"
+        :aria-label="title"
       >
         <SplideTrack>
           <SplideSlide v-for="product in products" :key="product.id">

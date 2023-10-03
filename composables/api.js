@@ -1,17 +1,23 @@
+import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
-import { useFetch, ref } from '#imports'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
+import { useAccountStore } from '@/stores/account'
 
 export async function useApi(url, options = {}, innerOptions = {}) {
+  const config = useRuntimeConfig()
+
   innerOptions = {
     version: 1,
     cache: true,
-    local: true,
+    local: false,
     dataOnly: false,
     ...innerOptions,
   }
 
   options = options || {}
+
+  const auth = useAccountStore()
+  const { token, isLoggedIn } = storeToRefs(auth)
 
   const apiUrl = (complete = false) => {
     let path = '/'
@@ -28,7 +34,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     path += paths.join('/').replaceAll(/\/+/g, '/')
 
     if (complete && options.params) {
-      path += '?' + (new URLSearchParams(options.params)).toString()
+      path += '?' + new URLSearchParams(options.params).toString()
     }
 
     return path
@@ -49,18 +55,30 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   const { data, error } = await useFetch(apiUrl(), {
     ...options,
+    baseURL: innerOptions.local ? null : config?.public?.endpoint,
+    headers: {
+      Authorization: isLoggedIn.value ? `Bearer ${token.value}` : '',
+      ...options?.headers,
+    },
     pick: null,
   })
 
   let responseData = data.value
   if (error.value) {
     const errorData = error.value?.data || {}
-    if ('data' in errorData && typeof errorData.data === 'object') {
+
+    if (
+      'data' in errorData &&
+      'success' in errorData &&
+      'code' in errorData &&
+      'message' in errorData &&
+      'statusCode' in errorData
+    ) {
       /**
        * Server error, can happen
        */
-      responseData = errorData.data
-      console.warn(responseData)
+      responseData = errorData
+      console.warn('errore previsto generato dal server:', responseData)
     } else {
       /**
        * Client error, must not happen

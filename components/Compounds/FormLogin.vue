@@ -1,22 +1,31 @@
 <template>
   <form :class="CSS_NAME" method="POST" @submit.prevent="login">
     <slot name="header">
-      <BaseHeading class="u-mb-small" tag="h3">Accedi</BaseHeading>
+      <BaseHeading class="u-mb-small" tag="h3">{{
+        $t('form.login')
+      }}</BaseHeading>
     </slot>
 
-    <InputField v-model="formData.user" class="u-mb-half" type="text" required>
-      Nome utente o indirizzo email *</InputField
+    <InputField
+      v-model="formData.username"
+      class="u-mb-half"
+      type="text"
+      required
+    >
+      {{ $t('form.userField') }}</InputField
     >
     <InputField
       v-model="formData.password"
       class="u-mb-tiny"
       type="password"
       required
-      >Password *</InputField
+      >{{ $t('form.password.field') }}</InputField
     >
 
     <div class="o-row s-remember-me">
-      <ToggleField v-model="formData.remember"> Ricordami </ToggleField>
+      <ToggleField v-model="formData.remember">
+        {{ $t('form.remember') }}
+      </ToggleField>
 
       <slot name="forgotLink" />
     </div>
@@ -26,7 +35,7 @@
       color="green"
       type="submit"
       :disabled="sending || disabled"
-      >Accedi</BaseButton
+      >{{ $t('form.login') }}</BaseButton
     >
   </form>
 </template>
@@ -35,6 +44,7 @@
 // Imports
 import { useAccountStore } from '@/stores/account'
 import { useCartStore } from '@/stores/cart'
+import { useWishlistStore } from '@/stores/wishlist'
 
 // Constants
 const CSS_NAME = 'c-login-form'
@@ -54,10 +64,11 @@ const emit = defineEmits(['api:start', 'api:end'])
 const { sending, send } = useSender(emit)
 const store = useAccountStore()
 const cart = useCartStore()
+const wishlist = useWishlistStore()
 
 // Data
 const formData = reactive({
-  user: '',
+  username: '',
   password: '',
   remember: false,
 })
@@ -74,9 +85,23 @@ const login = async () => {
 
   const response = await send(async () => await store.signUp(formData))
 
-  if (response.value.success) {
-    cart.load()
+  const message = {
+    status: 'danger',
+    message: 'È avvenuto un errore durante il login',
   }
+
+  console.debug(response.value)
+  if (response.value.success && response.value.data.token) {
+    message.status = 'success'
+    message.message = 'Login avvenuto con successo'
+
+    cart.load()
+    wishlist.load()
+  } else {
+    message.message = response.value.message
+  }
+
+  notify(message)
 }
 </script>
 
