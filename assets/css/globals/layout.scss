@@ -2,12 +2,64 @@
   @include object($parent) {
     display: flex;
     flex-wrap: wrap;
-    gap: get-var(gap, rem(20px), $prefix: $parent);
+    gap: get-var(
+        column-gap,
+        get-var(gap, rem(20px), $prefix: $parent),
+        $prefix: $parent
+      )
+      get-var(
+        row-gap,
+        get-var(gap, rem(20px), $prefix: $parent),
+        $prefix: $parent
+      );
+  }
+
+  @include object($parent) {
+    @extend %row;
+
+    @if ($sub) {
+      #{compose-element(compose-object($parent), $sub)} {
+        @extend %row;
+      }
+    }
+
     @include element($child) {
-      width: get-var(width, calc(100% / get-var(columns, 1, $prefix: $parent) - (get-var(gap, rem(20px), $prefix: $parent) * (get-var(columns, 1, $prefix: $parent) - 1) / get-var(columns, 1, $prefix: $parent))), $prefix: $child);
+      width: get-var(
+        width,
+        calc(
+          (
+              100% / get-var(columns, 1, $prefix: $parent) *
+                get-var(size, 1, $prefix: $child)
+            ) -
+            (
+              get-var(
+                  column-gap,
+                  get-var(gap, rem(20px), $prefix: $parent),
+                  $prefix: $parent
+                ) *
+                (
+                  get-var(columns, 1, $prefix: $parent) -
+                    get-var(size, 1, $prefix: $child)
+                ) / get-var(columns, 1, $prefix: $parent)
+            )
+        ),
+        $prefix: $child
+      );
     }
     @content;
   }
 }
 
-@include layout('row', 'column'); 
+@include layout('row', 'column');
+
+@include object('page') {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  @include element('main') {
+    flex: 1 1 auto;
+  }
+}
