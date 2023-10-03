@@ -52,7 +52,6 @@ watch(
     const { page: response } = await usePage(path)
 
     page.value = response.value
-    console.log(page)
     // breadcrumbs.value = page.value?.breadcrumbs || breadcrumbs.value
     const newBreadcrumbs = page.value?.breadcrumbs || breadcrumbs.value
     breadcrumbs.value = [...newBreadcrumbs]

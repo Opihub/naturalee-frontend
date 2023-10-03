@@ -5,6 +5,7 @@
       :column-class-name="CSS_FORM_FIELD"
       :column-full-class-name="CSS_FORM_FIELD_FULL"
       :column-half-class-name="CSS_FORM_FIELD_HALF"
+      :column-one-third-class-name="CSS_FORM_FIELD_ONE_THIRD"
     />
   </form>
 </template>
@@ -14,6 +15,7 @@ const CSS_NAME = 'o-form'
 const CSS_FORM_FIELD = `${CSS_NAME}__field`
 const CSS_FORM_FIELD_FULL = `${CSS_FORM_FIELD}--full`
 const CSS_FORM_FIELD_HALF = `${CSS_FORM_FIELD}--half`
+const CSS_FORM_FIELD_ONE_THIRD = `${CSS_FORM_FIELD}--one_third`
 
 const props = defineProps({
   maxWidth: {
@@ -71,13 +73,23 @@ $prefix: 'form';
 }
 @include layout($prefix, 'field') {
   @include from('tablet') {
-    @include set-local-vars(
-      $prefix: 'form',
-      $map: (
-        columns: 2,
-      )
-    );
     @include element('field') {
+      @include modifier('one_third') {
+        @include set-local-vars(
+          $prefix: 'form',
+          $map: (
+            columns: 3,
+          )
+        );
+      }
+      @include modifier('half') {
+        @include set-local-vars(
+          $prefix: 'form',
+          $map: (
+            columns: 2,
+          )
+        );
+      }
       @include modifier('full') {
         @include set-local-vars(
           $prefix: 'field',
