@@ -19,7 +19,7 @@ export default defineI18nConfig(() => ({
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
       products: {
-        count: '{count} @:product',
+        count: '{count} @:products.label',
         label: 'prodotto | prodotti',
         type: 'Tipologia',
         price: 'Prezzo',

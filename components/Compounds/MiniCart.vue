@@ -5,7 +5,7 @@
         <template v-if="cart.length">
           <span>
             {{ $t('cart.your') }} -
-            {{ $t('products.label', cart.length, { count: cart.length }) }}
+            {{ $t('products.count', cart.length, { count: cart.length }) }}
           </span>
 
           <BaseLink
@@ -77,9 +77,13 @@
         </PriceHolder>
       </dl>
 
-      <BaseButton as="link" :class="`${CSS_NAME}__submit`" color="green" to="/checkout">{{
-        $t('cart.proceed')
-      }}</BaseButton>
+      <BaseButton
+        as="link"
+        :class="`${CSS_NAME}__submit`"
+        color="green"
+        to="/checkout"
+        >{{ $t('cart.proceed') }}</BaseButton
+      >
       <BaseLink
         :class="`${CSS_NAME}__review`"
         to="/cart"
