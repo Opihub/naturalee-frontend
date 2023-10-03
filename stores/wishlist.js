@@ -140,7 +140,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
           method: 'POST',
           body: {
             id: product.id,
-            variantId: product.variantId,
+            variationId: product.variationId,
           },
         },
         {
@@ -177,7 +177,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
           method: 'DELETE',
           body: {
             id: product.id,
-            variantId: product.variantId,
+            variationId: product.variationId,
           },
         },
         {

@@ -25,7 +25,7 @@
                 x-centered
                 :cart="cart"
                 :shipping-cost="shippingCost"
-                :totals="totals"
+                :total="total"
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
@@ -117,7 +117,7 @@ const cartStore = useCartStore()
 
 // Data
 const { isLoggedIn } = storeToRefs(accountStore)
-const { cart, count, shippingCost, totals } = storeToRefs(cartStore)
+const { cart, count, shippingCost, total } = storeToRefs(cartStore)
 const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)

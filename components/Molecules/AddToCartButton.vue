@@ -6,7 +6,7 @@
     :disabled="animating || sending"
     @click="add"
   >
-    <span v-if="sending" :class="`${CSS_NAME}__spinner`"> Caricamento... </span>
+    <span v-if="sending" :class="`${CSS_NAME}__spinner`" />
 
     <ClientOnly>
       <div v-if="animating" :class="`${CSS_NAME}__animation`">

@@ -18,9 +18,7 @@
       <span>{{ error }}</span>
     </span>
 
-    <div
-      :class="{ [`${CSS_NAME}__input`]: true, 'u-mt-micro': !!slots.default }"
-    >
+    <div :class="{ [`${CSS_NAME}__input`]: true }">
       <template v-if="type === 'select'">
         <BaseSelect
           v-model="value"
@@ -226,7 +224,7 @@ $prefix: 'input-field';
   flex-direction: column;
 
   @include element('label') {
-    margin: get-var(margin, 0, $prefix: $prefix-label);
+    margin: get-var(margin, 0 0 rem(4px), $prefix: $prefix-label);
     padding: get-var(padding, 0, $prefix: $prefix-label);
   }
 
@@ -255,18 +253,10 @@ $prefix: 'input-field';
     }
   }
 
-  @include has('no-label') {
-    @include element('input') {
-      height: 100%;
-
-      @include element('element') {
-        height: 100%;
-      }
-    }
-  }
-
   @include element('input') {
     position: relative;
+    margin: get-var(margin, 0, $prefix: $prefix-input);
+    padding: get-var(padding, 0, $prefix: $prefix-input);
 
     @include element('element') {
       width: 100%;
@@ -294,6 +284,26 @@ $prefix: 'input-field';
         height: rem(14.861px);
         stroke: get-var(color-black);
         fill: get-var(color-black);
+      }
+    }
+  }
+
+  @include has('no-label') {
+    @include element('label') {
+      @include set-local-vars(
+        $prefix: $prefix-label,
+        $map: (
+          margin: 0,
+        )
+      );
+    }
+
+    @include element('input') {
+
+      height: 100%;
+
+      @include element('element') {
+        height: 100%;
       }
     }
   }
