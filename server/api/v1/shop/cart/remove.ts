@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  if (body.variantId && isNaN(body.variantId)) {
+  if (body.variationId && isNaN(body.variationId)) {
     throw createError({
       statusCode: 403,
       statusMessage: 'ID tipologia prodotto errato',

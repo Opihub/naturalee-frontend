@@ -1,45 +1,159 @@
 <template>
-  <form method="POST" :class="CSS_NAME" @submit.prevent="updateShippingAddress">
-    <input v-model="formData.country" type="hidden" name="country" />
+  <FormWrapper :class="CSS_NAME">
+    <template
+      #default="{
+        rowClassName,
+        columnClassName,
+        columnFullClassName,
+        columnHalfClassName,
+        columnThirdClassName,
+      }"
+    >
+      <fieldset :class="rowClassName">
+        <div :class="[columnClassName, columnFullClassName]">
+          Hai un codice promozionale?
+          <InlineButton underline @click="isCouponFormOpen = !isCouponFormOpen"
+            >Fai clic qui per inserire il tuo codice promozionale</InlineButton
+          >
 
-    <InputField
-      v-model="formData.state"
-      type="select"
-      name="state"
-      :placeholder="$t('shipping.city')"
-      class="u-mb-small"
-      :data="provinces"
-      error-after
-      rounded
-      required
-    />
+          <FormCoupon
+            v-show="isCouponFormOpen"
+            class="u-mt-mini"
+            :placeholder="$t('coupon.formPlaceholder')"
+          />
+        </div>
+      </fieldset>
 
-    <InputField
-      v-model="formData.city"
-      type="text"
-      name="city"
-      :placeholder="$t('shipping.city')"
-      class="u-mb-small"
-      error-after
-      rounded
-      required
-    />
+      <div :class="[columnClassName, columnFullClassName]">
+        Scegli una fascia oraria per la consegna:
+      </div>
 
-    <InputField
-      v-model="formData.postcode"
-      type="text"
-      name="postcode"
-      :placeholder="$t('shipping.postcode')"
-      class="u-mb-small"
-      error="CAP non valido"
-      pattern="\d{5}"
-      error-after
-      rounded
-      required
-    />
+      <fieldset :class="rowClassName">
+        <div
+          style="background-color: #fff"
+          :class="[columnClassName, columnThirdClassName]"
+        >
+          <ToggleField
+            v-for="slot in timeSlots"
+            :key="slot.id"
+            radio
+            :model-value="formData.timeSlot === slot.id"
+            @update:model-value="formData.timeSlot = slot.id"
+          >
+            <b>{{ slot.title }}</b>
+            <span>
+              <time>{{ slot.from }}</time> - <time>{{ slot.to }}</time>
+            </span>
+          </ToggleField>
+        </div>
+      </fieldset>
 
-    <BaseButton color="green" type="submit">Aggiorna</BaseButton>
-  </form>
+      <InputField
+        v-model="formData.address.firstName"
+        :class="[columnClassName, columnHalfClassName]"
+        type="text"
+        name="firstName"
+        required
+      >
+        Nome*
+      </InputField>
+      <InputField
+        v-model="formData.address.lastName"
+        :class="[columnClassName, columnHalfClassName]"
+        type="text"
+        name="firstName"
+        required
+      >
+        Cognome*
+      </InputField>
+
+      <InputField
+        v-model="formData.address.country"
+        :class="[columnClassName, columnFullClassName]"
+        type="select"
+        name="country"
+        :data="countries"
+      >
+        Paese/Regione
+      </InputField>
+
+      <InputField
+        v-model="formData.address.address"
+        :class="[columnClassName, columnFullClassName]"
+        type="text"
+        name="address"
+        placeholder="Via/Piazza e Numero Civico"
+        required
+      >
+        Via e numero*
+      </InputField>
+      <InputField
+        v-model="formData.address.address2"
+        :class="[columnClassName, columnFullClassName]"
+        type="text"
+        name="address2"
+        placeholder="Appartamento, suite, unità, piano, ecc. (opzionale)"
+      />
+
+      <InputField
+        v-model="formData.address.postcode"
+        :class="[columnClassName, columnThirdClassName]"
+        type="text"
+        name="postcode"
+        error="CAP non valido"
+        pattern="\d{5}"
+        required
+      >
+        CAP*
+      </InputField>
+      <InputField
+        v-model="formData.address.city"
+        :class="[columnClassName, columnThirdClassName]"
+        type="text"
+        name="city"
+        required
+      >
+        Città*
+      </InputField>
+      <ProvincesSelect
+        v-model="formData.address.country"
+        :class="[columnClassName, columnThirdClassName]"
+        name="country"
+      >
+        Paese/Regione
+      </ProvincesSelect>
+
+      <InputField
+        v-model="formData.address.phone"
+        :class="[columnClassName, columnHalfClassName]"
+        type="tel"
+        name="phone"
+        required
+      >
+        Telefono*
+      </InputField>
+
+      <InputField
+        v-model="formData.address.email"
+        :class="[columnClassName, columnHalfClassName]"
+        type="email"
+        name="email"
+        required
+      >
+        E-mail*
+      </InputField>
+
+      <InputField
+        v-model="formData.note"
+        :class="[columnClassName, columnFullClassName]"
+        type="textarea"
+        name="note"
+        placeholder="Note sull'ordine, ad esempio richieste particolare per la consegna..."
+      >
+        Note sull'ordine
+      </InputField>
+    </template>
+  </FormWrapper>
 </template>
 
 <script setup>
@@ -49,129 +163,31 @@
 const CSS_NAME = 'c-shipping-form'
 
 // Define (Props, Emits, Page Meta)
-const emit = defineEmits(['update', 'api:start', 'api:end'])
+const props = defineProps({
+  timeSlots: {
+    type: Array,
+    default() {
+      return []
+    },
+  },
+  address: {
+    type: Object,
+    required: true,
+  },
+})
 
 // Component life-cycle hooks
 
 // Composables
-const { sending, send } = useSender(emit)
 
 // Data
-const formData = reactive({
-  country: 'it',
-  state: '',
-  city: '',
-  postcode: '',
-})
+const isCouponFormOpen = ref(false)
+const countries = ref({ IT: 'Italia' })
 
-const provinces = ref({
-  AG: 'Agrigento',
-  AL: 'Alessandria',
-  AN: 'Ancona',
-  AO: 'Aosta',
-  AR: 'Arezzo',
-  AP: 'Ascoli Piceno',
-  AT: 'Asti',
-  AV: 'Avellino',
-  BA: 'Bari',
-  BT: 'Barletta-Andria-Trani',
-  BL: 'Belluno',
-  BN: 'Benevento',
-  BG: 'Bergamo',
-  BI: 'Biella',
-  BO: 'Bologna',
-  BZ: 'Bolzano',
-  BS: 'Brescia',
-  BR: 'Brindisi',
-  CA: 'Cagliari',
-  CL: 'Caltanissetta',
-  CB: 'Campobasso',
-  CE: 'Caserta',
-  CT: 'Catania',
-  CZ: 'Catanzaro',
-  CH: 'Chieti',
-  CO: 'Como',
-  CS: 'Cosenza',
-  CR: 'Cremona',
-  KR: 'Crotone',
-  CN: 'Cuneo',
-  EN: 'Enna',
-  FM: 'Fermo',
-  FE: 'Ferrara',
-  FI: 'Firenze',
-  FG: 'Foggia',
-  FC: 'Forlì-Cesena',
-  FR: 'Frosinone',
-  GE: 'Genova',
-  GO: 'Gorizia',
-  GR: 'Grosseto',
-  IM: 'Imperia',
-  IS: 'Isernia',
-  SP: 'La Spezia',
-  AQ: "L'Aquila",
-  LT: 'Latina',
-  LE: 'Lecce',
-  LC: 'Lecco',
-  LI: 'Livorno',
-  LO: 'Lodi',
-  LU: 'Lucca',
-  MC: 'Macerata',
-  MN: 'Mantova',
-  MS: 'Massa-Carrara',
-  MT: 'Matera',
-  ME: 'Messina',
-  MI: 'Milano',
-  MO: 'Modena',
-  MB: 'Monza e della Brianza',
-  NA: 'Napoli',
-  NO: 'Novara',
-  NU: 'Nuoro',
-  OR: 'Oristano',
-  PD: 'Padova',
-  PA: 'Palermo',
-  PR: 'Parma',
-  PV: 'Pavia',
-  PG: 'Perugia',
-  PU: 'Pesaro e Urbino',
-  PE: 'Pescara',
-  PC: 'Piacenza',
-  PI: 'Pisa',
-  PT: 'Pistoia',
-  PN: 'Pordenone',
-  PZ: 'Potenza',
-  PO: 'Prato',
-  RG: 'Ragusa',
-  RA: 'Ravenna',
-  RC: 'Reggio Calabria',
-  RE: 'Reggio Emilia',
-  RI: 'Rieti',
-  RN: 'Rimini',
-  RM: 'Roma',
-  RO: 'Rovigo',
-  SA: 'Salerno',
-  SS: 'Sassari',
-  SV: 'Savona',
-  SI: 'Siena',
-  SR: 'Siracusa',
-  SO: 'Sondrio',
-  SU: 'Sud Sardegna',
-  TA: 'Taranto',
-  TE: 'Teramo',
-  TR: 'Terni',
-  TO: 'Torino',
-  TP: 'Trapani',
-  TN: 'Trento',
-  TV: 'Treviso',
-  TS: 'Trieste',
-  UD: 'Udine',
-  VA: 'Varese',
-  VE: 'Venezia',
-  VB: 'Verbano-Cusio-Ossola',
-  VC: 'Vercelli',
-  VR: 'Verona',
-  VV: 'Vibo Valentia',
-  VI: 'Vicenza',
-  VT: 'Viterbo',
+const formData = reactive({
+  note: '',
+  timeSlot: props.timeSlots?.[0]?.id,
+  address: { ...props.address },
 })
 
 // Watcher
@@ -179,53 +195,27 @@ const provinces = ref({
 // Computed
 
 // Methods
-const updateShippingAddress = async () => {
-  if (sending.value) {
-    return
-  }
-
-  const response = await send(
-    async () =>
-      await useApi(
-        'shop/checkout/validate/shipping',
-        {
-          method: 'POST',
-          body: formData,
-        },
-        {
-          cache: false,
-        }
-      )
-  )
-
-  const notification = {
-    message: "È avvenuto un errore durante l'aggiornamento dell'indirizzo",
-    status: 'danger'
-  }
-
-  notification.message = response.value.message
-
-  if (response.value.success) {
-    notification.status = 'success'
-
-    emit('update', {
-      data: formData,
-      methods: response.value.data
-    })
-  }
-
-  notify(notification)
-}
 </script>
 
 <style lang="scss">
 $prefix: 'shipping-form';
 @include component($prefix) {
   @include set-local-vars(
-    $prefix: 'input-field-error',
+    $prefix: 'form',
     $map: (
-      margin: 0 rem(20px),
+      columns: 3,
+      fieldset-gap: rem(20px),
+      fieldset-border: 2px solid get-var(color-white),
     )
   );
+
+  @include set-local-vars(
+    $prefix: 'input-field-label',
+    $map: (
+      margin: 0 0 rem(8px),
+    )
+  );
+
+  @include typography(18px, 22px);
 }
 </style>
