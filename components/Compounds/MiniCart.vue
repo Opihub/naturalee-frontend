@@ -233,6 +233,9 @@ $prefix: 'mini-cart';
         font-weight: get-var(weight-light);
         @include typography(11px, 13px);
         @include letter-spacing(12);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       @include element('price') {
