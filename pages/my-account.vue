@@ -1,8 +1,9 @@
 <template>
-  <main>
+  <main class="o-page">
     <HeaderBottomBar v-if="breadcrumbs" :breadcrumb="breadcrumbs" />
 
-    <ProfileForms v-if="!isLoggedIn" />
+    <ProfileForms v-if="!isLoggedIn" class="o-page__main" />
+
     <ClientOnly v-else>
       <ProfileDashboard>
         <NuxtPage :page-key="(route) => route.fullPath" />

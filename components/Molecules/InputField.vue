@@ -32,6 +32,17 @@
           @invalid="showError"
         />
       </template>
+      <template v-else-if="type === 'textarea'">
+        <BaseTextarea
+          v-model="value"
+          :class="`${CSS_NAME}__input__element`"
+          :type="changedType"
+          :name="name"
+          v-bind="attributes"
+          @valid="hideError"
+          @invalid="showError"
+        />
+      </template>
       <template v-else>
         <BaseInput
           v-model="value"
@@ -96,6 +107,10 @@ const props = defineProps({
   },
 })
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const emit = defineEmits(['update:modelValue'])
 
 // Component life-cycle hooks
@@ -141,7 +156,6 @@ const className = computed(() => {
   if (!slots.default) {
     className.push('has-no-label')
   }
-
   if (attrs.class) {
     let classes = []
 
