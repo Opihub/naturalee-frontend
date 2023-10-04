@@ -21,11 +21,12 @@
         <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
           <ProductImage :src="product.image" :alt="product.title" />
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.count')">
-          {{ product.selling }}
+        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.label')">
+          {{ product.title }}<br />
+          <small>{{ product.costDescription }}</small>
         </td>
         <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
-          {{ product.costDescription }}
+          {{ product.selling }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
