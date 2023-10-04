@@ -56,6 +56,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  paginate: {
+    type: Boolean,
+    default: false,
+  },
   orderOptions: {
     type: Object,
     default() {
@@ -188,16 +192,21 @@ const fetchProducts = async () => {
     }
 
     let last = false
-    const records = props.use.slice(
-      page.value * DEFAULT_LIMIT,
-      (page.value + 1) * DEFAULT_LIMIT
-    )
+    if (props.paginate) {
+      const records = props.use.slice(
+        page.value * DEFAULT_LIMIT,
+        (page.value + 1) * DEFAULT_LIMIT
+      )
 
-    page.value += 1
+      page.value += 1
 
-    products.value = [...products.value, ...records]
+      products.value = [...products.value, ...records]
 
-    if (records.length < DEFAULT_LIMIT) {
+      if (records.length < DEFAULT_LIMIT) {
+        last = true
+      }
+    } else {
+      products.value = props.use
       last = true
     }
 
@@ -219,20 +228,22 @@ const fetchProducts = async () => {
   isFetching.value = true
 
   try {
-    const params = {
-      limit: DEFAULT_LIMIT,
-    }
+    const params = {}
 
-    if (page.value > 0) {
-      params.page = page.value
-    }
+    if (props.paginate) {
+      params.limit = DEFAULT_LIMIT
 
-    if (orderby.value) {
-      params.orderby = orderby.value
+      if (page.value > 0) {
+        params.page = page.value
+      }
     }
 
     if (props.search) {
       params.search = props.search
+    }
+
+    if (orderby.value) {
+      params.orderby = orderby.value
     }
 
     if (chosenFilters.value.length > 0) {
@@ -245,6 +256,15 @@ const fetchProducts = async () => {
     })
 
     if (response.value.success) {
+      if (!props.paginate) {
+        const records = response.value.data
+        products.value = records
+
+        canFetch.value = false
+        stopLazyLoad()
+        return
+      }
+
       const { pagination, records } = response.value.data
 
       products.value = [...products.value, ...records]
@@ -286,7 +306,7 @@ const updateQuery = () => {
     query['filters[]'] = chosenFilters.value
   }
 
-  router.push({query})
+  router.push({ query })
 }
 
 // On created
