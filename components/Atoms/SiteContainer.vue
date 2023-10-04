@@ -24,10 +24,6 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  flipped: {
-    type: Boolean,
-    default: false,
-  },
 })
 
 const { style: maxWidth } = useMaxWidth(
@@ -55,9 +51,6 @@ const className = computed(() => {
   if (props.flex) {
     className.push(`${CSS_NAME}--flex`)
   }
-  if (props.flipped) {
-    className.push(`${CSS_NAME}--flipped`)
-  }
 
   return className
 })
@@ -76,18 +69,6 @@ $prefix: 'container';
   @include modifier('flex') {
     display: flex;
     flex-direction: get-var(direction, row, $prefix: $prefix);
-    flex-wrap: get-var(wrap, wrap, $prefix: $prefix);
-    align-items: get-var(align-items, center, $prefix: $prefix);
-    justify-content: get-var(justify-content, space-between, $prefix: $prefix);
-    gap: get-var(gap, 0, $prefix: $prefix);
-  }
-
-  @include modifier('flipped') {
-    display: flex;
-    flex-direction: column;
-    @include from('tablet') {
-      flex-direction: row-reverse;
-    }
     flex-wrap: get-var(wrap, wrap, $prefix: $prefix);
     align-items: get-var(align-items, center, $prefix: $prefix);
     justify-content: get-var(justify-content, space-between, $prefix: $prefix);

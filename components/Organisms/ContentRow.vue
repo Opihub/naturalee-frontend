@@ -1,6 +1,6 @@
 <template>
-  <BackgroundHolder :class="CSS_NAME" tag="section" :color="color">
-    <SiteContainer :style="style" flipped>
+  <BackgroundHolder :class="className" tag="section" :color="color">
+    <SiteContainer :style="style" flex>
       <div :class="`${CSS_NAME}__content`">
         <BaseHeading
           v-if="slots['sup-title']"
@@ -74,6 +74,10 @@ const props = defineProps({
     type: Number,
     default: 0.075,
   },
+  parallax: {
+    type: Boolean,
+    default: false,
+  },
   button: {
     type: Object,
     default: null,
@@ -86,10 +90,18 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  flipped: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // Component life-cycle hooks
 onMounted(() => {
+  if (!props.parallax) {
+    return
+  }
+
   gsap.registerPlugin(ScrollTrigger)
 
   const parallax = getElement(parallaxElement)
@@ -116,14 +128,26 @@ const parallaxElement = ref(null)
 // Watcher
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.flipped) {
+    className.push(`${CSS_NAME}--flipped`)
+  }
+
+  return className
+})
+
 const style = computed(() => {
   const style = {}
 
   if (props.borderRadius) {
     style['--image-border-radius'] = props.borderRadius
   }
+
   return style
 })
+
 // Methods
 </script>
 
@@ -131,6 +155,7 @@ const style = computed(() => {
 $prefix: 'content-row';
 @include component($prefix) {
   $prefix-parallax: '#{$prefix}-parallax';
+
   @include set-local-vars(
     $prefix: 'container',
     $map: (
@@ -186,6 +211,17 @@ $prefix: 'content-row';
         position: absolute;
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
       }
+    }
+  }
+
+  @include from(tablet) {
+    @include modifier('flipped') {
+      @include set-local-vars(
+        $prefix: 'container',
+        $map: (
+          direction: row-reverse,
+        )
+      );
     }
   }
 }
