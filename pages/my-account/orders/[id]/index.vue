@@ -12,8 +12,8 @@
     <OrderDetails
       class="u-mb-huge u-mt-medium"
       :products="order.products"
-      :shipping="_shipping"
-      :payment="_payment"
+      :shipping="order.shipping"
+      :payment="order.payment"
     />
 
     <div class="o-row">
@@ -55,16 +55,6 @@ const order = await useApi(
 )
 
 // Data
-const _shipping = ref({
-  id: order.shippingMethod,
-  title: order.shippingMethod,
-  cost: order.shippingCost || 0,
-})
-const _payment = ref({
-  id: order.paymentMethod,
-  title: order.paymentMethod,
-  cost: order.shippingCost || 0,
-})
 
 // Watcher
 
