@@ -94,14 +94,20 @@
       >
         {{ $t('form.mailField') }}</InputField
       > -->
-      <fieldset :class="rowClassName">
+      <fieldset
+        v-if="$route.params.addresses == 'billing'"
+        :class="rowClassName"
+      >
         <div :class="[columnClassName, columnFullClassName]">
           <BaseHeading class="u-mt-large s-password" tag="h6"
             >Fatturazione</BaseHeading
           >
         </div>
       </fieldset>
-      <fieldset :class="rowClassName">
+      <fieldset
+        v-if="$route.params.addresses == 'billing'"
+        :class="rowClassName"
+      >
         <ToggleField
           v-for="invoice in invoices"
           :key="invoice.value"
@@ -190,7 +196,7 @@ const CSS_NAME = 'c-addresses-form'
 const invoices = ref([
   {
     name: 'No',
-    value: 'false',
+    value: false,
   },
   {
     name: 'Si, sono un privato',
@@ -271,7 +277,7 @@ const updateAddresses = async () => {
   }
 
   if (
-    formData.invoice.trim() === 'company' &&
+    formData.invoice === 'company' &&
     formData.cfCompany.trim() === '' &&
     formData.company.trim() === '' &&
     formData.vat.trim() === ''
