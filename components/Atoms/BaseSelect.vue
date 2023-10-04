@@ -6,7 +6,7 @@
     @change="input"
     @blur="check"
   >
-    <option v-for="(text, value) in data" :key="value" :value="value">
+    <option v-for="(text, value) in options" :key="value" :value="value">
       {{ text }}
     </option>
   </select>
@@ -47,6 +47,14 @@ const props = defineProps({
   modelValue: {
     type: [String, Number, Boolean],
     default: null,
+  },
+  labelKey: {
+    type: String,
+    default: 'text',
+  },
+  valueKey: {
+    type: String,
+    default: 'id',
   },
 })
 
@@ -98,6 +106,18 @@ const className = computed(() => {
   }
 
   return className
+})
+const options = computed(() => {
+  if (Array.isArray(props.data)) {
+    const data = {}
+    props.data.forEach((el) => {
+      data[el[props.valueKey]] = el[props.labelKey]
+    })
+    //console.log(data)
+    return data
+  }
+
+  return props.data
 })
 // Methods
 const input = (event) => {
@@ -160,7 +180,11 @@ $prefix: 'select';
   font-size: get-var(font-size, rem(18px), $prefix: $prefix);
   line-height: get-var(line-height, rem(35px), $prefix: $prefix);
   font-weight: get-var(font-weight, get-var(weight-regular), $prefix: $prefix);
-  padding: get-var(padding, rem(15px) rem(20px) rem(14px) rem(20px), $prefix: $prefix);
+  padding: get-var(
+    padding,
+    rem(15px) rem(20px) rem(14px) rem(20px),
+    $prefix: $prefix
+  );
   background-color: get-var(background-color, $prefix: $prefix);
   color: get-var(text-color, $prefix: $prefix);
   width: get-var(width, auto, $prefix: $prefix);

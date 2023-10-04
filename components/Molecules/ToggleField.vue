@@ -65,6 +65,10 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
+  inline: {
+    type: Boolean,
+    required: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -109,6 +113,10 @@ const className = computed(() => {
 
   if (props.errorBefore) {
     className.push('has-error-before')
+  }
+
+  if (props.inline) {
+    className.push(`${className}--inline`)
   }
 
   if (attrs.class) {
@@ -199,6 +207,9 @@ $prefix: 'toggle-field';
         }
       }
     }
+  }
+  @include modifier('inline') {
+    width: auto;
   }
 }
 </style>
