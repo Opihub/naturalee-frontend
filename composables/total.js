@@ -8,9 +8,16 @@ export const useTotal = (products, config) => {
   })
 
   const granTotal = computed(() => {
+    let total = subTotal.value
     const { shipping } = config
 
-    return subTotal.value + (shipping?.value || shipping || 0)
+    if ('value' in shipping) {
+      total += shipping.value
+    } else {
+      total += shipping || 0
+    }
+
+    return total
   })
 
   return {
