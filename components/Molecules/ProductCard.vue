@@ -32,7 +32,7 @@
 
       <PriceHolder class="u-mb-mini" :price="product.price">
         <template #after>
-          <small class="u-ml-micro">/ {{ product.unit }}</small>
+          <small class="u-ml-micro">/ {{ product.selling }}</small>
         </template>
       </PriceHolder>
 

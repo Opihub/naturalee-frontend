@@ -37,7 +37,7 @@
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
           :data-title="$t('products.quantity')"
         >
-          {{ `${product.quantity} ${product.unit}` }}
+          {{ product.quantity }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
