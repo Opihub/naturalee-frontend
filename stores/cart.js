@@ -38,8 +38,8 @@ export const useCartStore = defineStore('cart', () => {
     return count.value <= 0
   })
 
-  const { subTotal, granTotal: total } = useTotal(cart.value, {
-    shipping: shippingCost.value,
+  const { subTotal, granTotal: total } = useTotal(cart, {
+    shipping: shippingCost,
   })
 
   // Actions
