@@ -2,7 +2,6 @@
   <div :class="CSS_NAME">
     <div v-if="slots.head" :class="`${CSS_NAME}__head`">
       <slot name="head" />
-      <BaseLink color="green" underline :to="link">Modifica</BaseLink>
     </div>
     <div :class="`${CSS_NAME}__body`">
       <slot />

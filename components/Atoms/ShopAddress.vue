@@ -81,7 +81,7 @@ const fullName = computed(() => {
 
 const fullAddress = computed(() => {
   return [
-    props.address.zip,
+    props.address.postcode,
     props.address.city,
     props.address.province ? `(${props.address.province})` : '',
     props.address.country ? `, ${props.address.country}` : '',

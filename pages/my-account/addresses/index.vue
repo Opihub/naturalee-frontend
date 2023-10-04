@@ -1,24 +1,28 @@
 <template>
-  <BaseParagraph class="u-mb-large"
-    >I seguenti indirizzi saranno usati come predefiniti nella pagina di
-    riepilogo dell'ordine.</BaseParagraph
-  >
-  <SiteContainer flex>
-    <BaseBox
-      v-for="(address, index) in response.data"
-      :key="index"
-      :link="`addresses/${index}`"
+  <section>
+    <BaseParagraph class="u-mb-large"
+      >I seguenti indirizzi saranno usati come predefiniti nella pagina di
+      riepilogo dell'ordine.</BaseParagraph
     >
-      <template #head>
-        <BaseHeading tag="h4">{{
-          index == 'billing'
-            ? 'Indirizzo di Fatturazione'
-            : 'Indirizzo di Spedizione'
-        }}</BaseHeading>
-      </template>
-      <ShopAddress :address="address" />
-    </BaseBox>
-  </SiteContainer>
+    <SiteContainer flex>
+      <BaseBox v-for="(address, index) in response.data" :key="index">
+        <template #head>
+          <BaseHeading tag="h4">{{
+            index == 'billing'
+              ? 'Indirizzo di Fatturazione'
+              : 'Indirizzo di Spedizione'
+          }}</BaseHeading>
+          <BaseLink
+            color="green"
+            underline
+            :to="`/my-account/addresses/${index}`"
+            >Modifica</BaseLink
+          >
+        </template>
+        <ShopAddress :address="address" />
+      </BaseBox>
+    </SiteContainer>
+  </section>
 </template>
 
 <script setup>
@@ -27,7 +31,9 @@
 // Constants
 
 // Define (Props, Emits, Page Meta)
-
+definePageMeta({
+  name: 'addresses-list',
+})
 // Component life-cycle hooks
 
 // Composables

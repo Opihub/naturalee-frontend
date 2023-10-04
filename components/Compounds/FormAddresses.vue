@@ -6,10 +6,11 @@
   >
     <template
       #default="{
+        rowClassName,
+        columnClassName,
         columnFullClassName,
         columnHalfClassName,
-        columnClassName,
-        columnOneThirdClassName,
+        columnThirdClassName,
       }"
     >
       <InputField
@@ -30,12 +31,11 @@
         {{ $t('form.surname') }}*</InputField
       >
 
-      <InputField
-        v-model="formData.country"
+      <CountrySelect
         :class="[columnClassName, columnFullClassName]"
-        type="text"
-      >
-        Paese/Regione</InputField
+        :model-value="formData.country"
+        @update:model-value="provinces"
+        >Nazione/Regione</CountrySelect
       >
       <InputField
         v-model="formData.address"
@@ -53,8 +53,8 @@
       />
 
       <InputField
-        v-model="formData.zip"
-        :class="[columnClassName, columnOneThirdClassName]"
+        v-model="formData.postcode"
+        :class="[columnClassName, columnThirdClassName]"
         type="text"
         required
       >
@@ -62,23 +62,23 @@
       >
       <InputField
         v-model="formData.city"
-        :class="[columnClassName, columnOneThirdClassName]"
+        :class="[columnClassName, columnThirdClassName]"
         type="text"
         required
       >
         Città*</InputField
       >
-      <InputField
+      <ProvincesSelect
         v-model="formData.province"
-        :class="[columnClassName, columnOneThirdClassName]"
-        type="select"
-        :data="provinces"
-        required
+        :class="[columnClassName, columnThirdClassName]"
+        name="province"
+        :provinces="countryData"
+        :user-province="formData.province"
       >
-        Provincia*</InputField
-      >
+        Provincia
+      </ProvincesSelect>
 
-      <InputField
+      <!-- <InputField
         v-model="formData.phone"
         :class="[columnClassName, columnHalfClassName]"
         type="text"
@@ -93,34 +93,48 @@
         required
       >
         {{ $t('form.mailField') }}</InputField
-      >
-
-      <BaseHeading class="u-mt-large s-password" tag="h6"
-        >Fatturazione</BaseHeading
-      >
-      <ToggleField
-        v-for="invoice in invoices"
-        :key="invoice.value"
-        :value="invoice.value"
-        inline
-        :model-value="selectedInvoice === invoice.value"
-        @update:model-value="selectedInvoice = invoice.value"
-      >
-        {{ invoice.name }}
-      </ToggleField>
+      > -->
+      <fieldset :class="rowClassName">
+        <div :class="[columnClassName, columnFullClassName]">
+          <BaseHeading class="u-mt-large s-password" tag="h6"
+            >Fatturazione</BaseHeading
+          >
+        </div>
+      </fieldset>
+      <fieldset :class="rowClassName">
+        <ToggleField
+          v-for="invoice in invoices"
+          :key="invoice.value"
+          :value="invoice.value"
+          inline
+          radio
+          :model-value="formData.invoice === invoice.value"
+          @update:model-value="formData.invoice = invoice.value"
+        >
+          {{ invoice.name }}
+        </ToggleField>
+      </fieldset>
       <InputField
         v-if="formData.invoice == 'company'"
         v-model="formData.company"
-        :class="[columnClassName, columnHalfClassName]"
+        :class="[columnClassName, columnFullClassName]"
         type="text"
         required
       >
         Azienda</InputField
       >
       <InputField
-        v-if="formData.invoice == 'company' || formData.invoice == 'private'"
-        v-model="formData.cf"
-        :class="[columnClassName, columnFullClassName]"
+        v-if="formData.invoice == 'company'"
+        v-model="formData.cfCompany"
+        :class="[columnClassName, columnHalfClassName]"
+        type="text"
+      >
+        Codice fiscale</InputField
+      >
+      <InputField
+        v-if="formData.invoice == 'private'"
+        v-model="formData.cfPrivate"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
       >
         Codice fiscale</InputField
@@ -139,26 +153,28 @@
         v-model="formData.sdi"
         :class="[columnClassName, columnHalfClassName]"
         type="text"
-        required
       >
         Codice univico</InputField
       >
       <InputField
         v-if="formData.invoice == 'company'"
         v-model="formData.pec"
-        :class="[columnClassName, columnFullClassName]"
+        :class="[columnClassName, columnHalfClassName]"
         type="text"
-        required
       >
         PEC</InputField
       >
-      <BaseButton
-        class="u-mt-large"
-        color="green"
-        type="submit"
-        :disabled="sending"
-        >{{ $t('form.saveChanges') }}</BaseButton
-      >
+      <fieldset :class="rowClassName">
+        <div :class="[columnClassName, columnFullClassName]">
+          <BaseButton
+            class="u-mt-large"
+            color="green"
+            type="submit"
+            :disabled="sending"
+            >{{ $t('form.saveChanges') }}</BaseButton
+          >
+        </div>
+      </fieldset>
       <BaseMessage v-if="feedback.status" :status="feedback.status">{{
         feedback.message
       }}</BaseMessage>
@@ -169,116 +185,8 @@
 <script setup>
 // Imports
 
-const CSS_NAME = 'c-profile-update-form'
-const provinces = ref({
-  AG: 'Agrigento',
-  AL: 'Alessandria',
-  AN: 'Ancona',
-  AO: 'Aosta',
-  AR: 'Arezzo',
-  AP: 'Ascoli Piceno',
-  AT: 'Asti',
-  AV: 'Avellino',
-  BA: 'Bari',
-  BT: 'Barletta-Andria-Trani',
-  BL: 'Belluno',
-  BN: 'Benevento',
-  BG: 'Bergamo',
-  BI: 'Biella',
-  BO: 'Bologna',
-  BZ: 'Bolzano',
-  BS: 'Brescia',
-  BR: 'Brindisi',
-  CA: 'Cagliari',
-  CL: 'Caltanissetta',
-  CB: 'Campobasso',
-  CE: 'Caserta',
-  CT: 'Catania',
-  CZ: 'Catanzaro',
-  CH: 'Chieti',
-  CO: 'Como',
-  CS: 'Cosenza',
-  CR: 'Cremona',
-  KR: 'Crotone',
-  CN: 'Cuneo',
-  EN: 'Enna',
-  FM: 'Fermo',
-  FE: 'Ferrara',
-  FI: 'Firenze',
-  FG: 'Foggia',
-  FC: 'Forlì-Cesena',
-  FR: 'Frosinone',
-  GE: 'Genova',
-  GO: 'Gorizia',
-  GR: 'Grosseto',
-  IM: 'Imperia',
-  IS: 'Isernia',
-  SP: 'La Spezia',
-  AQ: "L'Aquila",
-  LT: 'Latina',
-  LE: 'Lecce',
-  LC: 'Lecco',
-  LI: 'Livorno',
-  LO: 'Lodi',
-  LU: 'Lucca',
-  MC: 'Macerata',
-  MN: 'Mantova',
-  MS: 'Massa-Carrara',
-  MT: 'Matera',
-  ME: 'Messina',
-  MI: 'Milano',
-  MO: 'Modena',
-  MB: 'Monza e della Brianza',
-  NA: 'Napoli',
-  NO: 'Novara',
-  NU: 'Nuoro',
-  OR: 'Oristano',
-  PD: 'Padova',
-  PA: 'Palermo',
-  PR: 'Parma',
-  PV: 'Pavia',
-  PG: 'Perugia',
-  PU: 'Pesaro e Urbino',
-  PE: 'Pescara',
-  PC: 'Piacenza',
-  PI: 'Pisa',
-  PT: 'Pistoia',
-  PN: 'Pordenone',
-  PZ: 'Potenza',
-  PO: 'Prato',
-  RG: 'Ragusa',
-  RA: 'Ravenna',
-  RC: 'Reggio Calabria',
-  RE: 'Reggio Emilia',
-  RI: 'Rieti',
-  RN: 'Rimini',
-  RM: 'Roma',
-  RO: 'Rovigo',
-  SA: 'Salerno',
-  SS: 'Sassari',
-  SV: 'Savona',
-  SI: 'Siena',
-  SR: 'Siracusa',
-  SO: 'Sondrio',
-  SU: 'Sud Sardegna',
-  TA: 'Taranto',
-  TE: 'Teramo',
-  TR: 'Terni',
-  TO: 'Torino',
-  TP: 'Trapani',
-  TN: 'Trento',
-  TV: 'Treviso',
-  TS: 'Trieste',
-  UD: 'Udine',
-  VA: 'Varese',
-  VE: 'Venezia',
-  VB: 'Verbano-Cusio-Ossola',
-  VC: 'Vercelli',
-  VR: 'Verona',
-  VV: 'Vibo Valentia',
-  VI: 'Vicenza',
-  VT: 'Viterbo',
-})
+//Constant
+const CSS_NAME = 'c-addresses-form'
 const invoices = ref([
   {
     name: 'No',
@@ -293,6 +201,7 @@ const invoices = ref([
     value: 'company',
   },
 ])
+const countryData = ref([])
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   userData: {
@@ -314,15 +223,18 @@ const formData = reactive({
   address2: props.userData.address2,
   province: props.userData.province,
   city: props.userData.city,
-  zip: props.userData.zip,
+  postcode: props.userData.postcode,
   phone: props.userData.phone,
   invoice: props.userData.invoice,
   company: props.userData.company,
-  cf: props.userData.cf,
+  cfPrivate: props.userData.cfPrivate,
+  cfCompany: props.userData.cfCompany,
   vat: props.userData.vat,
   sdi: props.userData.sdi,
   pec: props.userData.pec,
 })
+
+const formDataClone = {}
 
 const feedback = reactive({
   status: null,
@@ -340,40 +252,42 @@ const updateAddresses = async () => {
   if (
     formData.firstName.trim() == '' &&
     formData.lastName.trim() == '' &&
-    formData.email.trim() == '' &&
     formData.country.trim() == '' &&
     formData.address.trim() == '' &&
     formData.province.trim() == '' &&
     formData.city.trim() == '' &&
-    formData.zip.trim() == '' &&
-    formData.phone.trim() == ''
+    formData.postcode.trim() == ''
   ) {
     return notify({
-      message: 'compila i campi obbligatori',
+      message: 'Compila i campi obbligatori',
       status: 'danger',
     })
   }
-  if (formData.invoice === 'private' && formData.cf == '') {
+  if (formData.invoice === 'private' && formData.cfPrivate == '') {
     return notify({
-      message: 'il codice fiscale è obbligatorio',
+      message: 'Il codice fiscale è obbligatorio',
       status: 'danger',
     })
   }
 
   if (
     formData.invoice.trim() === 'company' &&
-    formData.cf.trim() == '' &&
-    formData.company.trim() == '' &&
-    formData.sdi.trim() == '' &&
-    formData.vat.trim() == '' &&
-    formData.pec.trim() == ''
+    formData.cfCompany.trim() === '' &&
+    formData.company.trim() === '' &&
+    formData.vat.trim() === ''
   ) {
     return notify({
-      message: 'compila i campi obbligatori',
+      message: 'Compila i campi obbligatori',
       status: 'danger',
     })
+  } else {
+    if (formData.sdi.trim() === '' && formData.pec.trim() === '') {
+      return notify({
+        message: 'Codice univoco o PEC obbligatoria',
+        status: 'danger',
+      })
+    }
   }
-
   const response = await send(
     async () =>
       await useApi(
@@ -400,9 +314,47 @@ const updateAddresses = async () => {
     }
   }
 }
+const provinces = async (value) => {
+  if (Object.keys(formDataClone).length === 0) {
+    formDataClone.value = { ...formData }
+  }
+
+  formData.country = value
+  const province = await useApi(
+    `/countries/${value}`,
+    {
+      method: 'GET',
+    },
+    {
+      cache: false,
+    }
+  )
+
+  countryData.value = province.value.data.provinces
+  if (formData.country !== formDataClone.value.country) {
+    formData.province = ''
+  } else {
+    formData.province = formDataClone.value.province
+  }
+}
+
+onMounted(() => {
+  provinces(formData.country)
+})
 </script>
 
 <style lang="scss">
+$prefix: 'addresses-form';
+@include component($prefix) {
+  @include set-local-vars(
+    $prefix: 'form',
+    $map: (
+      columns: 3,
+      fieldset-gap: rem(20px),
+      fieldset-border: 2px solid get-var(color-white),
+    )
+  );
+}
 @include scope('password') {
   @include set-local-vars(
     $prefix: 'heading',

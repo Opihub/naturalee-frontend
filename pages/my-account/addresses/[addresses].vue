@@ -19,7 +19,9 @@ const response = await useApi(
   }
 )
 // Define (Props, Emits, Page Meta)
-
+definePageMeta({
+  name: 'addresses-details',
+})
 // Component life-cycle hooks
 
 // Composables
