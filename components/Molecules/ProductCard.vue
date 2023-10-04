@@ -9,18 +9,19 @@
 
     <WishlistButton :product="product" :class="`${CSS_CLASS}__wishlist`" />
 
-    <ProductImage
+    <NuxtLink
+      :to="product.link"
       :class="[`${CSS_CLASS}__thumbnail`, 'u-mb-half']"
-      :src="product.image"
-      :size="fit"
-    />
+    >
+      <ProductImage :src="product.image" :size="fit" />
+    </NuxtLink>
 
     <div :class="[`${CSS_CLASS}__body`, 'u-mb-large']">
-      <BaseHeading
-        tag="span"
-        :class="`${CSS_CLASS}__title`"
-        class="u-mb-micro"
-        >{{ product.title }}</BaseHeading
+      <BaseLink
+        :to="product.link"
+        :class="[`${CSS_CLASS}__title`, 'u-mb-micro']"
+        color="dark"
+        >{{ product.title }}</BaseLink
       >
       <BaseHeading
         tag="span"
@@ -46,6 +47,7 @@
       class="u-mb-tiny u-mt-half"
       :product="product"
       :quantity="quantity"
+      :disabled="product.price <= 0"
     />
 
     <BaseLink underline color="dark" :to="product.link"
@@ -148,8 +150,22 @@ $prefix: 'product-card';
   }
 
   @include element('thumbnail') {
-    margin: 0 auto;
-    max-width: get-var(width, rem(300px), $prefix: $prefix);
+    width: 100%;
+    display: block;
+
+    svg {
+      margin: 0 auto;
+      max-width: get-var(width, rem(300px), $prefix: $prefix);
+        transform: scale(1);
+
+      @include transition(transform);
+    }
+
+    &:hover {
+      svg {
+        transform: scale(1.05);
+      }
+    }
   }
 }
 </style>

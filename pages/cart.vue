@@ -7,11 +7,30 @@ import { useCartStore } from '@/stores/cart';
       <div class="o-row">
         <template v-if="!isEmpty">
           <SiteContainer :max-width="1060" padless>
-            <CartTable />
+            <CartTable :products="basket" :on-delete="deleteFromCart" :on-clear="clearCart" />
           </SiteContainer>
 
           <SiteContainer :max-width="520" padless>
-            <CartResume />
+            <OrderResume :sub-total="subTotal" :heading="$t('cart.total')">
+              <template #before="{ className }">
+                <div :class="className">
+                  <span>{{ $t('coupon.formTitle') }}</span>
+
+                  <FormCoupon
+                    class="u-mt-mini"
+                    :placeholder="$t('coupon.formPlaceholder')"
+                  />
+                </div>
+              </template>
+
+              <template #after="{ className }">
+                <div :class="className">
+                  <BaseButton as="link" color="green" to="/checkout">{{
+                    $t('cart.proceed')
+                  }}</BaseButton>
+                </div>
+              </template>
+            </OrderResume>
           </SiteContainer>
         </template>
 
@@ -33,16 +52,18 @@ import { useCartStore } from '@/stores/cart'
 
 // Composables
 const { page } = await usePage('cart')
-const store = useCartStore()
+const cart = useCartStore()
 
 // Data
-const { isEmpty } = storeToRefs(store)
+const { isEmpty, subTotal } = storeToRefs(cart)
+const basket = await cart.load()
 
 // Watcher
 
 // Computed
 
 // Methods
+const { deleteFromCart, clearCart } = cart
 </script>
 
 <style lang="scss">

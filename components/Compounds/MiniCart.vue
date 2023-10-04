@@ -5,7 +5,7 @@
         <template v-if="cart.length">
           <span>
             {{ $t('cart.your') }} -
-            {{ $t('product', cart.length, { count: cart.length }) }}
+            {{ $t('products.count', cart.length, { count: cart.length }) }}
           </span>
 
           <BaseLink
@@ -51,25 +51,25 @@
       </li>
     </ul>
 
-    <div v-if="cart.length" :class="CSS_NAME_TOTALS">
-      <dl :class="`${CSS_NAME_TOTALS}__calculation`">
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+    <div v-if="cart.length" :class="CSS_NAME_TOTAL">
+      <dl :class="`${CSS_NAME_TOTAL}__calculation`">
+        <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
           $t('cart.shippingCost')
         }}</span>
         <PriceHolder
-          :class="`${CSS_NAME_TOTALS_CALCULATION}__price`"
+          :class="`${CSS_NAME_TOTAL_CALCULATION}__price`"
           :price="shippingCost"
         />
 
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+        <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
           $t('cart.orderTotal')
         }}</span>
         <PriceHolder
           :class="[
-            `${CSS_NAME_TOTALS_CALCULATION}__price`,
-            `${CSS_NAME_TOTALS_CALCULATION}__price--final`,
+            `${CSS_NAME_TOTAL_CALCULATION}__price`,
+            `${CSS_NAME_TOTAL_CALCULATION}__price--final`,
           ]"
-          :price="totals"
+          :price="total"
         >
           <template #after>
             <small>{{ $t('cart.fee') }}</small>
@@ -77,9 +77,13 @@
         </PriceHolder>
       </dl>
 
-      <BaseButton :class="`${CSS_NAME}__submit`" color="green">{{
-        $t('cart.proceed')
-      }}</BaseButton>
+      <BaseButton
+        as="link"
+        :class="`${CSS_NAME}__submit`"
+        color="green"
+        to="/checkout"
+        >{{ $t('cart.proceed') }}</BaseButton
+      >
       <BaseLink
         :class="`${CSS_NAME}__review`"
         to="/cart"
@@ -98,8 +102,8 @@
 const CSS_NAME = 'c-mini-cart'
 const CSS_NAME_LIST = `${CSS_NAME}__list`
 const CSS_NAME_LIST_PRODUCT = `${CSS_NAME_LIST}__product`
-const CSS_NAME_TOTALS = `${CSS_NAME}__totals`
-const CSS_NAME_TOTALS_CALCULATION = `${CSS_NAME_TOTALS}__calculation`
+const CSS_NAME_TOTAL = `${CSS_NAME}__total`
+const CSS_NAME_TOTAL_CALCULATION = `${CSS_NAME_TOTAL}__calculation`
 
 // Define (Props, Emits, Page Meta)
 defineProps({
@@ -113,7 +117,7 @@ defineProps({
     type: Number,
     default: 0,
   },
-  totals: {
+  total: {
     type: Number,
     default: 0,
   },
@@ -229,6 +233,9 @@ $prefix: 'mini-cart';
         font-weight: get-var(weight-light);
         @include typography(11px, 13px);
         @include letter-spacing(12);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       @include element('price') {
@@ -244,7 +251,7 @@ $prefix: 'mini-cart';
     }
   }
 
-  @include element('totals') {
+  @include element('total') {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

@@ -3,36 +3,37 @@
     <template #head>
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
-          Prodotto <span :class="`${CSS_NAME}__counter`">({{ count }})</span>
+          {{ $t('products.label', products.length) }}
+          <span :class="`${CSS_NAME}__counter`">({{ products.length }})</span>
         </th>
-        <th>{{ $t('cart.type') }}</th>
-        <th>{{ $t('cart.price') }}</th>
-        <th>{{ $t('cart.qty') }}</th>
-        <th colspan="2">{{ $t('cart.subTotals') }}</th>
+        <th>{{ $t('products.type') }}</th>
+        <th>{{ $t('products.price') }}</th>
+        <th>{{ $t('products.quantity') }}</th>
+        <th colspan="2">{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
     <template #body>
-      <template v-if="count > 0">
-        <tr v-for="product in cart" :key="product.id" :class="CSS_NAME_ITEM">
+      <template v-if="products.length > 0">
+        <tr v-for="product in products" :key="product.id" :class="CSS_NAME_ITEM">
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" data-title="Prodotto">
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.label')">
             {{ product.title }}
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" data-title="Tipologia">
-            {{ product.costDescription }}
+          <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
+            {{ product.selling }}
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Prezzo"
+            :data-title="$t('products.price')"
           >
             <PriceHolder :price="product.price" />
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Quantità / U"
+            :data-title="$t('products.quantity')"
           >
             <BaseCounter v-model="product.quantity">
               <template #after
@@ -42,12 +43,12 @@
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            data-title="Subtotale"
+            :data-title="$t('common.subTotal')"
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>
           <td :class="CSS_NAME_ITEM_CELL">
-            <CrossButton @click="deleteFromCart(product)" />
+            <CrossButton @click="onDelete(product)" />
           </td>
         </tr>
       </template>
@@ -64,14 +65,11 @@
             :class="`${CSS_NAME}__empty`"
             type="button"
             color="green"
-            :disabled="count <= 0"
-            @click="clearCart"
+            :disabled="products.length <= 0"
+            @click="onClear"
           >
             {{ $t('cart.clearCart') }}
           </button>
-          <!-- <BaseButton class="u-mr-half" color="green" @click="clearCart"
-            >Aggiorna il carrello</BaseButton
-          > -->
         </td>
       </tr>
     </template>
@@ -80,7 +78,6 @@
 
 <script setup>
 // Imports
-import { useCartStore } from '@/stores/cart'
 
 // Constants
 const CSS_NAME = 'c-cart-table'
@@ -88,21 +85,32 @@ const CSS_NAME_ITEM = `${CSS_NAME}__item`
 const CSS_NAME_ITEM_CELL = `${CSS_NAME_ITEM}__cell`
 
 // Define (Props, Emits, Page Meta)
+defineProps({
+  onDelete: {
+    type: Function,
+    required: true,
+  },
+  onClear: {
+    type: Function,
+    required: true,
+  },
+  products: {
+    type: Array,
+    required: true,
+  },
+})
 
 // Component life-cycle hooks
 
 // Composables
-const store = useCartStore()
 
 // Data
-const { cart, count } = storeToRefs(store)
 
 // Watcher
 
 // Computed
 
 // Methods
-const { deleteFromCart, clearCart } = store
 </script>
 
 <style lang="scss">

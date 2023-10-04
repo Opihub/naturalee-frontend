@@ -4,15 +4,15 @@
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
           {{
-            $t('productCount', products.length, {
+            $t('products.count', products.length, {
               count: products.length,
             })
           }}
         </th>
-        <th>{{ $t('cart.type') }}</th>
-        <th>{{ $t('cart.price') }}</th>
-        <th>{{ $t('cart.qty') }}</th>
-        <th>{{ $t('common.subTotals') }}</th>
+        <th>{{ $t('products.type') }}</th>
+        <th>{{ $t('products.price') }}</th>
+        <th>{{ $t('products.quantity') }}</th>
+        <th>{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
@@ -21,27 +21,27 @@
         <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
           <ProductImage :src="product.image" :alt="product.title" />
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('productCount')">
+        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.count')">
           {{ product.selling }}
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('cart.type')">
+        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
           {{ product.costDescription }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('cart.price')"
+          :data-title="$t('products.price')"
         >
           <PriceHolder :price="product.price" />
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('cart.qty')"
+          :data-title="$t('products.quantity')"
         >
           {{ `${product.quantity} ${product.unit}` }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('common.subTotals')"
+          :data-title="$t('common.subTotal')"
         >
           <PriceHolder :price="product.price * product.quantity" />
         </td>
@@ -51,10 +51,10 @@
       <tr :class="CSS_NAME_ITEM">
         <td
           :class="CSS_NAME_ITEM_CELL"
-          :data-title="$t('common.subTotals')"
+          :data-title="$t('common.subTotal')"
           colspan="3"
         >
-          {{ $t('common.subTotals') }}:
+          {{ $t('common.subTotal') }}:
         </td>
         <td :class="CSS_NAME_ITEM_CELL" colspan="3">
           <PriceHolder :price="subTotal" />
@@ -93,10 +93,10 @@
       <tr :class="CSS_NAME_ITEM">
         <td
           :class="CSS_NAME_ITEM_CELL"
-          :data-title="$t('common.totals')"
+          :data-title="$t('common.total')"
           colspan="3"
         >
-          {{ $t('common.totals') }}:
+          {{ $t('common.total') }}:
         </td>
         <td :class="CSS_NAME_ITEM_CELL" colspan="3">
           <PriceHolder :price="granTotal" />
@@ -121,6 +121,10 @@ const props = defineProps({
     default() {
       return []
     },
+  },
+  subTotal: {
+    type: Number,
+    default: null,
   },
   shipping: {
     type: Object,
@@ -149,11 +153,9 @@ const props = defineProps({
 // Watcher
 
 // Computed
-const subTotal = computed(() => {
-  return props.products.reduce((total, current) => {
-    return total + current.price * current.quantity
-  }, 0)
-})
+const { subTotal } = props.subTotal
+  ? ref(props.subTotal)
+  : useTotal(props.products)
 
 const granTotal = computed(() => {
   return subTotal.value + props.shipping.cost || 0
