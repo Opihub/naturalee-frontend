@@ -1,5 +1,5 @@
 <template>
-  <section :class="CSS_NAME">
+  <section :class="className">
     <ProductsFilters
       v-if="sortable || filters.length"
       class="u-mb-huge"
@@ -20,6 +20,9 @@
           :key="product.id"
           :product="product"
           class="o-row__column"
+          :type="listType"
+          :wishlist="isGrid"
+          :details="isGrid"
         />
       </div>
 
@@ -59,6 +62,13 @@ const props = defineProps({
   paginate: {
     type: Boolean,
     default: false,
+  },
+  listType: {
+    type: String,
+    default: 'grid',
+    validator(value) {
+      return ['grid', 'list'].includes(value)
+    }
   },
   orderOptions: {
     type: Object,
@@ -130,6 +140,20 @@ watch(
 )
 
 // Computed
+const isGrid = computed(() => {
+  return props.listType === 'grid'
+})
+
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.listType === 'list') {
+    className.push(`${CSS_NAME}--list`)
+  }
+
+  return className
+})
+
 const showLoader = computed(() => {
   if (isFetching.value) {
     return true
@@ -322,11 +346,6 @@ $prefix: 'products-grid';
     }
   }
 
-  @include object('button') {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   @include element('loader') {
     width: 100%;
     text-align: center;
@@ -350,6 +369,15 @@ $prefix: 'products-grid';
       $prefix: 'row',
       $map: (
         columns: 4,
+      )
+    );
+  }
+
+  @include modifier('list') {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 1,
       )
     );
   }

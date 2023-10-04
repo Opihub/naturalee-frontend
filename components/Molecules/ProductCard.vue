@@ -1,56 +1,60 @@
 <template>
-  <div :class="CSS_CLASS">
+  <div :class="className">
     <MarkerLabel
       v-if="product.marker && product.marker.text"
-      :class="`${CSS_CLASS}__marker`"
+      :class="`${CSS_NAME}__marker`"
       :text="product.marker.text"
       :color="product.marker.color"
     />
 
-    <WishlistButton :product="product" :class="`${CSS_CLASS}__wishlist`" />
+    <WishlistButton
+      v-if="wishlist"
+      :product="product"
+      :class="`${CSS_NAME}__wishlist`"
+    />
 
     <NuxtLink
       :to="product.link"
-      :class="[`${CSS_CLASS}__thumbnail`, 'u-mb-half']"
+      :class="{ [`${CSS_NAME}__thumbnail`]: true, 'u-mb-half': isGridItem }"
     >
       <ProductImage :src="product.image" :size="fit" />
     </NuxtLink>
 
-    <div :class="[`${CSS_CLASS}__body`, 'u-mb-large']">
+    <div :class="{ [`${CSS_NAME}__body`]: true, 'u-mb-large': isGridItem }">
       <BaseLink
         :to="product.link"
-        :class="[`${CSS_CLASS}__title`, 'u-mb-micro']"
+        :class="[`${CSS_NAME}__title`, 'u-mb-micro']"
         color="dark"
         >{{ product.title }}</BaseLink
       >
       <BaseHeading
         tag="span"
-        :class="`${CSS_CLASS}__provenance`"
+        :class="`${CSS_NAME}__provenance`"
         class="u-mb-tiny"
         >{{ product.provenance }}</BaseHeading
       >
 
       <PriceHolder class="u-mb-mini" :price="product.price">
-        <template #after>
+        <template v-if="product.selling" #after>
           <small class="u-ml-micro">/ {{ product.selling }}</small>
         </template>
       </PriceHolder>
 
-      <BaseHeading tag="small" :class="`${CSS_CLASS}__cost`">
-        {{ product.descriptionCost }}
+      <BaseHeading tag="small" :class="`${CSS_NAME}__cost`">
+        {{ product.costDescription }}
       </BaseHeading>
     </div>
 
-    <BaseCounter v-model="quantity" class="u-mt-auto" />
+    <BaseCounter v-model="quantity" :class="{ 'u-mt-auto': isGridItem }" />
 
     <AddToCartButton
-      class="u-mb-tiny u-mt-half"
+      :class="{ 'u-mb-tiny': isGridItem, 'u-mt-half': isGridItem }"
       :product="product"
       :quantity="quantity"
       :disabled="product.price <= 0"
     />
 
-    <BaseLink underline color="dark" :to="product.link"
+    <BaseLink v-if="details" underline color="dark" :to="product.link"
       >Vai alla scheda prodotto</BaseLink
     >
   </div>
@@ -60,7 +64,7 @@
 // Imports
 
 // Constants
-const CSS_CLASS = 'c-product-card'
+const CSS_NAME = 'c-product-card'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
@@ -76,6 +80,21 @@ const props = defineProps({
       )
     },
   },
+  type: {
+    type: String,
+    default: 'grid',
+    validator(value) {
+      return ['grid', 'list'].includes(value)
+    },
+  },
+  wishlist: {
+    type: Boolean,
+    default: true,
+  },
+  details: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 // Component life-cycle hooks
@@ -83,12 +102,21 @@ const props = defineProps({
 // Composables
 
 // Data
-// TODO: aggiungere counter
 const quantity = ref(1)
 
 // Watcher
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.type === 'list') {
+    className.push(`${CSS_NAME}--inline`)
+  }
+
+  return className
+})
+
 const fit = computed(() => {
   const { image } = props.product
   if (image) {
@@ -96,6 +124,10 @@ const fit = computed(() => {
   }
 
   return 'contain'
+})
+
+const isGridItem = computed(() => {
+  return props.listType === 'grid'
 })
 
 // Methods
@@ -156,7 +188,7 @@ $prefix: 'product-card';
     svg {
       margin: 0 auto;
       max-width: get-var(width, rem(300px), $prefix: $prefix);
-        transform: scale(1);
+      transform: scale(1);
 
       @include transition(transform);
     }
@@ -165,6 +197,36 @@ $prefix: 'product-card';
       svg {
         transform: scale(1.05);
       }
+    }
+  }
+
+  @include object('button') {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @include modifier('inline') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(15px);
+
+    @include element('thumbnail') {
+      width: auto;
+      flex: 0 1 get-var(width, rem(150px), $prefix: $prefix);
+
+      svg {
+        margin: 0;
+        max-width: get-var(width, rem(150px), $prefix: $prefix);
+      }
+    }
+
+    @include element('body') {
+      align-self: center;
+    }
+
+    @include object('button') {
+      margin: 0;
     }
   }
 }
