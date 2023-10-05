@@ -13,14 +13,11 @@
       :class="`${CSS_NAME}__wishlist`"
     />
 
-    <NuxtLink
-      :to="product.link"
-      :class="{ [`${CSS_NAME}__thumbnail`]: true, 'u-mb-half': isGridItem }"
-    >
+    <NuxtLink :to="product.link" :class="`${CSS_NAME}__thumbnail`">
       <ProductImage :src="product.image" :size="fit" />
     </NuxtLink>
 
-    <div :class="{ [`${CSS_NAME}__body`]: true, 'u-mb-large': isGridItem }">
+    <div :class="`${CSS_NAME}__body`">
       <BaseLink
         :to="product.link"
         :class="[`${CSS_NAME}__title`, 'u-mb-micro']"
@@ -45,10 +42,9 @@
       </BaseHeading>
     </div>
 
-    <BaseCounter v-model="quantity" :class="{ 'u-mt-auto': isGridItem }" />
+    <BaseCounter v-model="quantity" />
 
     <AddToCartButton
-      :class="{ 'u-mb-tiny': isGridItem, 'u-mt-half': isGridItem }"
       :product="product"
       :quantity="quantity"
       :disabled="product.price <= 0"
@@ -126,10 +122,6 @@ const fit = computed(() => {
   return 'contain'
 })
 
-const isGridItem = computed(() => {
-  return props.listType === 'grid'
-})
-
 // Methods
 </script>
 
@@ -140,6 +132,13 @@ $prefix: 'product-card';
     $prefix: $prefix,
     $map: (
       opacity: 1,
+    )
+  );
+
+  @include set-local-vars(
+    $prefix: 'counter',
+    $map: (
+      margin: auto 0 0,
     )
   );
 
@@ -173,6 +172,7 @@ $prefix: 'product-card';
     align-self: stretch;
     text-align: left;
     font-weight: get-var(weight-regular);
+    margin-bottom: rem(30px);
     @include typography(16px, 20px);
   }
 
@@ -184,6 +184,7 @@ $prefix: 'product-card';
   @include element('thumbnail') {
     width: 100%;
     display: block;
+    margin-bottom: rem(20px);
 
     svg {
       margin: 0 auto;
@@ -201,32 +202,60 @@ $prefix: 'product-card';
   }
 
   @include object('button') {
-    margin-left: auto;
-    margin-right: auto;
+    margin: rem(20px) auto rem(12px);
   }
 
-  @include modifier('inline') {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: rem(15px);
+  @include from(tablet) {
+    @include modifier('inline') {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: rem(15px);
 
-    @include element('thumbnail') {
-      width: auto;
-      flex: 0 1 get-var(width, rem(150px), $prefix: $prefix);
+      @include set-local-vars(
+        $prefix: 'counter',
+        $map: (
+          margin: 0 0 0 auto,
+        )
+      );
 
-      svg {
-        margin: 0;
-        max-width: get-var(width, rem(150px), $prefix: $prefix);
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          button-width: rem(200px),
+          width: rem(100px),
+        )
+      );
+
+      @include from(desktop) {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            button-width: auto,
+            width: rem(150px),
+          )
+        );
       }
-    }
 
-    @include element('body') {
-      align-self: center;
-    }
+      @include element('thumbnail') {
+        width: auto;
+        margin-bottom: 0;
+        flex: 0 0 get-var(width, rem(100px), $prefix: $prefix);
 
-    @include object('button') {
-      margin: 0;
+        svg {
+          margin: 0;
+        }
+      }
+
+      @include element('body') {
+        align-self: center;
+        margin-bottom: 0;
+      }
+
+      @include object('button') {
+        margin: 0;
+        flex: 0 0 get-var(button-width, rem(200px), $prefix: $prefix);
+      }
     }
   }
 }
