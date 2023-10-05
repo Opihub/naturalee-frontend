@@ -42,12 +42,12 @@
       </BaseHeading>
     </div>
 
-    <BaseCounter v-model="quantity" />
+    <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
     <AddToCartButton
       :product="product"
       :quantity="quantity"
-      :disabled="product.price <= 0"
+      :disabled="isDisabled"
     />
 
     <BaseLink v-if="details" underline color="dark" :to="product.link"
@@ -120,6 +120,13 @@ const fit = computed(() => {
   }
 
   return 'contain'
+})
+
+const isDisabled = computed(() => {
+  return (
+    props.product.price <= 0 ||
+    ('status' in props.product && props.product.status === 'disabled')
+  )
 })
 
 // Methods
