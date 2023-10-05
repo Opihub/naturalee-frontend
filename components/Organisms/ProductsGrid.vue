@@ -68,7 +68,7 @@ const props = defineProps({
     default: 'grid',
     validator(value) {
       return ['grid', 'list'].includes(value)
-    }
+    },
   },
   orderOptions: {
     type: Object,
@@ -83,6 +83,10 @@ const props = defineProps({
   from: {
     type: String,
     default: null,
+  },
+  cached: {
+    type: Boolean,
+    default: true,
   },
   use: {
     type: Array,
@@ -274,10 +278,16 @@ const fetchProducts = async () => {
       params['filters[]'] = chosenFilters.value
     }
 
-    const response = await useApi(props.from, {
-      method: 'GET',
-      params,
-    })
+    const response = await useApi(
+      props.from,
+      {
+        method: 'GET',
+        params,
+      },
+      {
+        cache: props.cached,
+      }
+    )
 
     if (response.value.success) {
       if (!props.paginate) {
