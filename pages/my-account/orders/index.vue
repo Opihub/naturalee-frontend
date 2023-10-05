@@ -11,14 +11,18 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'orders-list'
+  name: 'orders-list',
 })
 
 // Component life-cycle hooks
 onMounted(async () => {
-  const response = await useApi('shop/orders')
-
-  console.debug(response.value)
+  const response = await useApi(
+    'shop/orders',
+    {},
+    {
+      cache: false,
+    }
+  )
 
   if (!response.value.success) {
     return

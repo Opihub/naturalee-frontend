@@ -2,8 +2,9 @@
   <component
     :is="component"
     ref="playerElement"
-    :class="CSS_NAME"
+    :class="className"
     :src="src"
+    :style="style"
   />
 </template>
 
@@ -13,6 +14,7 @@ import Vlitejs from 'vlitejs'
 
 // Constants
 const CSS_NAME = 'o-video'
+const CSS_CUSTOM_RATIO = `${CSS_NAME}--ratio`
 const VIDEO_OPTIONS = {
   controls: false,
   autoplay: true,
@@ -36,6 +38,10 @@ const props = defineProps({
   background: {
     type: Boolean,
     default: false,
+  },
+  aspectRatio: {
+    type: Array,
+    default: null,
   },
   onReady: {
     type: Function,
@@ -78,6 +84,20 @@ onMounted(() => {
   }
 
   player.value = new Vlitejs(playerElement.value, config)
+  if (props.aspectRatio) {
+    player.value.outerContainer.style = style.value
+    player.value.outerContainer.classList.add('v-border-radius')
+  }
+})
+
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.aspectRatio) {
+    className.push(`${CSS_CUSTOM_RATIO}`)
+  }
+
+  return className
 })
 
 // Composables
@@ -97,6 +117,19 @@ const component = computed(() => {
 
   return 'div'
 })
+const style = computed(() => {
+  const style = {}
+
+  if (props.aspectRatio) {
+    if (Array.isArray(props.aspectRatio)) {
+      style['--video-ratio'] = `${props.aspectRatio[0]}/${props.aspectRatio[1]}`
+    }
+    if (typeof props.aspectRatio === 'string') {
+      style['--video-ratio'] = `${props.aspectRatio}`
+    }
+  }
+  return style
+})
 
 // Methods
 </script>
@@ -105,6 +138,11 @@ const component = computed(() => {
 @import 'vlitejs/vlite.css';
 
 $prefix: 'video';
-@include object($prefix) {
+
+.v-vlite.v-#{$prefix} {
+  aspect-ratio: get-var(video-ratio);
+  &.v-border-radius {
+    border-radius: 50px;
+  }
 }
 </style>

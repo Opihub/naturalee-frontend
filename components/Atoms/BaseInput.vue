@@ -5,6 +5,7 @@
     :name="name"
     :value="modelValue"
     :pattern="autoloadedPattern"
+    :placeholder="placeholder"
     @input="input"
     @blur="check"
   />
@@ -63,6 +64,11 @@ const props = defineProps({
   modelValue: {
     type: [String, Number, Boolean],
     default: null,
+  },
+  placeholder: {
+    type: String,
+    default: '',
+    require: false,
   },
 })
 

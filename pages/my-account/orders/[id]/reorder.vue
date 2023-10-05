@@ -4,6 +4,8 @@
       <ProductsGrid
         class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :from="`shop/orders/${$route.params.id}/products`"
+        list-type="list"
+        :cached="false"
       />
     </Suspense>
   </section>

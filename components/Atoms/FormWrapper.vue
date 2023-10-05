@@ -1,5 +1,5 @@
 <template>
-  <form :class="CSS_NAME">
+  <component :is="tag" :class="CSS_NAME">
     <slot
       :class-name="CSS_NAME"
       :row-class-name="CSS_FORM_FIELDSET"
@@ -9,7 +9,7 @@
       :column-third-class-name="CSS_FORM_FIELD_THIRD"
       :column-quarter-class-name="CSS_FORM_FIELD_QUARTER"
     />
-  </form>
+  </component>
 </template>
 
 <script setup>
@@ -25,7 +25,15 @@ const CSS_FORM_FIELD_THIRD = `${CSS_FORM_FIELD}--third`
 const CSS_FORM_FIELD_QUARTER = `${CSS_FORM_FIELD}--quarter`
 
 // Define (Props, Emits, Page Meta)
-
+defineProps({
+  tag: {
+    type: String,
+    default: 'form',
+    validator(value) {
+      return ['form', 'div'].includes(value)
+    },
+  },
+})
 // Component life-cycle hooks
 
 // Composables

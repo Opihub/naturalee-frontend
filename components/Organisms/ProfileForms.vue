@@ -1,5 +1,5 @@
 <template>
-  <div class="o-row s-profile">
+  <div class="o-row c-profile-forms">
     <BackgroundHolder
       class="o-row__column u-pt-huge u-pb-huge c-login-block"
       content-center
@@ -81,8 +81,8 @@ const toggleLoginForm = (toggle = null) => {
 </script>
 
 <style lang="scss">
-$prefix: 'profile';
-@include scope($prefix) {
+$prefix: 'profile-forms';
+@include component($prefix) {
   @include from(tablet) {
     @include set-vars(
       $prefix: $prefix,
@@ -102,12 +102,12 @@ $prefix: 'profile';
 
   @include component('login-block') {
     padding: 0 get-var(padding, $prefix: 'container');
-    height: get-var(height, auto, $prefix: $prefix);
+    min-height: get-var(height, auto, $prefix: $prefix);
   }
 
   @include component('registration-block') {
     padding: 0 get-var(padding, $prefix: 'container');
-    height: get-var(height, auto, $prefix: $prefix);
+    min-height: get-var(height, auto, $prefix: $prefix);
   }
 
   form {
@@ -132,6 +132,7 @@ $prefix: 'profile';
 
   @include component('toggle-field') {
     @include typography(13px, 18px);
+    width: auto;
   }
 }
 </style>

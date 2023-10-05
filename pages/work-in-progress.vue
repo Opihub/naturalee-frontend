@@ -13,7 +13,6 @@
 definePageMeta({
   layout: 'standard',
   alias: [
-    '/azienda',
     '/consegna',
     '/privacy-policy',
     '/cookie-policy',

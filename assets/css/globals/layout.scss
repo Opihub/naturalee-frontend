@@ -2,7 +2,16 @@
   %row {
     display: flex;
     flex-wrap: wrap;
-    gap: get-var(column-gap, get-var(gap, rem(20px), $prefix: $parent), $prefix: $parent) get-var(row-gap, get-var(gap, rem(20px), $prefix: $parent), $prefix: $parent);
+    gap: get-var(
+        column-gap,
+        get-var(gap, rem(20px), $prefix: $parent),
+        $prefix: $parent
+      )
+      get-var(
+        row-gap,
+        get-var(gap, rem(20px), $prefix: $parent),
+        $prefix: $parent
+      );
   }
 
   @include object($parent) {
@@ -23,7 +32,11 @@
                 get-var(size, 1, $prefix: $child)
             ) -
             (
-              get-var(column-gap, get-var(gap, rem(20px), $prefix: $parent), $prefix: $parent) *
+              get-var(
+                  column-gap,
+                  get-var(gap, rem(20px), $prefix: $parent),
+                  $prefix: $parent
+                ) *
                 (
                   get-var(columns, 1, $prefix: $parent) -
                     get-var(size, 1, $prefix: $child)
@@ -37,5 +50,16 @@
     @content;
   }
 }
-
 @include layout('row', 'column');
+
+@include object('page') {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  @include element('main') {
+    flex: 1 1 auto;
+  }
+}
