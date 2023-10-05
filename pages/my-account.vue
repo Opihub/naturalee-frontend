@@ -50,6 +50,16 @@ watch(
       path = orderRoute.path
     }
 
+    const isAddressesChild = ['addresses-details'].includes(route.name)
+
+    if (isAddressesChild) {
+      const addressesRoute = router.resolve({
+        name: 'addresses-list',
+      })
+
+      path = addressesRoute.path
+    }
+
     const { page: response } = await usePage(path)
 
     page.value = response.value
@@ -65,7 +75,21 @@ watch(
       if (!alreadyExists) {
         breadcrumbs.value.push({
           link: route.path,
-          title: orderId(route.params.id)
+          title: orderId(route.params.id),
+        })
+      }
+    }
+
+    if (isAddressesChild) {
+      const alreadyExists = breadcrumbs.value.some((breadcrumb) => {
+        return breadcrumb.link === route.path
+      })
+
+      if (!alreadyExists) {
+        breadcrumbs.value.push({
+          link: route.path,
+          title:
+            route.params.addresses == 'billing' ? 'Fatturazione' : 'Spedizione',
         })
       }
     }

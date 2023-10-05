@@ -103,6 +103,7 @@ $prefix: 'address';
 
   @include element('row') {
     display: block;
+    font-style: normal;
   }
 }
 </style>
