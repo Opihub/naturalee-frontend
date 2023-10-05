@@ -101,7 +101,6 @@ const slots = useSlots()
 const className = computed(() => {
   const className = [CSS_NAME]
 
-  console.debug(props.color)
   if (props.color && props.color !== 'yellow') {
     className.push(`${CSS_NAME}--${props.color}`)
   }
@@ -213,11 +212,11 @@ $prefix: 'link';
   }
 
   @include element('label') {
-    display: get-var(display, $prefix: $prefix);
+    display: get-var(display, inline-flex, $prefix: $prefix);
     align-items: baseline;
     width: get-var(width, auto, $prefix: $label-prefix);
     justify-content: get-var(disposition, center, $prefix: $label-prefix);
-    gap: get-var(gap, $prefix: $prefix);
+    gap: get-var(gap, rem(4px) rem(18px), $prefix: $prefix);
     @include transition(color);
   }
 
