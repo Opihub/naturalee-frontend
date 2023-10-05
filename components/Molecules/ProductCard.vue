@@ -102,7 +102,7 @@ const props = defineProps({
 // Composables
 
 // Data
-const quantity = ref(1)
+const quantity = ref(props.product?.quantity || 1)
 
 // Watcher
 
