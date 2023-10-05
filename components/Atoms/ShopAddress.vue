@@ -10,48 +10,72 @@
     <span v-if="fullAddress" :class="`${CSS_NAME}__row`">{{
       fullAddress
     }}</span>
-    <span v-if="address.company" :class="`${CSS_NAME}__row`">{{
-      address.company
-    }}</span>
 
-    <span v-if="address.cf" :class="`${CSS_NAME}__row`">{{
-      $t('addresses.cf', { cf: address.cf })
-    }}</span>
-    <span v-if="address.vat" :class="`${CSS_NAME}__row`">{{
-      $t('addresses.vat', { vat: address.vat })
-    }}</span>
-    <span v-if="address.sdi" :class="`${CSS_NAME}__row`">{{
-      $t('addresses.sdi', { sdi: address.sdi })
-    }}</span>
-    <BaseLink
-      v-if="address.pec"
-      :to="`mailto:${address.pec}`"
-      :class="`${CSS_NAME}__row`"
-      >{{ $t('addresses.pec', { pec: address.pec }) }}</BaseLink
-    >
+    <template v-if="'invoice' in address">
+      <i18n-t
+        keypath="invoice.answerRequestInvoice"
+        tag="b"
+        :class="[`${CSS_NAME}__row`, 'u-mt-tiny']"
+      >
+        <template #answer>
+          <u>{{ answerRequestInvoice }}</u>
+        </template>
+      </i18n-t>
 
-    <BaseLink
-      v-if="address.phone"
-      :to="`tel:${address.phone}`"
-      :class="`${CSS_NAME}__row`"
-      color="green"
-      underline
-      >{{ address.phone }}</BaseLink
-    >
+      <template v-if="address.invoice === 'company'">
+        <span v-if="address.company" :class="`${CSS_NAME}__row`">{{
+          address.company
+        }}</span>
 
-    <BaseLink
-      v-if="address.email"
-      :to="`mailto:${address.email}`"
-      :class="`${CSS_NAME}__row`"
-      color="green"
-      underline
-      >{{ address.email }}</BaseLink
-    >
+        <span v-if="address.cf" :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.cf') }}:</b> {{ address.cf }}
+        </span>
+        <span v-if="address.vat" :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.vat') }}:</b> {{ address.vat }}
+        </span>
+        <span v-if="address.sdi" :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.sdi') }}:</b> {{ address.sdi }}
+        </span>
+
+        <BaseLink
+          v-if="address.pec"
+          :to="`mailto:${address.pec}`"
+          :class="`${CSS_NAME}__row`"
+          color="green"
+        >
+          <b>{{ $t('addresses.pec') }}:</b> {{ address.pec }}
+        </BaseLink>
+      </template>
+      <template v-else-if="address.invoice === 'private'">
+        <span v-if="address.cf" :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.cf') }}:</b> {{ address.cf }}
+        </span>
+      </template>
+
+      <BaseLink
+        v-if="address.phone"
+        :to="`tel:${address.phone}`"
+        :class="`${CSS_NAME}__row`"
+        color="green"
+        underline
+        >{{ address.phone }}</BaseLink
+      >
+
+      <BaseLink
+        v-if="address.email"
+        :to="`mailto:${address.email}`"
+        :class="`${CSS_NAME}__row`"
+        color="green"
+        underline
+        >{{ address.email }}</BaseLink
+      >
+    </template>
   </address>
 </template>
 
 <script setup>
 // Imports
+import { useI18n } from 'vue-i18n'
 
 // Constants
 const CSS_NAME = 'o-address'
@@ -67,6 +91,7 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
+const { t } = useI18n()
 
 // Data
 
@@ -77,6 +102,14 @@ const fullName = computed(() => {
   return [props.address.firstName, props.address.lastName]
     .filter((part) => part)
     .join(' ')
+})
+
+const answerRequestInvoice = computed(() => {
+  if (['private', 'company'].includes(props.address.invoice)) {
+    return t(`invoice.is${capitalize(props.address.invoice)}`)
+  }
+
+  return t('common.no')
 })
 
 const fullAddress = computed(() => {
@@ -100,10 +133,18 @@ $prefix: 'address';
   flex-direction: column;
   align-items: stretch;
   text-align: left;
+  font-style: normal;
 
   @include element('row') {
     display: block;
-    font-style: normal;
   }
+
+  @include set-local-vars(
+    $prefix: 'link',
+    $map: (
+      gap: 0,
+      label-disposition: flex-start,
+    )
+  );
 }
 </style>

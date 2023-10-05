@@ -13,6 +13,7 @@
         class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :from="`shop/categories/${$route.params.category}/products`"
         :filters="page.filters"
+        paginate
         sortable
       />
     </Suspense>

@@ -4,7 +4,7 @@
       <image
         width="600"
         height="600"
-        :href="src"
+        :href="src || '/logo.png'"
         :preserveAspectRatio="aspectRatio"
       />
     </g>
@@ -15,7 +15,7 @@
 const props = defineProps({
   src: {
     type: String,
-    default: '/logo.png',
+    default: null,
   },
   size: {
     type: String,

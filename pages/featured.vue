@@ -12,6 +12,7 @@
       <ProductsGrid
         class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :from="`shop/featured/products`"
+        paginate
       />
     </Suspense>
   </main>

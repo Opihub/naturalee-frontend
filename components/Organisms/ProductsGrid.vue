@@ -1,5 +1,5 @@
 <template>
-  <section :class="CSS_NAME">
+  <section :class="className">
     <ProductsFilters
       v-if="sortable || filters.length"
       class="u-mb-huge"
@@ -20,6 +20,9 @@
           :key="product.id"
           :product="product"
           class="o-row__column"
+          :type="listType"
+          :wishlist="isGrid"
+          :details="isGrid"
         />
       </div>
 
@@ -56,6 +59,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  paginate: {
+    type: Boolean,
+    default: false,
+  },
+  listType: {
+    type: String,
+    default: 'grid',
+    validator(value) {
+      return ['grid', 'list'].includes(value)
+    },
+  },
   orderOptions: {
     type: Object,
     default() {
@@ -69,6 +83,10 @@ const props = defineProps({
   from: {
     type: String,
     default: null,
+  },
+  cached: {
+    type: Boolean,
+    default: true,
   },
   use: {
     type: Array,
@@ -126,6 +144,20 @@ watch(
 )
 
 // Computed
+const isGrid = computed(() => {
+  return props.listType === 'grid'
+})
+
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.listType === 'list') {
+    className.push(`${CSS_NAME}--list`)
+  }
+
+  return className
+})
+
 const showLoader = computed(() => {
   if (isFetching.value) {
     return true
@@ -188,16 +220,21 @@ const fetchProducts = async () => {
     }
 
     let last = false
-    const records = props.use.slice(
-      page.value * DEFAULT_LIMIT,
-      (page.value + 1) * DEFAULT_LIMIT
-    )
+    if (props.paginate) {
+      const records = props.use.slice(
+        page.value * DEFAULT_LIMIT,
+        (page.value + 1) * DEFAULT_LIMIT
+      )
 
-    page.value += 1
+      page.value += 1
 
-    products.value = [...products.value, ...records]
+      products.value = [...products.value, ...records]
 
-    if (records.length < DEFAULT_LIMIT) {
+      if (records.length < DEFAULT_LIMIT) {
+        last = true
+      }
+    } else {
+      products.value = props.use
       last = true
     }
 
@@ -219,32 +256,49 @@ const fetchProducts = async () => {
   isFetching.value = true
 
   try {
-    const params = {
-      limit: DEFAULT_LIMIT,
-    }
+    const params = {}
 
-    if (page.value > 0) {
-      params.page = page.value
-    }
+    if (props.paginate) {
+      params.limit = DEFAULT_LIMIT
 
-    if (orderby.value) {
-      params.orderby = orderby.value
+      if (page.value > 0) {
+        params.page = page.value
+      }
     }
 
     if (props.search) {
       params.search = props.search
     }
 
+    if (orderby.value) {
+      params.orderby = orderby.value
+    }
+
     if (chosenFilters.value.length > 0) {
       params['filters[]'] = chosenFilters.value
     }
 
-    const response = await useApi(props.from, {
-      method: 'GET',
-      params,
-    })
+    const response = await useApi(
+      props.from,
+      {
+        method: 'GET',
+        params,
+      },
+      {
+        cache: props.cached,
+      }
+    )
 
     if (response.value.success) {
+      if (!props.paginate) {
+        const records = response.value.data
+        products.value = records
+
+        canFetch.value = false
+        stopLazyLoad()
+        return
+      }
+
       const { pagination, records } = response.value.data
 
       products.value = [...products.value, ...records]
@@ -286,7 +340,7 @@ const updateQuery = () => {
     query['filters[]'] = chosenFilters.value
   }
 
-  router.push({query})
+  router.push({ query })
 }
 
 // On created
@@ -300,11 +354,6 @@ $prefix: 'products-grid';
     & + * {
       margin-top: rem(30px);
     }
-  }
-
-  @include object('button') {
-    margin-left: auto;
-    margin-right: auto;
   }
 
   @include element('loader') {
@@ -330,6 +379,15 @@ $prefix: 'products-grid';
       $prefix: 'row',
       $map: (
         columns: 4,
+      )
+    );
+  }
+
+  @include modifier('list') {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 1,
       )
     );
   }

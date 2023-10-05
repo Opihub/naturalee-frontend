@@ -11,7 +11,6 @@
         </th>
         <th>{{ $t('products.type') }}</th>
         <th>{{ $t('products.price') }}</th>
-        <th>{{ $t('products.quantity') }}</th>
         <th>{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
@@ -21,23 +20,18 @@
         <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
           <ProductImage :src="product.image" :alt="product.title" />
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.count')">
-          {{ product.selling }}
+        <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.label')">
+          <b class="u-mr-mini">{{product.quantity}}&times;</b>{{ product.title }}<br />
+          <small>{{ product.costDescription }}</small>
         </td>
         <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
-          {{ product.costDescription }}
+          {{ product.selling }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
           :data-title="$t('products.price')"
         >
           <PriceHolder :price="product.price" />
-        </td>
-        <td
-          :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-          :data-title="$t('products.quantity')"
-        >
-          {{ `${product.quantity} ${product.unit}` }}
         </td>
         <td
           :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"

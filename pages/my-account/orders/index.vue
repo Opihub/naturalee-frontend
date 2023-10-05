@@ -24,8 +24,6 @@ onMounted(async () => {
     }
   )
 
-  console.debug(response.value)
-
   if (!response.value.success) {
     return
   }

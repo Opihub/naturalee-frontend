@@ -11,6 +11,7 @@
         class="u-pb-huge u-pt-none"
         from="shop/search/products"
         :search="search"
+        paginate
       />
     </Suspense>
   </main>

@@ -11,6 +11,7 @@
       <ProductsGrid
         class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :use="wishlist"
+        paginate
       />
     </Suspense>
   </main>
