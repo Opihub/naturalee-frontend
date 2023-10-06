@@ -6,27 +6,28 @@
       @submit.prevent="updateAddresses"
     >
       <template #after="{ rowClassName }">
-        <FormInvoice
-          v-if="$route.params.addresses == 'billing'"
-          v-model:invoice="formData.invoice"
-          class="s-invoice"
-        />
-
-        <fieldset :class="rowClassName" class="s-button">
-          <div>
-            <BaseButton
-              class="u-mt-large"
-              color="green"
-              type="submit"
-              :disabled="sending"
-              >{{ $t('form.saveChanges') }}</BaseButton
-            >
+        <template v-if="isBilling">
+          <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
+            <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
           </div>
-        </fieldset>
 
-        <BaseMessage v-if="feedback.status" :status="feedback.status">{{
-          feedback.message
-        }}</BaseMessage>
+          <FormInvoice v-model:invoice="formData.invoice" class="s-invoice" />
+        </template>
+
+        <BaseButton
+          class="u-mt-half"
+          color="green"
+          type="submit"
+          :disabled="sending"
+          >{{ $t('form.saveChanges') }}</BaseButton
+        >
+
+        <BaseMessage
+          v-if="feedback.status"
+          :class="[rowClassName, 'u-mt-large']"
+          :status="feedback.status"
+          >{{ feedback.message }}</BaseMessage
+        >
       </template>
     </FormAddress>
   </div>
@@ -59,6 +60,7 @@ const response = await useApi(
 )
 
 // Data
+const isBilling = ref(route.params.addresses === 'billing')
 const formData = reactive({
   address: {
     firstName: response.value.data.firstName,

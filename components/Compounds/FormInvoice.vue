@@ -8,19 +8,12 @@
         columnHalfClassName,
       }"
     >
-      <fieldset :class="rowClassName">
-        <div :class="[columnClassName, columnFullClassName]">
-          <BaseHeading class="u-mt-large s-password" tag="h6"
-            >Fatturazione</BaseHeading
-          >
-        </div>
-      </fieldset>
-
-      <fieldset :class="[rowClassName, columnFullClassName]">
+      <fieldset :class="[rowClassName, columnFullClassName, 'u-pb-none']">
         <ToggleField
           v-for="invoiceValue in invoices"
           :key="invoiceValue.value"
           :value="invoiceValue.value"
+          name="invoice"
           inline
           radio
           :model-value="value.invoice === invoiceValue.value"
@@ -29,55 +22,63 @@
           {{ invoiceValue.name }}
         </ToggleField>
       </fieldset>
+
+      <template v-if="value.invoice === 'company'">
+        <InputField
+          v-model="value.company"
+          :class="[columnClassName, columnFullClassName]"
+          name="company"
+          type="text"
+          required
+        >
+          {{ $t('addresses.company') }}</InputField
+        >
+        <InputField
+          v-model="value.cfCompany"
+          :class="[columnClassName, columnHalfClassName]"
+          name="cf"
+          type="text"
+          required
+        >
+          {{ $t('addresses.cfFull') }}</InputField
+        >
+        <InputField
+          v-model="value.vat"
+          :class="[columnClassName, columnHalfClassName]"
+          name="vat"
+          type="text"
+          required
+        >
+          {{ $t('addresses.vatFull') }}</InputField
+        >
+        <InputField
+          v-model="value.sdi"
+          :class="[columnClassName, columnHalfClassName]"
+          name="sdi"
+          type="text"
+          required
+        >
+          {{ $t('addresses.sdiFull') }}</InputField
+        >
+        <InputField
+          v-model="value.pec"
+          :class="[columnClassName, columnHalfClassName]"
+          name="pec"
+          type="text"
+          required
+        >
+          {{ $t('addresses.pec') }}</InputField
+        >
+      </template>
       <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.company"
-        :class="[columnClassName, columnFullClassName]"
-        type="text"
-        required
-      >
-        Azienda</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.cfCompany"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        Codice fiscale</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'private'"
+        v-else-if="value.invoice === 'private'"
         v-model="value.cfPrivate"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        Codice fiscale</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.vat"
-        :class="[columnClassName, columnHalfClassName]"
+        :class="[columnClassName, columnFullClassName]"
+        name="cf"
         type="text"
         required
       >
-        Partita IVA</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.sdi"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        Codice univico</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.pec"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        PEC</InputField
+        {{ $t('addresses.cfFull') }}</InputField
       >
     </template>
   </FormWrapper>

@@ -187,9 +187,13 @@ export default defineI18nConfig(() => ({
         addressPlaceholder: 'Via/Piazza e Numero Civico',
         timeSlot: 'Scegli una fascia oraria per la consegna:',
 
+        company: 'Azienda',
         cf: 'CF',
+        cfFull: 'Codice fiscale',
         vat: 'P. IVA',
+        vatFull: 'P. IVA',
         sdi: 'SDI',
+        sdiFull: 'SDI',
         pec: 'PEC',
       },
       invoice: {
