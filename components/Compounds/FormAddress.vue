@@ -82,7 +82,7 @@
         required
         @update:model-value="(value) => updateAddress(value, 'postcode')"
       >
-        {{ $t('shipping.postcode') }}</InputField
+        {{ $t('addresses.postcode') }}</InputField
       >
       <InputField
         :model-value="address.city"

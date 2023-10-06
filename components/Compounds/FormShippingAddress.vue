@@ -29,7 +29,7 @@
       v-model="formData.postcode"
       type="text"
       name="postcode"
-      :placeholder="$t('shipping.postcode')"
+      :placeholder="$t('addresses.postcode')"
       class="u-mb-small"
       :error="$t('addresses.invalidPostCode')"
       pattern="\d{5}"

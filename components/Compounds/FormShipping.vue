@@ -26,7 +26,7 @@
       </fieldset>
 
       <div :class="[columnClassName, columnFullClassName]">
-        {{ $t('shipping.timeSlot') }}
+        {{ $t('addresses.timeSlot') }}
       </div>
 
       <fieldset :class="rowClassName">
@@ -84,7 +84,7 @@
         :placeholder="$t('checkout.notesPlaceholder')"
         @update:model-value="(value) => updateShippingData(value, 'note')"
       >
-        {{ $t('checkout.notes') }}
+        {{ $t('orders.notes') }}
       </InputField>
     </template>
   </FormAddress>
@@ -144,13 +144,6 @@ $prefix: 'shipping-form';
       columns: 3,
       fieldset-gap: rem(20px),
       fieldset-border: 2px solid get-var(color-white),
-    )
-  );
-
-  @include set-local-vars(
-    $prefix: 'input-field-label',
-    $map: (
-      margin: 0 0 rem(8px),
     )
   );
 
