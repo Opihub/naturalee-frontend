@@ -1,5 +1,5 @@
 <template>
-  <div :class="CSS_NAME">
+  <div :class="className">
     <div v-if="slots.head" :class="`${CSS_NAME}__head`">
       <slot name="head" />
     </div>
@@ -32,6 +32,15 @@ const slots = useSlots()
 // Watcher
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (!slots.head) {
+    className.push('is-headless')
+  }
+
+  return className
+})
 
 // Methods
 </script>
@@ -46,7 +55,11 @@ $prefix: 'box';
     )
   );
 
-  background-color: get-var(background-color, get-var(color-white), $prefix: $prefix);
+  background-color: get-var(
+    background-color,
+    get-var(color-white),
+    $prefix: $prefix
+  );
   border-radius: get-var(radius, $prefix: $prefix);
 
   @include element('head') {
@@ -68,13 +81,27 @@ $prefix: 'box';
     justify-content: get-var(head-justify, start, $prefix: $prefix);
     align-items: get-var(head-align, start, $prefix: $prefix);
     padding: rem(24px) rem(40px);
-    background-color: get-var(head-background, get-var(color-white), $prefix: $prefix);
+    background-color: get-var(
+      head-background,
+      get-var(color-white),
+      $prefix: $prefix
+    );
+    border-radius: get-var(radius, $prefix: $prefix)
+      get-var(radius, $prefix: $prefix) 0 0;
   }
 
   @include element('body') {
     display: block;
     padding: rem(20px) rem(40px) rem(40px);
     background-color: get-var(body-background, transparent, $prefix: $prefix);
+
+    border-radius: 0 0 get-var(radius, $prefix: $prefix)
+      get-var(radius, $prefix: $prefix);
+
+    @include is('headless') {
+      border-top-left-radius: get-var(radius, $prefix: $prefix);
+      border-top-right-radius: get-var(radius, $prefix: $prefix);
+    }
   }
 }
 </style>
