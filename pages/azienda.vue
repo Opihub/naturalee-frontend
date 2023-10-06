@@ -1,13 +1,16 @@
 <template>
   <main class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
+
     <SiteContainer flex class="u-mt-huge" :max-width="1370">
       <BaseVideo :src="AziendaVideo" :aspect-ratio="ratio" />
     </SiteContainer>
+
     <ContentRow
       class="c-first-section"
       image="/azienda/azienda-storia.png"
       flipped
+      parallax
     >
       <template #sup-title>LOREM IPSUM DOLOR SIT</template>
       <template #title>Amet consectetur adipiscing elit</template>
@@ -20,6 +23,7 @@
         velit esse cillum dolore.
       </template>
     </ContentRow>
+
     <BackgroundHolder tag="section" color="white">
       <SiteContainer
         class="c-second-section u-pt-huge@tablet u-pb-huge@tablet u-pt-custom@tablet u-pb-custom@tablet"
@@ -30,6 +34,7 @@
           <HighlightText>adipiscing</HighlightText> elit !
           <CircularText text="Lorem ipsum dolor sit amet" />
         </BaseHeading>
+
         <BaseParagraph class="u-mt-large">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -39,6 +44,7 @@
         </BaseParagraph>
       </SiteContainer>
     </BackgroundHolder>
+
     <SiteContainer class="c-third-section u-pt-huge u-pb-huge@tablet">
       <BaseHeading class="u-pb-huge" tag="h2">
         Amet consectetur adipisicing</BaseHeading
@@ -53,6 +59,7 @@
         />
       </div>
     </SiteContainer>
+
     <ContentRow
       class="c-fourth-section u-pt-huge u-pb-huge"
       image="/azienda/brb.png"

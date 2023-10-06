@@ -51,6 +51,7 @@
       class="c-third-section"
       :button="{ text: 'Chi siamo', to: 'chi-siamo' }"
       image="/home/chi-siamo.png"
+      parallax
     >
       <template #sup-title>LOREM IPSUM DOLOR SIT</template>
       <template #title>Amet consectetur adipiscing elit</template>
