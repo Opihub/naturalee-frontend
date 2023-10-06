@@ -95,35 +95,37 @@ const updateAddresses = async () => {
       status: 'danger',
     })
   }
-  if (
-    formData.invoice.invoice === 'private' &&
-    formData.invoice.cfPrivate == ''
-  ) {
-    return notify({
-      message: 'Il codice fiscale è obbligatorio',
-      status: 'danger',
-    })
-  }
-
-  if (
-    formData.invoice.invoice === 'company' &&
-    formData.invoice.cfCompany.trim() === '' &&
-    formData.invoice.company.trim() === '' &&
-    formData.invoice.vat.trim() === ''
-  ) {
-    return notify({
-      message: 'Compila i campi obbligatori',
-      status: 'danger',
-    })
-  } else {
+  if (route.params.address == 'billing') {
     if (
-      formData.invoice.sdi.trim() === '' &&
-      formData.invoice.pec.trim() === ''
+      formData.invoice.invoice === 'private' &&
+      formData.invoice.cfPrivate == ''
     ) {
       return notify({
-        message: 'Codice univoco o PEC obbligatoria',
+        message: 'Il codice fiscale è obbligatorio',
         status: 'danger',
       })
+    }
+
+    if (
+      formData.invoice.invoice === 'company' &&
+      formData.invoice.cfCompany.trim() === '' &&
+      formData.invoice.company.trim() === '' &&
+      formData.invoice.vat.trim() === ''
+    ) {
+      return notify({
+        message: 'Compila i campi obbligatori',
+        status: 'danger',
+      })
+    } else {
+      if (
+        formData.invoice.sdi.trim() === '' &&
+        formData.invoice.pec.trim() === ''
+      ) {
+        return notify({
+          message: 'Codice univoco o PEC obbligatoria',
+          status: 'danger',
+        })
+      }
     }
   }
   const response = await send(

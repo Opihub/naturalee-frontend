@@ -1,7 +1,7 @@
 <template>
   <InputField
     v-model="savedUserProvice"
-    :type="provinces.length > 0 ? 'select' : 'text'"
+    :type="provinces && provinces.length > 0 ? 'select' : 'text'"
     :data="provinces"
     label-key="name"
   >
