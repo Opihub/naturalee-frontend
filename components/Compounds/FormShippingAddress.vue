@@ -6,7 +6,7 @@
       v-model="formData.state"
       type="select"
       name="state"
-      :placeholder="$t('shipping.city')"
+      :placeholder="$t('addresses.city')"
       class="u-mb-small"
       :data="provinces"
       error-after
@@ -18,7 +18,7 @@
       v-model="formData.city"
       type="text"
       name="city"
-      :placeholder="$t('shipping.city')"
+      :placeholder="$t('addresses.city')"
       class="u-mb-small"
       error-after
       rounded
@@ -31,14 +31,16 @@
       name="postcode"
       :placeholder="$t('shipping.postcode')"
       class="u-mb-small"
-      error="CAP non valido"
+      :error="$t('addresses.invalidPostCode')"
       pattern="\d{5}"
       error-after
       rounded
       required
     />
 
-    <BaseButton color="green" type="submit">Aggiorna</BaseButton>
+    <BaseButton color="green" type="submit">{{
+      $t('common.update')
+    }}</BaseButton>
   </form>
 </template>
 
@@ -200,7 +202,7 @@ const updateShippingAddress = async () => {
 
   const notification = {
     message: "È avvenuto un errore durante l'aggiornamento dell'indirizzo",
-    status: 'danger'
+    status: 'danger',
   }
 
   notification.message = response.value.message
@@ -210,7 +212,7 @@ const updateShippingAddress = async () => {
 
     emit('update', {
       data: formData,
-      methods: response.value.data
+      methods: response.value.data,
     })
   }
 

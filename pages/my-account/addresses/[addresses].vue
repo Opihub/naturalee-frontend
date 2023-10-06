@@ -5,8 +5,9 @@
       method="POST"
       @submit.prevent="updateAddresses"
     >
-      <template #after>
+      <template #after="{ rowClassName }">
         <FormInvoice v-model:invoice="formData.invoice" class="s-invoice" />
+
         <fieldset :class="rowClassName" class="s-button">
           <div>
             <BaseButton
@@ -18,6 +19,7 @@
             >
           </div>
         </fieldset>
+
         <BaseMessage v-if="feedback.status" :status="feedback.status">{{
           feedback.message
         }}</BaseMessage>
@@ -30,6 +32,17 @@
 // Imports
 
 // Constants
+
+// Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'addresses-details',
+})
+const emit = defineEmits(['api:start', 'api:end'])
+
+// Component life-cycle hooks
+
+// Composables
+const { sending, send, sent } = useSender(emit)
 const route = useRoute()
 const response = await useApi(
   `/shop/addresses/${route.params.addresses}`,
@@ -40,15 +53,6 @@ const response = await useApi(
     cache: false,
   }
 )
-// Define (Props, Emits, Page Meta)
-const emit = defineEmits(['api:start', 'api:end', 'update:address'])
-const { sending, send, sent } = useSender(emit)
-definePageMeta({
-  name: 'addresses-details',
-})
-// Component life-cycle hooks
-
-// Composables
 
 // Data
 const formData = reactive({
@@ -72,6 +76,7 @@ const formData = reactive({
     pec: response.value.data.pec,
   },
 })
+
 // Watcher
 
 // Computed

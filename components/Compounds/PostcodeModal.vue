@@ -4,7 +4,7 @@
       <BaseHeading
         tag="span"
         :class="[`${CSS_NAME}__heading`, `${CSS_NAME}__heading--header`]"
-        >{{ $t('shipping.checkPostCode') }}</BaseHeading
+        >{{ $t('addresses.checkPostCode') }}</BaseHeading
       >
     </template>
 
@@ -18,30 +18,30 @@
         <InputField
           v-model="formData.postcode"
           name="postcode"
-          :error="$t('shipping.invalidPostCode')"
+          :error="$t('addresses.invalidPostCode')"
           pattern="\d{5}"
           error-after
           rounded
           required
-          >{{ $t('shipping.cap') }}</InputField
+          >{{ $t('addresses.postcode') }}</InputField
         >
 
         <InputField
           v-model="formData.address"
           :class="`${CSS_NAME}__form__address`"
           name="address"
-          :error="$t('shipping.shippingAddressRequired')"
+          :error="$t('addresses.deliveryRequired')"
           error-after
           rounded
           required
-          >{{ $t('shipping.shippingAddress') }}</InputField
+          >{{ $t('addresses.delivery') }}</InputField
         >
 
         <BaseButton
           :disabled="sending"
           color="green"
           type="submit"
-          :text="$t('shipping.checkAddress')"
+          :text="$t('addresses.checkAddress')"
         />
       </form>
 

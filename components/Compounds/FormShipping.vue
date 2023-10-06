@@ -1,19 +1,20 @@
 <template>
-  <FormWrapper :class="CSS_NAME">
+  <FormAddress :class="CSS_NAME">
     <template
-      #default="{
+      #before="{
         rowClassName,
         columnClassName,
         columnFullClassName,
-        columnHalfClassName,
         columnThirdClassName,
       }"
     >
       <fieldset :class="rowClassName">
         <div :class="[columnClassName, columnFullClassName]">
-          Hai un codice promozionale?
-          <InlineButton underline @click="isCouponFormOpen = !isCouponFormOpen"
-            >Fai clic qui per inserire il tuo codice promozionale</InlineButton
+          {{ $t('coupon.asking') }}
+          <InlineButton
+            underline
+            @click="isCouponFormOpen = !isCouponFormOpen"
+            >{{ $t('coupon.insertHere') }}</InlineButton
           >
 
           <FormCoupon
@@ -25,7 +26,7 @@
       </fieldset>
 
       <div :class="[columnClassName, columnFullClassName]">
-        Scegli una fascia oraria per la consegna:
+        {{ $t('shipping.timeSlot') }}
       </div>
 
       <fieldset :class="rowClassName">
@@ -36,9 +37,10 @@
           <ToggleField
             v-for="slot in timeSlots"
             :key="slot.id"
+            :class="`${CSS_NAME}__time-slot`"
             radio
-            :model-value="formData.timeSlot === slot.id"
-            @update:model-value="formData.timeSlot = slot.id"
+            :model-value="shipping.timeSlot === slot.id"
+            @update:model-value="() => updateShippingData(slot.id, 'timeSlot')"
           >
             <b>{{ slot.title }}</b>
             <span>
@@ -47,113 +49,45 @@
           </ToggleField>
         </div>
       </fieldset>
+    </template>
 
+    <template
+      #after="{ columnClassName, columnFullClassName, columnHalfClassName }"
+    >
       <InputField
-        v-model="formData.address.firstName"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-        name="firstName"
-        required
-      >
-        Nome*
-      </InputField>
-      <InputField
-        v-model="formData.address.lastName"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-        name="firstName"
-        required
-      >
-        Cognome*
-      </InputField>
-
-      <InputField
-        v-model="formData.address.country"
-        :class="[columnClassName, columnFullClassName]"
-        type="select"
-        name="country"
-        :data="countries"
-      >
-        Paese/Regione
-      </InputField>
-
-      <InputField
-        v-model="formData.address.address"
-        :class="[columnClassName, columnFullClassName]"
-        type="text"
-        name="address"
-        placeholder="Via/Piazza e Numero Civico"
-        required
-      >
-        Via e numero*
-      </InputField>
-      <InputField
-        v-model="formData.address.address2"
-        :class="[columnClassName, columnFullClassName]"
-        type="text"
-        name="address2"
-        placeholder="Appartamento, suite, unità, piano, ecc. (opzionale)"
-      />
-
-      <InputField
-        v-model="formData.address.postcode"
-        :class="[columnClassName, columnThirdClassName]"
-        type="text"
-        name="postcode"
-        error="CAP non valido"
-        pattern="\d{5}"
-        required
-      >
-        CAP*
-      </InputField>
-      <InputField
-        v-model="formData.address.city"
-        :class="[columnClassName, columnThirdClassName]"
-        type="text"
-        name="city"
-        required
-      >
-        Città*
-      </InputField>
-      <ProvincesSelect
-        v-model="formData.address.country"
-        :class="[columnClassName, columnThirdClassName]"
-        name="country"
-      >
-        Paese/Regione
-      </ProvincesSelect>
-
-      <InputField
-        v-model="formData.address.phone"
+        :model-value="shipping.phone"
         :class="[columnClassName, columnHalfClassName]"
         type="tel"
         name="phone"
         required
+        @update:model-value="(value) => updateShippingData(value, 'phone')"
       >
-        Telefono*
+        {{ $t('form.phone') }}
       </InputField>
 
       <InputField
-        v-model="formData.address.email"
+        :model-value="shipping.email"
         :class="[columnClassName, columnHalfClassName]"
         type="email"
         name="email"
         required
+        @update:model-value="(value) => updateShippingData(value, 'email')"
       >
-        E-mail*
+        {{ $t('form.mailField') }}
       </InputField>
 
       <InputField
-        v-model="formData.note"
+        :model-value="shipping.note"
         :class="[columnClassName, columnFullClassName]"
         type="textarea"
         name="note"
-        placeholder="Note sull'ordine, ad esempio richieste particolare per la consegna..."
+        :placeholder="$t('checkout.notesPlaceholder')"
+        @update:model-value="(value) => updateShippingData(value, 'note')"
       >
-        Note sull'ordine
+        {{ $t('checkout.notes') }}
       </InputField>
     </template>
-  </FormWrapper>
+  </FormAddress>
 </template>
 
 <script setup>
@@ -170,11 +104,12 @@ const props = defineProps({
       return []
     },
   },
-  address: {
+  shipping: {
     type: Object,
     required: true,
   },
 })
+const emit = defineEmits(['update:shipping'])
 
 // Component life-cycle hooks
 
@@ -182,19 +117,22 @@ const props = defineProps({
 
 // Data
 const isCouponFormOpen = ref(false)
-const countries = ref({ IT: 'Italia' })
-
-const formData = reactive({
-  note: '',
-  timeSlot: props.timeSlots?.[0]?.id,
-  address: { ...props.address },
-})
 
 // Watcher
 
 // Computed
 
 // Methods
+const updateShippingData = (value, field) => {
+  const newAddress = { ...props.shipping }
+  newAddress[field] = value
+
+  if (newAddress[field] === props.shipping[field]) {
+    return
+  }
+
+  emit('update:shipping', newAddress)
+}
 </script>
 
 <style lang="scss">
@@ -216,6 +154,17 @@ $prefix: 'shipping-form';
     )
   );
 
+  @include set-local-vars(
+    $prefix: 'input-field-label',
+    $map: (
+      margin: 0 0 rem(8px),
+    )
+  );
+
   @include typography(18px, 22px);
+
+  @include element('time-slot') {
+    @include set-local-vars($prefix: 'toggle-field-label', $map: ());
+  }
 }
 </style>
