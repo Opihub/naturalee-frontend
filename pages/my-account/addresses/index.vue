@@ -16,7 +16,17 @@
             color="green"
             underline
             :to="`/my-account/addresses/${index}`"
-            >Modifica</BaseLink
+            >{{
+              address.firstName == '' &&
+              address.lastName == '' &&
+              address.country == '' &&
+              address.address == '' &&
+              address.province == '' &&
+              address.city == '' &&
+              address.postcode == ''
+                ? 'Crea'
+                : 'Modifica'
+            }}</BaseLink
           >
         </template>
         <ShopAddress :address="address" />
@@ -67,7 +77,13 @@ const response = await useApi(
   @include set-vars(
     $prefix: 'container',
     $map: (
-      justify-content start,
+      justify-content: start,
+    )
+  );
+  @include set-vars(
+    $prefix: 'container',
+    $map: (
+      align-items: start,
     )
   );
   @include set-vars(
