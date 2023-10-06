@@ -66,6 +66,7 @@ const className = computed(() => {
 $prefix: 'button';
 @include object($prefix) {
   @include modifier('inline') {
+    font-family: get-var(font-family, inherit, $prefix: $prefix);
     border: 0;
     border-radius: 0;
     padding: 0;
