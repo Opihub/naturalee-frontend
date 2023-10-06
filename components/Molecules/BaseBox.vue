@@ -46,7 +46,7 @@ $prefix: 'box';
     )
   );
 
-  background-color: get-var(color-white);
+  background-color: get-var(background-color, get-var(color-white), $prefix: $prefix);
   border-radius: get-var(radius, $prefix: $prefix);
 
   @include element('head') {
@@ -68,13 +68,13 @@ $prefix: 'box';
     justify-content: get-var(head-justify, start, $prefix: $prefix);
     align-items: get-var(head-align, start, $prefix: $prefix);
     padding: rem(24px) rem(40px);
-    background-color: get-var(color-white);
+    background-color: get-var(head-background, get-var(color-white), $prefix: $prefix);
   }
 
   @include element('body') {
     display: block;
     padding: rem(20px) rem(40px) rem(40px);
-    background-color: get-var(body-background, trasparent, $prefix: $prefix);
+    background-color: get-var(body-background, transparent, $prefix: $prefix);
   }
 }
 </style>
