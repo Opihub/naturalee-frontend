@@ -9,7 +9,7 @@
         type="text"
         required
       >
-        {{ $t('form.name') }}*</InputField
+        {{ $t('form.name') }}</InputField
       >
 
       <InputField
@@ -18,7 +18,7 @@
         type="text"
         required
       >
-        {{ $t('form.surname') }}*</InputField
+        {{ $t('form.surname') }}</InputField
       >
       <InputField
         v-model="formData.email"
@@ -34,7 +34,7 @@
         :class="[columnClassName, columnHalfClassName]"
         type="tel"
       >
-        {{ $t('form.phone') }}*</InputField
+        {{ $t('form.phone') }}</InputField
       >
 
       <InputField

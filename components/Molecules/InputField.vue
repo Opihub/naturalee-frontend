@@ -6,6 +6,7 @@
       :for-input="name"
     >
       <slot />
+      <sup v-if="'required' in attrs && attrs.required !== false">*</sup>
     </BaseLabel>
     <span
       v-if="error"

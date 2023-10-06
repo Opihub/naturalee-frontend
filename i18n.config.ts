@@ -56,18 +56,19 @@ export default defineI18nConfig(() => ({
         shippingTo: 'Spedizione a <b>city</b>',
       },
       form: {
-        userField: 'Nome utente o indirizzo email *',
-        mailField: 'Indirizzo email *',
+        userField: 'Nome utente o indirizzo email',
+        mailField: 'Indirizzo email',
+        phone: 'Telefono',
         login: 'Accedi',
         signUp: 'Registrati',
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',
         submitContact: 'Invia richiesta',
-        message: 'Descrivi brevemente la tua richiesta*',
+        message: 'Descrivi brevemente la tua richiesta',
         name: 'Nome',
         surname: 'Cognome',
-        displayName: 'Nome Visualizzato *',
+        displayName: 'Nome Visualizzato',
         age: 'Età',
         toEmail: "all'indirizzo email",
         toUserEmail: "all'indirizzo email dell'utente",
@@ -88,7 +89,7 @@ export default defineI18nConfig(() => ({
         displayNameMsg:
           "Questo è il modo in cui il tuo nome verrà visualizzato nella sezione dell'account e nelle recensioni",
         password: {
-          field: 'Password *',
+          field: 'Password',
           forget: 'Hai dimenticato la password?',
           recovery: 'Recupera password',
           recoveryInstruction:
@@ -105,7 +106,6 @@ export default defineI18nConfig(() => ({
           generate: 'Genera Password',
         },
         leaveBlank: 'lascia in bianco per non modificare',
-        phone: 'Telefono',
         contactUs: 'Contattaci',
         moreInfo:
           'Per maggiori informazioni, per richiedere un preventivo o qualsiasi altra richiesta non esitare a contattarci',
