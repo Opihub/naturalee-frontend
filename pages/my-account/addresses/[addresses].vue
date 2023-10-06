@@ -6,7 +6,11 @@
       @submit.prevent="updateAddresses"
     >
       <template #after="{ rowClassName }">
-        <FormInvoice v-model:invoice="formData.invoice" class="s-invoice" />
+        <FormInvoice
+          v-if="$route.params.addresses == 'billing'"
+          v-model:invoice="formData.invoice"
+          class="s-invoice"
+        />
 
         <fieldset :class="rowClassName" class="s-button">
           <div>

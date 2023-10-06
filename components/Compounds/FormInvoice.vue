@@ -8,20 +8,15 @@
         columnHalfClassName,
       }"
     >
-      <fieldset
-        v-if="$route.params.addresses == 'billing'"
-        :class="rowClassName"
-      >
+      <fieldset :class="rowClassName">
         <div :class="[columnClassName, columnFullClassName]">
           <BaseHeading class="u-mt-large s-password" tag="h6"
             >Fatturazione</BaseHeading
           >
         </div>
       </fieldset>
-      <fieldset
-        v-if="$route.params.addresses == 'billing'"
-        :class="[rowClassName, columnFullClassName]"
-      >
+
+      <fieldset :class="[rowClassName, columnFullClassName]">
         <ToggleField
           v-for="invoiceValue in invoices"
           :key="invoiceValue.value"
