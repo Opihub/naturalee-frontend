@@ -25,7 +25,7 @@
       </fieldset>
 
       <div :class="[columnClassName, columnFullClassName]">
-        Scegli una fascia oraria per la consegna:
+        {{ $t('addresses.timeSlot') }}
       </div>
 
       <fieldset :class="rowClassName">
@@ -150,7 +150,7 @@
         name="note"
         placeholder="Note sull'ordine, ad esempio richieste particolare per la consegna..."
       >
-        Note sull'ordine
+        {{ $t('orders.notes') }}
       </InputField>
     </template>
   </FormWrapper>

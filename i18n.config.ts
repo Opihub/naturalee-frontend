@@ -152,6 +152,8 @@ export default defineI18nConfig(() => ({
       },
       checkout: {
         payment: 'Pagamento',
+        notesPlaceholder:
+          "Note sull'ordine, ad esempio richieste particolare per la consegna...",
       },
       orders: {
         your: 'Il tuo ordine',
@@ -174,6 +176,7 @@ export default defineI18nConfig(() => ({
         details: 'Dettagli ordine',
         createdAt:
           "L'ordine {id} è stato creato il {date} ed è attualmente {status}.",
+        notes: "Note sull'ordine",
       },
       addresses: {
         heading: 'I seguenti indirizzi saranno usati come predefiniti nella pagina di riepilogo dell\'ordine.',

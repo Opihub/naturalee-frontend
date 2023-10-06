@@ -62,7 +62,7 @@
         type="text"
         required
       >
-        {{ $t('shipping.postcode') }}*</InputField
+        {{ $t('addresses.postcode') }}</InputField
       >
       <InputField
         v-model="value.city"
