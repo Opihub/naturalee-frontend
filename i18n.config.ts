@@ -5,6 +5,7 @@ export default defineI18nConfig(() => ({
     it: {
       edit: 'Modifica',
       quantity: 'Quantità',
+      create: 'Crea',
       search: 'Cerca',
       searchMsg: 'Di cosa hai bisogno?',
       filters: {
@@ -175,12 +176,19 @@ export default defineI18nConfig(() => ({
           "L'ordine {id} è stato creato il {date} ed è attualmente {status}.",
       },
       addresses: {
+        heading: 'I seguenti indirizzi saranno usati come predefiniti nella pagina di riepilogo dell\'ordine.',
         billing: 'Indirizzo di fatturazione',
         shipping: 'Indirizzo di spedizione',
+        notSet:'Indirizzo non impostato',
         cf: 'CF',
         vat: 'P. IVA',
         sdi: 'SDI',
         pec: 'PEC',
+        country:'Nazione/Regione',
+        province:'Provincia',
+        city:'Città',
+        address:'Via e Numero',
+        address2:'Appartamento, suite, unità, piano, ecc. (opzionale)',
       },
       invoice: {
         requestInvoice: 'Desideri ricevere la fattura?',

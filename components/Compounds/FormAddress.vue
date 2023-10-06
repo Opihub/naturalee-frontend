@@ -38,7 +38,8 @@
         :class="[columnClassName, columnFullClassName]"
         :model-value="value.country"
         @update:model-value="provinces"
-        >Nazione/Regione</CountrySelect
+      >
+        {{ $t('addresses.country') }}</CountrySelect
       >
       <InputField
         v-model="value.address"
@@ -46,13 +47,13 @@
         type="text"
         placeholder="Via/Piazza e Numero Civico"
       >
-        Via e Numero*</InputField
+        {{ $t('addresses.addresses') }}*</InputField
       >
       <InputField
         v-model="value.address2"
         :class="[columnClassName, columnFullClassName]"
         type="text"
-        placeholder="Appartamento, suite, unità, piano, ecc. (opzionale)"
+        :placeholder="$t('addresses.address2')"
       />
 
       <InputField
@@ -69,7 +70,7 @@
         type="text"
         required
       >
-        Città*</InputField
+        {{ $t('addresses.city') }}</InputField
       >
       <ProvincesSelect
         v-model="value.province"
@@ -78,7 +79,7 @@
         :provinces="countryData"
         :user-province="value.province"
       >
-        Provincia
+        {{ $t('addresses.province') }}
       </ProvincesSelect>
       <slot name="after" />
     </template>

@@ -1,16 +1,15 @@
 <template>
   <section>
-    <BaseParagraph class="u-mb-large"
-      >I seguenti indirizzi saranno usati come predefiniti nella pagina di
-      riepilogo dell'ordine.</BaseParagraph
-    >
+    <BaseParagraph class="u-mb-large">{{
+      $t('addresses.heading')
+    }}</BaseParagraph>
     <SiteContainer flex>
       <BaseBox v-for="(address, index) in response.data" :key="index">
         <template #head>
           <BaseHeading tag="h4">{{
             index == 'billing'
-              ? 'Indirizzo di Fatturazione'
-              : 'Indirizzo di Spedizione'
+              ? $t('addresses.billing')
+              : $t('addresses.shipping')
           }}</BaseHeading>
           <BaseLink
             color="green"
@@ -24,12 +23,24 @@
               address.province == '' &&
               address.city == '' &&
               address.postcode == ''
-                ? 'Crea'
-                : 'Modifica'
+                ? $t('create')
+                : $t('edit')
             }}</BaseLink
           >
         </template>
-        <ShopAddress :address="address" />
+        <ShopAddress
+          v-if="
+            address.firstName != '' &&
+            address.lastName != '' &&
+            address.country != '' &&
+            address.address != '' &&
+            address.province != '' &&
+            address.city != '' &&
+            address.postcode != ''
+          "
+          :address="address"
+        />
+        <BaseParagraph v-else>{{ $t('addresses.notSet') }}</BaseParagraph>
       </BaseBox>
     </SiteContainer>
   </section>
@@ -83,7 +94,7 @@ const response = await useApi(
   @include set-vars(
     $prefix: 'container',
     $map: (
-      align-items: start,
+      align-items: stretch,
     )
   );
   @include set-vars(
