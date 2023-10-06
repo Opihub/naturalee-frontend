@@ -104,7 +104,7 @@
 // Imports
 
 // Constants
-const CSS_NAME = 'c-order-resume'
+const CSS_NAME = 'c-order-details'
 const CSS_NAME_ITEM = `${CSS_NAME}__item`
 const CSS_NAME_ITEM_CELL = `${CSS_NAME_ITEM}__cell`
 
@@ -159,7 +159,7 @@ const granTotal = computed(() => {
 </script>
 
 <style lang="scss">
-$prefix: 'order-resume';
+$prefix: 'order-details';
 @include component($prefix) {
   @include set-vars(
     $prefix: $prefix,
