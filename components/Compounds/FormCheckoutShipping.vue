@@ -19,6 +19,7 @@
 
           <FormCoupon
             v-show="isCouponFormOpen"
+            tag="div"
             class="u-mt-mini"
             :placeholder="$t('coupon.formPlaceholder')"
           />

@@ -1,5 +1,6 @@
 <template>
-  <form
+  <component
+    :is="tag"
     :class="CSS_NAME"
     method="GET"
     v-bind="$attrs"
@@ -22,7 +23,7 @@
       :disabled="!coupon"
       >Applica</BaseButton
     >
-  </form>
+  </component>
 </template>
 
 <script setup>
@@ -36,6 +37,13 @@ defineProps({
   placeholder: {
     type: String,
     default: null,
+  },
+  tag: {
+    type: String,
+    default: 'form',
+    validator(value) {
+      return ['form', 'div', 'section'].includes(value)
+    },
   },
 })
 
@@ -58,7 +66,7 @@ const applyCoupon = () => {
 
   notify({
     message: 'Coupon applicato!',
-    status: 'success'
+    status: 'success',
   })
 }
 </script>
