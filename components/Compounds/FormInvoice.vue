@@ -1,5 +1,5 @@
 <template>
-  <FormWrapper tag="div">
+  <FormWrapper :class="CSS_NAME" tag="div">
     <template
       #default="{
         rowClassName,
@@ -8,7 +8,9 @@
         columnHalfClassName,
       }"
     >
-      <fieldset :class="[rowClassName, columnFullClassName, 'u-pb-none']">
+      <fieldset
+        :class="[rowClassName, columnFullClassName, `${CSS_NAME}__invoice`]"
+      >
         <ToggleField
           v-for="invoiceValue in invoices"
           :key="invoiceValue.value"
@@ -86,22 +88,10 @@
 
 <script setup>
 // Imports
+import { useI18n } from 'vue-i18n';
 
-//Constant
-const invoices = ref([
-  {
-    name: 'No',
-    value: false,
-  },
-  {
-    name: 'Si, sono un privato',
-    value: 'private',
-  },
-  {
-    name: "Si, sono un'azienda",
-    value: 'company',
-  },
-])
+// Constants
+const CSS_NAME = 'c-form-invoice'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
@@ -114,7 +104,31 @@ const props = defineProps({
   },
 })
 defineEmits(['update:invoice'])
-//computed
+
+// Component life-cycle hooks
+
+// Composables
+const { t } = useI18n()
+
+// Data
+const invoices = ref([
+  {
+    name: t('common.no'),
+    value: false,
+  },
+  {
+    name: t('invoice.isPrivate'),
+    value: 'private',
+  },
+  {
+    name: t('invoice.isCompany'),
+    value: 'company',
+  },
+])
+
+// Watcher
+
+// Computed
 const value = computed({
   get() {
     return props.invoice
@@ -123,7 +137,22 @@ const value = computed({
     emit('update:invoice', value)
   },
 })
-//data
+
+// Methods
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@include component('form-invoice') {
+  @include set-local-vars(
+    $prefix: 'form',
+    $map: (
+      fieldset-gap: rem(20px),
+      fieldset-border: 2px solid get-var(color-white),
+    )
+  );
+
+  @include element('invoice') {
+    font-weight: get-var(weight-bold);
+  }
+}
+</style>

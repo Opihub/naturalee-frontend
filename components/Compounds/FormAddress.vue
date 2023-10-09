@@ -202,6 +202,14 @@ $prefix: 'addresses-form';
     $map: (
       columns: 3,
       fieldset-gap: rem(20px),
+      fieldset-border: 2px solid get-var(color-white),
+    )
+  );
+
+  @include set-local-vars(
+    $prefix: 'input-field-label',
+    $map: (
+      margin: 0 0 rem(8px),
     )
   );
 }

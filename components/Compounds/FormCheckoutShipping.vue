@@ -40,10 +40,11 @@
             :key="slot.id"
             :class="`${CSS_NAME}__time-slot`"
             radio
+            boxed
             :model-value="shipping.timeSlot === slot.id"
             @update:model-value="() => updateShippingData(slot.id, 'timeSlot')"
           >
-            <b>{{ slot.title }}</b>
+            <b class="u-mr-micro">{{ slot.title }}</b>
             <span>
               <time>{{ slot.from }}</time> - <time>{{ slot.to }}</time>
             </span>
@@ -138,27 +139,5 @@ const updateShippingData = (value, field) => {
 
 <style lang="scss">
 $prefix: 'shipping-form';
-@include component($prefix) {
-  @include set-local-vars(
-    $prefix: 'form',
-    $map: (
-      columns: 3,
-      fieldset-gap: rem(20px),
-      fieldset-border: 2px solid get-var(color-white),
-    )
-  );
-
-  @include set-local-vars(
-    $prefix: 'input-field-label',
-    $map: (
-      margin: 0 0 rem(8px),
-    )
-  );
-
-  @include typography(18px, 22px);
-
-  @include element('time-slot') {
-    @include set-local-vars($prefix: 'toggle-field-label', $map: ());
-  }
-}
+@include component($prefix) {}
 </style>
