@@ -170,16 +170,6 @@ const feedback = reactive({
 </script>
 
 <style lang="scss" scoped>
-@include scope('button') {
-  @include set-local-vars(
-    $prefix: 'form-fieldset',
-    $map: (
-      border: none,
-    )
-  );
-  border-color: transparent;
-  padding: 0;
-}
 @include scope('invoice') {
   width: 100%;
 }
