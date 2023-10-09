@@ -175,6 +175,7 @@ export default defineI18nConfig(() => ({
         shipping: 'Indirizzo di spedizione',
         delivery: 'Indirizzo di consegna',
         deliveryRequired: "L'indirizzo di consegna è obbligatorio",
+        differentBilling: 'Fatturare ad un indirizzo differente?',
         checkPostCode: 'Verifica se il tuo indirizzo è coperto dal servizio',
         checkAddress: 'Verifica indirizzo',
         postcode: 'CAP',
