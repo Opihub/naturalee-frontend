@@ -68,7 +68,6 @@ export const useAccountStore = defineStore('account', () => {
         cache: false,
       }
     )
-
     if (response.value.success) {
       await login(response.value.data)
     } else {

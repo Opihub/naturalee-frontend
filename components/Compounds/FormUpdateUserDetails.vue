@@ -26,23 +26,19 @@
       >
 
       <InputField
-        v-model="formData.username"
-        :class="[columnClassName, columnFullClassName]"
-        type="text"
-      >
-        {{ $t('form.displayName') }}</InputField
-      >
-      <base-heading tag="span" class="u-mb-half">{{
-        $t('form.displayNameMsg')
-      }}</base-heading>
-
-      <InputField
         v-model="formData.email"
         class="o-row__column s-email"
         type="text"
         required
       >
         {{ $t('form.mailField') }}</InputField
+      >
+      <InputField
+        v-model="formData.phone"
+        :class="[columnClassName, columnFullClassName]"
+        type="text"
+      >
+        {{ $t('form.phone') }}*</InputField
       >
       <slot name="header">
         <BaseHeading class="u-mt-large s-password" tag="h6">{{
@@ -100,7 +96,7 @@ const props = defineProps({
 const formData = reactive({
   firstName: props.userData.firstName,
   lastName: props.userData.lastName,
-  //username: props.userData.username,
+  phone: props.userData.phone,
   email: props.userData.email,
   oldPassword: '',
   newPassword: '',
@@ -133,6 +129,7 @@ const updateAccount = async () => {
       formData.firstName = response.value.data.firstName
       formData.lastName = response.value.data.lastName
       formData.email = response.value.data.email
+      formData.phone = response.value.data.phone
       formData.oldPassword = ''
       formData.newPassword = ''
       formData.confirmPassword = ''
