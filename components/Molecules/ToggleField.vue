@@ -136,10 +136,7 @@ const className = computed(() => {
   }
 
   if (attrs.class) {
-    console.debug(className)
-    console.debug(attrs.class)
     className = [...className, ...assembleClassName(attrs.class)]
-    console.debug(className)
   }
 
   return className
