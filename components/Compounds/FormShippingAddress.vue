@@ -1,32 +1,49 @@
 <template>
   <form method="POST" :class="CSS_NAME" @submit.prevent="updateShippingAddress">
-    <input v-model="formData.country" type="hidden" name="country" />
-
-    <InputField
-      v-model="formData.state"
-      type="select"
+    <CountrySelect
+      :model-value="address.country"
       name="state"
-      :placeholder="$t('addresses.city')"
+      :placeholder="$t('addresses.country')"
       class="u-mb-small"
-      :data="provinces"
       error-after
       rounded
       required
+      no-label
+      :disabled="sending"
+      @update:model-value="(value) => updateCountry(value)"
+    />
+
+    <ProvincesSelect
+      :model-value="address.province"
+      name="province"
+      :placeholder="$t('addresses.province')"
+      class="u-mb-small"
+      :provinces="provinces"
+      error-after
+      rounded
+      required
+      no-label
+      :disabled="sending"
+      @update:model-value="(value) => updateProvince(value)"
     />
 
     <InputField
-      v-model="formData.city"
+      :model-value="address.city"
       type="text"
       name="city"
       :placeholder="$t('addresses.city')"
       class="u-mb-small"
+      :error="$t('addresses.invalidPostCode')"
       error-after
       rounded
       required
+      no-label
+      :disabled="sending"
+      @update:model-value="(value) => updateAddress(value, 'city')"
     />
 
     <InputField
-      v-model="formData.postcode"
+      :model-value="address.postcode"
       type="text"
       name="postcode"
       :placeholder="$t('addresses.postcode')"
@@ -36,9 +53,12 @@
       error-after
       rounded
       required
+      no-label
+      :disabled="sending"
+      @update:model-value="(value) => updateAddress(value, 'postcode')"
     />
 
-    <BaseButton color="green" type="submit">{{
+    <BaseButton color="green" type="submit" :disabled="sending">{{
       $t('common.update')
     }}</BaseButton>
   </form>
@@ -46,141 +66,57 @@
 
 <script setup>
 // Imports
+import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 const CSS_NAME = 'c-shipping-form'
 
 // Define (Props, Emits, Page Meta)
-const emit = defineEmits(['update', 'api:start', 'api:end'])
-
-// Component life-cycle hooks
-
-// Composables
-const { sending, send } = useSender(emit)
-
-// Data
-const formData = reactive({
-  country: 'it',
-  state: '',
-  city: '',
-  postcode: '',
+const props = defineProps({
+  address: {
+    type: Object,
+    required: true,
+  },
 })
+const emit = defineEmits(['update:address', 'update', 'not-available', 'api:start', 'api:end'])
 
-const provinces = ref({
-  AG: 'Agrigento',
-  AL: 'Alessandria',
-  AN: 'Ancona',
-  AO: 'Aosta',
-  AR: 'Arezzo',
-  AP: 'Ascoli Piceno',
-  AT: 'Asti',
-  AV: 'Avellino',
-  BA: 'Bari',
-  BT: 'Barletta-Andria-Trani',
-  BL: 'Belluno',
-  BN: 'Benevento',
-  BG: 'Bergamo',
-  BI: 'Biella',
-  BO: 'Bologna',
-  BZ: 'Bolzano',
-  BS: 'Brescia',
-  BR: 'Brindisi',
-  CA: 'Cagliari',
-  CL: 'Caltanissetta',
-  CB: 'Campobasso',
-  CE: 'Caserta',
-  CT: 'Catania',
-  CZ: 'Catanzaro',
-  CH: 'Chieti',
-  CO: 'Como',
-  CS: 'Cosenza',
-  CR: 'Cremona',
-  KR: 'Crotone',
-  CN: 'Cuneo',
-  EN: 'Enna',
-  FM: 'Fermo',
-  FE: 'Ferrara',
-  FI: 'Firenze',
-  FG: 'Foggia',
-  FC: 'Forlì-Cesena',
-  FR: 'Frosinone',
-  GE: 'Genova',
-  GO: 'Gorizia',
-  GR: 'Grosseto',
-  IM: 'Imperia',
-  IS: 'Isernia',
-  SP: 'La Spezia',
-  AQ: "L'Aquila",
-  LT: 'Latina',
-  LE: 'Lecce',
-  LC: 'Lecco',
-  LI: 'Livorno',
-  LO: 'Lodi',
-  LU: 'Lucca',
-  MC: 'Macerata',
-  MN: 'Mantova',
-  MS: 'Massa-Carrara',
-  MT: 'Matera',
-  ME: 'Messina',
-  MI: 'Milano',
-  MO: 'Modena',
-  MB: 'Monza e della Brianza',
-  NA: 'Napoli',
-  NO: 'Novara',
-  NU: 'Nuoro',
-  OR: 'Oristano',
-  PD: 'Padova',
-  PA: 'Palermo',
-  PR: 'Parma',
-  PV: 'Pavia',
-  PG: 'Perugia',
-  PU: 'Pesaro e Urbino',
-  PE: 'Pescara',
-  PC: 'Piacenza',
-  PI: 'Pisa',
-  PT: 'Pistoia',
-  PN: 'Pordenone',
-  PZ: 'Potenza',
-  PO: 'Prato',
-  RG: 'Ragusa',
-  RA: 'Ravenna',
-  RC: 'Reggio Calabria',
-  RE: 'Reggio Emilia',
-  RI: 'Rieti',
-  RN: 'Rimini',
-  RM: 'Roma',
-  RO: 'Rovigo',
-  SA: 'Salerno',
-  SS: 'Sassari',
-  SV: 'Savona',
-  SI: 'Siena',
-  SR: 'Siracusa',
-  SO: 'Sondrio',
-  SU: 'Sud Sardegna',
-  TA: 'Taranto',
-  TE: 'Teramo',
-  TR: 'Terni',
-  TO: 'Torino',
-  TP: 'Trapani',
-  TN: 'Trento',
-  TV: 'Treviso',
-  TS: 'Trieste',
-  UD: 'Udine',
-  VA: 'Varese',
-  VE: 'Venezia',
-  VB: 'Verbano-Cusio-Ossola',
-  VC: 'Vercelli',
-  VR: 'Verona',
-  VV: 'Vibo Valentia',
-  VI: 'Vicenza',
-  VT: 'Viterbo',
-})
-
-// Watcher
-
-// Computed
+// Pinia Stores
+const shippingStore = useShippingStore()
 
 // Methods
+const { loadProvinces, saveCountry, currentProvince } = shippingStore
+
+const updateCountry = async (value) => {
+  if (sending.value) {
+    return
+  }
+
+  saveCountry(props.address.country, props.address.province)
+
+  updateAddress(value, 'country')
+
+  await send(async () => await loadProvinces(value))
+
+  updateAddress(currentProvince(value), 'province')
+}
+
+const updateProvince = (value) => {
+  saveCountry(props.address.country, value)
+
+  updateAddress(value, 'province')
+}
+
+const updateAddress = (value, field) => {
+  const newAddress = { ...props.address }
+  newAddress[field] = value
+
+  if (newAddress[field] === props.address[field]) {
+    return
+  }
+
+  emit('update:address', newAddress)
+}
+
 const updateShippingAddress = async () => {
   if (sending.value) {
     return
@@ -192,7 +128,7 @@ const updateShippingAddress = async () => {
         'shop/checkout/validate/shipping',
         {
           method: 'POST',
-          body: formData,
+          body: props.address,
         },
         {
           cache: false,
@@ -210,14 +146,25 @@ const updateShippingAddress = async () => {
   if (response.value.success) {
     notification.status = 'success'
 
-    emit('update', {
-      data: formData,
-      methods: response.value.data,
-    })
+    emit('update', response.value.data)
+  } else {
+    emit('not-available', response)
   }
 
   notify(notification)
 }
+
+// Composables
+const { sending, send } = useSender(emit)
+const { provinces } = storeToRefs(shippingStore)
+
+// Data
+
+// Computed
+
+// Watcher
+
+// Component life-cycle hooks
 </script>
 
 <style lang="scss">

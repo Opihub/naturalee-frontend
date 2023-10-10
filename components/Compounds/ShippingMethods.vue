@@ -5,23 +5,23 @@
       :class="[`${CSS_NAME}__methods`, 'u-mb-half']"
     >
       <ToggleField
-        v-for="method in shippingMethods"
-        :key="method.id"
+        v-for="shippingMethod in shippingMethods"
+        :key="shippingMethod.id"
         radio
         class="u-mb-tiny"
-        :value="method.id"
-        :model-value="selectedShippingMethods === method.id"
-        @update:model-value="selectedShippingMethods = method.id"
-        >{{ method.title }}</ToggleField
+        :value="shippingMethod.id"
+        :model-value="method === shippingMethod.id"
+        @update:model-value="selectedShippingMethods = shippingMethod.id"
+        >{{ shippingMethod.title }}</ToggleField
       >
     </div>
 
     <div :class="`${CSS_NAME}__form`">
-      <span v-if="shippingData.city"
-        >Spedizione a <b>{{ shippingData.city }}</b></span
+      <span v-if="city"
+        >Spedizione a <b>{{ city }}</b></span
       >
       <span v-else>
-        Inserisci il tuo indirizzo per visualizzare le opzioni di spedizione.
+        {{ message }}
       </span>
       <InlineButton
         :class="[`${CSS_NAME}__form__toggle`, 'u-mt-micro']"
@@ -33,8 +33,11 @@
 
       <FormShippingAddress
         v-show="isShippingFormOpen"
+        :address="address"
         class="u-mt-half"
         @update="updateShippingAddress"
+        @update:address="updateAddress"
+        @not-available="showMissingShippingAddress"
       />
     </div>
   </div>
@@ -53,26 +56,36 @@ const CSS_NAME = 'c-shipping'
 // Composables
 
 // Data
-const shippingData = ref({
-  country: 'it',
-  state: '',
-  city: '',
-  postcode: '',
-})
 const shippingMethods = ref([])
-const selectedShippingMethods = ref(null)
 const isShippingFormOpen = ref(false)
+const { address, updateAddress, method, updateMethod } = inject('shipping')
+const city = ref(null)
+const message = ref(
+  'Inserisci il tuo indirizzo per visualizzare le opzioni di spedizione.'
+)
 
 // Watcher
 
 // Computed
 
 // Methods
-const updateShippingAddress = (shipping) => {
-  shippingData.value = { ...shipping.data }
-  shippingMethods.value = shipping.methods
+const updateShippingAddress = (methods) => {
+  shippingMethods.value = methods
 
-  selectedShippingMethods.value = shippingMethods.value[0].id
+  // TODO: verificare nel caso dovessero cambiare i metodi di spedizione
+  updateMethod(shippingMethods.value.find(() => true).id)
+
+  city.value = address.value.city
+
+  isShippingFormOpen.value = false
+}
+
+const showMissingShippingAddress = (response) => {
+  shippingMethods.value = []
+
+  updateMethod(null)
+
+  message.value = response.value.message
 
   isShippingFormOpen.value = false
 }

@@ -57,13 +57,23 @@
           <CheckoutCart :products="basket || []" :sub-total="subTotal" />
 
           <OrderResume
+            v-model:address="shippingAddress"
             container-class="u-mt-huge"
             :sub-total="subTotal"
             :heading="$t('checkout.payment')"
             without-sub-total
           >
-            <template #after="{ className }">
-              <div :class="className">metodi di pagamento</div>
+            <template #after="{ footerClassName }">
+              <div :class="footerClassName">
+                <PaymentMethods v-model="paymentMethod">
+                  <BaseButton
+                    type="button"
+                    color="yellow"
+                    @click.prevent="submitOrder"
+                    >Paga ora</BaseButton
+                  >
+                </PaymentMethods>
+              </div>
             </template>
           </OrderResume>
         </SiteContainer>
@@ -79,6 +89,7 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
+import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 
@@ -93,21 +104,8 @@ onMounted(async () => {
     return
   }
 
-  const userShippingAddress = await useApi(
-    '/shop/addresses/shipping',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  shippingAddress.value = { ...userShippingAddress.value }
-
   const userBillingAddress = await useApi(
-    '/shop/addresses/billing',
+    'shop/addresses/billing',
     {
       method: 'GET',
     },
@@ -123,6 +121,7 @@ onMounted(async () => {
 // Composables
 const cart = useCartStore()
 const user = useAccountStore()
+const shippingStore = useShippingStore()
 const timeSlots = await useApi(
   'time-slots',
   {},
@@ -134,20 +133,11 @@ const timeSlots = await useApi(
 // Data
 const { isEmpty, subTotal } = storeToRefs(cart)
 const { isLoggedIn } = storeToRefs(user)
+
 const basket = await cart.load()
+const shippingAddress = await shippingStore.load()
 
 const useDifferentAddress = ref(false)
-
-const shippingAddress = ref({
-  firstName: null,
-  lastName: null,
-  country: null,
-  address: null,
-  address2: null,
-  province: null,
-  city: null,
-  postcode: null,
-})
 
 const billingAddress = ref({
   firstName: null,
@@ -177,11 +167,38 @@ const billingData = ref({
   cfPrivate: null,
 })
 
+const paymentMethod = ref(null)
+const shippingMethod = ref(null)
+
 // Watcher
 
 // Computed
 
 // Methods
+const updateAddress = (address) => {
+  shippingAddress.value = address
+}
+
+const updateShippingMethod = (method) => {
+  shippingMethod.value = method
+}
+
+const submitOrder = async () => {
+  console.debug(shippingAddress.value)
+  console.debug(billingAddress.value)
+  console.debug(shippingData.value)
+  console.debug(billingData.value)
+  console.debug(paymentMethod.value)
+  console.debug(shippingMethod.value)
+}
+
+// Provide
+provide('shipping', {
+  address: shippingAddress,
+  updateAddress,
+  method: shippingMethod,
+  updateMethod: updateShippingMethod,
+})
 </script>
 
 <style lang="scss" scoped>
@@ -192,6 +209,13 @@ const billingData = ref({
     $prefix: 'box',
     $map: (
       body-background: get-var(color-light),
+    )
+  );
+
+  @include set-local-vars(
+    $prefix: 'order-resume',
+    $map: (
+      border-bottom: 2px,
     )
   );
 

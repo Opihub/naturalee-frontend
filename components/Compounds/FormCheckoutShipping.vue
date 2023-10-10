@@ -40,6 +40,7 @@
             :class="`${CSS_NAME}__time-slot`"
             radio
             boxed
+            required
             :model-value="shipping.timeSlot === slot.id"
             @update:model-value="() => updateShippingData(slot.id, 'timeSlot')"
           >

@@ -45,11 +45,12 @@
       >
         {{ $t('form.surname') }}</InputField
       >
+
       <CountrySelect
         :class="[columnClassName, columnFullClassName]"
         :model-value="address.country"
         required
-        @update:model-value="loadProvinces"
+        @update:model-value="(value) => updateCountry(value)"
         >{{ $t('addresses.country') }}</CountrySelect
       >
       <InputField
@@ -99,7 +100,7 @@
         :class="[columnClassName, columnThirdClassName]"
         name="province"
         :provinces="provinces"
-        @update:model-value="(value) => updateAddress(value, 'province')"
+        @update:model-value="(value) => updateProvince(value)"
       >
         {{ $t('addresses.province') }}
       </ProvincesSelect>
@@ -122,6 +123,7 @@
 
 <script setup>
 // Imports
+import { useShippingStore } from '@/stores/shipping'
 
 // Constant
 const CSS_NAME = 'c-addresses-form'
@@ -131,56 +133,15 @@ const props = defineProps({
   address: {
     type: Object,
     required: true,
-    // validator(value) {
-    //   return 'username' in value && 'email' in value
-    // },
   },
 })
-const emit = defineEmits(['update:address'])
+const emit = defineEmits(['update:address', 'api:start', 'api:end'])
 
-// Component life-cycle hooks
-onMounted(async () => {
-  await loadProvinces(props.address.country)
-})
-
-// Composables
-
-// Data
-const provinces = ref([])
-const countriesProvinces = reactive({})
-
-// Computed
-
-// Watcher
+// Pinia Stores
+const shippingStore = useShippingStore()
 
 // Methods
-const loadProvinces = async (country) => {
-  countriesProvinces[props.address.country] = props.address.province
-
-  const newAddress = { ...props.address }
-
-  // Aggiorno la nazione e carico le sue province
-  newAddress.country = country
-
-  if (country) {
-    const countryData = await useApi(`/countries/${country}`, {
-      method: 'GET',
-    })
-
-    provinces.value = countryData.value.data.provinces
-  } else {
-    provinces.value = []
-  }
-
-  // Se ho già una provincia associata alla nazione corrente, allora la carico
-  if (country in countriesProvinces) {
-    newAddress.province = countriesProvinces[country]
-  } else {
-    newAddress.province = null
-  }
-
-  updateAddress()
-}
+const { loadProvinces, saveCountry, currentProvince } = shippingStore
 
 const updateAddress = (value, field) => {
   const newAddress = { ...props.address }
@@ -192,6 +153,41 @@ const updateAddress = (value, field) => {
 
   emit('update:address', newAddress)
 }
+
+const updateCountry = async (value) => {
+  if (sending.value) {
+    return
+  }
+
+  saveCountry(props.address.country, props.address.province)
+
+  updateAddress(value, 'country')
+
+  await send(async () => await loadProvinces(value))
+
+  updateAddress(currentProvince(value), 'province')
+}
+
+const updateProvince = (value) => {
+  saveCountry(props.address.country, value)
+
+  updateAddress(value, 'province')
+}
+
+// Composables
+const { provinces } = storeToRefs(shippingStore)
+const { sending, send } = useSender(emit)
+
+// Data
+
+// Computed
+
+// Watcher
+
+// Component life-cycle hooks
+onMounted(async () => {
+  await loadProvinces(props.address.country)
+})
 </script>
 
 <style lang="scss">

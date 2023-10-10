@@ -329,6 +329,8 @@ $prefix-filter: '#{$prefix}-filter';
       }
 
       @include modifier('select') {
+        appearance: none;
+
         @include until(desktop) {
           position: absolute;
           inset: 0;
