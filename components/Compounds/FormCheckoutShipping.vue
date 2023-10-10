@@ -32,12 +32,11 @@
 
       <fieldset :class="rowClassName">
         <div
-          style="background-color: #fff"
+          v-for="slot in timeSlots"
+          :key="slot.id"
           :class="[columnClassName, columnThirdClassName]"
         >
           <ToggleField
-            v-for="slot in timeSlots"
-            :key="slot.id"
             :class="`${CSS_NAME}__time-slot`"
             radio
             boxed
@@ -136,8 +135,3 @@ const updateShippingData = (value, field) => {
   emit('update:shipping', newAddress)
 }
 </script>
-
-<style lang="scss">
-$prefix: 'shipping-form';
-@include component($prefix) {}
-</style>
