@@ -34,6 +34,7 @@
       <FormShippingAddress
         v-show="isShippingFormOpen"
         :address="address"
+        tag="div"
         class="u-mt-half"
         @update="updateShippingAddress"
         @update:address="updateAddress"

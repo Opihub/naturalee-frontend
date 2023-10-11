@@ -1,7 +1,23 @@
 <template>
-  <form method="POST" :class="CSS_NAME" @submit.prevent="updateShippingAddress">
+  <component
+    :is="tag"
+    :class="CSS_NAME"
+    method="POST"
+    @submit.prevent="updateShippingAddress"
+  >
+    <template v-if="!isForm">
+      <Teleport to="body">
+        <form
+          :id="FORM_ID"
+          method="POST"
+          @submit.prevent="updateShippingAddress"
+        ></form>
+      </Teleport>
+    </template>
+
     <CountrySelect
       :model-value="address.country"
+      :form="!isForm ? FORM_ID : null"
       name="state"
       :placeholder="$t('addresses.country')"
       class="u-mb-small"
@@ -15,6 +31,7 @@
 
     <ProvincesSelect
       :model-value="address.province"
+      :form="!isForm ? FORM_ID : null"
       name="province"
       :placeholder="$t('addresses.province')"
       class="u-mb-small"
@@ -29,6 +46,7 @@
 
     <InputField
       :model-value="address.city"
+      :form="!isForm ? FORM_ID : null"
       type="text"
       name="city"
       :placeholder="$t('addresses.city')"
@@ -44,6 +62,7 @@
 
     <InputField
       :model-value="address.postcode"
+      :form="!isForm ? FORM_ID : null"
       type="text"
       name="postcode"
       :placeholder="$t('addresses.postcode')"
@@ -58,10 +77,14 @@
       @update:model-value="(value) => updateAddress(value, 'postcode')"
     />
 
-    <BaseButton color="green" type="submit" :disabled="sending">{{
-      $t('common.update')
-    }}</BaseButton>
-  </form>
+    <BaseButton
+      :form="!isForm ? FORM_ID : null"
+      color="green"
+      type="submit"
+      :disabled="sending"
+      >{{ $t('common.update') }}</BaseButton
+    >
+  </component>
 </template>
 
 <script setup>
@@ -70,15 +93,27 @@ import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 const CSS_NAME = 'c-shipping-form'
+const FORM_ID = 'calculate-shipping-form'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
+  tag: {
+    type: String,
+    default: 'form',
+    validator(value) {
+      return ['form', 'div', 'section'].includes(value)
+    },
+  },
   address: {
     type: Object,
     required: true,
   },
 })
-const emit = defineEmits(['update:address', 'update', 'not-available', 'api:start', 'api:end'])
+const emit = defineEmits([
+  'update:address',
+  'update',
+  'not-available',
+])
 
 // Pinia Stores
 const shippingStore = useShippingStore()
@@ -155,12 +190,15 @@ const updateShippingAddress = async () => {
 }
 
 // Composables
-const { sending, send } = useSender(emit)
+const { sending, send } = useSender()
 const { provinces } = storeToRefs(shippingStore)
 
 // Data
 
 // Computed
+const isForm = computed(() => {
+  return props.tag === 'form'
+})
 
 // Watcher
 

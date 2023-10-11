@@ -3,10 +3,9 @@
     :is="tag"
     :class="CSS_NAME"
     method="GET"
-    v-bind="$attrs"
     @submit.prevent="applyCoupon"
   >
-    <template v-if="tag !== 'form'">
+    <template v-if="!isForm">
       <Teleport to="body">
         <form :id="FORM_ID" method="GET" @submit.prevent="applyCoupon"></form>
       </Teleport>
@@ -57,7 +56,6 @@ const props = defineProps({
     },
   },
 })
-const emit = defineEmits('update:coupon', 'accepted:coupon')
 
 // Pinia Store
 const cart = useCartStore()
