@@ -12,8 +12,16 @@
         :value="shippingMethod.id"
         :model-value="method === shippingMethod.id"
         @update:model-value="selectedShippingMethods = shippingMethod.id"
-        >{{ shippingMethod.title }}</ToggleField
       >
+        {{ shippingMethod.title }}
+        <PriceHolder
+          v-if="shippingMethod.price > 0"
+          :price="shippingMethod.price"
+        >
+          <template #before>(</template>
+          <template #after>)</template>
+        </PriceHolder>
+      </ToggleField>
     </div>
 
     <div :class="`${CSS_NAME}__form`">

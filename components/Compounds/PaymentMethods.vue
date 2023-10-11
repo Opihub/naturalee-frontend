@@ -14,7 +14,13 @@
         @update:model-value="updatePaymentMethod(paymentMethod.id)"
       >
         {{ paymentMethod.title }}
-        <PriceHolder v-if="paymentMethod.price > 0" :price="method.price" />
+        <PriceHolder
+          v-if="paymentMethod.price > 0"
+          :price="paymentMethod.price"
+        >
+          <template #before>(</template>
+          <template #after>)</template>
+        </PriceHolder>
       </ToggleField>
     </div>
 
