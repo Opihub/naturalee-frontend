@@ -12,73 +12,80 @@
         :class="[rowClassName, columnFullClassName, `${CSS_NAME}__invoice`]"
       >
         <ToggleField
-          v-for="invoiceValue in invoices"
-          :key="invoiceValue.value"
-          :value="invoiceValue.value"
+          v-for="single in invoices"
+          :key="single.value"
+          :value="single.value"
           name="invoice"
           inline
           radio
-          :model-value="value.invoice === invoiceValue.value"
-          @update:model-value="value.invoice = invoiceValue.value"
+          :model-value="invoice.invoice === single.value"
+          @update:model-value="updateInvoice(single.value, 'invoice')"
         >
-          {{ invoiceValue.name }}
+          {{ single.name }}
         </ToggleField>
       </fieldset>
 
-      <template v-if="value.invoice === 'company'">
+      <template v-if="invoice.invoice === 'company'">
         <InputField
-          v-model="value.company"
+          :model-value="invoice.company"
           :class="[columnClassName, columnFullClassName]"
           name="company"
           type="text"
           required
+          @update:model-value="(value) => updateInvoice(value, 'company')"
         >
           {{ $t('addresses.company') }}</InputField
         >
         <InputField
-          v-model="value.cfCompany"
+          :model-value="invoice.cfCompany"
           :class="[columnClassName, columnHalfClassName]"
           name="cf"
           type="text"
           required
+          @update:model-value="(value) => updateInvoice(value, 'cfCompany')"
         >
           {{ $t('addresses.cfFull') }}</InputField
         >
         <InputField
-          v-model="value.vat"
+          :model-value="invoice.vat"
           :class="[columnClassName, columnHalfClassName]"
           name="vat"
           type="text"
           required
+          @update:model-value="(value) => updateInvoice(value, 'vat')"
         >
           {{ $t('addresses.vatFull') }}</InputField
         >
         <InputField
-          v-model="value.sdi"
+          :model-value="invoice.sdi"
           :class="[columnClassName, columnHalfClassName]"
           name="sdi"
           type="text"
-          required
+          pattern="[a-zA-Z0-9]{7}"
+          :required="!invoice.pec"
+          @update:model-value="(value) => updateInvoice(value, 'sdi')"
         >
           {{ $t('addresses.sdiFull') }}</InputField
         >
         <InputField
-          v-model="value.pec"
+          :model-value="invoice.pec"
           :class="[columnClassName, columnHalfClassName]"
           name="pec"
-          type="text"
-          required
+          type="email"
+          :required="!invoice.sdi"
+          @update:model-value="(value) => updateInvoice(value, 'pec')"
         >
           {{ $t('addresses.pec') }}</InputField
         >
       </template>
       <InputField
-        v-else-if="value.invoice === 'private'"
-        v-model="value.cfPrivate"
+        v-else-if="invoice.invoice === 'private'"
+        :model-value="invoice.cfPrivate"
         :class="[columnClassName, columnFullClassName]"
         name="cf"
         type="text"
         required
+        @update:model-value="(value) => updateInvoice(value, 'cfPrivate')"
       >
         {{ $t('addresses.cfFull') }}</InputField
       >
@@ -88,7 +95,7 @@
 
 <script setup>
 // Imports
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n'
 
 // Constants
 const CSS_NAME = 'c-form-invoice'
@@ -98,12 +105,9 @@ const props = defineProps({
   invoice: {
     type: Object,
     required: true,
-    // validator(value) {
-    //   return 'username' in value && 'email' in value
-    // },
   },
 })
-defineEmits(['update:invoice'])
+const emit = defineEmits(['update:invoice'])
 
 // Component life-cycle hooks
 
@@ -129,14 +133,17 @@ const invoices = ref([
 // Watcher
 
 // Computed
-const value = computed({
-  get() {
-    return props.invoice
-  },
-  set(value) {
-    emit('update:invoice', value)
-  },
-})
+const updateInvoice = (value, field) => {
+  const newInvoice = { ...props.invoice }
+
+  if (newInvoice[field] === value) {
+    return
+  }
+
+  newInvoice[field] = value
+
+  emit('update:invoice', newInvoice)
+}
 
 // Methods
 </script>
