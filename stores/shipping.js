@@ -1,4 +1,10 @@
-import { defineStore, acceptHMRUpdate, storeToRefs, ref } from '#imports'
+import {
+  defineStore,
+  acceptHMRUpdate,
+  storeToRefs,
+  skipHydrate,
+  ref,
+} from '#imports'
 import { useApi } from '@/composables/api'
 import { useAccountStore } from '@/stores/account'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
@@ -99,7 +105,7 @@ export const useShippingStore = defineStore('shipping', () => {
   }
 
   return {
-    address,
+    address: skipHydrate(address),
     provinces,
     countriesProvince,
     load,
