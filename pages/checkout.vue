@@ -235,8 +235,8 @@ const submitOrder = async () => {
     phone,
     invoice,
     products: cart.checkout,
-    shippingMethod,
-    paymentMethod,
+    shippingMethod: shippingMethod.value.id,
+    paymentMethod: paymentMethod.value.id,
   }
 
   if (invoice === 'private') {
