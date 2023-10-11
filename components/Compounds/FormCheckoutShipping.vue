@@ -41,8 +41,8 @@
             radio
             boxed
             required
-            :model-value="shipping.timeSlot === slot.id"
-            @update:model-value="() => updateShippingData(slot.id, 'timeSlot')"
+            :model-value="shipping.timeSlot === slot"
+            @update:model-value="() => updateShippingData(slot, 'timeSlot')"
           >
             <b class="u-mr-micro">{{ slot.title }}</b>
             <span>
