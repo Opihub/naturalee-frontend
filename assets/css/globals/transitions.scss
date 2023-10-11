@@ -5,8 +5,8 @@
     duration: 400ms,
   )
 ) {
-  opacity: 0;
-  filter: var(--blur);
+  opacity: 0 !important;
+  filter: var(--blur) !important;
 }
 
 @include vue-transition(
@@ -17,5 +17,5 @@
     timing: ease-in-out,
   )
 ) {
-  opacity: 0;
+  opacity: 0 !important;
 }

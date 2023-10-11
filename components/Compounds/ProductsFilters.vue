@@ -32,46 +32,48 @@
         </ul>
 
         <Teleport to="body">
-          <BaseOverlay
-            v-show="isFilterOverlayOpen"
-            :class="[CSS_NAME, CSS_NAME_OVERLAY]"
-          >
-            <div :class="`${CSS_NAME_OVERLAY}__header`">
-              <span>{{
-                $t('filters.selected', chosenFilters.length, {
-                  count: chosenFilters.length,
-                })
-              }}</span>
-              <u @click="$emit('filter:clear')">{{ $t('filters.clear') }}</u>
-            </div>
+          <Transition name="fade">
+            <BaseOverlay
+              v-if="isFilterOverlayOpen"
+              :class="[CSS_NAME, CSS_NAME_OVERLAY]"
+            >
+              <div :class="`${CSS_NAME_OVERLAY}__header`">
+                <span>{{
+                  $t('filters.selected', chosenFilters.length, {
+                    count: chosenFilters.length,
+                  })
+                }}</span>
+                <u @click="$emit('filter:clear')">{{ $t('filters.clear') }}</u>
+              </div>
 
-            <ul :class="`${CSS_NAME}__filter`">
-              <li
-                v-for="filter in filters"
-                :key="filter.slug"
-                :class="`${CSS_NAME}__filter__item`"
-              >
+              <ul :class="`${CSS_NAME}__filter`">
+                <li
+                  v-for="filter in filters"
+                  :key="filter.slug"
+                  :class="`${CSS_NAME}__filter__item`"
+                >
+                  <BaseButton
+                    color="transparent"
+                    scope="filter"
+                    :class="{
+                      'is-active': chosenFilters.includes(filter.slug),
+                    }"
+                    @click="$emit('filter:change', filter.slug)"
+                    >{{ filter.text }}</BaseButton
+                  >
+                </li>
+              </ul>
+
+              <div :class="`${CSS_NAME_OVERLAY}__footer`">
                 <BaseButton
                   color="transparent"
                   scope="filter"
-                  :class="{
-                    'is-active': chosenFilters.includes(filter.slug),
-                  }"
-                  @click="$emit('filter:change', filter.slug)"
-                  >{{ filter.text }}</BaseButton
-                >
-              </li>
-            </ul>
-
-            <div :class="`${CSS_NAME_OVERLAY}__footer`">
-              <BaseButton
-                color="transparent"
-                scope="filter"
-                @click="toggleOverlay(false)"
-                >{{ $t('apply') }}
-              </BaseButton>
-            </div>
-          </BaseOverlay>
+                  @click="toggleOverlay(false)"
+                  >{{ $t('apply') }}
+                </BaseButton>
+              </div>
+            </BaseOverlay>
+          </Transition>
         </Teleport>
       </div>
 

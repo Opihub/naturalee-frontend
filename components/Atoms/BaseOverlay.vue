@@ -1,11 +1,9 @@
 <template>
-  <Transition name="fade">
-    <section :class="CSS_NAME">
-      <SiteContainer :max-width="maxWidth" flex>
-        <slot />
-      </SiteContainer>
-    </section>
-  </Transition>
+  <section :class="CSS_NAME">
+    <SiteContainer :max-width="maxWidth" flex>
+      <slot />
+    </SiteContainer>
+  </section>
 </template>
 
 <script setup>

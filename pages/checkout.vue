@@ -1,6 +1,8 @@
 <template>
   <main class="s-checkout">
-    <BaseOverlay v-if="sending">loading...</BaseOverlay>
+    <Transition name="fade">
+      <LoadingOverlay v-if="sending" />
+    </Transition>
 
     <SiteContainer>
       <BaseMessage v-if="errors.length > 0" status="danger" class="u-mb-medium">
@@ -303,6 +305,7 @@ const submitOrder = async () => {
         }
       )
   )
+  console.debug({ ...response.value })
 
   if (response.value.success) {
     console.debug(response.value.data)
@@ -357,14 +360,6 @@ provide('shipping', {
 <style lang="scss" scoped>
 @include scope('checkout') {
   font-family: get-var(family-text);
-
-  @include set-local-vars(
-    $prefix: 'overlay',
-    $map: (
-      opacity: 0.6,
-      cursor: not-allowed,
-    )
-  );
 
   @include set-local-vars(
     $prefix: 'box',
