@@ -45,6 +45,15 @@ export const useCartStore = defineStore('cart', () => {
     return count.value <= 0
   })
 
+  const checkout = computed(() => {
+    return cart.value.map((item) => ({
+      id: item.id,
+      variationId: item.variationId,
+      quantity: item.quantity,
+      title: item.title,
+    }))
+  })
+
   const { subTotal, granTotal: total } = useTotal(cart, {
     shipping: shippingCost,
   })
@@ -388,6 +397,7 @@ export const useCartStore = defineStore('cart', () => {
     count,
     total,
     subTotal,
+    checkout,
     load,
     pickProduct,
     deleteFromCart: remoteDeleteFromCart,
