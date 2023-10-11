@@ -18,8 +18,8 @@
           name="invoice"
           inline
           radio
-          :model-value="invoice.invoice === single.value"
-          @update:model-value="updateInvoice(single.value, 'invoice')"
+          :model-value="invoice.invoice"
+          @update:model-value="(value) => updateInvoice(value, 'invoice')"
         >
           {{ single.name }}
         </ToggleField>

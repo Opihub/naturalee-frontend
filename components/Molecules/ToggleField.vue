@@ -58,7 +58,7 @@ const props = defineProps({
     default: null,
   },
   modelValue: {
-    type: Boolean,
+    type: [String, Number, Boolean],
     required: true,
   },
   radio: {
@@ -94,10 +94,10 @@ const isValid = ref(null)
 // Computed
 const updatedValue = computed({
   get() {
-    return !!props.modelValue
+    return props.modelValue
   },
   set(newValue) {
-    emit('update:modelValue', !!newValue)
+    emit('update:modelValue', newValue)
   },
 })
 
@@ -123,7 +123,7 @@ const className = computed(() => {
     className.push('has-error-before')
   }
 
-  if (updatedValue.value) {
+  if (props.modelValue === props.value) {
     className.push('is-active')
   }
 

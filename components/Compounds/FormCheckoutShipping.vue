@@ -41,8 +41,11 @@
             radio
             boxed
             required
-            :model-value="shipping.timeSlot === slot"
-            @update:model-value="() => updateShippingData(slot, 'timeSlot')"
+            :value="slot.id"
+            :model-value="shipping.timeSlot?.id"
+            @update:model-value="
+              (value) => updateShippingData(value, 'timeSlot')
+            "
           >
             <b class="u-mr-micro">{{ slot.title }}</b>
             <span>
@@ -127,6 +130,13 @@ const isCouponFormOpen = ref(false)
 // Methods
 const updateShippingData = (value, field) => {
   const newAddress = { ...props.shipping }
+
+  if (field === 'timeSlot') {
+    value = props.timeSlots.find((timeSlot) => timeSlot.id === value)
+
+    console.debug(value)
+  }
+
   newAddress[field] = value
 
   if (newAddress[field] === props.shipping[field]) {

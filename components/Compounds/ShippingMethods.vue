@@ -10,8 +10,10 @@
         radio
         class="u-mb-tiny"
         :value="shippingMethod.id"
-        :model-value="method.id === shippingMethod.id"
-        @update:model-value="updateMethod(shippingMethod)"
+        :model-value="method?.id"
+        @update:model-value="
+          (value) => updateShippingMethod(value)
+        "
       >
         {{ shippingMethod.title }}
         <PriceHolder
@@ -78,6 +80,14 @@ const message = ref(
 // Computed
 
 // Methods
+const updateShippingMethod = (methodId) => {
+  const method = shippingMethods.value.find(
+    (shippingMethod) => shippingMethod.id === methodId
+  )
+
+  updateMethod(method)
+}
+
 const updateShippingAddress = (methods) => {
   shippingMethods.value = methods
 

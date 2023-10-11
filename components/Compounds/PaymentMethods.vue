@@ -10,8 +10,8 @@
         radio
         class="u-mb-tiny"
         :value="paymentMethod.id"
-        :model-value="modelValue.id === paymentMethod.id"
-        @update:model-value="updatePaymentMethod(paymentMethod)"
+        :model-value="modelValue?.id"
+        @update:model-value="(value) => updatePaymentMethod(value)"
       >
         {{ paymentMethod.title }}
         <PriceHolder
@@ -61,13 +61,17 @@ const paymentMethods = await useApi(
 // Computed
 
 // Methods
-const updatePaymentMethod = (method) => {
+const updatePaymentMethod = (methodId) => {
+  const method = paymentMethods.value.find(
+    (paymentMethod) => paymentMethod.id === methodId
+  )
+
   emit('update:modelValue', method)
 }
 
 // Component life-cycle hooks
-if (!props.modelValue) {
-  updatePaymentMethod(paymentMethods.value.find(() => true))
+if (!props.modelValue?.id) {
+  updatePaymentMethod(paymentMethods.value.find(() => true)?.id)
 }
 </script>
 
