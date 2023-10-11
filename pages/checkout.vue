@@ -140,7 +140,8 @@ const timeSlots = await useApi(
 )
 
 // Data
-const { isEmpty, subTotal } = storeToRefs(cart)
+const { isEmpty, subTotal, total, paymentMethod, shippingMethod } =
+  storeToRefs(cart)
 const { isLoggedIn } = storeToRefs(user)
 
 const basket = await cart.load()
@@ -176,9 +177,6 @@ const billingData = ref({
   pec: null,
   cfPrivate: null,
 })
-
-const paymentMethod = ref(null)
-const shippingMethod = ref(null)
 
 // Watcher
 
@@ -224,7 +222,10 @@ const submitOrder = async () => {
     errors.value.push('Nessun prodotto presente nel carrello')
   }
 
-  errors.value = [...errors.value, ...validateAddress(shippingAddress, ' per la spedizione')]
+  errors.value = [
+    ...errors.value,
+    ...validateAddress(shippingAddress, ' per la spedizione'),
+  ]
 
   const formData = {
     shipping: shippingAddress.value,
@@ -281,7 +282,10 @@ const submitOrder = async () => {
   if (useDifferentAddress.value) {
     formData.billing = billingAddress.value
 
-    errors.value = [...errors.value, ...validateAddress(billingAddress, ' per la fatturazione')]
+    errors.value = [
+      ...errors.value,
+      ...validateAddress(billingAddress, ' per la fatturazione'),
+    ]
   }
 
   if (errors.value.length > 0) {

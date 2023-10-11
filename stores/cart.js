@@ -34,7 +34,13 @@ export const useCartStore = defineStore('cart', () => {
     }
   )
 
-  const shippingCost = useSessionStorage('shippingCost', 0)
+  const shippingMethod = useSessionStorage('shippingMethod', null, {
+    serializer: StorageSerializers.object,
+  })
+
+  const paymentMethod = useSessionStorage('paymentMethod', null, {
+    serializer: StorageSerializers.object,
+  })
 
   // Getters
   const count = computed(() => {
@@ -55,7 +61,8 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   const { subTotal, granTotal: total } = useTotal(cart, {
-    shipping: shippingCost,
+    shipping: shippingMethod,
+    payment: paymentMethod,
   })
 
   // Actions
@@ -249,8 +256,6 @@ export const useCartStore = defineStore('cart', () => {
       }
     )
 
-    console.debug({ ...response.value })
-
     if (response.value.success) {
       notify({
         message: 'Coupon applicato!',
@@ -392,7 +397,8 @@ export const useCartStore = defineStore('cart', () => {
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
-    shippingCost: skipHydrate(shippingCost),
+    shippingMethod: skipHydrate(shippingMethod),
+    paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
     count,
     total,
