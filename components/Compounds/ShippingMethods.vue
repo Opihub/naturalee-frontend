@@ -10,8 +10,8 @@
         radio
         class="u-mb-tiny"
         :value="shippingMethod.id"
-        :model-value="method === shippingMethod.id"
-        @update:model-value="selectedShippingMethods = shippingMethod.id"
+        :model-value="method.id === shippingMethod.id"
+        @update:model-value="updateMethod(shippingMethod)"
       >
         {{ shippingMethod.title }}
         <PriceHolder
@@ -82,7 +82,7 @@ const updateShippingAddress = (methods) => {
   shippingMethods.value = methods
 
   // TODO: verificare nel caso dovessero cambiare i metodi di spedizione
-  updateMethod(shippingMethods.value.find(() => true).id)
+  updateMethod(shippingMethods.value.find(() => true))
 
   city.value = address.value.city
 

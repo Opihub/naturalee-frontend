@@ -10,8 +10,8 @@
         radio
         class="u-mb-tiny"
         :value="paymentMethod.id"
-        :model-value="modelValue === paymentMethod.id"
-        @update:model-value="updatePaymentMethod(paymentMethod.id)"
+        :model-value="modelValue.id === paymentMethod.id"
+        @update:model-value="updatePaymentMethod(paymentMethod)"
       >
         {{ paymentMethod.title }}
         <PriceHolder
@@ -37,8 +37,10 @@ const CSS_NAME = 'c-payment'
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   modelValue: {
-    type: String,
-    default: null,
+    type: Object,
+    default() {
+      return {}
+    },
   },
 })
 const emit = defineEmits(['update:modelValue'])
@@ -65,7 +67,7 @@ const updatePaymentMethod = (method) => {
 
 // Component life-cycle hooks
 if (!props.modelValue) {
-  updatePaymentMethod(paymentMethods.value.find(() => true).id)
+  updatePaymentMethod(paymentMethods.value.find(() => true))
 }
 </script>
 
