@@ -1,6 +1,14 @@
 <template>
   <main class="s-checkout">
+    <BaseOverlay v-if="sending">loading...</BaseOverlay>
+
     <SiteContainer>
+      <BaseMessage v-if="errors.length > 0" status="danger" class="u-mb-medium">
+        <ul>
+          <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+        </ul>
+      </BaseMessage>
+
       <div class="o-row">
         <!-- <template v-if="!isEmpty"> -->
         <SiteContainer :max-width="1060" padless>
@@ -69,6 +77,7 @@
                   <BaseButton
                     type="button"
                     color="yellow"
+                    :disabled="sending"
                     @click.prevent="submitOrder"
                     >Paga ora</BaseButton
                   >
@@ -119,6 +128,7 @@ onMounted(async () => {
 })
 
 // Composables
+const { sending, send } = useSender()
 const cart = useCartStore()
 const user = useAccountStore()
 const shippingStore = useShippingStore()
@@ -138,6 +148,7 @@ const basket = await cart.load()
 const shippingAddress = await shippingStore.load()
 
 const useDifferentAddress = ref(false)
+const errors = ref([])
 
 const billingAddress = ref({
   firstName: null,
@@ -184,12 +195,157 @@ const updateShippingMethod = (method) => {
 }
 
 const submitOrder = async () => {
-  console.debug(shippingAddress.value)
-  console.debug(billingAddress.value)
-  console.debug(shippingData.value)
-  console.debug(billingData.value)
-  console.debug(paymentMethod.value)
-  console.debug(shippingMethod.value)
+  if (sending.value) {
+    return
+  }
+
+  errors.value = []
+  const { timeSlot, note, email, phone } = shippingData.value
+  const { invoice } = billingData.value
+
+  if (!timeSlot) {
+    errors.value.push(
+      'È obbligatorio riportare la fascia oraria per la consegna'
+    )
+  }
+
+  if (!email) {
+    errors.value.push('È obbligatorio indicare una mail')
+  }
+
+  if (!phone) {
+    errors.value.push('È obbligatorio indicare un numero di telefono valido')
+  }
+
+  if (!shippingMethod.value) {
+    errors.value.push('Nessun metodo di spedizione indicato')
+  }
+
+  if (cart.checkout.length <= 0) {
+    errors.value.push('Nessun prodotto presente nel carrello')
+  }
+
+  errors.value = [...errors.value, ...validateAddress(shippingAddress, ' per la spedizione')]
+
+  const formData = {
+    shipping: shippingAddress.value,
+    billing: false,
+    timeSlot,
+    note,
+    email,
+    phone,
+    invoice,
+    products: cart.checkout,
+    shippingMethod,
+    paymentMethod,
+  }
+
+  if (invoice === 'private') {
+    formData.cf = billingData.value.cfPrivate
+
+    if (billingData.value.cfPrivate) {
+      errors.value.push(
+        'Il Codice fiscale è obbligatorio per richiedere la fattura'
+      )
+    }
+  } else if (invoice === 'company') {
+    formData.vat = billingData.value.vat
+    formData.cf = billingData.value.cfCompany
+    formData.pec = billingData.value.pec
+    formData.sdi = billingData.value.sdi
+    formData.company = billingData.value.company
+
+    if (!billingData.value.pec && !billingData.value.sdi) {
+      errors.value.push(
+        'È necessario specificare almeno un campo tra la PEC ed il Codice univoco'
+      )
+    }
+
+    if (!billingData.value.company) {
+      errors.value.push(
+        'La ragione sociale è obbligatoria per richiedere la fattura'
+      )
+    }
+
+    if (!billingData.value.vat) {
+      errors.value.push(
+        'La partita IVA è obbligatoria per richiedere la fattura'
+      )
+    }
+
+    if (!billingData.value.cfCompany) {
+      errors.value.push(
+        'Il Codice fiscale è obbligatorio per richiedere la fattura'
+      )
+    }
+  }
+
+  if (useDifferentAddress.value) {
+    formData.billing = billingAddress.value
+
+    errors.value = [...errors.value, ...validateAddress(billingAddress, ' per la fatturazione')]
+  }
+
+  if (errors.value.length > 0) {
+    window.scrollTo(0, 0)
+    return
+  }
+
+  const response = await send(
+    async () =>
+      await useApi(
+        'shop/checkout/save',
+        {
+          method: 'POST',
+          body: formData,
+        },
+        {
+          cache: false,
+        }
+      )
+  )
+
+  if (response.value.success) {
+    console.debug(response.value.data)
+  } else {
+    console.debug(response.value.data)
+    errors.value = response.value.data
+    // errors.value = response.value.errors
+  }
+}
+
+const validateAddress = (address, after = '') => {
+  const errors = []
+
+  if (!address.value.firstName) {
+    errors.push(`Il nome è un campo obbligatorio${after}`)
+  }
+
+  if (!address.value.lastName) {
+    errors.push(`Il cognome è un campo obbligatorio${after}`)
+  }
+
+  if (!address.value.country) {
+    errors.push(`La nazione è un campo obbligatorio${after}`)
+  }
+
+  if (!address.value.address) {
+    errors.push(`L'indirizzo è un campo obbligatorio${after}`)
+  }
+
+  if (!address.value.postcode) {
+    errors.push(`IL CAP è un campo obbligatorio${after}`)
+  }
+
+  if (!address.value.city) {
+    errors.push(`La città è un campo obbligatorio${after}`)
+  }
+
+  if (!address.value.province) {
+    errors.push(`La provincia è un campo obbligatorio${after}`)
+  }
+
+  return errors
 }
 
 // Provide
@@ -204,6 +360,14 @@ provide('shipping', {
 <style lang="scss" scoped>
 @include scope('checkout') {
   font-family: get-var(family-text);
+
+  @include set-local-vars(
+    $prefix: 'overlay',
+    $map: (
+      opacity: 0.6,
+      cursor: not-allowed,
+    )
+  );
 
   @include set-local-vars(
     $prefix: 'box',
