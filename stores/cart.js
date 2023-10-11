@@ -49,7 +49,7 @@ export const useCartStore = defineStore('cart', () => {
 
   async function load() {
     if (!isLoggedIn.value) {
-      return cart.value
+      return cart
     }
 
     const response = await useApi('shop/cart/products', null, {
@@ -67,7 +67,7 @@ export const useCartStore = defineStore('cart', () => {
 
     cart.value = response.value.data
 
-    return cart.value
+    return cart
   }
 
   function clearCart() {
