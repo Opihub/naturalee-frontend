@@ -83,8 +83,6 @@ export const useShippingStore = defineStore('shipping', () => {
 
   const currentProvince = (country) => {
     // Se ho già una provincia associata alla nazione corrente, allora la carico
-    console.debug(countriesProvince.value)
-    console.debug(countriesProvince.value[country])
     if (country in countriesProvince.value) {
       return countriesProvince.value[country]
     }
