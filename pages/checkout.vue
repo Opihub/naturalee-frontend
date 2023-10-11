@@ -164,7 +164,7 @@ const shippingData = ref({
   note: null,
   email: null,
   phone: null,
-  timeSlot: timeSlots.length > 0 ? timeSlots[0].id : null,
+  timeSlot: timeSlots.value.find(() => true),
 })
 
 const billingData = ref({
