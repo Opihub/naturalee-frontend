@@ -5,6 +5,7 @@
       :class="`${CSS_NAME}__marker`"
       :text="product.marker.text"
       :color="product.marker.color"
+      :text-color="product.marker.textColor"
     />
 
     <WishlistButton
@@ -27,28 +28,47 @@
       <BaseHeading
         tag="span"
         :class="`${CSS_NAME}__provenance`"
-        class="u-mb-tiny"
+        class="u-mb-small"
         >{{ product.provenance }}</BaseHeading
       >
 
-      <PriceHolder class="u-mb-mini" :price="product.price">
-        <template v-if="product.selling" #after>
-          <small class="u-ml-micro">/ {{ product.selling }}</small>
-        </template>
-      </PriceHolder>
-
-      <BaseHeading tag="small" :class="`${CSS_NAME}__cost`">
-        {{ product.costDescription }}
-      </BaseHeading>
+      <ProductDescriptor
+        class="u-mb-medium"
+        :cost-descriptor="product.costDescription"
+        :selling="product.selling"
+      />
     </div>
+    <PriceHolder
+      class="u-mb-mini u-mt-auto"
+      :price="product.price"
+      :sales-price="product?.discountPrice"
+    >
+      <template v-if="product.selling" #after="{ priceClassName }">
+        <small
+          v-if="product.costPerUnit"
+          :class="`${priceClassName}__cost-per-unit`"
+        >
+          <span
+            :class="`${priceClassName}__cost-per-unit__value`"
+            class="is-sale"
+            >€ {{ formattedPrice(product.costPerUnit) }}</span
+          >
+          <span class="u-ml-tiny"
+            >€ {{ formattedPrice(product.costPerUnit) }}</span
+          >
+          / {{ product.unit }}</small
+        >
+      </template>
+    </PriceHolder>
+    <div :class="`${CSS_NAME}__buttons`">
+      <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
-    <BaseCounter v-model="quantity" :disabled="isDisabled" />
-
-    <AddToCartButton
-      :product="product"
-      :quantity="quantity"
-      :disabled="isDisabled"
-    />
+      <AddToCartButton
+        :product="product"
+        :quantity="quantity"
+        :disabled="isDisabled"
+      />
+    </div>
 
     <BaseLink v-if="details" underline color="dark" :to="product.link"
       >Vai alla scheda prodotto</BaseLink
@@ -130,6 +150,14 @@ const isDisabled = computed(() => {
 })
 
 // Methods
+const formattedPrice = (value) => {
+  return new Intl.NumberFormat('it-IT', {
+    style: 'currency',
+    currency: 'EUR',
+  })
+    .format(value)
+    .replaceAll(/[^0-9,.]/gi, '')
+}
 </script>
 
 <style lang="scss">
@@ -141,18 +169,16 @@ $prefix: 'product-card';
       opacity: 1,
     )
   );
-
   @include set-local-vars(
     $prefix: 'counter',
     $map: (
       margin: auto 0 0,
     )
   );
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   text-align: center;
   background-color: get-var(color-white);
@@ -207,12 +233,39 @@ $prefix: 'product-card';
       }
     }
   }
-
+  @include object('price') {
+    display: block;
+    @include element('cost-per-unit') {
+      display: block;
+      text-align: start;
+      font-weight: get-var(weight-regular);
+      @include element('value') {
+        @include is('sale') {
+          text-decoration: line-through;
+        }
+      }
+    }
+  }
   @include object('button') {
     margin: rem(20px) auto rem(12px);
+    @include set-local-vars(
+      $prefix: 'button',
+      $map: (
+        padding: rem(12px) rem(24px),
+      )
+    );
+  }
+  @include object('link') {
+    width: 100%;
   }
 
   @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'counter',
+      $map: (
+        margin: 0,
+      )
+    );
     @include modifier('inline') {
       flex-direction: row;
       align-items: center;
@@ -257,6 +310,13 @@ $prefix: 'product-card';
       @include element('body') {
         align-self: center;
         margin-bottom: 0;
+      }
+
+      @include element('buttons') {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
       }
 
       @include object('button') {

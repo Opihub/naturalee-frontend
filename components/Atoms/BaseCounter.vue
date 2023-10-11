@@ -3,7 +3,11 @@
     <slot name="before" />
 
     <button
-      :class="[`${CSS_NAME}__button`, `${CSS_NAME}__button--minus`]"
+      :class="[
+        `${CSS_NAME}__button`,
+        `${CSS_NAME}__button--minus`,
+        modelValue <= min ? 'is-limit' : '',
+      ]"
       type="button"
       @click="decrease"
     >
@@ -22,7 +26,11 @@
       @blur="check"
     />
     <button
-      :class="[`${CSS_NAME}__button`, `${CSS_NAME}__button--plus`]"
+      :class="[
+        `${CSS_NAME}__button`,
+        `${CSS_NAME}__button--plus`,
+        max !== null && modelValue >= max ? 'is-limit' : '',
+      ]"
       type="button"
       @click="increase"
     >
@@ -47,7 +55,7 @@ const props = defineProps({
   },
   min: {
     type: Number,
-    default: 0,
+    default: 1,
   },
   step: {
     type: Number,
@@ -105,12 +113,13 @@ const input = (event) => {
 
 const calculate = (negative = false) => {
   let value = parseFloat(props.modelValue) + props.step * (negative ? -1 : 1)
-
   if (props.min !== null && value < props.min) {
     value = props.min
   } else if (props.max !== null && value > props.max) {
     value = props.max
   }
+
+  console.log(value)
 
   return value
 }
@@ -245,6 +254,11 @@ $prefix: 'counter';
         content: none;
         display: none;
       }
+    }
+
+    @include is('limit') {
+      opacity: 0.5;
+      pointer-events: none;
     }
   }
 
