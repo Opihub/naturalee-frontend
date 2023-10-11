@@ -53,7 +53,7 @@
             >
 
             <FormAddress
-              v-show="useDifferentAddress"
+              v-if="useDifferentAddress"
               v-model:address="billingAddress"
               class="u-mt-half"
               tag="div"
@@ -168,7 +168,7 @@ const shippingData = ref({
 })
 
 const billingData = ref({
-  invoice: null,
+  invoice: false,
   company: null,
   cfCompany: null,
   vat: null,
@@ -228,7 +228,6 @@ const submitOrder = async () => {
 
   const formData = {
     shipping: shippingAddress.value,
-    billing: false,
     timeSlot,
     note,
     email,
@@ -242,7 +241,7 @@ const submitOrder = async () => {
   if (invoice === 'private') {
     formData.cf = billingData.value.cfPrivate
 
-    if (billingData.value.cfPrivate) {
+    if (!billingData.value.cfPrivate) {
       errors.value.push(
         'Il Codice fiscale è obbligatorio per richiedere la fattura'
       )
@@ -307,9 +306,7 @@ const submitOrder = async () => {
   if (response.value.success) {
     console.debug(response.value.data)
   } else {
-    console.debug(response.value.data)
-    errors.value = response.value.data
-    // errors.value = response.value.errors
+    errors.value = response.value.errors
   }
 }
 
