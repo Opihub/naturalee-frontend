@@ -26,6 +26,13 @@ export const useCartStore = defineStore('cart', () => {
   const cart = useLocalStorage('cart', [], {
     serializer: StorageSerializers.object,
   })
+  const coupon = useLocalStorage(
+    'coupon',
+    {},
+    {
+      serializer: StorageSerializers.object,
+    }
+  )
 
   const shippingCost = useSessionStorage('shippingCost', 0)
 
@@ -217,6 +224,45 @@ export const useCartStore = defineStore('cart', () => {
     return true
   }
 
+  async function applyCoupon(newCoupon) {
+    const body = {
+      coupon: newCoupon,
+    }
+
+    const response = await useApi(
+      `shop/coupon/validate`,
+      {
+        method: 'POST',
+        body,
+      },
+      {
+        cache: false,
+      }
+    )
+
+    console.debug({ ...response.value })
+
+    if (response.value.success) {
+      notify({
+        message: 'Coupon applicato!',
+        status: 'success',
+      })
+
+      coupon.value = response.value.data
+
+      return true
+    }
+
+    notify({
+      message: 'Coupon non valido!',
+      status: 'danger',
+    })
+
+    coupon.value = {}
+
+    return false
+  }
+
   async function remoteClearCart() {
     if (!isLoggedIn.value) {
       return clearCart()
@@ -335,6 +381,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   return {
+    coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
     shippingCost: skipHydrate(shippingCost),
     isEmpty,
@@ -346,6 +393,7 @@ export const useCartStore = defineStore('cart', () => {
     deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
+    applyCoupon,
   }
 })
 
