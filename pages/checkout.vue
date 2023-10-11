@@ -9,7 +9,7 @@
         </ul>
       </BaseMessage>
 
-      <div class="o-row">
+      <form method="POST" class="o-row" @submit.prevent="submitOrder">
         <!-- <template v-if="!isEmpty"> -->
         <SiteContainer :max-width="1060" padless>
           <BaseBox class="u-mb-large">
@@ -75,10 +75,9 @@
               <div :class="footerClassName">
                 <PaymentMethods v-model="paymentMethod">
                   <BaseButton
-                    type="button"
+                    type="submit"
                     color="yellow"
                     :disabled="sending"
-                    @click.prevent="submitOrder"
                     >Paga ora</BaseButton
                   >
                 </PaymentMethods>
@@ -89,7 +88,7 @@
         <!-- </template> -->
 
         <!-- <BaseMessage v-else :message="$t('cart.empty')" /> -->
-      </div>
+      </form>
     </SiteContainer>
   </main>
 </template>
