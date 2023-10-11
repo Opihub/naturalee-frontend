@@ -27,6 +27,8 @@ $prefix: 'overlay';
   position: fixed;
   inset: 0;
   z-index: get-var(z-#{$prefix});
-  background-color: get-var(color-light);
+  background-color: get-var(background-color, get-var(color-light), $prefix: $prefix);
+  opacity: get-var(opacity, 1, $prefix: $prefix);
+  cursor: get-var(cursor, default, $prefix: $prefix);
 }
 </style>
