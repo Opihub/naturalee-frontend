@@ -67,17 +67,14 @@
           <OrderResume
             v-model:address="shippingAddress"
             container-class="u-mt-huge"
-            :sub-total="subTotal"
+            :sub-total="total"
             :heading="$t('checkout.payment')"
             without-sub-total
           >
             <template #after="{ footerClassName }">
               <div :class="footerClassName">
                 <PaymentMethods v-model="paymentMethod">
-                  <BaseButton
-                    type="submit"
-                    color="yellow"
-                    :disabled="sending"
+                  <BaseButton type="submit" color="yellow" :disabled="sending"
                     >Paga ora</BaseButton
                   >
                 </PaymentMethods>
