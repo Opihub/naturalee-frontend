@@ -3,7 +3,11 @@
     <slot name="before" />
 
     <button
-      :class="[`${CSS_NAME}__button`, `${CSS_NAME}__button--minus`]"
+      :class="[
+        `${CSS_NAME}__button`,
+        `${CSS_NAME}__button--minus`,
+        modelValue <= min ? 'is-limit' : '',
+      ]"
       type="button"
       @click="decrease"
     >
@@ -22,7 +26,11 @@
       @blur="check"
     />
     <button
-      :class="[`${CSS_NAME}__button`, `${CSS_NAME}__button--plus`]"
+      :class="[
+        `${CSS_NAME}__button`,
+        `${CSS_NAME}__button--plus`,
+        max !== null && modelValue >= max ? 'is-limit' : '',
+      ]"
       type="button"
       @click="increase"
     >
@@ -47,7 +55,7 @@ const props = defineProps({
   },
   min: {
     type: Number,
-    default: 0,
+    default: 1,
   },
   step: {
     type: Number,
@@ -105,12 +113,13 @@ const input = (event) => {
 
 const calculate = (negative = false) => {
   let value = parseFloat(props.modelValue) + props.step * (negative ? -1 : 1)
-
   if (props.min !== null && value < props.min) {
     value = props.min
   } else if (props.max !== null && value > props.max) {
     value = props.max
   }
+
+  console.log(value)
 
   return value
 }
@@ -187,8 +196,8 @@ $prefix: 'counter';
   text-align: center;
 
   @include element('button') {
-    width: rem(30px);
-    height: rem(30px);
+    width: rem(23px);
+    height: rem(23px);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -211,8 +220,8 @@ $prefix: 'counter';
     &::after {
       content: '';
       display: block;
-      width: rem(12px);
-      height: rem(2px);
+      width: rem(8px);
+      height: rem(1px);
       position: absolute;
       top: 50%;
       left: 50%;
@@ -246,6 +255,11 @@ $prefix: 'counter';
         display: none;
       }
     }
+
+    @include is('limit') {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 
   @include element('input') {
@@ -253,12 +267,16 @@ $prefix: 'counter';
     border: 0;
     text-align: center;
     padding: 0;
-    margin: 0;
+    margin: 0 rem(61px);
+    font-weight: get-var(weight-bold);
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
+    }
+    @include from('tablet') {
+      margin: 0 rem(25px);
     }
   }
 

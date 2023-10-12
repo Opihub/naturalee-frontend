@@ -5,6 +5,7 @@
       :class="`${CSS_NAME}__marker`"
       :text="product.marker.text"
       :color="product.marker.color"
+      :text-color="product.marker.textColor"
     />
 
     <WishlistButton
@@ -27,30 +28,60 @@
       <BaseHeading
         tag="span"
         :class="`${CSS_NAME}__provenance`"
-        class="u-mb-tiny"
+        class="u-mb-small"
         >{{ product.provenance }}</BaseHeading
       >
 
-      <PriceHolder class="u-mb-mini" :price="product.price">
-        <template v-if="product.selling" #after>
-          <small class="u-ml-micro">/ {{ product.selling }}</small>
-        </template>
-      </PriceHolder>
+      <ProductDescriptor
+        class="u-mb-medium"
+        :cost-descriptor="product.costDescription"
+        :selling="product.selling"
+      />
+    </div>
+    <PriceHolder
+      class="u-mb-mini u-mt-auto"
+      :price="product.price"
+      :sales-price="product?.discountPrice"
+    >
+      <template v-if="product.selling" #after="{ priceClassName }">
+        <small
+          v-if="product.costPerUnit"
+          :class="`${priceClassName}__cost-per-unit`"
+        >
+          <span
+            v-if="product?.discountKgPrice && product?.discountKgPrice > 0"
+            :class="[
+              `${priceClassName}__cost-per-unit__value`,
+              product?.discountKgPrice ? 'is-sale u-mr-tiny' : '',
+            ]"
+            >€ {{ formattedPrice(product?.discountKgPrice) }}</span
+          >
+          <span>€ {{ formattedPrice(product.costPerUnit) }}</span>
+          / {{ product.unit }}</small
+        >
+      </template>
+    </PriceHolder>
+    <div :class="`${CSS_NAME}__buttons`" class="u-mt-large u-mt-none@desktop">
+      <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
-      <BaseHeading tag="small" :class="`${CSS_NAME}__cost`">
-        {{ product.costDescription }}
-      </BaseHeading>
+      <AddToCartButton
+        :product="product"
+        :quantity="quantity"
+        :disabled="isDisabled"
+        ><span>aggiungi</span>
+        <NuxtIcon
+          name="bag"
+          :class="`${CSS_NAME}__button__svg`"
+          :filled="false"
+      /></AddToCartButton>
     </div>
 
-    <BaseCounter v-model="quantity" :disabled="isDisabled" />
-
-    <AddToCartButton
-      :product="product"
-      :quantity="quantity"
-      :disabled="isDisabled"
-    />
-
-    <BaseLink v-if="details" underline color="dark" :to="product.link"
+    <BaseLink
+      v-if="details"
+      underline
+      color="dark"
+      :class="`${CSS_NAME}__link`"
+      :to="product.link"
       >Vai alla scheda prodotto</BaseLink
     >
   </div>
@@ -130,34 +161,77 @@ const isDisabled = computed(() => {
 })
 
 // Methods
+const formattedPrice = (value) => {
+  return new Intl.NumberFormat('it-IT', {
+    style: 'currency',
+    currency: 'EUR',
+  })
+    .format(value)
+    .replaceAll(/[^0-9,.]/gi, '')
+}
 </script>
 
 <style lang="scss">
 $prefix: 'product-card';
+
 @include component($prefix) {
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 2,
+      )
+    );
+  }
+  @include from(desktop) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 3,
+      )
+    );
+  }
   @include set-vars(
     $prefix: $prefix,
     $map: (
       opacity: 1,
     )
   );
-
   @include set-local-vars(
     $prefix: 'counter',
     $map: (
       margin: auto 0 0,
     )
   );
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   text-align: center;
   background-color: get-var(color-white);
   border-radius: rem(20px);
-  padding: rem(30px) rem(30px) rem(40px);
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding-top: rem(30px),
+    )
+  );
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding-x: rem(30px),
+    )
+  );
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding-bottom: rem(25px),
+    )
+  );
+  padding: get-var(padding-top, $prefix: $prefix)
+    get-var(padding-x, $prefix: $prefix)
+    get-var(padding-bottom, $prefix: $prefix);
   position: relative;
   overflow: hidden;
 
@@ -179,13 +253,17 @@ $prefix: 'product-card';
     align-self: stretch;
     text-align: left;
     font-weight: get-var(weight-regular);
-    margin-bottom: rem(30px);
+    margin-bottom: rem(22px);
     @include typography(16px, 20px);
   }
 
   @include element('title') {
     font-weight: get-var(weight-bold);
     @include typography(22px, 28px);
+    span {
+      width: 100%;
+      justify-content: flex-start;
+    }
   }
 
   @include element('thumbnail') {
@@ -207,12 +285,72 @@ $prefix: 'product-card';
       }
     }
   }
-
+  @include object('price') {
+    display: block;
+    text-align: start;
+    @include element('cost-per-unit') {
+      display: block;
+      text-align: start;
+      font-weight: get-var(weight-regular);
+      @include element('value') {
+        @include is('sale') {
+          text-decoration: line-through;
+        }
+      }
+    }
+  }
   @include object('button') {
     margin: rem(20px) auto rem(12px);
+    @include set-local-vars(
+      $prefix: 'button',
+      $map: (
+        padding: rem(12px) rem(80px),
+      )
+    );
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(12px) rem(30px),
+        )
+      );
+    }
+    @include from(desktop) {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(12px) rem(50px),
+        )
+      );
+    }
+  }
+  @include object('link') {
+    width: 100%;
+  }
+  @include element('link') {
+    margin-top: rem(20px);
+    padding-top: rem(20px);
+    text-align: center;
+    text-decoration: none;
+    &::before {
+      content: '';
+      display: block;
+      position: relative;
+      top: -20px;
+      width: calc(100% + (get-var(padding-x, $prefix: $prefix) * 2));
+      height: 2px;
+      background-color: get-var(color-light);
+      margin-left: calc(get-var(padding-x, $prefix: $prefix) / -1);
+    }
   }
 
   @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'counter',
+      $map: (
+        margin: 0,
+      )
+    );
     @include modifier('inline') {
       flex-direction: row;
       align-items: center;
@@ -262,6 +400,35 @@ $prefix: 'product-card';
       @include object('button') {
         margin: 0;
         flex: 0 0 get-var(button-width, rem(200px), $prefix: $prefix);
+      }
+    }
+  }
+  @include element('buttons') {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include from('desktop') {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: baseline;
+      gap: rem(26px);
+      flex-wrap: wrap;
+    }
+    @include object('button') {
+      svg {
+        display: inline-block;
+        margin-left: rem(14px);
+        margin-top: rem(-5px);
+        color: get-var(color-yellow);
+        transition: all 0.5s;
+      }
+      &:hover svg {
+        color: get-var(color-green);
       }
     }
   }

@@ -21,6 +21,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  textColor: {
+    type: String,
+    default: null,
+  },
 })
 
 const style = computed(() => {
@@ -28,7 +32,10 @@ const style = computed(() => {
 
   if (props.color) {
     style['--marker-background'] = props.color
-    style['--marker-text'] = invertColor(props.color)
+  }
+
+  if (props.color) {
+    style['--marker-text'] = props.textColor ?? invertColor(props.color)
   }
 
   return style
@@ -49,7 +56,7 @@ $prefix: 'marker';
   @include element('marker') {
     display: block;
     fill: get-var(background, get-var(color-green), $prefix: $prefix);
-    width: get-var(width, rem(117px), $prefix: $prefix);
+    width: get-var(width, rem(200px), $prefix: $prefix);
     height: get-var(height, rem(39px), $prefix: $prefix);
   }
 

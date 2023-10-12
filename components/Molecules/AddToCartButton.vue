@@ -4,6 +4,7 @@
     type="button"
     :color="color"
     :disabled="isDisabled"
+    :text="text"
     @click="add"
   >
     <span v-if="sending" :class="`${CSS_NAME}__spinner`" />
@@ -23,7 +24,9 @@
       </div>
     </ClientOnly>
 
-    <span :class="`${CSS_NAME}__text`">Aggiungi al carrello</span>
+    <span :class="`${CSS_NAME}__text`"
+      ><slot>{{ text }}</slot></span
+    >
   </BaseButton>
 </template>
 
@@ -56,6 +59,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  text: {
+    type: String,
+    default: 'Aggiungi al carrello',
   },
 })
 const emit = defineEmits(['api:start', 'api:end'])
