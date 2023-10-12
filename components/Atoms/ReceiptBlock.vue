@@ -1,5 +1,5 @@
 <template>
-  <div :class="[CSS_NAME, containerClass]">
+  <div :class="className">
     <div :class="`${CSS_NAME}__holder`" v-bind="$attrs">
       <div
         v-if="slots.header"
@@ -24,10 +24,18 @@ const CSS_NAME_BLOCK = `${CSS_NAME}__block`
 defineOptions({
   inheritAttrs: false,
 })
-defineProps({
+const props = defineProps({
   containerClass: {
     type: String,
     default: null,
+  },
+  topLess: {
+    type: Boolean,
+    default: false,
+  },
+  bottomLess: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -41,6 +49,19 @@ const slots = useSlots()
 // Watcher
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME, props.containerClass]
+
+  if (props.topLess) {
+    className.push(`${CSS_NAME}--topless`)
+  }
+
+  if (props.bottomLess) {
+    className.push(`${CSS_NAME}--bottomless`)
+  }
+
+  return className
+})
 
 // Methods
 </script>
@@ -112,6 +133,20 @@ $prefix: 'receipt';
     font-weight: get-var(weight-bold);
     @include typography(16px, 20px);
     border-bottom: 2px solid get-var(color-light);
+  }
+
+  @include modifier('topless') {
+    &::before {
+      content: none;
+      display: none;
+    }
+  }
+
+  @include modifier('bottomless') {
+    &::after {
+      content: none;
+      display: none;
+    }
   }
 }
 </style>
