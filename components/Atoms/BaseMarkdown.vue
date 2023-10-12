@@ -1,5 +1,8 @@
 <template>
-  <VueMarkdown :source="content" />
+  <VueMarkdown
+    :source="content"
+    :options="{ ...DEFAULT_OPTIONS, ...options }"
+  />
 </template>
 
 <script setup>
@@ -7,12 +10,19 @@
 import VueMarkdown from 'vue-markdown-render'
 
 // Constants
+const DEFAULT_OPTIONS = {}
 
 // Define (Props, Emits, Page Meta)
 defineProps({
   content: {
     type: String,
     required: true,
+  },
+  options: {
+    type: Object,
+    default() {
+      return {}
+    },
   },
 })
 
