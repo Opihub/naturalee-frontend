@@ -17,7 +17,11 @@
         :without-payment="withoutPayment"
       />
 
-      <slot name="after" :class-name="[`${CSS_NAME}__footer`, className]" />
+      <slot
+        name="after"
+        :class-name="[`${CSS_NAME}__row`, className]"
+        :footer-class-name="[`${CSS_NAME}__footer`, className]"
+      />
     </template>
   </ReceiptBlock>
 </template>
@@ -73,6 +77,9 @@ $prefix: 'order-resume';
   }
 
   @include element('body') {
+    border-bottom: get-var(border-bottom, 0, $prefix: $prefix) solid
+      get-var(color-light);
+
     @include set-local-vars(
       $prefix: 'toggle-field',
       $map: (

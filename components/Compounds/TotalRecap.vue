@@ -10,7 +10,9 @@
       <ShippingMethods :class="`${CSS_NAME}__shipping`" />
     </template>
 
-    <span :class="[`${CSS_NAME}__sum`, totalClassName]">{{ $t('common.total') }}</span>
+    <span :class="[`${CSS_NAME}__sum`, totalClassName]">{{
+      $t('common.total')
+    }}</span>
     <PriceHolder
       :class="[`${CSS_NAME}__sum`, `${CSS_NAME}__sum--price`, totalClassName]"
       :price="subTotal"

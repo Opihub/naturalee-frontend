@@ -1,7 +1,6 @@
 <template>
   <InputField
-    v-model="savedUserProvice"
-    :type="provinces && provinces.length > 0 ? 'select' : 'text'"
+    :type="provinces.length > 0 ? 'select' : 'text'"
     :data="provinces"
     label-key="name"
   >
@@ -13,7 +12,6 @@
 // Imports
 
 // Constants
-const savedUserProvice = ref('RC')
 
 // Define (Props, Emits, Page Meta)
 defineProps({
@@ -25,13 +23,10 @@ defineProps({
     type: Array,
     required: true,
   },
-  userProvice: {
-    type: String,
-    default: null,
-  },
 })
-defineEmits(['provinces:empty'])
+
 // Component life-cycle hooks
+
 // Composables
 // TODO: watchEffect al cambio della nazione passata
 // const provinces = await useApi(`countries/${props.country}/provinces`)

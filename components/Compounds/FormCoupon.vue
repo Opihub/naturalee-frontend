@@ -1,45 +1,69 @@
 <template>
-  <form
+  <component
+    :is="tag"
     :class="CSS_NAME"
     method="GET"
-    v-bind="$attrs"
     @submit.prevent="applyCoupon"
   >
+    <template v-if="!isForm">
+      <Teleport to="body">
+        <form :id="FORM_ID" method="GET" @submit.prevent="applyCoupon"></form>
+      </Teleport>
+    </template>
+
     <InputField
       v-model="coupon"
+      :form="!isForm ? FORM_ID : null"
       :class="`${CSS_NAME}__input`"
       type="text"
       :placeholder="placeholder"
       rounded
       borderless
       required
+      :disabled="sending"
     />
 
     <BaseButton
+      :form="!isForm ? FORM_ID : null"
       :class="`${CSS_NAME}__submit`"
       type="submit"
       color="yellow"
-      :disabled="!coupon"
+      :disabled="!coupon || sending"
       >Applica</BaseButton
     >
-  </form>
+  </component>
 </template>
 
 <script setup>
 // Imports
+import { useCartStore } from '@/stores/cart'
 
 // Constants
 const CSS_NAME = 'c-coupon-form'
+const FORM_ID = 'coupon-form'
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   placeholder: {
     type: String,
     default: null,
   },
+  tag: {
+    type: String,
+    default: 'form',
+    validator(value) {
+      return ['form', 'div', 'section'].includes(value)
+    },
+  },
 })
 
+// Pinia Store
+const cart = useCartStore()
+
 // Component life-cycle hooks
+
+// Composables
+const { sending, send } = useSender()
 
 // Data
 const coupon = ref('')
@@ -47,19 +71,23 @@ const coupon = ref('')
 // Watcher
 
 // Computed
+const isForm = computed(() => {
+  return props.tag === 'form'
+})
 
 // Methods
-const applyCoupon = () => {
-  if (!coupon.value) {
+const applyCoupon = async () => {
+  if (!coupon) {
     return
   }
 
-  // TODO: aggiungere chiamata al metodo per applicare coupon
+  if (sending.value) {
+    return
+  }
 
-  notify({
-    message: 'Coupon applicato!',
-    status: 'success'
-  })
+  const response = await send(async () => await cart.applyCoupon(coupon.value))
+
+  console.debug(response)
 }
 </script>
 

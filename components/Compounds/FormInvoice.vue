@@ -1,5 +1,5 @@
 <template>
-  <FormWrapper tag="div">
+  <FormWrapper :class="CSS_NAME" tag="div">
     <template
       #default="{
         rowClassName,
@@ -9,80 +9,85 @@
       }"
     >
       <fieldset
-        v-if="$route.params.addresses == 'billing'"
-        :class="rowClassName"
-      >
-        <div :class="[columnClassName, columnFullClassName]">
-          <BaseHeading class="u-mt-large s-password" tag="h6"
-            >Fatturazione</BaseHeading
-          >
-        </div>
-      </fieldset>
-      <fieldset
-        v-if="$route.params.addresses == 'billing'"
-        :class="[rowClassName, columnFullClassName]"
+        :class="[rowClassName, columnFullClassName, `${CSS_NAME}__invoice`]"
       >
         <ToggleField
-          v-for="invoiceValue in invoices"
-          :key="invoiceValue.value"
-          :value="invoiceValue.value"
+          v-for="single in invoices"
+          :key="single.value"
+          :value="single.value"
+          name="invoice"
           inline
           radio
-          :model-value="value.invoice === invoiceValue.value"
-          @update:model-value="value.invoice = invoiceValue.value"
+          :model-value="invoice.invoice"
+          @update:model-value="(value) => updateInvoice(value, 'invoice')"
         >
-          {{ invoiceValue.name }}
+          {{ single.name }}
         </ToggleField>
       </fieldset>
+
+      <template v-if="invoice.invoice === 'company'">
+        <InputField
+          :model-value="invoice.company"
+          :class="[columnClassName, columnFullClassName]"
+          name="company"
+          type="text"
+          required
+          @update:model-value="(value) => updateInvoice(value, 'company')"
+        >
+          {{ $t('addresses.company') }}</InputField
+        >
+        <InputField
+          :model-value="invoice.cfCompany"
+          :class="[columnClassName, columnHalfClassName]"
+          name="cf"
+          type="text"
+          required
+          @update:model-value="(value) => updateInvoice(value, 'cfCompany')"
+        >
+          {{ $t('addresses.cfFull') }}</InputField
+        >
+        <InputField
+          :model-value="invoice.vat"
+          :class="[columnClassName, columnHalfClassName]"
+          name="vat"
+          type="text"
+          required
+          @update:model-value="(value) => updateInvoice(value, 'vat')"
+        >
+          {{ $t('addresses.vatFull') }}</InputField
+        >
+        <InputField
+          :model-value="invoice.sdi"
+          :class="[columnClassName, columnHalfClassName]"
+          name="sdi"
+          type="text"
+          pattern="[a-zA-Z0-9]{7}"
+          :required="!invoice.pec"
+          @update:model-value="(value) => updateInvoice(value, 'sdi')"
+        >
+          {{ $t('addresses.sdiFull') }}</InputField
+        >
+        <InputField
+          :model-value="invoice.pec"
+          :class="[columnClassName, columnHalfClassName]"
+          name="pec"
+          type="email"
+          :required="!invoice.sdi"
+          @update:model-value="(value) => updateInvoice(value, 'pec')"
+        >
+          {{ $t('addresses.pec') }}</InputField
+        >
+      </template>
       <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.company"
+        v-else-if="invoice.invoice === 'private'"
+        :model-value="invoice.cfPrivate"
         :class="[columnClassName, columnFullClassName]"
+        name="cf"
         type="text"
         required
+        @update:model-value="(value) => updateInvoice(value, 'cfPrivate')"
       >
-        Azienda</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.cfCompany"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        Codice fiscale</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'private'"
-        v-model="value.cfPrivate"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        Codice fiscale</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.vat"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-        required
-      >
-        Partita IVA</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.sdi"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        Codice univico</InputField
-      >
-      <InputField
-        v-if="value.invoice == 'company'"
-        v-model="value.pec"
-        :class="[columnClassName, columnHalfClassName]"
-        type="text"
-      >
-        PEC</InputField
+        {{ $t('addresses.cfFull') }}</InputField
       >
     </template>
   </FormWrapper>
@@ -90,44 +95,71 @@
 
 <script setup>
 // Imports
+import { useI18n } from 'vue-i18n'
 
-//Constant
-const invoices = ref([
-  {
-    name: 'No',
-    value: false,
-  },
-  {
-    name: 'Si, sono un privato',
-    value: 'private',
-  },
-  {
-    name: "Si, sono un'azienda",
-    value: 'company',
-  },
-])
+// Constants
+const CSS_NAME = 'c-form-invoice'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   invoice: {
     type: Object,
     required: true,
-    // validator(value) {
-    //   return 'username' in value && 'email' in value
-    // },
   },
 })
-defineEmits(['update:invoice'])
-//computed
-const value = computed({
-  get() {
-    return props.invoice
+const emit = defineEmits(['update:invoice'])
+
+// Component life-cycle hooks
+
+// Composables
+const { t } = useI18n()
+
+// Data
+const invoices = ref([
+  {
+    name: t('common.no'),
+    value: false,
   },
-  set(value) {
-    emit('update:invoice', value)
+  {
+    name: t('invoice.isPrivate'),
+    value: 'private',
   },
-})
-//data
+  {
+    name: t('invoice.isCompany'),
+    value: 'company',
+  },
+])
+
+// Watcher
+
+// Computed
+const updateInvoice = (value, field) => {
+  const newInvoice = { ...props.invoice }
+
+  if (newInvoice[field] === value) {
+    return
+  }
+
+  newInvoice[field] = value
+
+  emit('update:invoice', newInvoice)
+}
+
+// Methods
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@include component('form-invoice') {
+  @include set-local-vars(
+    $prefix: 'form',
+    $map: (
+      fieldset-gap: rem(20px),
+      fieldset-border: 2px solid get-var(color-white),
+    )
+  );
+
+  @include element('invoice') {
+    font-weight: get-var(weight-bold);
+  }
+}
+</style>

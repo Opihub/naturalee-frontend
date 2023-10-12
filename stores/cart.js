@@ -26,8 +26,21 @@ export const useCartStore = defineStore('cart', () => {
   const cart = useLocalStorage('cart', [], {
     serializer: StorageSerializers.object,
   })
+  const coupon = useLocalStorage(
+    'coupon',
+    {},
+    {
+      serializer: StorageSerializers.object,
+    }
+  )
 
-  const shippingCost = useSessionStorage('shippingCost', 0)
+  const shippingMethod = useSessionStorage('shippingMethod', null, {
+    serializer: StorageSerializers.object,
+  })
+
+  const paymentMethod = useSessionStorage('paymentMethod', null, {
+    serializer: StorageSerializers.object,
+  })
 
   // Getters
   const count = computed(() => {
@@ -38,8 +51,18 @@ export const useCartStore = defineStore('cart', () => {
     return count.value <= 0
   })
 
+  const checkout = computed(() => {
+    return cart.value.map((item) => ({
+      id: item.id,
+      variationId: item.variationId,
+      quantity: item.quantity,
+      title: item.title,
+    }))
+  })
+
   const { subTotal, granTotal: total } = useTotal(cart, {
-    shipping: shippingCost,
+    shipping: shippingMethod,
+    payment: paymentMethod,
   })
 
   // Actions
@@ -49,7 +72,7 @@ export const useCartStore = defineStore('cart', () => {
 
   async function load() {
     if (!isLoggedIn.value) {
-      return cart.value
+      return cart
     }
 
     const response = await useApi('shop/cart/products', null, {
@@ -67,7 +90,7 @@ export const useCartStore = defineStore('cart', () => {
 
     cart.value = response.value.data
 
-    return cart.value
+    return cart
   }
 
   function clearCart() {
@@ -217,6 +240,43 @@ export const useCartStore = defineStore('cart', () => {
     return true
   }
 
+  async function applyCoupon(newCoupon) {
+    const body = {
+      coupon: newCoupon,
+    }
+
+    const response = await useApi(
+      `shop/coupon/validate`,
+      {
+        method: 'POST',
+        body,
+      },
+      {
+        cache: false,
+      }
+    )
+
+    if (response.value.success) {
+      notify({
+        message: 'Coupon applicato!',
+        status: 'success',
+      })
+
+      coupon.value = response.value.data
+
+      return true
+    }
+
+    notify({
+      message: 'Coupon non valido!',
+      status: 'danger',
+    })
+
+    coupon.value = {}
+
+    return false
+  }
+
   async function remoteClearCart() {
     if (!isLoggedIn.value) {
       return clearCart()
@@ -335,17 +395,21 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   return {
+    coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
-    shippingCost: skipHydrate(shippingCost),
+    shippingMethod: skipHydrate(shippingMethod),
+    paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
     count,
     total,
     subTotal,
+    checkout,
     load,
     pickProduct,
     deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
+    applyCoupon,
   }
 })
 

@@ -13,7 +13,7 @@
         type="text"
         required
       >
-        {{ $t('form.name') }}*</InputField
+        {{ $t('form.name') }}</InputField
       >
 
       <InputField
@@ -22,7 +22,7 @@
         type="text"
         required
       >
-        {{ $t('form.surname') }}*</InputField
+        {{ $t('form.surname') }}</InputField
       >
 
       <InputField

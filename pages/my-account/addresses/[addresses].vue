@@ -5,22 +5,29 @@
       method="POST"
       @submit.prevent="updateAddresses"
     >
-      <template #after>
-        <FormInvoice v-model:invoice="formData.invoice" class="s-invoice" />
-        <fieldset :class="rowClassName" class="s-button">
-          <div>
-            <BaseButton
-              class="u-mt-large"
-              color="green"
-              type="submit"
-              :disabled="sending"
-              >{{ $t('form.saveChanges') }}</BaseButton
-            >
+      <template #after="{ rowClassName }">
+        <template v-if="isBilling">
+          <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
+            <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
           </div>
-        </fieldset>
-        <BaseMessage v-if="feedback.status" :status="feedback.status">{{
-          feedback.message
-        }}</BaseMessage>
+
+          <FormInvoice v-model:invoice="formData.invoice" class="s-invoice" />
+        </template>
+
+        <BaseButton
+          class="u-mt-half"
+          color="green"
+          type="submit"
+          :disabled="sending"
+          >{{ $t('form.saveChanges') }}</BaseButton
+        >
+
+        <BaseMessage
+          v-if="feedback.status"
+          :class="[rowClassName, 'u-mt-large']"
+          :status="feedback.status"
+          >{{ feedback.message }}</BaseMessage
+        >
       </template>
     </FormAddress>
   </div>
@@ -30,6 +37,17 @@
 // Imports
 
 // Constants
+
+// Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'addresses-details',
+})
+const emit = defineEmits(['api:start', 'api:end'])
+
+// Component life-cycle hooks
+
+// Composables
+const { sending, send, sent } = useSender(emit)
 const route = useRoute()
 const response = await useApi(
   `/shop/addresses/${route.params.addresses}`,
@@ -40,17 +58,9 @@ const response = await useApi(
     cache: false,
   }
 )
-// Define (Props, Emits, Page Meta)
-const emit = defineEmits(['api:start', 'api:end', 'update:address'])
-const { sending, send, sent } = useSender(emit)
-definePageMeta({
-  name: 'addresses-details',
-})
-// Component life-cycle hooks
-
-// Composables
 
 // Data
+const isBilling = ref(route.params.addresses === 'billing')
 const formData = reactive({
   address: {
     firstName: response.value.data.firstName,
@@ -72,6 +82,7 @@ const formData = reactive({
     pec: response.value.data.pec,
   },
 })
+
 // Watcher
 
 // Computed
@@ -161,16 +172,6 @@ const feedback = reactive({
 </script>
 
 <style lang="scss" scoped>
-@include scope('button') {
-  @include set-local-vars(
-    $prefix: 'form-fieldset',
-    $map: (
-      border: none,
-    )
-  );
-  border-color: transparent;
-  padding: 0;
-}
 @include scope('invoice') {
   width: 100%;
 }

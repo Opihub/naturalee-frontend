@@ -1,11 +1,12 @@
 <template>
   <div :class="className">
     <BaseLabel
-      v-if="slots.default"
+      v-if="!!$slots.default && !noLabel"
       :class="`${CSS_NAME}__label`"
       :for-input="name"
     >
       <slot />
+      <sup v-if="'required' in attrs && attrs.required !== false">*</sup>
     </BaseLabel>
     <span
       v-if="error"
@@ -94,6 +95,10 @@ const props = defineProps({
   error: {
     type: String,
     default: null,
+  },
+  noLabel: {
+    type: Boolean,
+    default: false,
   },
   errorAfter: {
     type: Boolean,

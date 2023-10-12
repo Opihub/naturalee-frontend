@@ -2,148 +2,191 @@
   <FormWrapper :class="CSS_NAME">
     <template
       #default="{
+        className,
+        rowClassName,
         columnClassName,
         columnFullClassName,
         columnHalfClassName,
         columnThirdClassName,
+        columnQuarterClassName,
       }"
     >
       <slot
         name="before"
-        :class="
-          (columnClassName,
+        v-bind="{
+          className,
+          rowClassName,
+          columnClassName,
           columnFullClassName,
           columnHalfClassName,
-          columnThirdClassName)
-        "
+          columnThirdClassName,
+          columnQuarterClassName,
+        }"
       />
+
       <InputField
-        v-model="value.firstName"
+        :model-value="address.firstName"
         :class="[columnClassName, columnHalfClassName]"
         type="text"
+        name="firstName"
         required
+        @update:model-value="(value) => updateAddress(value, 'firstName')"
       >
-        {{ $t('form.name') }}*</InputField
+        {{ $t('form.name') }}</InputField
       >
 
       <InputField
-        v-model="value.lastName"
+        :model-value="address.lastName"
         :class="[columnClassName, columnHalfClassName]"
         type="text"
+        name="lastName"
         required
+        @update:model-value="(value) => updateAddress(value, 'lastName')"
       >
-        {{ $t('form.surname') }}*</InputField
+        {{ $t('form.surname') }}</InputField
       >
+
       <CountrySelect
         :class="[columnClassName, columnFullClassName]"
-        :model-value="value.country"
-        @update:model-value="provinces"
-      >
-        {{ $t('addresses.country') }}</CountrySelect
-      >
-      <InputField
-        v-model="value.address"
-        :class="[columnClassName, columnFullClassName]"
-        type="text"
-        placeholder="Via/Piazza e Numero Civico"
-      >
-        {{ $t('addresses.addresses') }}*</InputField
+        :model-value="address.country"
+        required
+        @update:model-value="(value) => updateCountry(value)"
+        >{{ $t('addresses.country') }}</CountrySelect
       >
       <InputField
-        v-model="value.address2"
+        :model-value="address.address"
         :class="[columnClassName, columnFullClassName]"
         type="text"
+        name="address"
+        required
+        :placeholder="$t('addresses.addressPlaceholder')"
+        @update:model-value="(value) => updateAddress(value, 'address')"
+      >
+        {{ $t('addresses.address') }}</InputField
+      >
+      <InputField
+        :model-value="address.address2"
+        :class="[columnClassName, columnFullClassName]"
+        type="text"
+        name="address2"
         :placeholder="$t('addresses.address2')"
+        @update:model-value="(value) => updateAddress(value, 'address2')"
       />
 
       <InputField
-        v-model="value.postcode"
+        :model-value="address.postcode"
         :class="[columnClassName, columnThirdClassName]"
         type="text"
+        name="postcode"
+        :error="$t('addresses.invalidPostCode')"
+        pattern="\d{5}"
         required
+        @update:model-value="(value) => updateAddress(value, 'postcode')"
       >
         {{ $t('addresses.postcode') }}</InputField
       >
       <InputField
-        v-model="value.city"
+        :model-value="address.city"
         :class="[columnClassName, columnThirdClassName]"
         type="text"
+        name="city"
         required
+        @update:model-value="(value) => updateAddress(value, 'city')"
       >
         {{ $t('addresses.city') }}</InputField
       >
       <ProvincesSelect
-        v-model="value.province"
+        :model-value="address.province"
         :class="[columnClassName, columnThirdClassName]"
         name="province"
-        :provinces="countryData"
-        :user-province="value.province"
+        :provinces="provinces"
+        @update:model-value="(value) => updateProvince(value)"
       >
         {{ $t('addresses.province') }}
       </ProvincesSelect>
-      <slot name="after" />
+
+      <slot
+        name="after"
+        v-bind="{
+          className,
+          rowClassName,
+          columnClassName,
+          columnFullClassName,
+          columnHalfClassName,
+          columnThirdClassName,
+          columnQuarterClassName,
+        }"
+      />
     </template>
   </FormWrapper>
 </template>
 
 <script setup>
 // Imports
+import { useShippingStore } from '@/stores/shipping'
 
-//Constant
+// Constant
 const CSS_NAME = 'c-addresses-form'
-const countryData = ref([])
+
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   address: {
     type: Object,
     required: true,
-    // validator(value) {
-    //   return 'username' in value && 'email' in value
-    // },
   },
 })
-defineEmits(['update:address'])
-//form data
-const formDataClone = {}
-//Computed
-const value = computed({
-  get() {
-    return props.address
-  },
-  set(value) {
-    emit('update:address', value)
-  },
-})
-//Watcher
+const emit = defineEmits(['update:address', 'api:start', 'api:end'])
 
-//Methods
+// Pinia Stores
+const shippingStore = useShippingStore()
 
-const provinces = async (v) => {
-  if (Object.keys(formDataClone).length === 0) {
-    formDataClone.value = { ...value }
+// Methods
+const { loadProvinces, saveCountry, currentProvince } = shippingStore
+
+const updateAddress = (value, field) => {
+  const newAddress = { ...props.address }
+  newAddress[field] = value
+
+  if (newAddress[field] === props.address[field]) {
+    return
   }
 
-  value.country = v
-  const province = await useApi(
-    `/countries/${v}`,
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-    }
-  )
-
-  countryData.value = province.value.data.provinces
-  if (value.country !== formDataClone.value.country) {
-    value.province = ''
-  } else {
-    value.province = formDataClone.value.province
-  }
+  emit('update:address', newAddress)
 }
 
-onMounted(() => {
-  provinces(value.value.country)
+const updateCountry = async (value) => {
+  if (sending.value) {
+    return
+  }
+
+  saveCountry(props.address.country, props.address.province)
+
+  updateAddress(value, 'country')
+
+  await send(async () => await loadProvinces(value))
+
+  updateAddress(currentProvince(value), 'province')
+}
+
+const updateProvince = (value) => {
+  saveCountry(props.address.country, value)
+
+  updateAddress(value, 'province')
+}
+
+// Composables
+const { provinces } = storeToRefs(shippingStore)
+const { sending, send } = useSender(emit)
+
+// Data
+
+// Computed
+
+// Watcher
+
+// Component life-cycle hooks
+onMounted(async () => {
+  await loadProvinces(props.address.country)
 })
 </script>
 
@@ -158,12 +201,11 @@ $prefix: 'addresses-form';
       fieldset-border: 2px solid get-var(color-white),
     )
   );
-}
-@include scope('password') {
+
   @include set-local-vars(
-    $prefix: 'heading',
+    $prefix: 'input-field-label',
     $map: (
-      text-color: get-var(color-black),
+      margin: 0 0 rem(8px),
     )
   );
 }
