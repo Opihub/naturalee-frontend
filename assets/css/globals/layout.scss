@@ -3,12 +3,12 @@
     display: flex;
     flex-wrap: wrap;
     gap: get-var(
-        column-gap,
+        row-gap,
         get-var(gap, rem(20px), $prefix: $parent),
         $prefix: $parent
       )
       get-var(
-        row-gap,
+        column-gap,
         get-var(gap, rem(20px), $prefix: $parent),
         $prefix: $parent
       );
