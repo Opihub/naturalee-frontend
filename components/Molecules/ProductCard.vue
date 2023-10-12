@@ -66,7 +66,7 @@
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
-        ><span>aggiungi</span>
+        ><span>{{ $t('cart.addTo') }}</span>
         <NuxtIcon
           name="bag"
           :class="`${CSS_NAME}__button__svg`"
@@ -80,7 +80,7 @@
       color="dark"
       :class="`${CSS_NAME}__link`"
       :to="product.link"
-      >Vai alla scheda prodotto</BaseLink
+      >{{ $t('products.viewDetails') }}</BaseLink
     >
   </div>
 </template>

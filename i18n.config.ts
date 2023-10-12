@@ -26,6 +26,7 @@ export default defineI18nConfig(() => ({
         type: 'Tipologia',
         price: 'Prezzo',
         quantity: 'Quantità',
+        viewDetails: 'Vai alla scheda prodotto',
       },
       company: {
         name: 'Naturalee srl',
@@ -39,6 +40,8 @@ export default defineI18nConfig(() => ({
       },
       cart: {
         your: 'Il tuo carrello',
+        add: 'Aggiungi',
+        addTo: 'Aggiungi al carrello',
         empty: 'Non hai alcun prodotto nel carrello',
         cleared: 'Il carrello è stato svuotato',
         missingProduct: 'Prodotto non trovato nel carrello',
@@ -175,10 +178,11 @@ export default defineI18nConfig(() => ({
         notes: "Note sull'ordine",
       },
       addresses: {
-        heading: 'I seguenti indirizzi saranno usati come predefiniti nella pagina di riepilogo dell\'ordine.',
+        heading:
+          "I seguenti indirizzi saranno usati come predefiniti nella pagina di riepilogo dell'ordine.",
         billing: 'Indirizzo di fatturazione',
         shipping: 'Indirizzo di spedizione',
-        notSet:'Indirizzo non impostato',
+        notSet: 'Indirizzo non impostato',
         delivery: 'Indirizzo di consegna',
         deliveryRequired: "L'indirizzo di consegna è obbligatorio",
         differentBilling: 'Fatturare ad un indirizzo differente?',
