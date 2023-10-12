@@ -1,11 +1,9 @@
 <template>
   <div :class="className">
     <MarkerLabel
-      v-if="product.marker && product.marker.text"
+      v-if="product.marker && product.marker?.text"
       :class="`${CSS_NAME}__marker`"
-      :text="product.marker.text"
-      :color="product.marker.color"
-      :text-color="product.marker.textColor"
+      :marker="product.marker"
     />
 
     <WishlistButton
