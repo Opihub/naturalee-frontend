@@ -187,7 +187,7 @@ $prefix: 'product-card';
     @include set-local-vars(
       $prefix: 'row',
       $map: (
-        columns: 3,
+        columns: 4,
       )
     );
   }
@@ -319,7 +319,7 @@ $prefix: 'product-card';
       @include set-local-vars(
         $prefix: 'button',
         $map: (
-          padding: rem(12px) rem(50px),
+          padding: rem(12px) rem(30px),
         )
       );
     }
