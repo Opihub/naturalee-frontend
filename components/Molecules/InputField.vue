@@ -67,8 +67,8 @@
           @click="isPasswordVisible = !isPasswordVisible"
         >
           <Transition mode="out-in">
-            <NuxtIcon v-if="!isPasswordVisible" name="eye-off" filled />
-            <NuxtIcon v-else name="eye-on" filled />
+            <BaseIcon v-if="!isPasswordVisible" name="eye-off" filled />
+            <BaseIcon v-else name="eye-on" filled />
           </Transition>
         </button>
       </template>
@@ -304,7 +304,6 @@ $prefix: 'input-field';
     }
 
     @include element('input') {
-
       height: 100%;
 
       @include element('element') {

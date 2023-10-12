@@ -5,11 +5,11 @@
     :label-class-name="`${CSS_NAME}__label`"
   >
     <template #svg="{ className }">
-      <NuxtIcon name="profile" :class="className" filled />
+      <BaseIcon name="profile" :class="className" filled />
     </template>
     <template v-if="isLoggedIn" #default>
       <Suspense>
-        <NuxtIcon :class="`${CSS_NAME}__caret`" name="caret" :filled="false" />
+        <BaseIcon :class="`${CSS_NAME}__caret`" name="caret" :filled="false" />
       </Suspense>
     </template>
   </BaseLink>

@@ -2,7 +2,7 @@
   <SiteContainer :class="CSS_NAME">
     <div :class="`${CSS_NAME}__links`">
       <SiteLogo :alt="true" />
-      <InlineMenu v-if="socialsMenu" :menu="socialsMenu" />
+      <InlineMenu v-if="socialsMenu" :menu="socialsMenu" svg-size="24px" />
     </div>
 
     <InlineMenu v-if="menu" :menu="menu" :class="`${CSS_NAME}__menu`" />

@@ -69,7 +69,7 @@
         :quantity="quantity"
         :disabled="isDisabled"
         ><span>aggiungi</span>
-        <NuxtIcon
+        <BaseIcon
           name="bag"
           :class="`${CSS_NAME}__button__svg`"
           :filled="false"
