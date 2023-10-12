@@ -177,6 +177,8 @@ const billingData = ref({
   cfPrivate: null,
 })
 
+const order = useState('order', () => {})
+
 // Watcher
 
 // Computed
@@ -308,7 +310,14 @@ const submitOrder = async () => {
   console.debug({ ...response.value })
 
   if (response.value.success) {
-    console.debug(response.value.data)
+    order.value = response.value.data
+
+    await navigateTo({
+      path: '/order-confirmed',
+      query: {
+        orderId: order.value.id,
+      },
+    })
   } else {
     errors.value = response.value.errors
   }
