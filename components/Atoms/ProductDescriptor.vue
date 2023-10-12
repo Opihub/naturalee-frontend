@@ -69,25 +69,24 @@ $prefix: 'cost-descriptor';
 @include object($prefix) {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
   @include from('tablet') {
-    flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
   }
   @include element('weight') {
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     gap: rem(2px);
   }
   @include element('selling') {
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     gap: rem(2px);
   }

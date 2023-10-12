@@ -49,28 +49,39 @@
           :class="`${priceClassName}__cost-per-unit`"
         >
           <span
-            :class="`${priceClassName}__cost-per-unit__value`"
-            class="is-sale"
-            >€ {{ formattedPrice(product.costPerUnit) }}</span
+            v-if="product?.discountKgPrice && product?.discountKgPrice > 0"
+            :class="[
+              `${priceClassName}__cost-per-unit__value`,
+              product?.discountKgPrice ? 'is-sale u-mr-tiny' : '',
+            ]"
+            >€ {{ formattedPrice(product?.discountKgPrice) }}</span
           >
-          <span class="u-ml-tiny"
-            >€ {{ formattedPrice(product.costPerUnit) }}</span
-          >
+          <span>€ {{ formattedPrice(product.costPerUnit) }}</span>
           / {{ product.unit }}</small
         >
       </template>
     </PriceHolder>
-    <div :class="`${CSS_NAME}__buttons`">
+    <div :class="`${CSS_NAME}__buttons`" class="u-mt-large u-mt-none@desktop">
       <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
       <AddToCartButton
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
-      />
+        ><span>aggiungi</span>
+        <NuxtIcon
+          name="bag"
+          :class="`${CSS_NAME}__button__svg`"
+          :filled="false"
+      /></AddToCartButton>
     </div>
 
-    <BaseLink v-if="details" underline color="dark" :to="product.link"
+    <BaseLink
+      v-if="details"
+      underline
+      color="dark"
+      :class="`${CSS_NAME}__link`"
+      :to="product.link"
       >Vai alla scheda prodotto</BaseLink
     >
   </div>
@@ -162,7 +173,24 @@ const formattedPrice = (value) => {
 
 <style lang="scss">
 $prefix: 'product-card';
+
 @include component($prefix) {
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 2,
+      )
+    );
+  }
+  @include from(desktop) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 3,
+      )
+    );
+  }
   @include set-vars(
     $prefix: $prefix,
     $map: (
@@ -183,7 +211,27 @@ $prefix: 'product-card';
   text-align: center;
   background-color: get-var(color-white);
   border-radius: rem(20px);
-  padding: rem(30px) rem(30px) rem(40px);
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding-top: rem(30px),
+    )
+  );
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding-x: rem(30px),
+    )
+  );
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      padding-bottom: rem(25px),
+    )
+  );
+  padding: get-var(padding-top, $prefix: $prefix)
+    get-var(padding-x, $prefix: $prefix)
+    get-var(padding-bottom, $prefix: $prefix);
   position: relative;
   overflow: hidden;
 
@@ -205,13 +253,17 @@ $prefix: 'product-card';
     align-self: stretch;
     text-align: left;
     font-weight: get-var(weight-regular);
-    margin-bottom: rem(30px);
+    margin-bottom: rem(22px);
     @include typography(16px, 20px);
   }
 
   @include element('title') {
     font-weight: get-var(weight-bold);
     @include typography(22px, 28px);
+    span {
+      width: 100%;
+      justify-content: flex-start;
+    }
   }
 
   @include element('thumbnail') {
@@ -235,6 +287,7 @@ $prefix: 'product-card';
   }
   @include object('price') {
     display: block;
+    text-align: start;
     @include element('cost-per-unit') {
       display: block;
       text-align: start;
@@ -251,12 +304,44 @@ $prefix: 'product-card';
     @include set-local-vars(
       $prefix: 'button',
       $map: (
-        padding: rem(12px) rem(24px),
+        padding: rem(12px) rem(80px),
       )
     );
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(12px) rem(30px),
+        )
+      );
+    }
+    @include from(desktop) {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(12px) rem(50px),
+        )
+      );
+    }
   }
   @include object('link') {
     width: 100%;
+  }
+  @include element('link') {
+    margin-top: rem(20px);
+    padding-top: rem(20px);
+    text-align: center;
+    text-decoration: none;
+    &::before {
+      content: '';
+      display: block;
+      position: relative;
+      top: -20px;
+      width: calc(100% + (get-var(padding-x, $prefix: $prefix) * 2));
+      height: 2px;
+      background-color: get-var(color-light);
+      margin-left: calc(get-var(padding-x, $prefix: $prefix) / -1);
+    }
   }
 
   @include from(tablet) {
@@ -312,16 +397,38 @@ $prefix: 'product-card';
         margin-bottom: 0;
       }
 
-      @include element('buttons') {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-      }
-
       @include object('button') {
         margin: 0;
         flex: 0 0 get-var(button-width, rem(200px), $prefix: $prefix);
+      }
+    }
+  }
+  @include element('buttons') {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include from('desktop') {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: baseline;
+      gap: rem(26px);
+      flex-wrap: wrap;
+    }
+    @include object('button') {
+      svg {
+        display: inline-block;
+        margin-left: rem(14px);
+        margin-top: rem(-5px);
+        color: get-var(color-yellow);
+        transition: all 0.5s;
+      }
+      &:hover svg {
+        color: get-var(color-green);
       }
     }
   }

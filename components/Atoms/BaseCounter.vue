@@ -196,8 +196,8 @@ $prefix: 'counter';
   text-align: center;
 
   @include element('button') {
-    width: rem(30px);
-    height: rem(30px);
+    width: rem(23px);
+    height: rem(23px);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -220,8 +220,8 @@ $prefix: 'counter';
     &::after {
       content: '';
       display: block;
-      width: rem(12px);
-      height: rem(2px);
+      width: rem(8px);
+      height: rem(1px);
       position: absolute;
       top: 50%;
       left: 50%;
@@ -267,12 +267,16 @@ $prefix: 'counter';
     border: 0;
     text-align: center;
     padding: 0;
-    margin: 0;
+    margin: 0 rem(61px);
+    font-weight: get-var(weight-bold);
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
+    }
+    @include from('tablet') {
+      margin: 0 rem(25px);
     }
   }
 
