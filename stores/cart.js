@@ -20,7 +20,6 @@ export const useCartStore = defineStore('cart', () => {
   const profile = useAccountStore()
 
   const { isLoggedIn } = storeToRefs(profile)
-  const { t } = useI18n()
 
   // State
   const cart = useLocalStorage('cart', [], {
@@ -94,6 +93,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function clearCart() {
+    const { t } = useI18n()
     cart.value = []
 
     notify({
@@ -105,6 +105,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function addToCart(product, quantity = 1) {
+    const { t } = useI18n()
     const {
       id,
       variationId,
@@ -166,6 +167,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function updateCartQuantity(product, quantity, server = false) {
+    const { t } = useI18n()
     const { variationId: id } = product
     const existingProduct = pickProduct(id)
 
@@ -214,6 +216,7 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
+    const { t } = useI18n()
     const { variationId: id } = product
     const existingProduct = pickProduct(id)
 
@@ -241,6 +244,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function applyCoupon(newCoupon) {
+    const { t } = useI18n()
     const body = {
       coupon: newCoupon,
     }
@@ -258,7 +262,7 @@ export const useCartStore = defineStore('cart', () => {
 
     if (response.value.success) {
       notify({
-        message: 'Coupon applicato!',
+        message: t('coupon.applied'),
         status: 'success',
       })
 
@@ -268,7 +272,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     notify({
-      message: 'Coupon non valido!',
+      message: t('coupon.notValid'),
       status: 'danger',
     })
 
