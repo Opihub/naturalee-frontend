@@ -202,11 +202,6 @@ export default defineI18nConfig(() => ({
         sdi: 'SDI',
         sdiFull: 'SDI',
         pec: 'PEC',
-        country:'Nazione/Regione',
-        province:'Provincia',
-        city:'Città',
-        address:'Via e Numero',
-        address2:'Appartamento, suite, unità, piano, ecc. (opzionale)',
       },
       invoice: {
         requestInvoice: 'Desideri ricevere la fattura?',
