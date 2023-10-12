@@ -8,6 +8,7 @@ export default defineI18nConfig(() => ({
       quantity: 'Quantità',
       create: 'Crea',
       search: 'Cerca',
+      add: 'Aggiungi',
       searchMsg: 'Di cosa hai bisogno?',
       filters: {
         label: 'Filtra',

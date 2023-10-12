@@ -42,23 +42,21 @@
       class="u-mb-mini u-mt-auto"
       :price="product.price"
       :sales-price="product?.discountPrice"
+      :is-green="product?.discountPrice ? true : false"
+      :normal-price-green="product?.discountPrice ? false : true"
     >
       <template v-if="product.selling" #after="{ priceClassName }">
         <small
           v-if="product.costPerUnit"
           :class="`${priceClassName}__cost-per-unit`"
         >
-          <span
+          <PriceHolder
             v-if="product?.discountKgPrice && product?.discountKgPrice > 0"
-            :class="[
-              `${priceClassName}__cost-per-unit__value`,
-              product?.discountKgPrice ? 'is-sale u-mr-tiny' : '',
-            ]"
-            >€ {{ formattedPrice(product?.discountKgPrice) }}</span
-          >
-          <span>€ {{ formattedPrice(product.costPerUnit) }}</span>
-          / {{ product.unit }}</small
-        >
+            :class="`${priceClassName}__cost-per-unit__value`"
+            :price="product?.costPerUnit"
+            :sales-price="product?.discountKgPrice"
+            :unit="product?.unit"
+        /></small>
       </template>
     </PriceHolder>
     <div :class="`${CSS_NAME}__buttons`" class="u-mt-large u-mt-none@desktop">
@@ -68,7 +66,7 @@
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
-        ><span>aggiungi</span>
+        ><span>{{ $t('add') }}</span>
         <BaseIcon
           name="bag"
           :class="`${CSS_NAME}__button__svg`"
@@ -159,16 +157,6 @@ const isDisabled = computed(() => {
     ('status' in props.product && props.product.status === 'disabled')
   )
 })
-
-// Methods
-const formattedPrice = (value) => {
-  return new Intl.NumberFormat('it-IT', {
-    style: 'currency',
-    currency: 'EUR',
-  })
-    .format(value)
-    .replaceAll(/[^0-9,.]/gi, '')
-}
 </script>
 
 <style lang="scss">
@@ -288,16 +276,6 @@ $prefix: 'product-card';
   @include object('price') {
     display: block;
     text-align: start;
-    @include element('cost-per-unit') {
-      display: block;
-      text-align: start;
-      font-weight: get-var(weight-regular);
-      @include element('value') {
-        @include is('sale') {
-          text-decoration: line-through;
-        }
-      }
-    }
   }
   @include object('button') {
     margin: rem(20px) auto rem(12px);

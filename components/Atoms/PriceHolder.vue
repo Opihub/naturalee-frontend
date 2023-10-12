@@ -6,7 +6,7 @@
       :class="[
         CSS_NAME_VALUE,
         salesPrice ? 'is-sale' : '',
-        !salesPrice ? CSS_NAME_VALUE_GREEN : '',
+        normalPriceGreen ? CSS_NAME_VALUE_GREEN : '',
       ]"
     >
       <span v-if="!currencyAfterPrice" :class="CSS_NAME_CURRENCY">{{
@@ -20,8 +20,8 @@
 
     <span
       v-if="salesPrice"
-      :class="[CSS_NAME_VALUE, salesPrice ? CSS_NAME_VALUE_GREEN : '']"
-      class="u-ml-small"
+      :class="[CSS_NAME_VALUE, isGreen ? CSS_NAME_VALUE_GREEN : '']"
+      class="u-ml-tiny"
     >
       <span v-if="!currencyAfterPrice" :class="CSS_NAME_CURRENCY">{{
         currency
@@ -31,6 +31,7 @@
         currency
       }}</span>
     </span>
+    <span v-if="unit"> / {{ unit }}</span>
     <slot name="after" :price-class-name="CSS_NAME" />
   </span>
 </template>
@@ -55,6 +56,18 @@ const props = defineProps({
     default: '€',
   },
   currencyAfterPrice: {
+    type: Boolean,
+    default: false,
+  },
+  unit: {
+    type: String,
+    default: null,
+  },
+  isGreen: {
+    type: Boolean,
+    default: false,
+  },
+  normalPriceGreen: {
     type: Boolean,
     default: false,
   },
@@ -86,6 +99,11 @@ $prefix: 'price';
     @include modifier('green') {
       color: get-var(color-green);
       font-size: rem(26px);
+    }
+  }
+  @include element('cost-per-unit') {
+    @include element('value') {
+      font-weight: get-var(weight-regular);
     }
   }
 }
