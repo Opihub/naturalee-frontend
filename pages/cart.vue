@@ -7,7 +7,11 @@ import { useCartStore } from '@/stores/cart';
       <div class="o-row">
         <template v-if="!isEmpty">
           <SiteContainer :max-width="1060" padless>
-            <CartTable :products="basket" :on-delete="deleteFromCart" :on-clear="clearCart" />
+            <CartTable
+              :products="basket"
+              :on-delete="deleteFromCart"
+              :on-clear="clearCart"
+            />
           </SiteContainer>
 
           <SiteContainer :max-width="520" padless>

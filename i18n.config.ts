@@ -1,6 +1,7 @@
 export default defineI18nConfig(() => ({
   legacy: false,
   locale: 'it',
+  globalInjection: true,
   messages: {
     it: {
       edit: 'Modifica',
@@ -123,6 +124,8 @@ export default defineI18nConfig(() => ({
         formPlaceholder: 'Codice promozionale',
         asking: 'Hai un codice promozionale?',
         insertHere: 'Fai clic qui per inserire il tuo codice promozionale',
+        applied: 'Coupon applicato!',
+        notValid: 'Coupon non valido!',
       },
       wishlist: {
         added: '{name} aggiunto ai preferiti',
@@ -199,11 +202,6 @@ export default defineI18nConfig(() => ({
         sdi: 'SDI',
         sdiFull: 'SDI',
         pec: 'PEC',
-        country:'Nazione/Regione',
-        province:'Provincia',
-        city:'Città',
-        address:'Via e Numero',
-        address2:'Appartamento, suite, unità, piano, ecc. (opzionale)',
       },
       invoice: {
         requestInvoice: 'Desideri ricevere la fattura?',

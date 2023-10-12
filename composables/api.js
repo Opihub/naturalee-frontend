@@ -2,6 +2,7 @@ import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
+import { saveJSON, loadJSON } from '@/utils/storageApi'
 
 export async function useApi(url, options = {}, innerOptions = {}) {
   const config = useRuntimeConfig()
@@ -42,11 +43,16 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   let cached = ref(null)
   if (innerOptions.cache) {
-    cached = useSessionStorage(apiUrl(true), null, {
-      // By passing null as default it can't automatically
-      // determine which serializer to use
-      serializer: StorageSerializers.object,
-    })
+    if (process.server) {
+      const json = loadJSON(apiUrl(true), null)
+      cached = ref(json)
+    } else {
+      cached = useSessionStorage(apiUrl(true), null, {
+        // By passing null as default it can't automatically
+        // determine which serializer to use
+        serializer: StorageSerializers.object,
+      })
+    }
   }
 
   if (cached.value && cached.value.success) {
@@ -107,6 +113,10 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   }
 
   cached.value = innerOptions.dataOnly ? response.data : response
+
+  if (process.server) {
+    saveJSON(apiUrl(true), cached.value)
+  }
 
   return cached
 }
