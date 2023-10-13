@@ -27,6 +27,8 @@ export default defineI18nConfig(() => ({
         price: 'Prezzo',
         quantity: 'Quantità',
         viewDetails: 'Vai alla scheda prodotto',
+        category: 'Categoria',
+        tag: 'Tag',
       },
       company: {
         name: 'Naturalee srl',
