@@ -24,19 +24,28 @@
           </li>
         </ul>
 
-        <BaseParagraph>
-          <BaseMarkdown :content="product.description" />
-        </BaseParagraph>
+        <BaseMarkdown :content="product.description" />
 
-        <ul v-if="product?.tag && product.tag.length > 0">
-          <li v-for="(tag, index) in product.tag" :key="index">{{ tag }}</li>
-        </ul>
+        <TagsList
+          v-if="product?.categories && product.categories.length > 0"
+          class="u-mt-half"
+          :list="product.categories"
+          :title="$t('products.category')"
+          item-key="slug"
+          item-value="title"
+          :resolve-link="(item) => categoryLink(item.slug)"
+        />
 
-        <ul v-if="product?.categories && product.categories.length > 0">
-          <li v-for="(category, index) in product.categories" :key="index">
-            {{ category }}
-          </li>
-        </ul>
+        <TagsList
+          v-if="product?.tag && product.tag.length > 0"
+          class="u-mt-half"
+          :list="product.tag"
+          :title="$t('products.tag')"
+          item-key="slug"
+          :resolve-link="
+            (item) => categoryLink($route.params.category, item.slug)
+          "
+        />
       </div>
     </div>
 
@@ -52,7 +61,6 @@
       </div>
     </ReceiptBlock>
   </section>
-  <pre>{{ product }}</pre>
 </template>
 
 <script setup>
@@ -73,6 +81,7 @@ defineProps({
 // Component life-cycle hooks
 
 // Composables
+const router = useRouter()
 
 // Data
 
@@ -81,6 +90,22 @@ defineProps({
 // Computed
 
 // Methods
+const categoryLink = (category, filter = null) => {
+  const query = {}
+  if (filter) {
+    query['filters[]'] = filter
+  }
+
+  const route = router.resolve({
+    name: 'category',
+    params: {
+      category,
+    },
+    query,
+  })
+
+  return route
+}
 </script>
 
 <style lang="scss">
@@ -130,7 +155,7 @@ $prefix: 'product-detail';
     );
 
     @include set-local-vars(
-      $prefix: 'paragraph',
+      $prefix: 'content',
       $map: (
         font-family: get-var(family-main),
         font-size: rem(14px),
@@ -142,7 +167,7 @@ $prefix: 'product-detail';
     align-items: flex-start;
     grid-template-columns: rem(520px) auto;
     column-gap: rem(60px);
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr;
     row-gap: rem(20px);
 
     // align-items: center;
