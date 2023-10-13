@@ -1,5 +1,6 @@
 <template>
   <VueMarkdown
+    :class="CSS_NAME"
     :source="content"
     :options="{ ...DEFAULT_OPTIONS, ...options }"
   />
@@ -10,6 +11,7 @@
 import VueMarkdown from 'vue-markdown-render'
 
 // Constants
+const CSS_NAME = 'c-content'
 const DEFAULT_OPTIONS = {}
 
 // Define (Props, Emits, Page Meta)
@@ -38,3 +40,13 @@ defineProps({
 
 // Methods
 </script>
+
+<style lang="scss">
+$prefix: 'content';
+@include component($prefix) {
+  white-space: pre-line;
+  font-family: get-var(font-family, inherit, $prefix: $prefix);
+  font-size: get-var(font-size, inherit, $prefix: $prefix);
+  line-height: get-var(line-height, inherit, $prefix: $prefix);
+}
+</style>
