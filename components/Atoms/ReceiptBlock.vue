@@ -136,6 +136,8 @@ $prefix: 'receipt';
   }
 
   @include modifier('topless') {
+    padding-top: 0;
+
     &::before {
       content: none;
       display: none;
@@ -143,6 +145,8 @@ $prefix: 'receipt';
   }
 
   @include modifier('bottomless') {
+    padding-bottom: 0;
+
     &::after {
       content: none;
       display: none;
