@@ -265,7 +265,7 @@ $prefix: 'product-detail';
     @include element('single') {
       display: grid;
       grid-template-columns: rem(38px) 1fr;
-      grid-template-row: 1fr auto;
+      grid-template-rows: 1fr auto;
       column-gap: rem(16px);
       row-gap: rem(2px);
       text-align: left;
