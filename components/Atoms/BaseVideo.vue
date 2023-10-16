@@ -13,7 +13,7 @@
 <script setup>
 // Imports
 import Vlitejs from 'vlitejs'
-import VlitejsYoutube from 'vlitejs/providers/youtube.js'
+import VlitejsYoutube from 'vlitejs/providers/youtube'
 
 // Constants
 const CSS_NAME = 'o-video'
