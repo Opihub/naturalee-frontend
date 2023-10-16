@@ -26,7 +26,7 @@ defineOptions({
 })
 const props = defineProps({
   containerClass: {
-    type: String,
+    type: [String, Array, Object],
     default: null,
   },
   topLess: {
@@ -50,7 +50,7 @@ const slots = useSlots()
 
 // Computed
 const className = computed(() => {
-  const className = [CSS_NAME, props.containerClass]
+  const className = [CSS_NAME, ...assembleClassName(props.containerClass)]
 
   if (props.topLess) {
     className.push(`${CSS_NAME}--topless`)
