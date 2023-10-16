@@ -6,7 +6,7 @@
 
     <Suspense>
       <slot name="svg">
-        <NuxtIcon v-if="svg" :name="svg" :style="svgStyle" />
+        <BaseIcon v-if="svg" :name="svg" :icon-size="svgStyle" />
       </slot>
     </Suspense>
   </component>
@@ -56,7 +56,9 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['black', 'green', 'yellow', 'transparent', 'white'].includes(value)
+      return ['black', 'green', 'yellow', 'transparent', 'white'].includes(
+        value
+      )
     },
   },
 })
@@ -75,7 +77,6 @@ const svgStyle = computed(() => {
       height = props.svgSize[0]
     }
   }
-
   return {
     '--svg-width': typeof width === 'number' ? `${width}px` : width,
     '--svg-height': typeof height === 'number' ? `${height}px` : height,

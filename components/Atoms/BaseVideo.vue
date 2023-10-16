@@ -1,9 +1,11 @@
 <template>
   <component
     :is="component"
+    :id="elementId"
     ref="playerElement"
     :class="className"
     :src="src"
+    :data-youtube-id="src"
     :style="style"
   />
 </template>
@@ -11,6 +13,7 @@
 <script setup>
 // Imports
 import Vlitejs from 'vlitejs'
+import VlitejsYoutube from 'vlitejs/providers/youtube.js'
 
 // Constants
 const CSS_NAME = 'o-video'
@@ -31,9 +34,13 @@ const VIDEO_OPTIONS = {
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
+  elementId: {
+    type: String,
+    default: null,
+  },
   src: {
     type: String,
-    required: true,
+    default: null,
   },
   background: {
     type: Boolean,
@@ -67,7 +74,6 @@ const props = defineProps({
 // Component life-cycle hooks
 onMounted(() => {
   const { options: inheritOptions, provider } = props
-
   const config = {
     provider,
     onReady: props.onReady,
@@ -83,10 +89,15 @@ onMounted(() => {
     ...inheritOptions,
   }
 
+  Vlitejs.registerProvider('youtube', VlitejsYoutube)
   player.value = new Vlitejs(playerElement.value, config)
   if (props.aspectRatio) {
     player.value.outerContainer.style = style.value
     player.value.outerContainer.classList.add('v-border-radius')
+  }
+  if (props.provider !== 'html5') {
+    player.value.outerContainer.classList.add('is-iframe')
+    className.push('is-iframe')
   }
 })
 
@@ -140,9 +151,43 @@ const style = computed(() => {
 $prefix: 'video';
 
 .v-vlite.v-#{$prefix} {
+  &.is-iframe {
+    width: 100%;
+    height: auto;
+    padding-bottom: 50%;
+    position: relative;
+    & iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
   aspect-ratio: get-var(video-ratio);
   &.v-border-radius {
     border-radius: 50px;
+  }
+
+  & .v-bigPlay {
+    --vlite-controlsOpacity: 1;
+    --vlite-controlsColor: #{get-var(color-white)};
+    & svg {
+      stroke: none;
+      background: get-var(color-green);
+      border-radius: 100%;
+    }
+    &::after {
+      content: 'Clicca qui per visionare il video';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      color: white;
+      font-size: 25px;
+      width: 250px;
+      font-weight: get-var(weight-extrabold);
+    }
   }
 }
 </style>

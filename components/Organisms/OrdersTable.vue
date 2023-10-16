@@ -39,7 +39,7 @@
                 :class="`${CSS_NAME_ITEM}__view`"
                 color="green"
               >
-                <NuxtIcon name="eye-on" filled />
+                <BaseIcon name="eye-on" filled />
               </BaseButton>
               <BaseButton
                 as="link"

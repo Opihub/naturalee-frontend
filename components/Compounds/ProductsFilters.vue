@@ -87,7 +87,7 @@
         >
           {{ $t('filters.order') }}
           <Suspense>
-            <NuxtIcon name="caret" />
+            <BaseIcon name="caret" />
           </Suspense>
         </button>
         <select

@@ -6,7 +6,12 @@
   >
     <Suspense v-if="svg || slots.svg">
       <slot name="svg" :class-name="CSS_NAME_ICON">
-        <NuxtIcon :name="svg" :class="CSS_NAME_ICON" :filled="svgFilled" />
+        <BaseIcon
+          :name="svg"
+          :class="CSS_NAME_ICON"
+          :icon-size="svgSize"
+          :filled="svgFilled"
+        />
       </slot>
 
       <template #fallback>
@@ -57,6 +62,10 @@ const props = defineProps({
   svgFilled: {
     type: Boolean,
     default: true,
+  },
+  svgSize: {
+    type: String,
+    default: '1em',
   },
   text: {
     type: String,
