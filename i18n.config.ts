@@ -8,7 +8,6 @@ export default defineI18nConfig(() => ({
       quantity: 'Quantità',
       create: 'Crea',
       search: 'Cerca',
-      add: 'Aggiungi',
       searchMsg: 'Di cosa hai bisogno?',
       filters: {
         label: 'Filtra',
@@ -30,7 +29,9 @@ export default defineI18nConfig(() => ({
         viewDetails: 'Vai alla scheda prodotto',
         category: 'Categoria',
         tag: 'Tag',
-        stock: 'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
+        stock:
+          'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
+        related: 'Potrebbero interessarti anche',
       },
       company: {
         name: 'Naturalee srl',
@@ -227,37 +228,44 @@ export default defineI18nConfig(() => ({
           firstSection: {
             supTitle: 'freschezza e qualità dalle nostre terre',
             title: 'una storia che abbraccia passato e futuro',
-            paragraph: 'Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.',
+            paragraph:
+              'Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.',
           },
           secondSection: {
             circularText: 'Lorem ipsum dolor sit amet',
             title: 'Coltiviamo passione, {highlight} gusto',
             highlightText: 'Raccogliamo',
-            paragraph: 'La nostra missione è un connubio di tradizione e innovazione. Ci impegniamo a consegnare a voi e alla vostra attività la migliore selezione di frutta, verdura, latticini, vini, spezie e molto altro.La freschezza di ieri incontra la comodità di oggi guardando avanti con entusiasmo. Volete frutta e verdura di alta qualità a portata di clic? Saremo il vostro punto di riferimento.',
+            paragraph:
+              'La nostra missione è un connubio di tradizione e innovazione. Ci impegniamo a consegnare a voi e alla vostra attività la migliore selezione di frutta, verdura, latticini, vini, spezie e molto altro.La freschezza di ieri incontra la comodità di oggi guardando avanti con entusiasmo. Volete frutta e verdura di alta qualità a portata di clic? Saremo il vostro punto di riferimento.',
           },
           thirdSection: {
             title: 'Cuore e Impegno in ogni fase',
             firstBox: {
               title: '+20 Ettari',
-              paragraph: 'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualità dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
+              paragraph:
+                'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualità dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
             },
             secondBox: {
               title: '25 Anni di esperienza',
-              paragraph: 'La nostra famiglia porta avanti una tradizione di generazioni nella vendita di frutta e verdura al mercato ortofrutticolo di Milano.',
+              paragraph:
+                'La nostra famiglia porta avanti una tradizione di generazioni nella vendita di frutta e verdura al mercato ortofrutticolo di Milano.',
             },
             thirdBox: {
               title: 'Consegna in 24h',
-              paragraph: 'Naturale direttamente a casa vostra. Portiamo la tradizione nel futuro, rendendo più facile che mai l\'acquisto online di prodotti di alta qualità.',
+              paragraph:
+                "Naturale direttamente a casa vostra. Portiamo la tradizione nel futuro, rendendo più facile che mai l'acquisto online di prodotti di alta qualità.",
             },
           },
           fourthSection: {
-            supTitle: 'Naturalee per l\'Ho.re.ca.',
+            supTitle: "Naturalee per l'Ho.re.ca.",
             title: 'una storia che abbraccia passato e futuro',
-            paragraph: 'Naturalee garantisce qualità e professionalità per soddisfare ogni cliente. Mense, ristoranti, frutterie, alberghi e professionisti della ristorazione possono contare su un servizio puntuale, flessibile e basato sulla onestà.',
-            paragraph2: 'Forniamo all\'ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche.',
+            paragraph:
+              'Naturalee garantisce qualità e professionalità per soddisfare ogni cliente. Mense, ristoranti, frutterie, alberghi e professionisti della ristorazione possono contare su un servizio puntuale, flessibile e basato sulla onestà.',
+            paragraph2:
+              "Forniamo all'ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche.",
           },
         },
-      }
+      },
     },
   },
 }))

@@ -64,7 +64,7 @@
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
-        ><span>{{ $t('cart.addTo') }}</span>
+        ><span>{{ $t('cart.add') }}</span>
         <NuxtIcon
           name="bag"
           :class="`${CSS_NAME}__button__svg`"
