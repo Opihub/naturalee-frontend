@@ -2,16 +2,22 @@
   <main>
     <HeaderBottomBar :breadcrumb="page.breadcrumbs" />
 
-    <SiteContainer class="u-pt-huge u-pb-huge">
+    <SiteContainer class="u-pt-huge u-mb-huge">
       <ProductDetail :product="page" />
+    </SiteContainer>
 
-      <BackgroundHolder class="u-pt-huge u-pb-huge" tag="section">
-        <ProductCards
-          v-if="related.data && related.data.length"
-          :products="related.data"
-          :title="$t('products.related')"
-        />
-      </BackgroundHolder>
+    <template
+      v-if="page?.tag && page.tag.find((tag) => tag.slug === 'mioorto')"
+    >
+      <NuxtImg class="u-mb-huge" src="mioorto-row.png" />
+    </template>
+
+    <SiteContainer class="u-pt-huge u-pb-huge">
+      <ProductCards
+        v-if="related.data && related.data.length"
+        :products="related.data"
+        :title="$t('products.related')"
+      />
     </SiteContainer>
   </main>
 </template>
