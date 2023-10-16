@@ -5,11 +5,13 @@
     <SiteContainer class="u-pt-huge u-pb-huge">
       <ProductDetail :product="page" />
 
-      <ProductCards
-        v-if="related.data && related.data.length"
-        :products="related.data"
-        :title="$t('products.related')"
-      />
+      <BackgroundHolder class="u-pt-huge u-pb-huge" tag="section">
+        <ProductCards
+          v-if="related.data && related.data.length"
+          :products="related.data"
+          :title="$t('products.related')"
+        />
+      </BackgroundHolder>
     </SiteContainer>
   </main>
 </template>
@@ -45,10 +47,8 @@ const { page } = await usePage(
 )
 
 const related = await useApi(
-  `shop/categories/${route.params.category}/products/${route.params.product}/related`
+  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`
 )
-
-console.debug(related.value)
 
 // Watcher
 
