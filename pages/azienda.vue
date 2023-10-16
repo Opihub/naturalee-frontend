@@ -3,7 +3,12 @@
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
     <SiteContainer flex class="u-mt-huge" :max-width="1370">
-      <BaseVideo :src="AziendaVideo" :aspect-ratio="ratio" />
+      <BaseVideo
+        id="player"
+        src="shZXLvznzWk"
+        provider="youtube"
+        :aspect-ratio="ratio"
+      />
     </SiteContainer>
 
     <ContentRow
@@ -12,15 +17,13 @@
       flipped
       parallax
     >
-      <template #sup-title>LOREM IPSUM DOLOR SIT</template>
-      <template #title>Amet consectetur adipiscing elit</template>
+      <template #sup-title>{{
+        $t('pages.company.firstSection.supTitle')
+      }}</template>
+      <template #title>{{ $t('pages.company.firstSection.title') }}</template>
 
       <template #default>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore.
+        {{ $t('pages.company.firstSection.paragraph') }}
       </template>
     </ContentRow>
 
@@ -30,29 +33,30 @@
         :max-width="830"
       >
         <BaseHeading>
-          Amet consectetur
-          <HighlightText>adipiscing</HighlightText> elit !
-          <CircularText text="Lorem ipsum dolor sit amet" />
+          Coltiviamo passione,
+          <HighlightText>{{
+            $t('pages.company.secondSection.highlightText')
+          }}</HighlightText>
+          gusto
+          <CircularText
+            :text="$t('pages.company.secondSection.circularText')"
+          />
         </BaseHeading>
 
         <BaseParagraph class="u-mt-large">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse.
+          {{ $t('pages.company.secondSection.paragraph') }}
         </BaseParagraph>
       </SiteContainer>
     </BackgroundHolder>
 
     <SiteContainer class="c-third-section u-pt-huge u-pb-huge@tablet">
       <BaseHeading class="u-pb-huge" tag="h2">
-        Amet consectetur adipisicing</BaseHeading
+        {{ $t('pages.company.thirdSection.title') }}</BaseHeading
       >
       <div class="o-row">
         <BaseCard
           v-for="(card, index) in cards"
-          :key="card.heading + index"
+          :key="index"
           :heading="card.heading"
           :paragraph="card.paragraph"
           :image="card.image"
@@ -66,15 +70,13 @@
       flipped
       color="white"
     >
-      <template #sup-title>LOREM IPSUM DOLOR SIT</template>
-      <template #title>Hai un ristorante, bar o un bed&breakfast?</template>
+      <template #sup-title>{{
+        $t('pages.company.fourthSection.supTitle')
+      }}</template>
+      <template #title>{{ $t('pages.company.fourthSection.title') }}</template>
 
       <template #default>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore.
+        {{ $t('pages.company.fourthSection.paragraph') }}
       </template>
     </ContentRow>
   </main>
@@ -82,29 +84,37 @@
 
 <script setup>
 // Imports
-import AziendaVideo from 'assets/video/azienda.mp4'
+//import AziendaVideo from 'assets/video/azienda.mp4'
+//import { useI18n } from 'vue-i18n'
+//const { t } = useI18n()
 
 // Constants
 const { page } = await usePage('azienda')
 const ratio = [16, 8.8]
 const cards = ref([
+  // {
+  //   image: '/azienda/delivery_1.png',
+  //   heading: '+20 Ettari',
+  //   paragraph:
+  //     'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualità dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
+  // },
   {
     image: '/azienda/delivery_1.png',
-    heading: 'Amet consectetur',
+    heading: '+20 Ettari',
     paragraph:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusimod tempor incididunt ut dolore magna aliqua. Ut enim ad minim veniam',
+      'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualit dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
   },
   {
     image: '/azienda/delivery_2.png',
-    heading: 'Amet consectetur',
+    heading: '25 Anni di esperienza',
     paragraph:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusimod tempor incididunt ut dolore magna aliqua. Ut enim ad minim veniam',
+      'La nostra famiglia porta avanti una tradizione di generazioni nella vendita di frutta e verdura al mercato ortofrutticolo di Milano.',
   },
   {
     image: '/azienda/delivery_3.png',
-    heading: 'Amet consectetur',
+    heading: 'Consegna in 24h',
     paragraph:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusimod tempor incididunt ut dolore magna aliqua. Ut enim ad minim veniam',
+      "Naturale direttamente a casa vostra. Portiamo la tradizione nel futuro, rendendo più facile che mai l'acquisto online di prodotti di alta qualità.",
   },
 ])
 // Define (Props, Emits, Page Meta)
@@ -195,6 +205,7 @@ const cards = ref([
   }
   @include component('third-section') {
     @include object('row') {
+      align-items: baseline;
       @include from('full') {
         flex-wrap: nowrap;
       }

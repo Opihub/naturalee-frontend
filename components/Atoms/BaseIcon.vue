@@ -5,13 +5,7 @@
     v-bind="$props"
     :size="checkSize"
   />
-  <NuxtIcon
-    v-else
-    :name="name"
-    :class="CSS_NAME_ICON"
-    :filled="svgFilled"
-    :style="checkSize"
-  />
+  <NuxtIcon v-else :name="name" :style="checkSize" />
 </template>
 
 <script setup>
@@ -27,7 +21,7 @@ const props = defineProps({
     default: icon,
   },
   iconSize: {
-    type: [Number, String],
+    type: [String, Number, Object],
     default: '1em',
   },
   name: {
