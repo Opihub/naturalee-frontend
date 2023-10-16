@@ -24,7 +24,7 @@
         >
           <li v-for="variation in product.list" :key="variation.id">
             <DrawedButton
-            as="link"
+              as="link"
               :to="variation.link"
               :inner-class="`${CSS_NAME}__variations__single`"
             >
@@ -68,17 +68,10 @@
       </div>
     </div>
 
-    <ReceiptBlock
+    <ProductCardDetail
       :container-class="[`${CSS_NAME}__card`, 'o-row__column']"
-      top-less
-    >
-      <MarkerLabel v-if="product.marker" :marker="product.marker" />
-
-      <div>
-        <BaseButton color="green">{{ $t('cart.addTo') }}</BaseButton>
-        <WishlistButton :product="product" />
-      </div>
-    </ReceiptBlock>
+      :product="product"
+    />
   </section>
 </template>
 
@@ -256,15 +249,6 @@ $prefix: 'product-detail';
         width: rem(340px),
       )
     );
-    display: flex;
-    flex-direction: column;
-    position: relative;
-
-    @include object('marker') {
-      position: absolute;
-      left: 0;
-      top: rem(60px);
-    }
   }
 }
 </style>
