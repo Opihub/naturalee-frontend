@@ -65,6 +65,10 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  big: {
+    type: Boolean,
+    default: false,
+  },
   modelValue: {
     type: Number,
     default: null,
@@ -93,6 +97,10 @@ const className = computed(() => {
 
   if (firstInteraction.value) {
     className.push('is-init')
+  }
+
+  if (props.big) {
+    className.push('is-big')
   }
 
   return className
@@ -196,8 +204,8 @@ $prefix: 'counter';
   text-align: center;
 
   @include element('button') {
-    width: rem(23px);
-    height: rem(23px);
+    width: get-var(size, rem(23px), $prefix: $prefix);
+    height: get-var(size, rem(23px), $prefix: $prefix);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -220,7 +228,7 @@ $prefix: 'counter';
     &::after {
       content: '';
       display: block;
-      width: rem(8px);
+      width: calc(get-var(size, rem(23px), $prefix: $prefix) * 34.78 / 100);
       height: rem(1px);
       position: absolute;
       top: 50%;
@@ -292,6 +300,15 @@ $prefix: 'counter';
 
   &::placeholder {
     opacity: 0.4;
+  }
+
+  @include is('big') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        size: rem(28px),
+      )
+    );
   }
 
   @include is('init') {
