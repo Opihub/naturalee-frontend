@@ -100,21 +100,18 @@ const cards = ref([
   // },
   {
     image: '/azienda/delivery_1.png',
-    heading: '+20 Ettari',
-    paragraph:
-      'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualit dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
+    heading: t('pages.company.thirdSection.firstBox.title'),
+    paragraph: t('pages.company.thirdSection.firstBox.paragraph'),
   },
   {
     image: '/azienda/delivery_2.png',
-    heading: '25 Anni di esperienza',
-    paragraph:
-      'La nostra famiglia porta avanti una tradizione di generazioni nella vendita di frutta e verdura al mercato ortofrutticolo di Milano.',
+    heading: t('pages.company.thirdSection.secondBox.title'),
+    paragraph: t('pages.company.thirdSection.secondBox.paragraph'),
   },
   {
     image: '/azienda/delivery_3.png',
-    heading: 'Consegna in 24h',
-    paragraph:
-      "Naturale direttamente a casa vostra. Portiamo la tradizione nel futuro, rendendo più facile che mai l'acquisto online di prodotti di alta qualità.",
+    heading: t('pages.company.thirdSection.thirdBox.title'),
+    paragraph: t('pages.company.thirdSection.thirdBox.paragraph'),
   },
 ])
 // Define (Props, Emits, Page Meta)
