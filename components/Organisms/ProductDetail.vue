@@ -18,9 +18,28 @@
       </hgroup>
 
       <div :class="`${CSS_NAME_MAIN}__body`">
-        <ul v-if="product?.list && product.list.length > 0">
+        <ul
+          v-if="product?.list && product.list.length > 0"
+          :class="[`${CSS_NAME}__variations`, 'u-mb-half']"
+        >
           <li v-for="variation in product.list" :key="variation.id">
-            {{ variation }}
+            <DrawedButton
+            as="link"
+              :to="variation.link"
+              :inner-class="`${CSS_NAME}__variations__single`"
+            >
+              <BaseIcon
+                :class="`${CSS_NAME}__variations__single__icon`"
+                :name="variation.selling.toLowerCase().replace(' ', '-').trim()"
+                icon-size="38px"
+              />
+              <strong :class="`${CSS_NAME}__variations__single__title`">{{
+                variation.selling
+              }}</strong>
+              <span :class="`${CSS_NAME}__variations__single__description`">{{
+                variation.costDescription
+              }}</span>
+            </DrawedButton>
           </li>
         </ul>
 
@@ -135,6 +154,45 @@ $prefix: 'product-detail';
         font-weight: get-var(weight-regular),
       )
     );
+  }
+
+  @include element('variations') {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 0;
+    margin: 0;
+    gap: rem(14px);
+
+    @include element('single') {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-row: 1fr auto;
+      column-gap: rem(16px);
+      row-gap: rem(2px);
+      text-align: left;
+      align-items: center;
+
+      @include element('icon') {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+      }
+
+      @include element('title') {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        @include typography(16px, 20px);
+      }
+
+      @include element('description') {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+        font-weight: get-var(weight-regular);
+        @include typography(13px, 16px);
+      }
+    }
   }
 
   @include element('main') {
