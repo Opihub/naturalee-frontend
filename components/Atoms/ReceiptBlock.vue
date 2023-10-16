@@ -79,6 +79,9 @@ $prefix: 'receipt';
   display: block;
   position: relative;
   padding: get-var(border-gap, $prefix: $prefix) 0;
+  font-family: get-var(family-text);
+  font-weight: get-var(weight-regular);
+  @include typography(18px, 28px);
 
   &::before,
   &::after {
@@ -106,19 +109,9 @@ $prefix: 'receipt';
   @include element('holder') {
     background-color: get-var(color-white);
   }
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      padding: rem(40px),
-    )
-  );
-
-  font-family: get-var(family-text);
-  font-weight: get-var(weight-regular);
-  @include typography(18px, 28px);
 
   @include element('block') {
-    padding: rem(20px) get-var(padding, $prefix: $prefix);
+    padding: rem(20px) get-var(padding, rem(40px), $prefix: $prefix);
   }
 
   @include element('head') {
