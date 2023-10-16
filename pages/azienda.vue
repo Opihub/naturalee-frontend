@@ -85,8 +85,8 @@
 <script setup>
 // Imports
 //import AziendaVideo from 'assets/video/azienda.mp4'
-//import { useI18n } from 'vue-i18n'
-//const { t } = useI18n()
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 // Constants
 const { page } = await usePage('azienda')
