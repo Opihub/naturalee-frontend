@@ -127,8 +127,6 @@ const calculate = (negative = false) => {
     value = props.max
   }
 
-  console.log(value)
-
   return value
 }
 
