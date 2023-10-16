@@ -181,7 +181,7 @@ $prefix: 'product-detail';
       align-self: center;
 
       @include from(desktop) {
-        grid-column: 1 / 2;
+        grid-column: 2 / 3;
         grid-row: 1 / 2;
       }
     }
