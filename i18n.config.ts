@@ -30,6 +30,7 @@ export default defineI18nConfig(() => ({
         viewDetails: 'Vai alla scheda prodotto',
         category: 'Categoria',
         tag: 'Tag',
+        stock: 'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
       },
       company: {
         name: 'Naturalee srl',
@@ -150,6 +151,7 @@ export default defineI18nConfig(() => ({
         loading: 'Caricamento',
         no: 'No',
         yes: 'Sì',
+        vatInclude: 'IVA inclusa',
       },
       checkout: {
         payment: 'Pagamento',
