@@ -1,5 +1,11 @@
 <template>
-  <component :is="is" :class="className" :type="type">
+  <component
+    :is="is"
+    :class="className"
+    :type="type"
+    active-class="is-current"
+    exact-active-class="is-exact"
+  >
     <slot>
       <span v-if="text">{{ text }}</span>
     </slot>

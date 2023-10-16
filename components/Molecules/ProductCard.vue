@@ -1,11 +1,9 @@
 <template>
   <div :class="className">
     <MarkerLabel
-      v-if="product.marker && product.marker.text"
+      v-if="product.marker && product.marker?.text"
       :class="`${CSS_NAME}__marker`"
-      :text="product.marker.text"
-      :color="product.marker.color"
-      :text-color="product.marker.textColor"
+      :marker="product.marker"
     />
 
     <WishlistButton
@@ -66,8 +64,8 @@
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
-        ><span>{{ $t('add') }}</span>
-        <BaseIcon
+        ><span>{{ $t('cart.add') }}</span>
+        <NuxtIcon
           name="bag"
           :class="`${CSS_NAME}__button__svg`"
           :filled="false"
@@ -80,7 +78,7 @@
       color="dark"
       :class="`${CSS_NAME}__link`"
       :to="product.link"
-      >Vai alla scheda prodotto</BaseLink
+      >{{ $t('products.viewDetails') }}</BaseLink
     >
   </div>
 </template>

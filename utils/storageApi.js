@@ -27,7 +27,7 @@ export function loadJSON(url, defaultData = null) {
 
   const data = fs.readFileSync(file, 'utf8')
 
-  return JSON.parse(data)
+  return JSON.parse(data) || defaultData
 }
 
 export function clearJSON() {

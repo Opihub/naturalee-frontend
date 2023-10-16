@@ -17,6 +17,8 @@ import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
 
 export const useCartStore = defineStore('cart', () => {
+  const { t } = useI18n()
+
   const profile = useAccountStore()
 
   const { isLoggedIn } = storeToRefs(profile)
@@ -93,7 +95,6 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function clearCart() {
-    const { t } = useI18n()
     cart.value = []
 
     notify({
@@ -105,7 +106,6 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function addToCart(product, quantity = 1) {
-    const { t } = useI18n()
     const {
       id,
       variationId,
@@ -167,7 +167,6 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function updateCartQuantity(product, quantity, server = false) {
-    const { t } = useI18n()
     const { variationId: id } = product
     const existingProduct = pickProduct(id)
 
@@ -216,7 +215,6 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
-    const { t } = useI18n()
     const { variationId: id } = product
     const existingProduct = pickProduct(id)
 
@@ -244,7 +242,6 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function applyCoupon(newCoupon) {
-    const { t } = useI18n()
     const body = {
       coupon: newCoupon,
     }

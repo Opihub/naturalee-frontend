@@ -1,14 +1,14 @@
 @mixin layout($parent, $child, $sub: null) {
   %row {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: get-var(wrap, wrap, $prefix: $parent);
     gap: get-var(
-        column-gap,
+        row-gap,
         get-var(gap, rem(20px), $prefix: $parent),
         $prefix: $parent
       )
       get-var(
-        row-gap,
+        column-gap,
         get-var(gap, rem(20px), $prefix: $parent),
         $prefix: $parent
       );

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[CSS_NAME, containerClass]">
+  <div :class="className">
     <div :class="`${CSS_NAME}__holder`" v-bind="$attrs">
       <div
         v-if="slots.header"
@@ -24,10 +24,18 @@ const CSS_NAME_BLOCK = `${CSS_NAME}__block`
 defineOptions({
   inheritAttrs: false,
 })
-defineProps({
+const props = defineProps({
   containerClass: {
-    type: String,
+    type: [String, Array, Object],
     default: null,
+  },
+  topLess: {
+    type: Boolean,
+    default: false,
+  },
+  bottomLess: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -41,6 +49,19 @@ const slots = useSlots()
 // Watcher
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME, ...assembleClassName(props.containerClass)]
+
+  if (props.topLess) {
+    className.push(`${CSS_NAME}--topless`)
+  }
+
+  if (props.bottomLess) {
+    className.push(`${CSS_NAME}--bottomless`)
+  }
+
+  return className
+})
 
 // Methods
 </script>
@@ -58,6 +79,9 @@ $prefix: 'receipt';
   display: block;
   position: relative;
   padding: get-var(border-gap, $prefix: $prefix) 0;
+  font-family: get-var(family-text);
+  font-weight: get-var(weight-regular);
+  @include typography(18px, 28px);
 
   &::before,
   &::after {
@@ -85,19 +109,9 @@ $prefix: 'receipt';
   @include element('holder') {
     background-color: get-var(color-white);
   }
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      padding: rem(40px),
-    )
-  );
-
-  font-family: get-var(family-text);
-  font-weight: get-var(weight-regular);
-  @include typography(18px, 28px);
 
   @include element('block') {
-    padding: rem(20px) get-var(padding, $prefix: $prefix);
+    padding: rem(20px) get-var(padding, rem(40px), $prefix: $prefix);
   }
 
   @include element('head') {
@@ -112,6 +126,24 @@ $prefix: 'receipt';
     font-weight: get-var(weight-bold);
     @include typography(16px, 20px);
     border-bottom: 2px solid get-var(color-light);
+  }
+
+  @include modifier('topless') {
+    padding-top: 0;
+
+    &::before {
+      content: none;
+      display: none;
+    }
+  }
+
+  @include modifier('bottomless') {
+    padding-bottom: 0;
+
+    &::after {
+      content: none;
+      display: none;
+    }
   }
 }
 </style>

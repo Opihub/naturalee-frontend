@@ -12,6 +12,8 @@ import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
 
 export const useWishlistStore = defineStore('wishlist', () => {
+  const { t } = useI18n()
+
   const profile = useAccountStore()
 
   const { isLoggedIn } = storeToRefs(profile)
@@ -51,7 +53,6 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   function addToWishlist(product) {
-    const { t } = useI18n()
     const { id, title } = product
 
     const existingProduct = pick.value(id)
@@ -84,7 +85,6 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   function removeFromWishlist(product) {
-    const { t } = useI18n()
     const existingProduct = pick.value(product.id)
 
     if (!existingProduct) {
@@ -111,7 +111,6 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   function clearWishlist() {
-    const { t } = useI18n()
     wishlist.value = []
 
     notify({

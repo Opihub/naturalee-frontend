@@ -36,7 +36,13 @@ export default defineNuxtConfig({
     },
   },
   hooks: {
+    ready: async (nuxt) => {
+      console.info('Avviato pulizia file')
+      await clearJSON()
+      console.info('Puliti tutti i file')
+    },
     close: async (nuxt) => {
+      console.info('Avviato pulizia file')
       await clearJSON()
       console.info('Puliti tutti i file')
     },
