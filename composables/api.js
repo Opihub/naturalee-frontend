@@ -1,4 +1,10 @@
-import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
+import {
+  useFetch,
+  ref,
+  storeToRefs,
+  useRuntimeConfig,
+  navigateTo,
+} from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
@@ -85,6 +91,14 @@ export async function useApi(url, options = {}, innerOptions = {}) {
        */
       responseData = errorData
       console.warn('errore previsto generato dal server:', responseData)
+
+      if (responseData.code === 'jwt_auth_invalid_token') {
+        await auth.logout(true)
+
+        await navigateTo({
+          path: '/',
+        })
+      }
     } else {
       /**
        * Client error, must not happen

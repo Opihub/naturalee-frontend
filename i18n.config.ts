@@ -223,6 +223,11 @@ export default defineI18nConfig(() => ({
         isCompany: "@:common.yes, sono un'@:invoice.company",
         hasCompany: '@:common.yes, come @:invoice.company',
       },
+      notifications: {
+        logout: 'Logout avvenuto con successo',
+        forcedLogout:
+          'La sessione è scaduta, si prega di rieffettuare il login',
+      },
       pages: {
         company: {
           firstSection: {
