@@ -10,6 +10,7 @@
       <TotalRecap
         class="u-pt-half u-pb-half"
         :class="`${CSS_NAME}__body`"
+        :total="total"
         :sub-total="subTotal"
         :total-class-name="`${CSS_NAME}__body__total`"
         :without-sub-total="withoutSubTotal"
@@ -41,6 +42,10 @@ defineProps({
   subTotal: {
     type: Number,
     required: true,
+  },
+  total: {
+    type: Number,
+    default: null,
   },
   withoutSubTotal: {
     type: Boolean,
