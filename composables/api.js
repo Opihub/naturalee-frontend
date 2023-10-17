@@ -13,6 +13,10 @@ import { saveJSON, loadJSON } from '@/utils/storageApi'
 export async function useApi(url, options = {}, innerOptions = {}) {
   const config = useRuntimeConfig()
 
+  const apiKeys = useSessionStorage('apiKeys', [], {
+    serializer: StorageSerializers.object,
+  })
+
   innerOptions = {
     version: 1,
     cache: true,
@@ -53,6 +57,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       const json = loadJSON(apiUrl(true), null)
       cached = ref(json)
     } else {
+      apiKeys.value.push(apiUrl(true))
       cached = useSessionStorage(apiUrl(true), null, {
         // By passing null as default it can't automatically
         // determine which serializer to use
