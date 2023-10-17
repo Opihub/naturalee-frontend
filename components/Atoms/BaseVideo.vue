@@ -30,6 +30,7 @@ const VIDEO_OPTIONS = {
   playsinline: true,
   loop: true,
   muted: true,
+  poster: null,
 }
 
 // Define (Props, Emits, Page Meta)
@@ -48,6 +49,10 @@ const props = defineProps({
   },
   aspectRatio: {
     type: Array,
+    default: null,
+  },
+  poster: {
+    type: String,
     default: null,
   },
   onReady: {
@@ -84,6 +89,10 @@ onMounted(() => {
     options = VIDEO_OPTIONS
   }
 
+  if (props.poster) {
+    options['poster'] = props.poster
+  }
+
   config.options = {
     ...options,
     ...inheritOptions,
@@ -97,7 +106,9 @@ onMounted(() => {
   }
   if (props.provider !== 'html5') {
     player.value.outerContainer.classList.add('is-iframe')
-    className.push('is-iframe')
+    player.value.outerContainer.style = `--video-ratio: ${formatAspectRatio(
+      props.aspectRatio
+    )}`
   }
 })
 
@@ -132,15 +143,19 @@ const style = computed(() => {
   const style = {}
 
   if (props.aspectRatio) {
-    if (Array.isArray(props.aspectRatio)) {
-      style['--video-ratio'] = `${props.aspectRatio[0]}/${props.aspectRatio[1]}`
-    }
-    if (typeof props.aspectRatio === 'string') {
-      style['--video-ratio'] = `${props.aspectRatio}`
-    }
+    style['--video-ratio'] = formatAspectRatio(props.aspectRatio)
   }
   return style
 })
+
+const formatAspectRatio = (prop) => {
+  if (Array.isArray(prop)) {
+    return `${prop[0]}/${prop[1]}`
+  }
+  if (typeof prop === 'string') {
+    return `${prop.aspectRatio}`
+  }
+}
 
 // Methods
 </script>
@@ -154,16 +169,21 @@ $prefix: 'video';
   &.is-iframe {
     width: 100%;
     height: auto;
-    padding-bottom: 50%;
+    //aspect-ratio: get-var(video-ratio);
     position: relative;
     & iframe {
+      height: 200%;
       position: absolute;
-      top: 0;
+      top: 50%;
       left: 0;
+      transform: translate(0, -50%);
+      .ytp-large-play-button {
+        display: none !important;
+      }
     }
   }
-
   aspect-ratio: get-var(video-ratio);
+
   &.v-border-radius {
     border-radius: 50px;
   }
