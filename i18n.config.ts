@@ -32,6 +32,7 @@ export default defineI18nConfig(() => ({
         stock:
           'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
         related: 'Potrebbero interessarti anche',
+        homepageFeatured: 'Scegli tra la nostra fresca selezione:',
       },
       company: {
         name: 'Naturalee srl',

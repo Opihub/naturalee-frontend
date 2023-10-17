@@ -6,7 +6,7 @@
       <CategoryCards
         v-if="categories && categories.data"
         class="u-pb-huge"
-        :title="categoriesTitle"
+        :title="$t('products.homepageFeatured')"
         :categories="categories.data"
       />
 
@@ -25,12 +25,6 @@ import CompleteLayout from '@/layouts/standard'
 // Constants
 
 // Define (Props, Emits, Page Meta)
-defineProps({
-  categoriesTitle: {
-    type: String,
-    default: null,
-  },
-})
 
 // Component life-cycle hooks
 

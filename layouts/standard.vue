@@ -43,10 +43,6 @@ const CSS_NAME = 'o-layout'
 
 // Define (Props, Emits, Page Meta)
 defineProps({
-  categoriesTitle: {
-    type: String,
-    default: null,
-  },
   overrideLastElement: {
     type: Boolean,
     default: false,
