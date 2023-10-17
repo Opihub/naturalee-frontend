@@ -7,15 +7,17 @@ function getPath() {
 }
 
 export function saveJSON(url, data) {
-  fs.writeFile(
-    `${getPath()}${slugify(url)}.json`,
-    JSON.stringify(data, null, 2),
-    'utf8',
-    (err) => {
-      if (err) return console.log('An error happened', err)
-      console.log(`File fetched from ${url} and written locally!`)
-    }
-  )
+  try {
+    fs.writeFileSync(
+      `${getPath()}${slugify(url)}.json`,
+      JSON.stringify(data, null, 2),
+      'utf8'
+    )
+
+    console.log(`File fetched from ${url} and written locally!`)
+  } catch (error) {
+    console.error(`An error happened while fetching from ${url}`, error)
+  }
 }
 
 export function loadJSON(url, defaultData = null) {
