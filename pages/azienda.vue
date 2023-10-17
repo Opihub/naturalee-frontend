@@ -2,12 +2,29 @@
   <main class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
-    <SiteContainer flex class="u-mt-huge" :max-width="1370">
+    <SiteContainer flex class="u-mt-huge u-position-relative" :max-width="1370">
+      <FloatingIcon
+        :svg-size="{ width: 150, height: 140 }"
+        :coordinates="{ bottom: -20, left: -90 }"
+      >
+        <template #default>
+          <FragolaPera />
+        </template>
+      </FloatingIcon>
+      <FloatingIcon
+        :svg-size="{ width: 260, height: 360 }"
+        :coordinates="{ bottom: -20, right: -170 }"
+      >
+        <template #default>
+          <FormaggioRapanello />
+        </template>
+      </FloatingIcon>
       <BaseVideo
         id="player"
         src="shZXLvznzWk"
         provider="youtube"
         :aspect-ratio="ratio"
+        poster="/azienda/poster-azienda.svg"
       />
     </SiteContainer>
 
@@ -84,20 +101,15 @@
 
 <script setup>
 // Imports
-//import AziendaVideo from 'assets/video/azienda.mp4'
 import { useI18n } from 'vue-i18n'
+import FormaggioRapanello from '@/assets/svg/decorations/formaggio-rapanello.svg'
+import FragolaPera from '@/assets/svg/decorations/fragola-pera.svg'
 const { t } = useI18n()
 
 // Constants
 const { page } = await usePage('azienda')
 const ratio = [16, 8.8]
 const cards = ref([
-  // {
-  //   image: '/azienda/delivery_1.png',
-  //   heading: '+20 Ettari',
-  //   paragraph:
-  //     'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualità dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
-  // },
   {
     image: '/azienda/delivery_1.png',
     heading: t('pages.company.thirdSection.firstBox.title'),

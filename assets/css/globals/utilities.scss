@@ -7,12 +7,20 @@
       @if ($media) {
         @include from($media) {
           @include utility(#{$prop}-#{$key}\@#{$media}) {
-            #{$rule}: if(meta.type-of($value) == number, rem($value), $value) !important;
+            #{$rule}: if(
+              meta.type-of($value) == number,
+              rem($value),
+              $value
+            ) !important;
           }
         }
       } @else {
         @include utility(#{$prop}-#{$key}) {
-          #{$rule}: if(meta.type-of($value) == number, rem($value), $value) !important;
+          #{$rule}: if(
+            meta.type-of($value) == number,
+            rem($value),
+            $value
+          ) !important;
         }
       }
     }
@@ -51,6 +59,7 @@
 
 @include assemble-utilities-with-sizes();
 @include assemble-utilities-without-sizes();
+//@include assemble-utilities-position();
 @each $media, $_ in $responsive {
   @include assemble-utilities-with-sizes($media);
   @include assemble-utilities-without-sizes($media);

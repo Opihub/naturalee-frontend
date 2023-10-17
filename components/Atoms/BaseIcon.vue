@@ -50,6 +50,20 @@ const checkSize = computed(() => {
     return Object.values(props.iconSize)[0]
   }
 
+  if (!checkIcon.value) {
+    if (typeof props.iconSize === 'object') {
+      return {
+        '--svg-width': !isNaN(width) ? `${width}px` : width,
+        '--svg-height': !isNaN(height) ? `${height}px` : height,
+      }
+    }
+    return {
+      '--svg-width': !isNaN(props.iconSize)
+        ? `${props.iconSize}px`
+        : props.iconSize,
+    }
+  }
+
   return props.iconSize
 })
 
