@@ -1,8 +1,11 @@
 <template>
   <Head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,700&family=Mulish:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,700&family=Mulish:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
   </Head>
 
   <SVGDefinitions v-once />
@@ -29,6 +32,7 @@
 <script setup>
 // Imports
 import { useNotificationsStore } from '@/stores/notifications'
+import { StorageSerializers, useSessionStorage } from '@vueuse/core'
 
 // Constants
 
@@ -37,10 +41,46 @@ import { useNotificationsStore } from '@/stores/notifications'
 // Component life-cycle hooks
 
 // Composables
-const store = useNotificationsStore()
+const config = useRuntimeConfig()
+const notificationsStore = useNotificationsStore()
 
 // Data
-const { notifications } = storeToRefs(store)
+const { notifications } = storeToRefs(notificationsStore)
+
+/**
+ * Carica la versione remota delle API
+ */
+if (process.client) {
+  console.debug('test')
+  const { data: cache } = await useFetch('/v1/auth/x-cache', {
+    baseURL: config?.public?.endpoint,
+  })
+
+  /**
+   * Carica la lista di tutte le API salvate
+   */
+  const apiKeys = useSessionStorage('apiKeys', [], {
+    serializer: StorageSerializers.object,
+  })
+  /**
+   * Carica la versione locale delle API
+   */
+  const cacheVersion = useSessionStorage('cacheVersion', null)
+
+  /**
+   * Confronta le due versioni delle API
+   * se differenti, cancella tutte le API registrate, pulisce la lista
+   * ed aggiorna la versione corrente delle API
+   */
+  if (cache.value !== cacheVersion.value) {
+    apiKeys.value.forEach((key) => {
+      window.sessionStorage.removeItem(key)
+    })
+
+    window.sessionStorage.removeItem('apiKeys')
+    cacheVersion.value = cache.value
+  }
+}
 
 // Watcher
 

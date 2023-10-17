@@ -3,7 +3,11 @@ import { useApi } from '@/composables/api'
 import { usePageSeo } from '@/composables/seo'
 import { useSlug } from '@/composables/slug'
 
-export const usePage = async (slug = null, namespace = 'pages') => {
+export const usePage = async (
+  slug = null,
+  namespace = 'pages',
+  loadSeo = true
+) => {
   const endpoint = slug || useSlug()
   const page = ref({})
 
@@ -11,7 +15,7 @@ export const usePage = async (slug = null, namespace = 'pages') => {
 
   page.value = response.value.data
 
-  if (page.value) {
+  if (page.value && loadSeo) {
     usePageSeo(page.value)
   }
 

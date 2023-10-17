@@ -36,7 +36,8 @@ definePageMeta({
 
     const { response } = await usePage(
       route.params.variation,
-      `shop/categories/${route.params.category}/products/${route.params.product}`
+      `shop/categories/${route.params.category}/products/${route.params.product}`,
+      false
     )
 
     return response.value.success

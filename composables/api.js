@@ -1,4 +1,10 @@
-import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
+import {
+  useFetch,
+  ref,
+  storeToRefs,
+  useRuntimeConfig,
+  navigateTo,
+} from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
@@ -6,6 +12,10 @@ import { saveJSON, loadJSON } from '@/utils/storageApi'
 
 export async function useApi(url, options = {}, innerOptions = {}) {
   const config = useRuntimeConfig()
+
+  const apiKeys = useSessionStorage('apiKeys', [], {
+    serializer: StorageSerializers.object,
+  })
 
   innerOptions = {
     version: 1,
@@ -47,6 +57,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       const json = loadJSON(apiUrl(true), null)
       cached = ref(json)
     } else {
+      apiKeys.value.push(apiUrl(true))
       cached = useSessionStorage(apiUrl(true), null, {
         // By passing null as default it can't automatically
         // determine which serializer to use
@@ -85,6 +96,14 @@ export async function useApi(url, options = {}, innerOptions = {}) {
        */
       responseData = errorData
       console.warn('errore previsto generato dal server:', responseData)
+
+      if (responseData.code === 'jwt_auth_invalid_token') {
+        await auth.logout(true)
+
+        await navigateTo({
+          path: '/',
+        })
+      }
     } else {
       /**
        * Client error, must not happen

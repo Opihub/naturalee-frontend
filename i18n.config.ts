@@ -32,6 +32,7 @@ export default defineI18nConfig(() => ({
         stock:
           'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
         related: 'Potrebbero interessarti anche',
+        homepageFeatured: 'Scegli tra la nostra fresca selezione:',
       },
       company: {
         name: 'Naturalee srl',
@@ -222,6 +223,11 @@ export default defineI18nConfig(() => ({
         company: 'azienda',
         isCompany: "@:common.yes, sono un'@:invoice.company",
         hasCompany: '@:common.yes, come @:invoice.company',
+      },
+      notifications: {
+        logout: 'Logout avvenuto con successo',
+        forcedLogout:
+          'La sessione è scaduta, si prega di rieffettuare il login',
       },
       pages: {
         company: {
