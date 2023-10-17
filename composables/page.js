@@ -7,7 +7,7 @@ export const usePage = async (slug = null, namespace = 'pages') => {
   const endpoint = slug || useSlug()
   const page = ref({})
 
-  const response = await useApi(`${namespace}/${endpoint}`, null)
+  const response = await useApi(`${namespace}/${endpoint}`, {})
 
   page.value = response.value.data
 
