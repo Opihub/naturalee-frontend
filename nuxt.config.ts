@@ -2,6 +2,7 @@ import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { clearJSON } from './utils/storageApi'
+import { ofetch } from 'ofetch'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -36,15 +37,34 @@ export default defineNuxtConfig({
     },
   },
   hooks: {
-    ready: async (nuxt) => {
+    ready: async () => {
       console.info('Avviato pulizia file')
       await clearJSON()
       console.info('Puliti tutti i file')
     },
-    close: async (nuxt) => {
+    close: async () => {
       console.info('Avviato pulizia file')
       await clearJSON()
       console.info('Puliti tutti i file')
+    },
+    async 'nitro:config'(nitroConfig) {
+      if (nitroConfig.dev) {
+        return
+      }
+
+      const sitemap = await ofetch(
+        (process.env.API_ENDPOINT_URL || '/') + '/v1/sitemap/products',
+        { parseResponse: JSON.parse }
+      )
+
+      if (!sitemap.success) {
+        throw new Error(sitemap.message)
+      }
+
+      nitroConfig.prerender.routes = [
+        ...nitroConfig.prerender.routes,
+        ...sitemap.data,
+      ]
     },
   },
   modules: [
