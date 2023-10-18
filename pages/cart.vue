@@ -1,4 +1,3 @@
-import { useCartStore } from '@/stores/cart';
 <template>
   <main class="s-cart">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
@@ -15,7 +14,7 @@ import { useCartStore } from '@/stores/cart';
           </SiteContainer>
 
           <SiteContainer :max-width="520" padless>
-            <OrderResume :sub-total="subTotal" :heading="$t('cart.total')">
+            <OrderResume :sub-total="subTotal" :total="total" :heading="$t('cart.total')">
               <template #before="{ className }">
                 <div :class="className">
                   <span>{{ $t('coupon.formTitle') }}</span>
@@ -27,8 +26,8 @@ import { useCartStore } from '@/stores/cart';
                 </div>
               </template>
 
-              <template #after="{ className }">
-                <div :class="className">
+              <template #after="{ footerClassName }">
+                <div :class="footerClassName">
                   <BaseButton as="link" color="green" to="/checkout">{{
                     $t('cart.proceed')
                   }}</BaseButton>
@@ -47,6 +46,7 @@ import { useCartStore } from '@/stores/cart';
 <script setup>
 // Imports
 import { useCartStore } from '@/stores/cart'
+import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 
@@ -57,17 +57,35 @@ import { useCartStore } from '@/stores/cart'
 // Composables
 const { page } = await usePage('cart')
 const cart = useCartStore()
+const shippingStore = useShippingStore()
 
 // Data
-const { isEmpty, subTotal } = storeToRefs(cart)
+const { isEmpty, subTotal, total, shippingMethod } = storeToRefs(cart)
 const basket = await cart.load()
+const shippingAddress = await shippingStore.load()
 
 // Watcher
 
 // Computed
 
 // Methods
+const updateAddress = (address) => {
+  shippingAddress.value = address
+}
+
+const updateShippingMethod = (method) => {
+  console.debug(shippingMethod.value)
+  shippingMethod.value = method
+}
 const { deleteFromCart, clearCart } = cart
+
+// Provide
+provide('shipping', {
+  address: shippingAddress,
+  updateAddress,
+  method: shippingMethod,
+  updateMethod: updateShippingMethod,
+})
 </script>
 
 <style lang="scss">

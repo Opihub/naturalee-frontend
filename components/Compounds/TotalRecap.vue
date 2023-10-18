@@ -15,7 +15,7 @@
     }}</span>
     <PriceHolder
       :class="[`${CSS_NAME}__sum`, `${CSS_NAME}__sum--price`, totalClassName]"
-      :price="subTotal"
+      :price="total || subTotal"
     />
   </div>
 </template>
@@ -31,6 +31,10 @@ defineProps({
   subTotal: {
     type: Number,
     required: true,
+  },
+  total: {
+    type: Number,
+    default: null,
   },
   withoutSubTotal: {
     type: Boolean,
