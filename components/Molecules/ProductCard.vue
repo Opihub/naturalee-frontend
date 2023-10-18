@@ -35,6 +35,7 @@
         :cost-descriptor="product.costDescription"
         :selling="product.selling"
       />
+
     </div>
     <PriceHolder
       class="u-mb-mini u-mt-auto"
@@ -43,13 +44,9 @@
       :is-green="product?.discountPrice ? true : false"
       :normal-price-green="product?.discountPrice ? false : true"
     >
-      <template v-if="product.selling" #after="{ priceClassName }">
-        <small
-          v-if="product.costPerUnit"
-          :class="`${priceClassName}__cost-per-unit`"
-        >
+      <template v-if="product.costPerUnit" #after="{ priceClassName }">
+        <small :class="`${priceClassName}__cost-per-unit`">
           <PriceHolder
-            v-if="product?.discountKgPrice && product?.discountKgPrice > 0"
             :class="`${priceClassName}__cost-per-unit__value`"
             :price="product?.costPerUnit"
             :sales-price="product?.discountKgPrice"
