@@ -29,19 +29,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  validate: async (route) => {
-    if (!isCategory(route.params.category)) {
-      return false
-    }
-
-    const { response } = await usePage(
-      route.params.product,
-      `shop/categories/${route.params.category}/products`,
-      false
-    )
-
-    return response.value.success
-  },
+  middleware: ['category', 'product'],
 })
 
 // Component life-cycle hooks

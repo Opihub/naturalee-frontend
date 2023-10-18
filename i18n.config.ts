@@ -20,6 +20,13 @@ export default defineI18nConfig(() => ({
       apply: 'Applica',
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
+      errors: {
+        backToHome: 'Torna alla homepage',
+        ops: 'Ops!',
+        generic: 'È avvenuto un errore inaspettato...',
+        pageNotFound:
+          'La pagina che stavi cercando non esiste oppure è stata spostata.',
+      },
       products: {
         count: '{count} @:products.label',
         label: 'prodotto | prodotti',

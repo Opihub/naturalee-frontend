@@ -10,6 +10,7 @@
 
   <SVGDefinitions v-once />
 
+  <NuxtLoadingIndicator />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

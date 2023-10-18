@@ -1,3 +1,4 @@
+import { NuxtErrorBoundary } from '../../.nuxt/components';
 <template>
   <main>
     <HeaderBottomBar color="light" />
@@ -27,9 +28,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  validate: async (route) => {
-    return isCategory(route.params.category)
-  },
+  middleware: ['category'],
 })
 
 // Component life-cycle hooks

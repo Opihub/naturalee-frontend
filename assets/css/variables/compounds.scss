@@ -36,4 +36,7 @@ $variables-to-set: (
   z-categories: map.get($z-index, categories),
   z-overlay: map.get($z-index, overlay),
   z-modal: map.get($z-index, modal),
+
+  scrollbar-track-color: get-var(color-light),
+  scrollbar-thumb-color: get-var(color-green),
 );

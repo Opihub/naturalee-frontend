@@ -158,7 +158,7 @@ $prefix: 'mini-cart';
   }
 
   @include element('list') {
-    overflow: scroll visible;
+    overflow: visible scroll;
     max-height: get-var(max-height, $prefix: $prefix);
     list-style: none;
     padding: 0;
