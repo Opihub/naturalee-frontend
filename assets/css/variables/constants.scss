@@ -94,4 +94,14 @@ $utilities-without-sizes: (
       justify,
     ),
   ),
+  position: (
+    rule: position,
+    values: (
+      relative,
+      absolute,
+      fixed,
+      sticky,
+      static,
+    ),
+  ),
 );
