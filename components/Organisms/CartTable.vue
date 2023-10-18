@@ -7,15 +7,19 @@
           <span :class="`${CSS_NAME}__counter`">({{ products.length }})</span>
         </th>
         <th>{{ $t('products.type') }}</th>
-        <th>{{ $t('products.price') }}</th>
-        <th>{{ $t('products.quantity') }}</th>
-        <th colspan="2">{{ $t('common.subTotal') }}</th>
+        <th align="center">{{ $t('products.price') }}</th>
+        <th align="center">{{ $t('products.quantity') }}</th>
+        <th align="center" colspan="2">{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
     <template #body>
       <template v-if="products.length > 0">
-        <tr v-for="product in products" :key="product.id" :class="CSS_NAME_ITEM">
+        <tr
+          v-for="product in products"
+          :key="product.id"
+          :class="CSS_NAME_ITEM"
+        >
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
@@ -28,26 +32,24 @@
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
             :data-title="$t('products.price')"
+             align="center"
           >
             <PriceHolder :price="product.price" />
           </td>
           <td
-            :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
+            :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`, `${CSS_NAME_ITEM_CELL}--inline`]"
             :data-title="$t('products.quantity')"
+             align="center"
           >
-            <BaseCounter v-model="product.quantity">
-              <template #after
-                ><span class="u-ml-tiny">{{ product.unit }}</span></template
-              >
-            </BaseCounter>
+            <BaseCounter v-model="product.quantity" />
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('common.subTotal')"
+            :data-title="$t('common.subTotal')" align="center"
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL">
+          <td :class="CSS_NAME_ITEM_CELL" align="center">
             <CrossButton @click="onDelete(product)" />
           </td>
         </tr>
@@ -128,8 +130,19 @@ $prefix: 'cart-table';
   background-color: get-var(color-white);
   text-align: left;
 
+  @include set-local-vars(
+    $prefix: 'counter',
+    $map: (
+      width: rem(110px),
+    )
+  );
+
   @include element('counter') {
     font-weight: get-var(weight-regular);
+  }
+
+  @include element('unit') {
+    display-inline: block;
   }
 
   @include element('head') {
@@ -220,6 +233,10 @@ $prefix: 'cart-table';
       @include typography(16px, 22px);
       vertical-align: middle;
 
+      & > * {
+        vertical-align: middle;
+      }
+
       @include from(tablet) {
         &:first-child {
           padding-left: get-var(x-offset, $prefix: $prefix);
@@ -241,6 +258,10 @@ $prefix: 'cart-table';
 
       @include modifier('emphasis') {
         @include typography(20px, 24px);
+      }
+
+      @include modifier('inline') {
+        white-space: nowrap;
       }
 
       @include object('cross') {
