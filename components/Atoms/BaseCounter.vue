@@ -206,7 +206,7 @@ $prefix: 'counter';
     height: get-var(size, rem(23px), $prefix: $prefix);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 0;
     margin: 0;
     appearance: none;
@@ -216,6 +216,7 @@ $prefix: 'counter';
     padding: 0;
     position: relative;
     cursor: pointer;
+    flex: 0 0 auto;
     @include transition(border-color);
 
     span {
@@ -273,16 +274,14 @@ $prefix: 'counter';
     border: 0;
     text-align: center;
     padding: 0;
-    margin: 0 rem(61px);
+    margin: 0;
+    flex: 1 1 auto;
     font-weight: get-var(weight-bold);
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
-    }
-    @include from('tablet') {
-      margin: 0 rem(25px);
     }
   }
 
