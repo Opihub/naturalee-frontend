@@ -10,6 +10,27 @@ import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
 import { saveJSON, loadJSON } from '@/utils/storageApi'
 
+function getApiUrl(url, options = {}) {
+  let path = '/'
+  const paths = [url]
+
+  if (options?.version) {
+    paths.unshift(`v${options.version}`)
+  }
+
+  if (options?.local) {
+    paths.unshift('api')
+  }
+
+  path += paths.join('/').replaceAll(/\/+/g, '/')
+
+  if (options?.params) {
+    path += '?' + new URLSearchParams(options.params).toString()
+  }
+
+  return path
+}
+
 export async function useApi(url, options = {}, innerOptions = {}) {
   const config = useRuntimeConfig()
 
@@ -30,35 +51,20 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const auth = useAccountStore()
   const { token, isLoggedIn } = storeToRefs(auth)
 
-  const apiUrl = (complete = false) => {
-    let path = '/'
-    const paths = [url]
-
-    if (innerOptions.version) {
-      paths.unshift(`v${innerOptions.version}`)
-    }
-
-    if (innerOptions.local) {
-      paths.unshift('api')
-    }
-
-    path += paths.join('/').replaceAll(/\/+/g, '/')
-
-    if (complete && options.params) {
-      path += '?' + new URLSearchParams(options.params).toString()
-    }
-
-    return path
-  }
+  const apiUrl = getApiUrl(url, {
+    params: options.params,
+    version: innerOptions.version,
+    local: innerOptions.local,
+  })
 
   let cached = ref(null)
   if (innerOptions.cache) {
     if (process.server) {
-      const json = loadJSON(apiUrl(true), null)
+      const json = loadJSON(apiUrl, null)
       cached = ref(json)
     } else {
-      apiKeys.value.push(apiUrl(true))
-      cached = useSessionStorage(apiUrl(true), null, {
+      apiKeys.value.push(apiUrl)
+      cached = useSessionStorage(apiUrl, null, {
         // By passing null as default it can't automatically
         // determine which serializer to use
         serializer: StorageSerializers.object,
@@ -70,15 +76,22 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     return cached
   }
 
-  const { data, error } = await useFetch(apiUrl(), {
-    ...options,
-    baseURL: innerOptions.local ? null : config?.public?.endpoint,
-    headers: {
-      Authorization: isLoggedIn.value ? `Bearer ${token.value}` : '',
-      ...options?.headers,
-    },
-    pick: null,
-  })
+  const { data, error } = await useFetch(
+    getApiUrl(url, {
+      version: innerOptions.version,
+      local: innerOptions.local,
+    }),
+    {
+      ...options,
+      baseURL: innerOptions.local ? null : config?.public?.endpoint,
+      headers: {
+        Authorization:
+          isLoggedIn && isLoggedIn.value ? `Bearer ${token.value}` : '',
+        ...options?.headers,
+      },
+      pick: null,
+    }
+  )
 
   let responseData = data.value
   if (error.value) {
@@ -134,7 +147,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   cached.value = innerOptions.dataOnly ? response.data : response
 
   if (process.server) {
-    saveJSON(apiUrl(true), cached.value)
+    saveJSON(apiUrl, cached.value)
   }
 
   return cached
