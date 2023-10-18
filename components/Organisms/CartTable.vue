@@ -15,7 +15,11 @@
 
     <template #body>
       <template v-if="products.length > 0">
-        <tr v-for="product in products" :key="product.id" :class="CSS_NAME_ITEM">
+        <tr
+          v-for="product in products"
+          :key="product.id"
+          :class="CSS_NAME_ITEM"
+        >
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
@@ -219,6 +223,10 @@ $prefix: 'cart-table';
       padding: get-var(cell-padding, $prefix: $prefix);
       @include typography(16px, 22px);
       vertical-align: middle;
+
+      & > * {
+        vertical-align: middle;
+      }
 
       @include from(tablet) {
         &:first-child {
