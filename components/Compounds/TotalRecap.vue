@@ -15,7 +15,7 @@
     }}</span>
     <PriceHolder
       :class="[`${CSS_NAME}__sum`, `${CSS_NAME}__sum--price`, totalClassName]"
-      :price="total"
+      :price="total || subTotal"
     />
   </div>
 </template>
