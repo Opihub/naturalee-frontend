@@ -1,7 +1,5 @@
 <template>
   <div :class="className">
-    <slot name="before" />
-
     <button
       :class="[
         `${CSS_NAME}__button`,
@@ -36,8 +34,6 @@
     >
       <span>+</span>
     </button>
-
-    <slot name="after" />
   </div>
 </template>
 
