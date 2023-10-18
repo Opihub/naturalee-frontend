@@ -1,7 +1,9 @@
 export function assembleClassName(raw) {
   let classes = []
 
-  if (Array.isArray(raw)) {
+  if (!raw) {
+    return classes
+  } else if (Array.isArray(raw)) {
     classes = raw
   } else if (typeof raw === 'string') {
     classes.push(raw)

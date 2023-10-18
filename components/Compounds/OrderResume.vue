@@ -10,6 +10,7 @@
       <TotalRecap
         class="u-pt-half u-pb-half"
         :class="`${CSS_NAME}__body`"
+        :total="total"
         :sub-total="subTotal"
         :total-class-name="`${CSS_NAME}__body__total`"
         :without-sub-total="withoutSubTotal"
@@ -42,6 +43,10 @@ defineProps({
     type: Number,
     required: true,
   },
+  total: {
+    type: Number,
+    default: null,
+  },
   withoutSubTotal: {
     type: Boolean,
     default: false,
@@ -72,6 +77,13 @@ defineProps({
 <style lang="scss">
 $prefix: 'order-resume';
 @include component($prefix) {
+  @include set-local-vars(
+    $prefix: 'receipt',
+    $map: (
+      padding: rem(40px),
+    )
+  );
+
   @include element('row') {
     border-bottom: 2px solid get-var(color-light);
   }
