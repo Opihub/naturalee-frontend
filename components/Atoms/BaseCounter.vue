@@ -277,6 +277,7 @@ $prefix: 'counter';
     margin: 0;
     flex: 1 1 auto;
     font-weight: get-var(weight-bold);
+    max-width: calc(100% - (get-var(size, rem(23px), $prefix: $prefix) * 2));
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
