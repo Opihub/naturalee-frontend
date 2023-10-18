@@ -83,6 +83,8 @@ $prefix: 'product-cards';
   }
 
   @include element('item') {
+    height: 100%;
+
     @include from(desktop) {
       width: rem(385px);
     }
