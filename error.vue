@@ -3,25 +3,27 @@
     <SiteContainer flex class="u-pt-huge u-pb-huge">
       <template v-if="error.statusCode === 404">
         <BaseHeading class="u-mt-large">{{ error.statusCode }}</BaseHeading>
-        <BaseHeading tag="h2" use="h3" class="u-mb-huge"
-          >La pagina che stavi cercando non esiste oppure è stata
-          spostata.</BaseHeading
-        >
+        <BaseHeading tag="h2" use="h3" class="u-mb-huge">
+          {{ message }}
+        </BaseHeading>
       </template>
       <template v-else>
-        <BaseHeading class="u-mt-large">Ops!</BaseHeading>
-        <BaseHeading tag="h2" use="h3" class="u-mb-huge"
-          >È avvenuto un errore inaspettato...</BaseHeading
-        >
+        <BaseHeading class="u-mt-large">{{ $t('errors.ops') }}</BaseHeading>
+        <BaseHeading tag="h2" use="h3" class="u-mb-huge">{{
+          $t('errors.generic')
+        }}</BaseHeading>
       </template>
 
-      <BaseButton @click="handleError">Torna alla homepage</BaseButton>
+      <BaseButton @click="handleError">{{
+        $t('errors.backToHome')
+      }}</BaseButton>
     </SiteContainer>
   </NuxtLayout>
 </template>
 
 <script setup>
 // Imports
+import { useI18n } from 'vue-i18n'
 
 // Constants
 
@@ -43,12 +45,20 @@ onMounted(() => {
 })
 
 // Composables
+const { t } = useI18n()
 
 // Data
 
 // Watcher
 
 // Computed
+const message = computed(() => {
+  if (props.error.statusMessage.indexOf('Page Not Found:') > -1) {
+    return t('errors.pageNotFound')
+  }
+
+  return props.error.statusMessage
+})
 
 // Methods
 const handleError = () => clearError({ redirect: '/' })
