@@ -51,7 +51,6 @@ const { notifications } = storeToRefs(notificationsStore)
  * Carica la versione remota delle API
  */
 if (process.client) {
-  console.debug('test')
   const { data: cache } = await useFetch('/v1/auth/x-cache', {
     baseURL: config?.public?.endpoint,
   })
