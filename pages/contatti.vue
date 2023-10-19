@@ -24,8 +24,12 @@
             {{ page.meta.stato }}</BaseParagraph
           >
 
-          <BaseParagraph class="u-mb-small"
-            >{{ $t('company.pIva', { piva: page.meta.piva }) }} <br />
+          <BaseParagraph class="u-mb-small">
+            <BaseLink :to="`mailto:${page.meta.pec}`" color="green">{{
+              page.meta.pec
+            }}</BaseLink
+            ><br />
+            {{ $t('company.pIva', { piva: page.meta.piva }) }} <br />
             {{ $t('company.cf', { cf: page.meta.codice_fiscale }) }}<br />
             {{ $t('company.rea', { rea: page.meta.rea }) }}<br />
             {{ $t('company.capSoc', { capSoc: page.meta.capitale_sociale }) }}
