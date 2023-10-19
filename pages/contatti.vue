@@ -13,20 +13,22 @@
           }}</BaseParagraph>
 
           <BaseHeading class="u-mt-huge" tag="h6">{{
-            $t('company.name')
+            page.meta.nome
           }}</BaseHeading>
 
           <BaseParagraph class="u-mb-small"
-            >{{ $t('company.address') }} <br />
-            {{ $t('company.city') }}<br />
-            {{ $t('company.state') }}</BaseParagraph
+            >{{ page.meta.indirizzo }} <br />
+            {{ page.meta.cap }} {{ page.meta.citta }} ({{
+              page.meta.provincia
+            }})<br />
+            {{ page.meta.stato }}</BaseParagraph
           >
 
           <BaseParagraph class="u-mb-small"
-            >{{ $t('company.pIva') }} <br />
-            {{ $t('company.cf') }}<br />
-            {{ $t('company.rea') }}<br />
-            {{ $t('company.capSoc') }}
+            >{{ $t('company.pIva', { piva: page.meta.piva }) }} <br />
+            {{ $t('company.cf', { cf: page.meta.codice_fiscale }) }}<br />
+            {{ $t('company.rea', { rea: page.meta.rea }) }}<br />
+            {{ $t('company.capSoc', { capSoc: page.meta.capitale_sociale }) }}
           </BaseParagraph>
         </SiteContainer>
 

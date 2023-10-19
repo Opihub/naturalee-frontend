@@ -42,14 +42,10 @@ export default defineI18nConfig(() => ({
         homepageFeatured: 'Scegli tra la nostra fresca selezione:',
       },
       company: {
-        name: 'Naturalee srl',
-        address: 'Via Lorem impsum. 123',
-        city: '20100 Milano (MI)',
-        state: 'Italy',
-        pIva: 'PI IT 0000000000',
-        cf: 'CF 0000000000',
-        rea: 'REA MI 00000',
-        capSoc: 'Cap. Soc. €00.000,00 int.ver',
+        pIva: 'PI {piva}',
+        cf: 'CF {cf}',
+        rea: 'REA MI {rea}',
+        capSoc: 'Cap. Soc. €{capSoc} int.ver',
       },
       cart: {
         your: 'Il tuo carrello',
