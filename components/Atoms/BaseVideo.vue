@@ -76,6 +76,54 @@ const props = defineProps({
   },
 })
 
+// Composables
+
+// Data
+const player = ref(null)
+const playerElement = ref(null)
+const providers = useState('videoProviders', () => [])
+
+// Watcher
+
+// Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.aspectRatio) {
+    className.push(`${CSS_CUSTOM_RATIO}`)
+  }
+
+  return className
+})
+
+const component = computed(() => {
+  if (props.provider === 'html5') {
+    return 'video'
+    // return 'audio'
+  }
+
+  return 'div'
+})
+
+const style = computed(() => {
+  const style = {}
+
+  if (props.aspectRatio) {
+    style['--video-ratio'] = formatAspectRatio(props.aspectRatio)
+  }
+  return style
+})
+
+// Methods
+const formatAspectRatio = (prop) => {
+  if (Array.isArray(prop)) {
+    return `${prop[0]}/${prop[1]}`
+  }
+  if (typeof prop === 'string') {
+    return `${prop.aspectRatio}`
+  }
+}
+
 // Component life-cycle hooks
 onMounted(() => {
   const { options: inheritOptions, provider } = props
@@ -98,12 +146,17 @@ onMounted(() => {
     ...inheritOptions,
   }
 
-  Vlitejs.registerProvider('youtube', VlitejsYoutube)
+  if (props.provider === 'youtube' && !providers.value.includes('youtube')) {
+    Vlitejs.registerProvider('youtube', VlitejsYoutube)
+    providers.value.push('youtube')
+  }
+
   player.value = new Vlitejs(playerElement.value, config)
   if (props.aspectRatio) {
     player.value.outerContainer.style = style.value
     player.value.outerContainer.classList.add('v-border-radius')
   }
+
   if (props.provider !== 'html5') {
     player.value.outerContainer.classList.add('is-iframe')
     player.value.outerContainer.style = `--video-ratio: ${formatAspectRatio(
@@ -111,53 +164,6 @@ onMounted(() => {
     )}`
   }
 })
-
-const className = computed(() => {
-  const className = [CSS_NAME]
-
-  if (props.aspectRatio) {
-    className.push(`${CSS_CUSTOM_RATIO}`)
-  }
-
-  return className
-})
-
-// Composables
-
-// Data
-const player = ref(null)
-const playerElement = ref(null)
-
-// Watcher
-
-// Computed
-const component = computed(() => {
-  if (props.provider === 'html5') {
-    return 'video'
-    // return 'audio'
-  }
-
-  return 'div'
-})
-const style = computed(() => {
-  const style = {}
-
-  if (props.aspectRatio) {
-    style['--video-ratio'] = formatAspectRatio(props.aspectRatio)
-  }
-  return style
-})
-
-const formatAspectRatio = (prop) => {
-  if (Array.isArray(prop)) {
-    return `${prop[0]}/${prop[1]}`
-  }
-  if (typeof prop === 'string') {
-    return `${prop.aspectRatio}`
-  }
-}
-
-// Methods
 </script>
 
 <style lang="scss">
