@@ -170,6 +170,9 @@ const togglePostcodeModal = (status = null) => {
     @include object('heading') {
       @include typography(24px, 30px);
     }
+    @include object('video') {
+      width: 100%;
+    }
   }
 
   @include component('second-section') {
