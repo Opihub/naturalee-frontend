@@ -16,7 +16,7 @@
       <ProductImage :src="product.image" :size="fit" />
     </NuxtLink>
 
-    <div :class="`${CSS_NAME}__body`">
+    <div :class="[`${CSS_NAME}__row`, `${CSS_NAME}__info`]">
       <BaseLink
         :to="product.link"
         :class="[`${CSS_NAME}__title`, 'u-mb-micro']"
@@ -31,52 +31,52 @@
       >
 
       <ProductDescriptor
-        class="u-mb-medium"
         :cost-descriptor="product.costDescription"
         :selling="product.selling"
       />
     </div>
-    <PriceHolder
-      class="u-mb-mini u-mt-auto"
-      :price="product.price"
-      :sales-price="product?.discountPrice"
-      :is-green="product?.discountPrice ? true : false"
-      :normal-price-green="product?.discountPrice ? false : true"
-    >
-      <template v-if="product.selling" #after="{ priceClassName }">
-        <small
-          v-if="product.costPerUnit"
-          :class="`${priceClassName}__cost-per-unit`"
-        >
-          <PriceHolder
-            v-if="product?.discountKgPrice && product?.discountKgPrice > 0"
-            :class="`${priceClassName}__cost-per-unit__value`"
-            :price="product?.costPerUnit"
-            :sales-price="product?.discountKgPrice"
-            :unit="product?.unit"
-        /></small>
-      </template>
-    </PriceHolder>
-    <div :class="`${CSS_NAME}__buttons`" class="u-mt-large u-mt-none@desktop">
+
+    <div :class="[`${CSS_NAME}__row`, 'u-mt-auto']">
+      <PriceHolder
+        class="u-mb-mini"
+        :price="product.price"
+        :sales-price="product?.discountPrice"
+        :is-green="product?.discountPrice ? true : false"
+        :normal-price-green="product?.discountPrice ? false : true"
+      >
+        <template v-if="product.costPerUnit" #after="{ priceClassName }">
+          <small :class="`${priceClassName}__cost-per-unit`">
+            <PriceHolder
+              :class="`${priceClassName}__cost-per-unit__value`"
+              :price="product?.costPerUnit"
+              :sales-price="product?.discountKgPrice"
+              :unit="product?.unit"
+          /></small>
+        </template>
+      </PriceHolder>
+    </div>
+
+    <div :class="[`${CSS_NAME}__row`, `${CSS_NAME}__buy`]">
       <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
       <AddToCartButton
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
-        ><span>{{ $t('cart.add') }}</span>
+      >
+        <span>{{ $t('cart.add') }}</span>
         <NuxtIcon
           name="bag"
           :class="`${CSS_NAME}__button__svg`"
           :filled="false"
-      /></AddToCartButton>
+        />
+      </AddToCartButton>
     </div>
 
     <BaseLink
       v-if="details"
-      underline
       color="dark"
-      :class="`${CSS_NAME}__link`"
+      :class="[`${CSS_NAME}__row`, `${CSS_NAME}__link`]"
       :to="product.link"
       >{{ $t('products.viewDetails') }}</BaseLink
     >
@@ -186,40 +186,27 @@ $prefix: 'product-card';
   @include set-local-vars(
     $prefix: 'counter',
     $map: (
+      width: rem(108px),
       margin: auto 0 0,
     )
   );
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
-  text-align: center;
+  text-align: left;
   background-color: get-var(color-white);
   border-radius: rem(20px);
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      padding-top: rem(30px),
-    )
-  );
+  padding: 0;
+  position: relative;
+  overflow: hidden;
   @include set-vars(
     $prefix: $prefix,
     $map: (
       padding-x: rem(30px),
     )
   );
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      padding-bottom: rem(25px),
-    )
-  );
-  padding: get-var(padding-top, $prefix: $prefix)
-    get-var(padding-x, $prefix: $prefix)
-    get-var(padding-bottom, $prefix: $prefix);
-  position: relative;
-  overflow: hidden;
 
   @include element('marker') {
     position: absolute;
@@ -235,7 +222,40 @@ $prefix: 'product-card';
     z-index: 1;
   }
 
-  @include element('body') {
+  @include element('row') {
+    padding: get-var(padding-top, 0px, $prefix: $prefix)
+      get-var(padding-x, $prefix: $prefix)
+      get-var(padding-bottom, 0px, $prefix: $prefix);
+  }
+
+  @include element('thumbnail') {
+    width: 100%;
+    display: block;
+    margin-bottom: rem(20px);
+    padding-top: rem(30px);
+
+    svg {
+      margin: 0 auto;
+      max-width: get-var(width, rem(300px), $prefix: $prefix);
+
+      image {
+        transform: scale(1);
+        transform-origin: center;
+
+        @include transition(transform);
+      }
+    }
+
+    &:hover {
+      svg {
+        image {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  @include element('info') {
     align-self: stretch;
     text-align: left;
     font-weight: get-var(weight-regular);
@@ -246,78 +266,25 @@ $prefix: 'product-card';
   @include element('title') {
     font-weight: get-var(weight-bold);
     @include typography(22px, 28px);
-    span {
-      width: 100%;
-      justify-content: flex-start;
-    }
   }
 
-  @include element('thumbnail') {
-    width: 100%;
-    display: block;
-    margin-bottom: rem(20px);
-
-    svg {
-      margin: 0 auto;
-      max-width: get-var(width, rem(300px), $prefix: $prefix);
-      transform: scale(1);
-
-      @include transition(transform);
-    }
-
-    &:hover {
-      svg {
-        transform: scale(1.05);
-      }
-    }
-  }
   @include object('price') {
     display: block;
     text-align: start;
   }
-  @include object('button') {
-    margin: rem(20px) auto rem(12px);
+
+  @include element('link') {
     @include set-local-vars(
-      $prefix: 'button',
+      $prefix: $prefix,
       $map: (
-        padding: rem(12px) rem(80px),
+        padding-top: rem(20px),
+        padding-bottom: rem(20px),
       )
     );
-    @include from(tablet) {
-      @include set-local-vars(
-        $prefix: 'button',
-        $map: (
-          padding: rem(12px) rem(30px),
-        )
-      );
-    }
-    @include from(desktop) {
-      @include set-local-vars(
-        $prefix: 'button',
-        $map: (
-          padding: rem(12px) rem(30px),
-        )
-      );
-    }
-  }
-  @include object('link') {
-    width: 100%;
-  }
-  @include element('link') {
+
     margin-top: rem(20px);
-    padding-top: rem(20px);
     text-align: center;
-    text-decoration: none;
-    &::before {
-      content: '';
-      display: block;
-      position: relative;
-      top: -20px;
-      width: calc(100% + (get-var(padding-x, $prefix: $prefix) * 2));
-      height: 2px;
-      background-color: get-var(color-light);
-      margin-left: calc(get-var(padding-x, $prefix: $prefix) / -1);
-    }
+    border-top: 2px solid get-var(color-light);
   }
 
   @include from(tablet) {
@@ -327,6 +294,7 @@ $prefix: 'product-card';
         margin: 0,
       )
     );
+
     @include modifier('inline') {
       flex-direction: row;
       align-items: center;
@@ -368,7 +336,7 @@ $prefix: 'product-card';
         }
       }
 
-      @include element('body') {
+      @include element('info') {
         align-self: center;
         margin-bottom: 0;
       }
@@ -379,23 +347,23 @@ $prefix: 'product-card';
       }
     }
   }
-  @include element('buttons') {
+
+  @include element('buy') {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-wrap: nowrap;
 
-    @include from('desktop') {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: baseline;
-      gap: rem(26px);
-      flex-wrap: wrap;
+    @include object('counter') {
+      flex: 0 0 rem(108px);
     }
+
     @include object('button') {
+      flex: 1 1 auto;
+      max-width: rem(190px);
+
       svg {
         display: inline-block;
         margin-left: rem(14px);
@@ -403,9 +371,46 @@ $prefix: 'product-card';
         color: get-var(color-yellow);
         transition: all 0.5s;
       }
+
       &:hover svg {
         color: get-var(color-green);
       }
+
+      // margin: rem(20px) auto rem(12px);
+
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(12px) rem(80px),
+        )
+      );
+
+      @include from(tablet) {
+        @include set-local-vars(
+          $prefix: 'button',
+          $map: (
+            padding: rem(12px) rem(30px),
+          )
+        );
+      }
+
+      @include from(desktop) {
+        @include set-local-vars(
+          $prefix: 'button',
+          $map: (
+            padding: rem(12px) rem(30px),
+          )
+        );
+      }
+    }
+
+    @include from('desktop') {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: rem(10px);
     }
   }
 }

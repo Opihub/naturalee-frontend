@@ -34,15 +34,18 @@
 
         <span :class="`${CSS_NAME_LIST_PRODUCT}__description`">
           <span :class="`${CSS_NAME_LIST_PRODUCT}__description__quantity`"
-            >{{ product.quantity }}{{ product.unit }}</span
+            >{{ product.quantity }} &times;</span
           >
           <span :class="`${CSS_NAME_LIST_PRODUCT}__description__title`">{{
             product.title
           }}</span>
         </span>
-        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">{{
-          $t('cart.productCode', { sku: product.sku })
-        }}</span>
+        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">
+          <span v-if="product.costDescription">{{
+            product.costDescription
+          }}</span>
+          <span v-if="product.selling">{{ product.selling }}</span>
+        </span>
 
         <PriceHolder
           :class="`${CSS_NAME_LIST_PRODUCT}__price`"
@@ -145,7 +148,7 @@ $prefix: 'mini-cart';
       horizontal-padding: rem(22px),
       max-height: rem(368px),
       product-bound: rem(14px),
-      product-description-gap: rem(18px),
+      product-description-gap: rem(10px),
     )
   );
 
@@ -158,7 +161,7 @@ $prefix: 'mini-cart';
   }
 
   @include element('list') {
-    overflow: scroll visible;
+    overflow: visible scroll;
     max-height: get-var(max-height, $prefix: $prefix);
     list-style: none;
     padding: 0;
@@ -213,17 +216,6 @@ $prefix: 'mini-cart';
           margin-right: get-var(product-description-gap, $prefix: $prefix);
           position: relative;
           white-space: nowrap;
-
-          &::after {
-            content: '-';
-            position: absolute;
-            left: 100%;
-            top: 50%;
-            width: get-var(product-description-gap, $prefix: $prefix);
-            height: auto;
-            text-align: center;
-            transform: translateY(-50%);
-          }
         }
       }
 
@@ -231,11 +223,23 @@ $prefix: 'mini-cart';
         grid-area: code;
         padding-bottom: get-var(product-bound, $prefix: $prefix);
         font-weight: get-var(weight-light);
+        display: inline-flex;
+        justify-content: flex-start;
         @include typography(11px, 13px);
         @include letter-spacing(12);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+
+        & > * {
+          &::before {
+            content: '-';
+            margin: 0 4px;
+          }
+
+          &:first-child {
+            &::before {
+              display: none;
+            }
+          }
+        }
       }
 
       @include element('price') {

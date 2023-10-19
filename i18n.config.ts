@@ -20,6 +20,13 @@ export default defineI18nConfig(() => ({
       apply: 'Applica',
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
+      errors: {
+        backToHome: 'Torna alla homepage',
+        ops: 'Ops!',
+        generic: 'È avvenuto un errore inaspettato...',
+        pageNotFound:
+          'La pagina che stavi cercando non esiste oppure è stata spostata.',
+      },
       products: {
         count: '{count} @:products.label',
         label: 'prodotto | prodotti',
@@ -35,14 +42,10 @@ export default defineI18nConfig(() => ({
         homepageFeatured: 'Scegli tra la nostra fresca selezione:',
       },
       company: {
-        name: 'Naturalee srl',
-        address: 'Via Lorem impsum. 123',
-        city: '20100 Milano (MI)',
-        state: 'Italy',
-        pIva: 'PI IT 0000000000',
-        cf: 'CF 0000000000',
-        rea: 'REA MI 00000',
-        capSoc: 'Cap. Soc. €00.000,00 int.ver',
+        pIva: 'PI {piva}',
+        cf: 'CF {cf}',
+        rea: 'REA MI {rea}',
+        capSoc: 'Cap. Soc. €{capSoc} int.ver',
       },
       cart: {
         your: 'Il tuo carrello',
@@ -51,6 +54,7 @@ export default defineI18nConfig(() => ({
         empty: 'Non hai alcun prodotto nel carrello',
         cleared: 'Il carrello è stato svuotato',
         missingProduct: 'Prodotto non trovato nel carrello',
+        quantity: '@:products.quantity / U',
         quantityUpdated: '@:quantity aggiornata | @:quantity aggiornate',
         addedToCart:
           '{count} {name} aggiunto al carrello | {count} {name} aggiunti al carrello',

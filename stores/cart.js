@@ -115,6 +115,7 @@ export const useCartStore = defineStore('cart', () => {
       link,
       sku,
       unit,
+      selling,
       costDescription,
       image,
     } = product
@@ -149,6 +150,7 @@ export const useCartStore = defineStore('cart', () => {
       link,
       sku,
       unit,
+      selling,
       costDescription,
       image,
     })
