@@ -57,6 +57,9 @@ const value = computed(() => {
     case 'vaschetta-tonda':
       selling = 'vaschetta-rotonda'
       break
+    case 'ciotola-monoporzione':
+      selling = 'ciotola'
+      break
   }
   return selling
 })
