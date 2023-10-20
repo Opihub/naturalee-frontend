@@ -25,18 +25,38 @@
           >
 
           <BaseParagraph class="u-mb-small">
-            <BaseLink :to="`mailto:${page.meta.pec}`" color="green">{{
-              page.meta.pec
-            }}</BaseLink
-            ><br />
             {{ $t('company.pIva', { piva: page.meta.piva }) }} <br />
             {{ $t('company.cf', { cf: page.meta.codice_fiscale }) }}<br />
             {{ $t('company.rea', { rea: page.meta.rea }) }}<br />
-            {{ $t('company.capSoc', { capSoc: page.meta.capitale_sociale }) }}
+            {{ $t('company.capSoc', { capSoc: page.meta.capitale_sociale })
+            }}<br />
+            <BaseLink :to="`mailto:${page.meta.pec}`" color="green">{{
+              page.meta.pec
+            }}</BaseLink>
           </BaseParagraph>
         </SiteContainer>
 
-        <SiteContainer class="o-row__container o-row__container--right" padless>
+        <SiteContainer
+          class="o-row__container o-row__container--right u-position-relative u-pb-none"
+          padless
+        >
+          <FloatingIcon
+            :svg-size="{ width: 285, height: 250 }"
+            :coordinates="{ bottom: -70, left: -220 }"
+          >
+            <template #default>
+              <Papaya />
+            </template>
+          </FloatingIcon>
+          <FloatingIcon
+            :svg-size="{ width: 150, height: 140 }"
+            :coordinates="{ top: -30, right: -70 }"
+            z-index="-1"
+          >
+            <template #default>
+              <yellowDots />
+            </template>
+          </FloatingIcon>
           <BackgroundHolder tag="div" color="white" content-center>
             <ContactForm />
           </BackgroundHolder>
@@ -47,6 +67,10 @@
 </template>
 
 <script setup>
+//Imports
+import Papaya from '@/assets/svg/decorations/papaya.svg'
+import yellowDots from '@/assets/svg/decorations/yellow-dots.svg'
+//Constant
 const { page } = await usePage('contatti')
 </script>
 
@@ -85,7 +109,7 @@ $prefix: 'contacts';
         @include set-local-vars(
           $prefix: 'container',
           $map: (
-            margin: 50px 0,
+            margin: 50px 0 0 0,
           )
         );
         @include modifier('left') {

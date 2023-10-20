@@ -24,6 +24,10 @@ const props = defineProps({
     type: [String, Number, Object],
     default: '1em',
   },
+  zIndex: {
+    type: [String, Number],
+    default: '10',
+  },
 })
 // Component life-cycle hooks
 
@@ -59,6 +63,10 @@ const style = computed(() => {
         : props.svgSize?.height
     }
   }
+
+  if (!isNaN(props.zIndex)) {
+    style['--floating-icon-zindex'] = props.zIndex
+  }
   return style
 })
 
@@ -74,7 +82,7 @@ $prefix: 'floating-icon';
   left: get-var(position-left, $prefix: $prefix);
   right: get-var(position-right, $prefix: $prefix);
   bottom: get-var(position-bottom, $prefix: $prefix);
-  z-index: 10;
+  z-index: get-var(zindex, $prefix: $prefix);
   user-select: none;
   //pointer-events: none;
   svg {

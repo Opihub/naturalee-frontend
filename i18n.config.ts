@@ -44,7 +44,7 @@ export default defineI18nConfig(() => ({
       company: {
         pIva: 'PI {piva}',
         cf: 'CF {cf}',
-        rea: 'REA MI {rea}',
+        rea: 'REA {rea}',
         capSoc: 'Cap. Soc. €{capSoc} int.ver',
       },
       cart: {
