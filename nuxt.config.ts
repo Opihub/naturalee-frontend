@@ -21,6 +21,12 @@ export default defineNuxtConfig({
       name: 'page',
       mode: 'out-in',
     },
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    },
   },
   css: [
     '@splidejs/vue-splide/css/core',
