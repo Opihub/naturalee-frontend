@@ -108,7 +108,7 @@ const { t } = useI18n()
 
 // Constants
 const { page } = await usePage('azienda')
-const ratio = [16, 8.8]
+const ratio = [16, 9]
 const cards = ref([
   {
     image: '/azienda/delivery_1.png',
