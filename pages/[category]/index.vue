@@ -1,4 +1,3 @@
-import { NuxtErrorBoundary } from '../../.nuxt/components';
 <template>
   <main>
     <HeaderBottomBar color="light" />
