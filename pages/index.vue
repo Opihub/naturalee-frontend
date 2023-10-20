@@ -66,6 +66,7 @@
     </ContentRow>
 
     <BackgroundHolder
+      id="frutta-verdura"
       class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
       tag="section"
     >

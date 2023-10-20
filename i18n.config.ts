@@ -161,6 +161,7 @@ export default defineI18nConfig(() => ({
         video: {
           clickHere: 'Clicca qui per visionare il video',
         },
+        timeSlot: 'Fascia oraria',
       },
       checkout: {
         payment: 'Pagamento',
@@ -188,7 +189,7 @@ export default defineI18nConfig(() => ({
         reorder: 'Riordina',
         details: 'Dettagli ordine',
         createdAt:
-          "L'ordine {id} è stato creato il {date} ed è attualmente {status}.",
+          "L'ordine {id} creato il {date} è attualmente {status}.",
         notes: "Note sull'ordine",
       },
       addresses: {

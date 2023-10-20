@@ -2,7 +2,7 @@
   <section class="s-order-details">
     <BaseParagraph class="u-mb-tiny">{{
       $t('orders.createdAt', {
-        // id: orderId(order.id),
+        id: orderId(order.id),
         date,
         status: $t(`orders.status.${order.status}`),
       })
@@ -18,12 +18,16 @@
 
     <div class="o-row">
       <div class="o-row__column">
-        <BaseHeading tag="h5" class="u-mb-small">{{ $t('addresses.shipping') }}</BaseHeading>
+        <BaseHeading tag="h5" class="u-mb-small">{{
+          $t('addresses.shipping')
+        }}</BaseHeading>
         <ShopAddress :address="order.addresses.shipping" />
       </div>
 
       <div class="o-row__column">
-        <BaseHeading tag="h5" class="u-mb-small">{{ $t('addresses.billing') }}</BaseHeading>
+        <BaseHeading tag="h5" class="u-mb-small">{{
+          $t('addresses.billing')
+        }}</BaseHeading>
         <ShopAddress :address="order.addresses.billing" />
       </div>
     </div>

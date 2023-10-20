@@ -21,7 +21,8 @@
           <ProductImage :src="product.image" :alt="product.title" />
         </td>
         <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.label')">
-          <b class="u-mr-mini">{{product.quantity}}&times;</b>{{ product.title }}<br />
+          <b class="u-mr-mini">{{ product.quantity }}&times;</b
+          >{{ product.title }}<br />
           <small>{{ product.costDescription }}</small>
         </td>
         <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
@@ -52,6 +53,21 @@
         </td>
         <td :class="CSS_NAME_ITEM_CELL" colspan="3">
           <PriceHolder :price="subTotal" />
+        </td>
+      </tr>
+      <tr
+        v-if="timeSlots && Object.keys(timeSlots).length > 0"
+        :class="CSS_NAME_ITEM"
+      >
+        <td
+          :class="CSS_NAME_ITEM_CELL"
+          :data-title="$t('common.timeSlot')"
+          colspan="3"
+        >
+          {{ $t('common.timeSlot') }}:
+        </td>
+        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
+          {{ timeSlots.title }} {{ timeSlots.from }} - {{ timeSlots.to }}
         </td>
       </tr>
       <tr v-if="coupon" :class="CSS_NAME_ITEM">
@@ -127,6 +143,12 @@ const props = defineProps({
     },
   },
   payment: {
+    type: Object,
+    default() {
+      return {}
+    },
+  },
+  timeSlots: {
     type: Object,
     default() {
       return {}
