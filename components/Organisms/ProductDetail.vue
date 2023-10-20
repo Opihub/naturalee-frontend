@@ -42,7 +42,7 @@
         </li>
       </ul>
 
-      <BaseMarkdown :content="product.description" />
+      <BaseMarkdown v-if="product.description" :content="product.description" />
 
       <TagsList
         v-if="product?.categories && product.categories.length > 0"
