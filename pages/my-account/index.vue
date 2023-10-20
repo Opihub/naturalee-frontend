@@ -55,7 +55,7 @@ const { account } = storeToRefs(store)
 // Computed
 
 // Methods
-const { logout } = store
+const { logout } = useLogout()
 </script>
 
 <style lang="scss">
