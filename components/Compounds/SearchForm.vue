@@ -23,8 +23,9 @@
       color="yellow"
       svg="search"
       :svg-size="svgSize"
-      >{{ $t('search') }}</BaseButton
     >
+      <span :class="`${CSS_NAME}__submit__text`">{{ $t('search') }}</span>
+    </BaseButton>
   </form>
 
   <slot name="after" />
@@ -139,6 +140,18 @@ $prefix: 'search';
   display: flex;
   align-items: stretch;
 
+  @include element('input') {
+    flex: 0 1 100%;
+  }
+
+  @include element('submit') {
+    flex: 0 0 auto;
+
+    @include element('text') {
+      display: get-var(display-label, inline, $prefix: $prefix);
+    }
+  }
+
   @include modifier('mini') {
     @include set-local-vars(
       $prefix: $prefix,
@@ -153,7 +166,7 @@ $prefix: 'search';
       $map: (
         font-size: get-var(font-size, $prefix: $prefix),
         line-height: get-var(line-height, $prefix: $prefix),
-        padding: rem(7px) rem(20px),
+        padding: rem(7px) rem(9px),
       )
     );
 
@@ -165,14 +178,29 @@ $prefix: 'search';
         padding: rem(7px) rem(20px),
       )
     );
-  }
 
-  @include element('input') {
-    flex: 0 1 100%;
-  }
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        display-label: none,
+      )
+    );
 
-  @include element('submit') {
-    flex: 0 0 auto;
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(7px) rem(20px),
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          display-label: inline,
+        )
+      );
+    }
   }
 }
 </style>

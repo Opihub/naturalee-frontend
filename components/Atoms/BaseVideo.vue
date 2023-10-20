@@ -12,6 +12,7 @@
 
 <script setup>
 // Imports
+import { useI18n } from '#imports'
 import Vlitejs from 'vlitejs'
 import VlitejsYoutube from 'vlitejs/providers/youtube'
 
@@ -77,6 +78,7 @@ const props = defineProps({
 })
 
 // Composables
+const { t } = useI18n()
 
 // Data
 const player = ref(null)
@@ -163,6 +165,14 @@ onMounted(() => {
       props.aspectRatio
     )}`
   }
+
+  const bigPlay = player.value.outerContainer.querySelector('.v-bigPlay')
+  if (bigPlay) {
+    const span = document.createElement('span')
+    span.innerText = t('common.video.clickHere')
+
+    bigPlay.appendChild(span)
+  }
 })
 </script>
 
@@ -175,14 +185,16 @@ $prefix: 'video';
   &.is-iframe {
     width: 100%;
     height: auto;
-    //aspect-ratio: get-var(video-ratio);
     position: relative;
-    & iframe {
+    //aspect-ratio: get-var(video-ratio);
+
+    iframe {
       height: 200%;
       position: absolute;
       top: 50%;
       left: 0;
       transform: translate(0, -50%);
+
       .ytp-large-play-button {
         display: none !important;
       }
@@ -194,25 +206,37 @@ $prefix: 'video';
     border-radius: 50px;
   }
 
-  & .v-bigPlay {
+  .v-bigPlay {
+    width: auto;
+    height: auto;
+    outline: 0;
+
     --vlite-controlsOpacity: 1;
     --vlite-controlsColor: #{get-var(color-white)};
-    & svg {
+
+    svg {
+      width: rem(215px);
+      height: rem(215px);
+      margin: 0 auto rem(18px);
       stroke: none;
       background: get-var(color-green);
       border-radius: 100%;
     }
-    &::after {
-      content: 'Clicca qui per visionare il video';
-      display: block;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, 50%);
+
+    span {
+      display: none;
       color: white;
-      font-size: 25px;
-      width: 250px;
+      width: rem(430px);
+      @include typography(50px, 60px);
       font-weight: get-var(weight-extrabold);
+    }
+  }
+
+  &.v-firstStart {
+    .v-bigPlay {
+      span {
+        display: block;
+      }
     }
   }
 }

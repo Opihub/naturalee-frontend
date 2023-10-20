@@ -24,7 +24,7 @@
             to="/"
             underline
             :class="`${CSS_NAME}__logout`"
-            @click.prevent="quit"
+            @click.prevent="logout"
             >{{ $t('form.logout') }}</BaseLink
           >
         </li>
@@ -54,8 +54,8 @@ defineProps({
 
 // Composables
 const store = useAccountStore()
-const { logout } = store
 const { account } = storeToRefs(store)
+const { logout } = useLogout()
 
 // Data
 
@@ -64,13 +64,6 @@ const { account } = storeToRefs(store)
 // Computed
 
 // Methods
-const quit = async () => {
-  await logout()
-
-  await navigateTo({
-    path: '/',
-  })
-}
 </script>
 
 <style lang="scss">

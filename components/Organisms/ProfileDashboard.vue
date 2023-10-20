@@ -30,7 +30,6 @@
 
 <script setup>
 // Imports
-import { useAccountStore } from '@/stores/account'
 
 // Constants
 const CSS_NAME = 'c-profile-dashboard'
@@ -40,7 +39,6 @@ const CSS_NAME = 'c-profile-dashboard'
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
 const menu = await useApi('menu/dashboard').catch((error) => {
   console.error('Errore durante il caricamento di "menu/categories"', error)
 })
@@ -52,7 +50,7 @@ const menu = await useApi('menu/dashboard').catch((error) => {
 // Computed
 
 // Methods
-const { logout } = store
+const { logout } = useLogout()
 </script>
 
 <style lang="scss">

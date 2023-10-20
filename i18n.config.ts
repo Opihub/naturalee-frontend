@@ -158,6 +158,9 @@ export default defineI18nConfig(() => ({
         no: 'No',
         yes: 'Sì',
         vatInclude: 'IVA inclusa',
+        video: {
+          clickHere: 'Clicca qui per visionare il video',
+        },
       },
       checkout: {
         payment: 'Pagamento',
