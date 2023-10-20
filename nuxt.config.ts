@@ -1,7 +1,7 @@
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
-import { clearJSON } from './utils/storageApi'
+import { clearJSON } from './server/utils/storageApi'
 import { ofetch } from 'ofetch'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 

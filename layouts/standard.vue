@@ -64,29 +64,47 @@ onUnmounted(() => {
 })
 
 // Composables
-const topbarBanners = await useApi('layout/topbar').catch((error) => {
-  console.error('Errore durante il caricamento di "layout/topbar"', error)
-})
-const copyrights = await useApi('layout/copyright').catch((error) => {
-  console.error('Errore durante il caricamento di "layout/copyright"', error)
-})
+const topbarBanners = await useApi('layout/topbar', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "layout/topbar"', error)
+  }
+)
+const copyrights = await useApi('layout/copyright', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "layout/copyright"', error)
+  }
+)
 
-const primaryMenu = await useApi('menu/primary').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/primary"', error)
-})
-const footerMenu = await useApi('menu/footer').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/footer"', error)
-})
-const socialsMenu = await useApi('menu/socials').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/socials"', error)
-})
-const profileMenu = await useApi('menu/profile').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/profile"', error)
-})
-const privacyMenu = await useApi('menu/privacy').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/privacy"', error)
-})
-const categoriesMenu = await useApi('menu/categories').catch((error) => {
+const primaryMenu = await useApi('menu/primary', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "menu/primary"', error)
+  }
+)
+const footerMenu = await useApi('menu/footer', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "menu/footer"', error)
+  }
+)
+const socialsMenu = await useApi('menu/socials', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "menu/socials"', error)
+  }
+)
+const profileMenu = await useApi('menu/profile', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "menu/profile"', error)
+  }
+)
+const privacyMenu = await useApi('menu/privacy', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "menu/privacy"', error)
+  }
+)
+const categoriesMenu = await useApi(
+  'menu/categories',
+  {},
+  { local: true }
+).catch((error) => {
   console.error('Errore durante il caricamento di "menu/categories"', error)
 })
 

@@ -29,13 +29,17 @@ import CompleteLayout from '@/layouts/standard'
 // Component life-cycle hooks
 
 // Composables
-const categories = await useApi('shop/categories').catch((error) => {
-  console.error('Errore durante il caricamento di "shop/categories"', error)
-})
+const categories = await useApi('shop/categories', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "shop/categories"', error)
+  }
+)
 
-const marquee = await useApi('layout/marquee').catch((error) => {
-  console.error('Errore durante il caricamento di "layout/marquee"', error)
-})
+const marquee = await useApi('layout/marquee', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "layout/marquee"', error)
+  }
+)
 
 // Data
 

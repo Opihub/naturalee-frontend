@@ -2,20 +2,20 @@ import { useRemoteApi } from '@/server/utils/remoteApi'
 import storage from '@/server/utils/storageApi'
 
 export default defineEventHandler(async (event) => {
-  const slug = event.context.params?.slug
+  const layout = event.context.params?.layout
 
-  if (!slug) {
+  if (!layout) {
     throw createError({
       statusCode: 403,
-      statusMessage: 'Missing mandatory menu slug',
+      statusMessage: 'Missing mandatory layout slug',
       data: {
-        code: 'missing_slug',
+        code: 'missing_layout_slug',
         success: false,
       },
     })
   }
 
-  const URL = `/v1/menu/${slug}`
+  const URL = `/v1/layout/${layout}`
 
   try {
     const json = await storage.load(URL)

@@ -23,13 +23,17 @@
 // Component life-cycle hooks
 
 // Composables
-const copyrights = await useApi('layout/copyright').catch((error) => {
-  console.error('Errore durante il caricamento di "layout/copyright"', error)
-})
+const copyrights = await useApi('layout/copyright', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "layout/copyright"', error)
+  }
+)
 
-const privacyMenu = await useApi('menu/privacy').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/privacy"', error)
-})
+const privacyMenu = await useApi('menu/privacy', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "menu/privacy"', error)
+  }
+)
 
 // Data
 
