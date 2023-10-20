@@ -275,6 +275,10 @@ export default defineI18nConfig(() => ({
               "Forniamo all'ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche.",
           },
         },
+        faq: {
+          title: 'Le risposte alle domande più frequenti',
+          paragraph: 'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
+        }
       },
     },
   },

@@ -3,11 +3,23 @@
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
     <BackgroundHolder color="white" class="u-pt-huge u-pb-large">
-      <SiteContainer :max-width="1060">
-        <BaseHeading tag="h1" class="u-text-center@tablet u-mb-huge"
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</BaseHeading
-        >
+      <div class="o-row row-faq">
+        <SiteContainer :max-width="1060">
+          <BaseHeading tag="h1" class="u-text-start u-mb-huge">{{
+            $t('pages.faq.title')
+          }}</BaseHeading>
 
+          <BaseParagraph class="u-text-start u-mb-huge">
+            Qui troverete risposte alle domande più comuni riguardanti il
+            processo di acquisto, il pagamento, la spedizione e altro ancora. Se
+            non trovate la risposta alla vostra domanda, non esitate a
+            <BaseLink to="/contatti" color="dark" underline=""
+              >contattarci</BaseLink
+            >.
+          </BaseParagraph>
+        </SiteContainer>
+      </div>
+      <SiteContainer :max-width="1060">
         <SiteAccordion
           v-for="(faq, index) in faqs"
           :key="index"
@@ -56,5 +68,26 @@ const { page } = await usePage('faq')
       text-color: get-var(color-green),
     )
   );
+  @include object('row') {
+    @include object('container') {
+      display: flex;
+      flex-direction: column;
+      @include object('heading') {
+        @include set-local-vars(
+          $prefix: 'heading',
+          $map: (
+            'font-size': rem(40px),
+            'line-height': rem(50px),
+          )
+        );
+      }
+
+      @include from('desktop') {
+        flex-direction: row;
+        align-items: center;
+        gap: rem(154px);
+      }
+    }
+  }
 }
 </style>
