@@ -67,7 +67,7 @@
     </template>
     <template #footer>
       <tr :class="`${CSS_NAME}__footer`">
-        <td colspan="7" align="right">
+        <td colspan="7">
           <button
             :class="`${CSS_NAME}__empty`"
             type="button"
@@ -175,9 +175,11 @@ $prefix: 'cart-table';
   @include element('footer') {
     td,
     th {
-      padding: rem(24px) get-var(cell-padding, $prefix: $prefix);
+      padding: rem(0px) get-var(cell-padding, $prefix: $prefix) rem(24px);
 
       @include from(tablet) {
+        padding: rem(24px) get-var(cell-padding, $prefix: $prefix);
+        text-align: right;
         &:first-child {
           padding-left: get-var(x-offset, $prefix: $prefix);
         }
@@ -299,6 +301,12 @@ $prefix: 'cart-table';
         }
       }
     }
+  }
+}
+tfoot {
+  @include until(tablet) {
+    display: block;
+    text-align: center;
   }
 }
 </style>
