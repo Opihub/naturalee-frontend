@@ -198,8 +198,8 @@ $prefix: 'counter';
   text-align: center;
 
   @include element('button') {
-    width: get-var(size, rem(23px), $prefix: $prefix);
-    height: get-var(size, rem(23px), $prefix: $prefix);
+    width: get-var(size, rem(24px), $prefix: $prefix);
+    height: get-var(size, rem(24px), $prefix: $prefix);
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
@@ -223,7 +223,7 @@ $prefix: 'counter';
     &::after {
       content: '';
       display: block;
-      width: calc(get-var(size, rem(23px), $prefix: $prefix) * 34.78 / 100);
+      width: calc(get-var(size, rem(24px), $prefix: $prefix) * 34.78 / 100);
       height: rem(1px);
       position: absolute;
       top: 50%;
@@ -273,7 +273,7 @@ $prefix: 'counter';
     margin: 0;
     flex: 1 1 auto;
     font-weight: get-var(weight-bold);
-    max-width: calc(100% - (get-var(size, rem(23px), $prefix: $prefix) * 2));
+    max-width: calc(100% - (get-var(size, rem(24px), $prefix: $prefix) * 2));
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
