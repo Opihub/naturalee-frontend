@@ -3,6 +3,7 @@
     <ProductImage
       :class="`${CSS_NAME}__thumbnail`"
       :src="product.image"
+      background="white"
     />
 
     <hgroup :class="`${CSS_NAME}__heading`">
