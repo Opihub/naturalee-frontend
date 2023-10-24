@@ -10,7 +10,7 @@
       <ProductsGrid
         class="u-pb-huge u-pt-none"
         from="shop/search/products"
-        :search="search"
+        :search="$route.query?.search || ''"
         paginate
       />
     </Suspense>
@@ -28,20 +28,17 @@
 
 // Data
 const route = useRoute()
-const router = useRouter()
 const search = ref(route.query.search ? route.query.search : '')
 
 // Watcher
-watch(search, (search) => {
-  router.push({
-    path: '/search',
-    query: { search },
-  })
-})
 
 // Computed
 const title = computed(() => {
-  return `Hai cercato: ${search.value}`
+  if (route.query.search) {
+    return `Hai cercato: ${route.query.search}`
+  }
+
+  return 'Scrivi almeno tre caratteri per avviare la ricerca'
 })
 
 const breadcrumbs = computed(() => {
