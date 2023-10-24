@@ -155,9 +155,23 @@ $prefix: 'order-table';
 
     @include element('cell') {
       border-bottom: 1px solid transparent;
-      padding: get-var(cell-padding, $prefix: $prefix);
       @include typography(16px, 22px);
       vertical-align: middle;
+      margin-bottom: rem(20px);
+      @include until(tablet) {
+        padding-left: 50%;
+        text-align: start;
+        padding-right: rem(20px);
+        padding-top: rem(20px);
+      }
+      &::before {
+        padding-top: rem(20px);
+        width: 0;
+        left: rem(40px);
+        font-weight: get-var(weight-bold);
+        @include typography(16px, 22px);
+        text-transform: uppercase;
+      }
 
       @include from(tablet) {
         &:first-child {
@@ -170,10 +184,25 @@ $prefix: 'order-table';
       }
 
       @include modifier('actions') {
-        width: rem(300px);
+        padding-left: 0;
+        @include from(tablet) {
+          width: rem(300px);
+        }
 
         @include object('row') {
-          justify-content: space-between;
+          @include until(tablet) {
+            margin-top: rem(40px);
+            justify-content: center;
+            @include set-local-vars(
+              $prefix: 'row',
+              $map: (
+                gap: rem(36px),
+              )
+            );
+          }
+          @include from(tablet) {
+            justify-content: space-between;
+          }
         }
       }
 

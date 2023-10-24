@@ -79,9 +79,17 @@ const date = computed(() => {
   @include set-local-vars(
     $prefix: 'row',
     $map: (
-      columns: 2,
+      columns: 1,
     )
   );
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 2,
+      )
+    );
+  }
 
   @include set-local-vars(
     $prefix: 'heading',
