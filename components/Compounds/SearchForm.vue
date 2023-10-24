@@ -4,12 +4,14 @@
   <form
     :class="className"
     method="GET"
+    action="search"
     v-bind="$attrs"
     @submit.prevent="goToSearch"
   >
     <InputField
       v-model="searchValue"
       :class="`${CSS_NAME}__input`"
+      name="search"
       type="search"
       required
       :minlength="minlength"

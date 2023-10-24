@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     public: {
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',
+      seoSeparator: '-',
     },
   },
   app: {

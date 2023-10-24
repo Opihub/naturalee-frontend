@@ -24,9 +24,8 @@
 
 // Define (Props, Emits, Page Meta)
 
-// Component life-cycle hooks
-
-// Data
+// Data & Composables
+const config = useRuntimeConfig()
 const route = useRoute()
 const search = ref(route.query.search ? route.query.search : '')
 
@@ -41,6 +40,25 @@ const title = computed(() => {
   return 'Scrivi almeno tre caratteri per avviare la ricerca'
 })
 
+const breadcrumbTitle = computed(() => {
+  let title = 'Ricerca nei prodotti'
+  if (route.query.search) {
+    title = `Hai cercato: ${route.query.search}`
+  }
+
+  return title
+})
+
+const seoTitle = computed(() => {
+  let title = breadcrumbTitle.value
+
+  if (config.public.title) {
+    title += ` ${config.public.seoSeparator || '|'} ${config.public.title}`
+  }
+
+  return title
+})
+
 const breadcrumbs = computed(() => {
   return [
     {
@@ -48,12 +66,17 @@ const breadcrumbs = computed(() => {
       link: '/',
     },
     {
-      title: title.value,
+      title: breadcrumbTitle.value,
     },
   ]
 })
 
 // Methods
+
+// Component life-cycle hooks
+usePageSeo({
+  title: seoTitle
+})
 </script>
 
 <style lang="scss">
