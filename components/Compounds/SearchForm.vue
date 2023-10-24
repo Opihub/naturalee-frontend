@@ -8,13 +8,14 @@
     @submit.prevent="goToSearch"
   >
     <InputField
-      :value="searchValue"
+      v-model="searchValue"
       :class="`${CSS_NAME}__input`"
       type="search"
+      required
+      :minlength="minlength"
       :placeholder="placeholder"
       :rounded="true"
       :borderless="true"
-      @update:model-value="updateSearch"
     />
 
     <BaseButton
@@ -54,6 +55,10 @@ const props = defineProps({
       return ['default', 'mini'].includes(value)
     },
   },
+  minlength: {
+    type: Number,
+    default: 3,
+  },
 })
 
 const emit = defineEmits(['update:search'])
@@ -61,7 +66,16 @@ const emit = defineEmits(['update:search'])
 // Component life-cycle hooks
 
 // Data
-const searchValue = ref(props.search ? props.search : '')
+const innerSearch = ref('')
+const searchValue = computed({
+  get() {
+    return props.search || innerSearch.value
+  },
+  set(value) {
+    innerSearch.value = value
+    emit('update:search', value)
+  },
+})
 
 // Watcher
 
@@ -85,25 +99,14 @@ const className = computed(() => {
 })
 
 // Methods
-const updateSearch = (event) => {
-  if (props.search === null) {
-    searchValue.value = event
-    return
-  }
-
-  emit('update:search', event)
-}
-
 const goToSearch = async () => {
-  if (props.search !== null) {
+  if (!searchValue.value) {
     return
   }
 
   await navigateTo({
     path: '/search',
-    query: {
-      search: searchValue.value,
-    },
+    query: { search: searchValue.value },
   })
 }
 </script>

@@ -1,35 +1,30 @@
 <template>
-  <div :class="className">
-    <div
-      v-if="costDescriptor"
-      :class="`${className}__weight`"
-      class="u-mr-medium"
-    >
-      <BaseIcon name="peso" />
-      {{ costDescriptor }}
-    </div>
-    <div v-if="selling" :class="`${className}__selling`">
-      <BaseIcon :name="value" />
-      {{ selling }}
-    </div>
+  <div :class="CSS_NAME">
+    <BaseIcon :name="iconName" :icon-size="iconSize" />
+    {{ value }}
   </div>
 </template>
 
 <script setup>
 // Imports
+import slugify from 'slugify'
 
 // Constants
 const CSS_NAME = 'o-cost-descriptor'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
-  costDescriptor: {
+  icon: {
     type: String,
     default: null,
   },
-  selling: {
+  value: {
     type: String,
     default: null,
+  },
+  iconSize: {
+    type: [String, Number, Object],
+    default: '1em',
   },
 })
 
@@ -40,28 +35,24 @@ const props = defineProps({
 // Watcher
 
 // Computed
-const className = computed(() => {
-  const className = [CSS_NAME]
+const iconName = computed(() => {
+  let iconName = slugify(props.icon || props.value, {
+    lower: true,
+  })
 
-  return className
-})
-
-const value = computed(() => {
-  let selling = null
-  selling = props.selling.toLowerCase().replace(' ', '-').trim()
-  //cassetta
-  switch (selling) {
+  switch (iconName) {
     case 'busta-biodegradabile':
-      selling = 'busta-bio'
+      iconName = 'busta-bio'
       break
     case 'vaschetta-tonda':
-      selling = 'vaschetta-rotonda'
+      iconName = 'vaschetta-rotonda'
       break
     case 'ciotola-monoporzione':
-      selling = 'ciotola'
+      iconName = 'ciotola'
       break
   }
-  return selling
+
+  return iconName
 })
 
 // Methods
@@ -70,28 +61,10 @@ const value = computed(() => {
 <style lang="scss">
 $prefix: 'cost-descriptor';
 @include object($prefix) {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
-  @include from('tablet') {
-    justify-content: flex-start;
-    align-items: center;
-  }
-  @include element('weight') {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: rem(2px);
-  }
-  @include element('selling') {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: rem(2px);
-  }
+  align-items: center;
+  gap: rem(2px);
 }
 </style>

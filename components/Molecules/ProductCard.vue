@@ -30,10 +30,14 @@
         >{{ product.provenance }}</BaseHeading
       >
 
-      <ProductDescriptor
-        :cost-descriptor="product.costDescription"
-        :selling="product.selling"
-      />
+      <div :class="`${CSS_NAME}__descriptor`">
+        <ProductDescriptor
+          v-if="product.costDescription"
+          :value="product.costDescription"
+          icon="peso"
+        />
+        <ProductDescriptor v-if="product.selling" :value="product.selling" />
+      </div>
     </div>
 
     <div :class="[`${CSS_NAME}__row`, 'u-mt-auto']">
@@ -261,6 +265,15 @@ $prefix: 'product-card';
     font-weight: get-var(weight-regular);
     margin-bottom: rem(22px);
     @include typography(16px, 20px);
+  }
+
+  @include element('descriptor') {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: rem(24px);
   }
 
   @include element('title') {
