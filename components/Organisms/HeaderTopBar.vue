@@ -1,11 +1,7 @@
 <template>
   <section :class="className">
     <SiteContainer :class="`${CSS_NAME}__container`">
-      <InlineMenu
-        :menu="socialsMenu"
-        :class="`${CSS_NAME}__left`"
-        gap="mini"
-      />
+      <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="mini" />
 
       <ClientOnly>
         <div v-if="banners && banners.length" :class="`${CSS_NAME}__center`">
@@ -20,7 +16,9 @@
               :key="banner.id"
               :class="`${CSS_NAME}__banner`"
             >
-              <span ref="slides">{{ banner.text }}</span>
+              <span ref="slides">
+                <BaseMarkdown :content="banner.text" />
+              </span>
             </SplideSlide>
           </Splide>
         </div>
