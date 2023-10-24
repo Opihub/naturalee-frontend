@@ -44,9 +44,12 @@ defineProps({
 <style lang="scss">
 $prefix: 'content';
 @include component($prefix) {
-  white-space: pre-line;
   font-family: get-var(font-family, inherit, $prefix: $prefix);
   font-size: get-var(font-size, inherit, $prefix: $prefix);
   line-height: get-var(line-height, inherit, $prefix: $prefix);
+
+  & > p {
+    white-space: pre-line;
+  }
 }
 </style>
