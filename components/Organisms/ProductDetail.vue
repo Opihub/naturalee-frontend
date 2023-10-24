@@ -27,9 +27,9 @@
             :to="variation.link"
             :inner-class="`${CSS_NAME}__variations__single`"
           >
-            <BaseIcon
+            <ProductDescriptor
               :class="`${CSS_NAME}__variations__single__icon`"
-              :name="variation.selling.toLowerCase().replace(' ', '-').trim()"
+              :icon="variation.selling"
               icon-size="38px"
             />
             <strong :class="`${CSS_NAME}__variations__single__title`">{{
