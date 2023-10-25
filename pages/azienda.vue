@@ -37,7 +37,7 @@
       <template #sup-title>{{ t('firstSection.supTitle') }}</template>
       <template #title>{{ t('firstSection.title') }}</template>
 
-      <template #default>
+      <template #text>
         {{ t('firstSection.paragraph') }}
       </template>
     </ContentRow>
