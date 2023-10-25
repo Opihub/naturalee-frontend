@@ -86,7 +86,7 @@
     </SiteContainer>
 
     <ContentRow
-      class="c-fourth-section u-pt-huge u-pb-huge"
+      class="c-fourth-section u-pt-large u-pb-large u-pt-custom@tablet u-pb-custom@tablet"
       image="/azienda/brb.png"
       flipped
       color="white"
@@ -95,7 +95,12 @@
       <template #title>{{ t('fourthSection.title') }}</template>
 
       <template #default>
-        {{ t('fourthSection.paragraph') }}
+        <BaseParagraph class="u-mb-large">
+          {{ t('fourthSection.paragraph') }}
+        </BaseParagraph>
+        <BaseParagraph>
+          {{ t('fourthSection.paragraph2') }}
+        </BaseParagraph>
       </template>
     </ContentRow>
   </main>
@@ -311,31 +316,18 @@ const cards = ref([
   }
 
   @include component('fourth-section') {
-    @include object('container') {
-      @include component('content-row') {
-        background-color: red;
-        @include element('parallax') {
-          display: flex !important;
-          align-items: center !important;
-        }
-      }
-    }
-    margin-top: rem(100px);
     @include set-local-vars(
-      $prefix: 'content-row',
+      $prefix: 'custom',
       $map: (
-        margin: rem(100px),
+        pt: rem(60px),
+        pb: rem(80px),
       )
     );
+
     @include set-local-vars(
       $prefix: 'container',
       $map: (
         justify-content: space-around,
-      )
-    );
-    @include set-local-vars(
-      $prefix: 'container',
-      $map: (
         align-items: center,
       )
     );
@@ -346,37 +338,28 @@ const cards = ref([
         margin-left: 0,
       )
     );
+
     @include set-local-vars(
       $prefix: 'heading',
       $map: (
-        'text-color': color-black,
+        text-transform: none,
+        text-color: get-var(color-black),
       )
     );
+
     @include set-local-vars(
       $prefix: 'paragraph',
       $map: (
-        'text-color': color-black,
+        text-color: get-var(color-black),
       )
     );
 
     @include set-local-vars(
-      $prefix: 'content-row-content',
+      $prefix: 'content-row',
       $map: (
-        width: rem(537px),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'content-row-parallax',
-      $map: (
-        width: rem(790px),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'image',
-      $map: (
-        border-radius: rem(50px),
+        content-width: rem(537px),
+        parallax-width: rem(790px),
+        image-radius: rem(50px),
       )
     );
   }
@@ -412,10 +395,10 @@ const cards = ref([
     }
   },
   "fourthSection": {
-    "supTitle": "Naturalee per l'Ho.re.ca.",
-    "title": "una storia che abbraccia passato e futuro",
-    "paragraph": "Naturalee garantisce qualità e professionalità per soddisfare ogni cliente. Mense, ristoranti, frutterie, alberghi e professionisti della ristorazione possono contare su un servizio puntuale, flessibile e basato sulla onestà.",
-    "paragraph2": "Forniamo all'ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche."
+    "supTitle": "Naturalee per l’Ho.re.ca.",
+    "title": "Hai un ristorante, bar o un bed&breakfast? ",
+    "paragraph": "Naturalee garantisce qualità e professionalità per soddisfare ogni cliente. Mense, ristoranti, frutterie, alberghi e professionisti della ristorazione possono contare su un servizio puntuale, flessibile e basato sulla onestà. ",
+    "paragraph2": "Forniamo all’ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche."
   }
 }
 </i18n>
