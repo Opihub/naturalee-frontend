@@ -74,6 +74,7 @@ $prefix: 'button';
     border-radius: 0;
     padding: 0;
     background-color: transparent;
+    // TODO: metterlo a tutti = 0
     outline-offset: 3px;
     font-weight: get-var(
       font-weight,

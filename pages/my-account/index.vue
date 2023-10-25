@@ -10,8 +10,11 @@
         >Ciao <b>{{ account.username }}</b> (non sei
         <b>{{ account.username }}</b
         >?
-        <BaseLink to="/" color="green" underline @click.prevent="logout"
-          >Logout</BaseLink
+        <InlineButton
+          color="green"
+          underline
+          @click.prevent="logout"
+          >Logout</InlineButton
         >)</BaseParagraph
       >
       <BaseParagraph
