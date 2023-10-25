@@ -27,6 +27,7 @@
           v-if="button?.text"
           :as="button.to ? 'link' : 'button'"
           :target="button.target || null"
+          :to="button.to || null"
           :color="button.color || 'yellow'"
           class="u-mt-large u-mt-huge@tablet"
           >{{ button.text }}</BaseButton
