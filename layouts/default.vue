@@ -2,17 +2,16 @@
   <CompleteLayout override-last-element>
     <slot />
 
-    <BackgroundHolder class="u-mt-auto" color="white">
+    <BackgroundHolder class="u-pt-huge u-mt-auto" color="white" :class="{'u-pb-medium': marquee && marquee.data.length}">
       <CategoryCards
         v-if="categories && categories.data"
-        class="u-pb-huge"
         :title="$t('products.homepageFeatured')"
         :categories="categories.data"
+        class="u-mb-medium"
       />
 
       <MarqueeSlider
         v-if="marquee && marquee.data.length"
-        class="u-pt-medium u-pb-medium"
         :marquee="marquee.data"
       />
     </BackgroundHolder>
