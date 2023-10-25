@@ -2,7 +2,7 @@
   <CompleteLayout override-last-element>
     <slot />
 
-    <BackgroundHolder class="u-pt-huge u-mt-auto" color="white">
+    <BackgroundHolder class="u-mt-auto" color="white">
       <CategoryCards
         v-if="categories && categories.data"
         class="u-pb-huge"
@@ -12,6 +12,7 @@
 
       <MarqueeSlider
         v-if="marquee && marquee.data.length"
+        class="u-pt-medium u-pb-medium"
         :marquee="marquee.data"
       />
     </BackgroundHolder>
