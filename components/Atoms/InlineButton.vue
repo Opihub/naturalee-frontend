@@ -13,6 +13,13 @@ const CSS_NAME = 'o-button'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
+  align: {
+    type: String,
+    default: 'center',
+    validator(value) {
+      return ['center', 'left', 'right'].includes(value)
+    },
+  },
   underline: {
     type: [Boolean, String],
     default: null,
@@ -21,7 +28,6 @@ const props = defineProps({
         return value
       }
 
-      // The value must match one of these strings
       return ['black', 'green', 'yellow', 'white'].includes(value)
     },
   },
@@ -39,12 +45,17 @@ const props = defineProps({
 const className = computed(() => {
   const className = [`${CSS_NAME}--inline`]
 
+  if (props.align && props.align !== 'center') {
+    className.push(`is-${props.align}`)
+  }
+
   if (props.underline) {
     className.push('is-underline')
   }
 
   if (props.underline) {
-    const color = typeof props.underline === 'string' ? props.underline : 'black'
+    const color =
+      typeof props.underline === 'string' ? props.underline : 'black'
     className.push(`${CSS_NAME}--underline-${color}`)
   }
 
@@ -64,8 +75,31 @@ $prefix: 'button';
     padding: 0;
     background-color: transparent;
     outline-offset: 3px;
-    font-weight: get-var(font-weight, get-var(weight-regular), $prefix: $prefix);
+    font-weight: get-var(
+      font-weight,
+      get-var(weight-regular),
+      $prefix: $prefix
+    );
     text-transform: get-var(text-transform, none, $prefix: $prefix);
+    justify-content: get-var(align, center, $prefix: $prefix);
+
+    @include is('left') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          align: flex-start,
+        )
+      );
+    }
+
+    @include is('right') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          align: flex-end,
+        )
+      );
+    }
 
     @include is('underline') {
       text-decoration: underline;
