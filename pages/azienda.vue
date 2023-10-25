@@ -211,6 +211,14 @@ const cards = ref([
         );
       }
     }
+
+    @include set-local-vars(
+      $prefix: 'paragraph',
+      $map: (
+        white-space: pre-line,
+      )
+    );
+
     @include set-local-vars(
       $prefix: 'custom',
       $map: (
@@ -218,11 +226,13 @@ const cards = ref([
         pb: rem(120px),
       )
     );
+
     @include object('circular-text') {
-      font-weight: 400;
+      font-weight: get-var(weight-regular);
       top: rem(50px);
       right: calc(rem(100px) - 4vw);
-      @include from('tablet') {
+
+      @include from(tablet) {
         top: rem(120px);
         right: rem(100px);
       }
