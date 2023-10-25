@@ -6,8 +6,7 @@
       <InlineMenu
         v-if="socialsMenu"
         :menu="socialsMenu"
-        svg-size="24px"
-        gap="mini"
+        svg-size="18px"
       />
     </div>
 
@@ -102,7 +101,7 @@ $prefix: 'footer-navigation';
     grid-column: 1 / 2;
     display: flex;
     align-items: center;
-    gap: rem(30px);
+    gap: rem(24px);
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
