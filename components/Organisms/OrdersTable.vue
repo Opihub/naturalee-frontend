@@ -35,7 +35,7 @@
             <div class="o-row">
               <BaseButton
                 as="link"
-                :to="`/my-account/orders/${order.id}/view`"
+                :to="{ name: 'order-view', params: { id: order.id } }"
                 :class="`${CSS_NAME_ITEM}__view`"
                 color="green"
               >
@@ -43,7 +43,7 @@
               </BaseButton>
               <BaseButton
                 as="link"
-                :to="`/my-account/orders/${order.id}/reorder`"
+                :to="{ name: 'order-products', params: { id: order.id } }"
                 color="green"
                 >{{ $t('orders.reorder') }}</BaseButton
               >

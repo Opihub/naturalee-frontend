@@ -14,7 +14,7 @@
         >
           <template #forgotLink>
             <BaseLink
-              to="/my-account?forgot_password"
+              :to="{ name: 'login', query: { forgot_password: true } }"
               color="dark"
               underline
               @click.prevent="toggleLoginForm(true)"
@@ -30,7 +30,7 @@
         >
           <template #profileLink>
             <BaseLink
-              to="/my-account?"
+              :to="{ name: 'login' }"
               color="dark"
               underline
               @click.prevent="toggleLoginForm(false)"
