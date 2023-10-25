@@ -15,20 +15,12 @@ const CSS_NAME = 'o-button'
 const props = defineProps({
   underline: {
     type: [Boolean, String],
-    default: false,
+    default: null,
     validator(value) {
       if (typeof value === 'boolean') {
         return value
       }
 
-      // The value must match one of these strings
-      return ['black', 'green', 'yellow', 'white'].includes(value)
-    },
-  },
-  color: {
-    type: String,
-    default: null,
-    validator(value) {
       // The value must match one of these strings
       return ['black', 'green', 'yellow', 'white'].includes(value)
     },
@@ -72,14 +64,8 @@ $prefix: 'button';
     padding: 0;
     background-color: transparent;
     outline-offset: 3px;
-
-    @include set-local-vars(
-      $prefix: $prefix,
-      $map: (
-        font-weight: get-var(weight-regular),
-        text-transform: none,
-      )
-    );
+    font-weight: get-var(font-weight, get-var(weight-regular), $prefix: $prefix);
+    text-transform: get-var(text-transform, none, $prefix: $prefix);
 
     @include is('underline') {
       text-decoration: underline;
