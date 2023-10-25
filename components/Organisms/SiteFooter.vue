@@ -50,7 +50,7 @@ $prefix: 'footer';
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
-        padding: rem(12px) 0,
+        padding: rem(30px) 0 rem(12px),
       )
     );
   }
