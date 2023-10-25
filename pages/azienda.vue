@@ -159,31 +159,38 @@ const cards = ref([
         )
       );
     }
+
+    @include set-local-vars(
+      $prefix: 'paragraph',
+      $map: (
+        width: rem(520px),
+      )
+    );
+
     @include set-local-vars(
       $prefix: 'content-row',
       $map: (
         margin: rem(100px),
+        content-width: rem(610px),
+        parallax-offset: rem(-55px) 0 0,
       )
     );
+
     @include set-local-vars(
       $prefix: 'container',
       $map: (
         justify-content: start,
       )
     );
+
     @include set-local-vars(
       $prefix: 'parallax',
       $map: (
         margin-left: 0,
       )
     );
-    @include set-local-vars(
-      $prefix: 'content-row-parallax',
-      $map: (
-        offset: rem(-55px) 0 0,
-      )
-    );
   }
+
   @include component('second-section') {
     position: relative;
 

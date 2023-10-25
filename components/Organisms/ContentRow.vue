@@ -186,9 +186,6 @@ $prefix: 'content-row';
     @include from(tablet) {
       order: 1;
       max-width: get-var(content-width, rem(520px), $prefix: $prefix);
-    }
-
-    @include from(tablet) {
       margin: get-var(margin, 0, $prefix: $prefix) 0;
     }
   }
