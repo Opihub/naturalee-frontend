@@ -182,7 +182,7 @@ $prefix: 'video';
 @include object($prefix) {
   @include is('loading') {
     width: 100%;
-    aspect-ratio: get-var(video-ratio, 16 / 9);
+    aspect-ratio: get-var(video-ratio, "16 / 9");
     background-color: get-var(color-black);
     border-radius: #{$video-radius};
   }
