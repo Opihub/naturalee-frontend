@@ -170,14 +170,6 @@ onMounted(() => {
       props.aspectRatio
     )}`
   }
-
-  const bigPlay = player.value.outerContainer.querySelector('.v-bigPlay')
-  if (bigPlay) {
-    const span = document.createElement('span')
-    span.innerText = t('common.video.clickHere')
-
-    bigPlay.appendChild(span)
-  }
 })
 </script>
 
@@ -236,22 +228,6 @@ $prefix: 'video';
       stroke: none;
       background: get-var(color-green);
       border-radius: 100%;
-    }
-
-    span {
-      display: none;
-      color: white;
-      width: rem(430px);
-      @include typography(50px, 60px);
-      font-weight: get-var(weight-extrabold);
-    }
-  }
-
-  &.v-firstStart {
-    .v-bigPlay {
-      span {
-        display: block;
-      }
     }
   }
 }
