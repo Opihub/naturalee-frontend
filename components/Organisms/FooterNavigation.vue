@@ -2,6 +2,7 @@
   <SiteContainer :class="CSS_NAME">
     <div :class="`${CSS_NAME}__links`">
       <SiteLogo :alt="true" />
+
       <InlineMenu
         v-if="socialsMenu"
         :menu="socialsMenu"
@@ -120,8 +121,7 @@ $prefix: 'footer-navigation';
     }
 
     @include from(desktop) {
-      flex-direction: row;
-      align-items: baseline;
+      align-items: flex-start;
     }
 
     @include between(tablet, desktop) {
