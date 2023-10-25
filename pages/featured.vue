@@ -24,6 +24,9 @@
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'featured'
+})
 
 // Component life-cycle hooks
 
