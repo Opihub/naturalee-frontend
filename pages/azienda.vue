@@ -118,6 +118,13 @@ definePageMeta({
   name: 'company',
 })
 
+defineI18nRoute({
+  paths: {
+    it: '/azienda',
+  },
+  locales: ['it'],
+})
+
 // Component life-cycle hooks
 
 // Data

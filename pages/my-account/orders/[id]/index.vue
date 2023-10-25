@@ -45,6 +45,13 @@ definePageMeta({
   name: 'order-view',
 })
 
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/ordini/[id]/visualizza',
+  },
+  locales: ['it'],
+})
+
 // Component life-cycle hooks
 
 // Composables

@@ -28,6 +28,13 @@ definePageMeta({
   name: 'featured'
 })
 
+defineI18nRoute({
+  paths: {
+    it: '/featured',
+  },
+  locales: ['it'],
+})
+
 // Component life-cycle hooks
 
 // Data

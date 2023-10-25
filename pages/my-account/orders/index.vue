@@ -14,6 +14,13 @@ definePageMeta({
   name: 'orders-list',
 })
 
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/ordini',
+  },
+  locales: ['it'],
+})
+
 // Component life-cycle hooks
 onMounted(async () => {
   const response = await useApi(

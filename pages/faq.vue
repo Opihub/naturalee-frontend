@@ -13,7 +13,7 @@
             Qui troverete risposte alle domande più comuni riguardanti il
             processo di acquisto, il pagamento, la spedizione e altro ancora. Se
             non trovate la risposta alla vostra domanda, non esitate a
-            <BaseLink to="/contatti" color="dark" underline=""
+            <BaseLink :to="{ name: 'contacts' }" color="dark" underline=""
               >contattarci</BaseLink
             >.
           </BaseParagraph>
@@ -40,6 +40,16 @@
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'faq',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/faq',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 

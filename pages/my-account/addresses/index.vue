@@ -55,6 +55,14 @@
 definePageMeta({
   name: 'addresses-list',
 })
+
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/indirizzi',
+  },
+  locales: ['it'],
+})
+
 // Component life-cycle hooks
 
 // Composables
