@@ -53,15 +53,11 @@
       image="/home/chi-siamo.png"
       parallax
     >
-      <template #sup-title>LOREM IPSUM DOLOR SIT</template>
-      <template #title>Amet consectetur adipiscing elit</template>
+      <template #sup-title>{{ t('firstSection.supTitle') }}</template>
+      <template #title>{{ t('firstSection.title') }}</template>
 
       <template #default>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore.
+        {{ t('firstSection.paragraph') }}
       </template>
     </ContentRow>
 
@@ -103,6 +99,9 @@ import HomeVideo from 'assets/video/homepage.mp4'
 await usePage()
 const products = await useApi('shop/homepage/products')
 const { togglePostcodeModal } = inject('postcodeModal')
+const { t } = useI18n({
+  useScope: 'local'
+})
 
 // Watcher
 
@@ -229,3 +228,14 @@ const { togglePostcodeModal } = inject('postcodeModal')
   }
 }
 </style>
+
+<i18n lang="json" locale="it">
+{
+  "firstSection": {
+    "supTitle": "Freschezza e qualità dalle nostre terre",
+    "title": "Una storia che abbraccia passato e futuro",
+    "paragraph":
+      "Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.",
+  }
+}
+</i18n>
