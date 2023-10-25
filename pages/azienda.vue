@@ -238,18 +238,58 @@ const cards = ref([
       }
     }
   }
+
   @include component('third-section') {
+    text-align: center;
+    position: relative;
+
+    @include set-local-vars(
+      $prefix: 'card',
+      $map: (
+        width: rem(350px),
+      )
+    );
+
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'custom',
+        $map: (
+          pt: rem(70px),
+          pb: rem(70px),
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: 'paragraph',
+        $map: (
+          width: rem(385px),
+          white-space: pre-line,
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: 'card',
+        $map: (
+          width: rem(420px),
+        )
+      );
+    }
+
     @include object('row') {
       align-items: baseline;
+      justify-content: center;
+
       @include from('full') {
         flex-wrap: nowrap;
       }
+
       @include set-local-vars(
         $prefix: 'row',
         $map: (
           gap: rem(30px),
         )
       );
+
       @include from('tablet') {
         @include set-local-vars(
           $prefix: 'row',
@@ -258,19 +298,18 @@ const cards = ref([
           )
         );
       }
-      justify-content: center;
     }
-    text-align: center;
-    position: relative;
+
     @include object('heading') {
       @include set-local-vars(
         $prefix: 'heading',
         $map: (
-          'text-color': color-black,
+          text-color: get-var(color-black),
         )
       );
     }
   }
+
   @include component('fourth-section') {
     @include object('container') {
       @include component('content-row') {
