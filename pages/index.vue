@@ -86,13 +86,6 @@
         ><strong>Riordina<br />quando vuoi!</strong></template
       >
     </TrackRow>
-
-    <Teleport to="body">
-      <PostcodeModal
-        v-show="isPostcodeModalOpen"
-        @close="togglePostcodeModal(false)"
-      />
-    </Teleport>
   </main>
 </template>
 
@@ -106,23 +99,16 @@ import HomeVideo from 'assets/video/homepage.mp4'
 
 // Component life-cycle hooks
 
-// Composables
+// Data (Reactive, Composables & Inject)
 await usePage()
-
-// Data
-const isPostcodeModalOpen = ref(false)
-
 const products = await useApi('shop/homepage/products')
+const { togglePostcodeModal } = inject('postcodeModal')
 
 // Watcher
 
 // Computed
 
 // Methods
-const togglePostcodeModal = (status = null) => {
-  isPostcodeModalOpen.value =
-    status !== null ? !!status : !isPostcodeModalOpen.value
-}
 </script>
 
 <style lang="scss" scoped>
