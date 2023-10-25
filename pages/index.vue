@@ -49,7 +49,7 @@
 
     <ContentRow
       class="c-third-section"
-      :button="{ text: 'Chi siamo', to: 'chi-siamo' }"
+      :button="{ text: 'Chi siamo', to: { name: 'company' } }"
       image="/home/chi-siamo.png"
       parallax
     >
