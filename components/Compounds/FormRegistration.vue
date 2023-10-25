@@ -83,8 +83,18 @@ const register = async () => {
 
   const response = await send(async () => await store.signIn(formData))
 
-  if (response.value.success) {
-    // TODO: cambiare layout?
+  console.debug(response.value)
+  if (response.value.success && response.value.data.token) {
+    message.status = 'success'
+    message.message = 'Registrazione avvenuta con successo'
+  } else {
+    message.message = response.value.message
   }
+
+  notify(message)
+
+  await navigateTo({
+    name: 'dashboard'
+  })
 }
 </script>
