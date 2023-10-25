@@ -67,10 +67,16 @@
 </template>
 
 <script setup>
-//Imports
+// Imports
 import Papaya from '@/assets/svg/decorations/papaya.svg'
 import yellowDots from '@/assets/svg/decorations/yellow-dots.svg'
-//Constant
+
+// Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'contacts'
+})
+
+// Data
 const { page } = await usePage('contatti')
 </script>
 
