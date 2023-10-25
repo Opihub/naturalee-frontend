@@ -1,21 +1,23 @@
 <template>
   <div :class="className" :style="style">
-    <div v-if="image" :class="`${CSS_NAME} ${CSS_NAME}__image`">
-      <NuxtImg :src="image" />
+    <div v-if="image" :class="`${CSS_NAME}__image`" class="u-mb-medium">
+      <NuxtImg :src="image" :alt="heading" />
     </div>
-    <div
-      :class="`${CSS_NAME} ${CSS_NAME}__heading`"
-      class="u-mt-medium u-mb-medium"
-      :heading="heading"
+
+    <BaseHeading
+      v-if="heading"
+      :class="`${CSS_NAME}__heading`"
+      class="u-mb-tiny"
+      tag="h4"
     >
-      <BaseHeading tag="h3">
-        {{ heading }}
-      </BaseHeading>
-    </div>
-    <div :class="`${CSS_NAME} ${CSS_NAME}__paragraph`" :paragraph="paragraph">
-      <BaseParagraph>
+      {{ heading }}
+    </BaseHeading>
+
+    <div :class="`${CSS_NAME}__paragraph`">
+      <BaseParagraph v-if="paragraph">
         {{ paragraph }}
       </BaseParagraph>
+
       <slot />
     </div>
   </div>
@@ -26,6 +28,7 @@
 
 // Constants
 const CSS_NAME = 'o-card'
+
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   image: {
@@ -96,28 +99,24 @@ $prefix: 'card';
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: get-var(width, rem(350px), $prefix: $prefix);
-  @include from('tablet') {
-    width: get-var(width, rem(420px), $prefix: $prefix);
-  }
+  width: get-var(width, 100%, $prefix: $prefix);
+
+  @include set-local-vars(
+    $prefix: 'heading',
+    $map: (
+      text-color: get-var(color-black),
+    )
+  );
+
   @include element('image') {
     width: 100%;
     height: 100%;
-    & img {
+
+    img {
       width: 100%;
       height: 100%;
-      border-radius: 15px;
+      border-radius: get-var(border-radius, rem(20px), $prefix: $prefix);
       object-fit: get-var(objectFit, contain, $prefix: $prefix);
-    }
-  }
-  @include element('heading') {
-    @include object('heading') {
-      @include set-local-vars(
-        $prefix: 'heading',
-        $map: (
-          'text-color': color-black,
-        )
-      );
     }
   }
 }
