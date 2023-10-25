@@ -107,6 +107,12 @@ import FragolaPera from '@/assets/svg/decorations/fragola-pera.svg'
 const { t } = useI18n()
 
 // Constants
+
+// Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'company',
+})
+
 const { page } = await usePage('azienda')
 const ratio = [16, 9]
 const cards = ref([
