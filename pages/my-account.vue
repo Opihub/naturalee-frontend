@@ -2,19 +2,14 @@
   <main class="o-page">
     <HeaderBottomBar v-if="breadcrumbs" :breadcrumb="breadcrumbs" />
 
-    <ProfileForms v-if="!isLoggedIn" class="o-page__main" />
-
-    <ClientOnly v-else>
-      <ProfileDashboard>
-        <NuxtPage :page-key="(route) => route.fullPath" />
-      </ProfileDashboard>
-    </ClientOnly>
+    <ProfileDashboard>
+      <NuxtPage />
+    </ProfileDashboard>
   </main>
 </template>
 
 <script setup>
 // Imports
-import { useAccountStore } from '@/stores/account'
 
 // Constants
 
@@ -22,28 +17,24 @@ import { useAccountStore } from '@/stores/account'
 definePageMeta({
   layout: 'standard',
   name: 'my-account',
-  middleware: () => {
-    const store = useAccountStore()
-    const { isLoggedIn } = storeToRefs(store)
-
-    if (!isLoggedIn.value) {
-      return navigateTo({ name: 'login' })
+  key: (route) => {
+    if (route.name === 'my-account') {
+      return 'dashboard'
     }
 
-    return true
+    return route.name
   },
+  middleware: 'auth',
 })
 
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
 const route = useRoute()
 const router = useRouter()
 
 // Data
 const page = ref({})
-const { isLoggedIn } = storeToRefs(store)
 const breadcrumbs = ref(page.value?.breadcrumbs || [])
 
 // Watcher
