@@ -162,8 +162,6 @@ const updateAccount = async () => {
 <style lang="scss">
 $prefix: 'profile-update-form';
 @include component($prefix) {
-  @include typography(18px, 35px);
-
   @include set-local-vars(
     $prefix: 'heading',
     $map: (
