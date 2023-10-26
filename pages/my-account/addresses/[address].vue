@@ -1,5 +1,5 @@
 <template>
-  <section class="s-edit-address">
+  <section>
     <BaseHeading
       tag="h1"
       use="h3"
@@ -197,9 +197,7 @@ const updateAddress = async () => {
 </script>
 
 <style lang="scss" scoped>
-@include scope('s-edit-address') {
-  @include scope('invoice') {
-    width: 100%;
-  }
+@include scope('invoice') {
+  width: 100%;
 }
 </style>
