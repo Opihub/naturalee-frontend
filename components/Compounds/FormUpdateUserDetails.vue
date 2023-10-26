@@ -86,9 +86,11 @@
         />
       </div>
 
-      <BaseMessage v-if="sent" :status="feedback.status" class="u-mt-ten">{{
-        feedback.message
-      }}</BaseMessage>
+      <div v-if="feedback.message" :class="[columnClassName, columnFullClassName, 'u-mt-ten']">
+        <BaseMessage :status="feedback.status">
+          <span>{{ feedback.message }}</span>
+        </BaseMessage>
+      </div>
     </template>
   </FormWrapper>
 </template>
