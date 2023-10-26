@@ -10,6 +10,7 @@
       <InputField
         v-model="formData.firstName"
         :class="[columnClassName, columnHalfClassName]"
+        class="u-mb-ten"
         type="text"
         required
       >
@@ -19,6 +20,7 @@
       <InputField
         v-model="formData.lastName"
         :class="[columnClassName, columnHalfClassName]"
+        class="u-mb-ten"
         type="text"
         required
       >
@@ -27,7 +29,8 @@
 
       <InputField
         v-model="formData.email"
-        class="o-row__column s-email"
+        :class="[columnClassName, columnFullClassName]"
+        class="u-mb-ten"
         type="text"
         required
       >
@@ -36,41 +39,54 @@
       <InputField
         v-model="formData.phone"
         :class="[columnClassName, columnFullClassName]"
+        class="u-mb-ten"
         type="text"
+        required
       >
-        {{ $t('form.phone') }}*</InputField
+        {{ $t('form.phone') }}</InputField
       >
-      <slot name="header">
-        <BaseHeading class="u-mt-large s-password" tag="h6">{{
-          $t('form.password.update')
-        }}</BaseHeading>
-      </slot>
+
+      <BaseHeading
+        :class="[columnClassName, columnFullClassName]"
+        class="u-mt-large"
+        tag="h6"
+        >{{ $t('form.password.update') }}</BaseHeading
+      >
+
       <InputField
         v-model="formData.oldPassword"
-        class="o-row__column u-mb-tiny"
+        :class="[columnClassName, columnFullClassName]"
+        class="u-mb-ten"
         type="password"
         >{{ $t('form.password.old') }} ({{ $t('form.leaveBlank') }})</InputField
       >
+
       <InputField
         v-model="formData.newPassword"
-        class="o-row__column u-mb-tiny"
+        :class="[columnClassName, columnFullClassName]"
+        class="u-mb-ten"
         type="password"
         >{{ $t('form.password.new') }} ({{ $t('form.leaveBlank') }})</InputField
       >
+
       <InputField
         v-model="formData.confirmPassword"
-        class="o-row__column u-mb-tiny"
+        :class="[columnClassName, columnFullClassName]"
+        class="u-mb-ten"
         type="password"
         >{{ $t('form.password.check') }}</InputField
       >
-      <BaseButton
-        class="u-mt-large"
-        color="green"
-        type="submit"
-        :disabled="sending"
-        >{{ $t('form.saveChanges') }}</BaseButton
-      >
-      <BaseMessage v-if="feedback.status" :status="feedback.status">{{
+
+      <div :class="[columnClassName, columnFullClassName]">
+        <BaseButton
+          color="green"
+          type="submit"
+          :disabled="sending"
+          :text="$t('form.saveChanges')"
+        />
+      </div>
+
+      <BaseMessage v-if="sent" :status="feedback.status" class="u-mt-ten">{{
         feedback.message
       }}</BaseMessage>
     </template>
@@ -81,18 +97,21 @@
 // Imports
 import { useAccountStore } from '@/stores/account'
 
+// Constants
 const CSS_NAME = 'c-profile-update-form'
+
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   userData: {
     type: Object,
     required: true,
     validator(value) {
-      return 'username' in value && 'email' in value
+      return 'email' in value
     },
   },
 })
-//form data
+
+// Data
 const formData = reactive({
   firstName: props.userData.firstName,
   lastName: props.userData.lastName,
@@ -108,9 +127,7 @@ const feedback = reactive({
   message: null,
 })
 
-const emit = defineEmits(['api:start', 'api:end'])
-
-const { sending, send, sent } = useSender(emit)
+const { sending, send, sent } = useSender()
 
 const update = useAccountStore()
 
@@ -119,36 +136,46 @@ const updateAccount = async () => {
     return
   }
 
+  feedback.message = null
+
   const response = await send(async () => await update.updateUser(formData))
 
-  if (sent) {
-    if (response.value.success) {
-      feedback.status = 'success'
-      feedback.message = response.value.message
+  feedback.status = 'danger'
 
-      formData.firstName = response.value.data.firstName
-      formData.lastName = response.value.data.lastName
-      formData.email = response.value.data.email
-      formData.phone = response.value.data.phone
-      formData.oldPassword = ''
-      formData.newPassword = ''
-      formData.confirmPassword = ''
-    } else {
-      notify({
-        message: response.value.message,
-        status: 'danger',
-      })
-    }
+  if (response.value.success) {
+    feedback.status = 'success'
+    feedback.message = response.value.message
+
+    formData.firstName = response.value.data.firstName
+    formData.lastName = response.value.data.lastName
+    formData.email = response.value.data.email
+    formData.phone = response.value.data.phone
+    formData.oldPassword = ''
+    formData.newPassword = ''
+    formData.confirmPassword = ''
   }
+
+  feedback.message = response.value.message
 }
 </script>
 
 <style lang="scss">
-@include scope('password') {
+$prefix: 'profile-update-form';
+@include component($prefix) {
+  @include typography(18px, 35px);
+
   @include set-local-vars(
     $prefix: 'heading',
     $map: (
       text-color: get-var(color-black),
+    )
+  );
+
+  @include set-local-vars(
+    $prefix: 'form',
+    $map: (
+      row-gap: rem(20px),
+      column-gap: rem(20px),
     )
   );
 }

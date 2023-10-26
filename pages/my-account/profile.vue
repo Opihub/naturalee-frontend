@@ -25,10 +25,10 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
+const user = useAccountStore()
 
 // Data
-const { account } = storeToRefs(store)
+const account = await user.load()
 // Watcher
 
 // Computed
