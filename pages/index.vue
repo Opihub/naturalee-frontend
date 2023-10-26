@@ -66,7 +66,7 @@
       class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
       tag="section"
     >
-      <ProductCards :products="products.data" :title="t('carousel.title')" />
+      <ProductCards :products="products.data" :title="$t('products.homepageFeatured')" />
     </BackgroundHolder>
 
     <TrackRow class="c-fifth-section">
@@ -268,9 +268,6 @@ const { t } = useI18n({
     "title": "Una storia che abbraccia passato e futuro",
     "paragraph": "Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.",
     "cta": "Chi siamo"
-  },
-  "carousel": {
-    "title": "Frutta e Verdura Fresca"
   },
   "fifthSection": {
     "title": "Dalla terra a casa tua!",
