@@ -13,7 +13,7 @@
 definePageMeta({
   layout: 'standard',
   name: 'terms-and-conditions',
-  alias: '/termini-e-condizioni',
+  alias: ['/termini-e-condizioni', '/condizioni-di-vendita'],
 })
 
 defineI18nRoute({
