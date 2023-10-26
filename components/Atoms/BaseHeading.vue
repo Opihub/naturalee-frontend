@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :class="className">
+  <component :is="tag" :class="className" :style="style">
     <slot>
       {{ text }}
     </slot>
@@ -47,6 +47,23 @@ const props = defineProps({
       return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'custom'].includes(value)
     },
   },
+  color: {
+    type: String,
+    default: null,
+    validator(value) {
+      return [
+        'green',
+        'red',
+        'brown',
+        'orange',
+        'yellow',
+        'light',
+        'dark',
+        'white',
+        'black',
+      ].includes(value)
+    },
+  },
 })
 
 const className = computed(() => {
@@ -64,6 +81,16 @@ const className = computed(() => {
   }
 
   return className
+})
+
+const style = computed(() => {
+  const style = {}
+
+  if (props.color) {
+    style['--heading-text-color'] = `var(--color-${props.color})`
+  }
+
+  return style
 })
 </script>
 

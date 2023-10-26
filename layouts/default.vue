@@ -5,7 +5,7 @@
     <BackgroundHolder class="u-pt-huge u-mt-auto" color="white" :class="{'u-pb-medium': marquee && marquee.data.length}">
       <CategoryCards
         v-if="categories && categories.data"
-        :title="$t('products.homepageFeatured')"
+        :title="$t('products.categoriesFeatured')"
         :categories="categories.data"
         class="u-mb-medium"
       />
