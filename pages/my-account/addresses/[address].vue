@@ -3,7 +3,7 @@
     <FormAddress
       v-model:address="formData.address"
       method="POST"
-      @submit.prevent="updateAddresses"
+      @submit.prevent="updateAddress"
     >
       <template #after="{ rowClassName }">
         <template v-if="isBilling">
@@ -40,12 +40,12 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'addresses-details',
+  name: 'address-details',
 })
 
 defineI18nRoute({
   paths: {
-    it: '/il-mio-account/indirizzi/[addresses]',
+    it: '/il-mio-account/indirizzi/[address]',
   },
   locales: ['it'],
 })
@@ -58,7 +58,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 const { sending, send, sent } = useSender(emit)
 const route = useRoute()
 const response = await useApi(
-  `/shop/addresses/${route.params.addresses}`,
+  `/shop/addresses/${route.params.address}`,
   {
     method: 'GET',
   },
@@ -68,7 +68,7 @@ const response = await useApi(
 )
 
 // Data
-const isBilling = ref(route.params.addresses === 'billing')
+const isBilling = ref(route.params.address === 'billing')
 const formData = reactive({
   address: {
     firstName: response.value.data.firstName,
@@ -96,7 +96,7 @@ const formData = reactive({
 // Computed
 
 // Methods
-const updateAddresses = async () => {
+const updateAddress = async () => {
   if (sending.value) {
     return
   }
@@ -150,7 +150,7 @@ const updateAddresses = async () => {
   const response = await send(
     async () =>
       await useApi(
-        `/shop/addresses/${route.params.addresses}/update`,
+        `/shop/addresses/${route.params.address}/update`,
         {
           method: 'POST',
           body: formData,
