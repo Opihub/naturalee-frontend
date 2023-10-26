@@ -1,15 +1,15 @@
 <template>
   <div :class="CSS_NAME">
     <table>
-      <thead>
+      <thead v-if="slots.head">
         <slot name="head" />
       </thead>
 
-      <tbody>
+      <tbody v-if="slots.body">
         <slot name="body" />
       </tbody>
 
-      <tfoot>
+      <tfoot v-if="slots.footer">
         <slot name="footer" />
       </tfoot>
     </table>
@@ -27,6 +27,7 @@ const CSS_NAME = 'o-table'
 // Component life-cycle hooks
 
 // Composables
+const slots = useSlots()
 
 // Data
 
@@ -43,7 +44,7 @@ $prefix: 'table';
   table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: auto;
+    table-layout: get-var(layout, auto, $prefix: $prefix);
   }
 
   /* Media Query per il No More Tables */

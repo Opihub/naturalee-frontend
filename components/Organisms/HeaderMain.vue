@@ -21,10 +21,11 @@
           <ClientOnly>
             <Transition name="fade">
               <MiniCart
-                v-show="isMiniCartMenuOpen"
+              v-show="isMiniCartMenuOpen"
+                x-centered
                 :cart="cart"
                 :shipping-cost="shippingCost"
-                :totals="totals"
+                :total="total"
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
@@ -62,8 +63,9 @@
           <ClientOnly>
             <Transition name="fade">
               <ProfileMenu
-                v-if="isLoggedIn"
+              v-if="isLoggedIn"
                 v-show="isProfileMenuOpen"
+                x-centered
                 :menu="profileMenu"
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
@@ -115,7 +117,7 @@ const cartStore = useCartStore()
 
 // Data
 const { isLoggedIn } = storeToRefs(accountStore)
-const { cart, count, shippingCost, totals } = storeToRefs(cartStore)
+const { cart, count, shippingCost, total } = storeToRefs(cartStore)
 const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
@@ -248,8 +250,9 @@ $prefix: 'header';
     @include element('popup') {
       position: absolute;
       top: 100%;
+      left: 0;
       left: 50%;
-      transform: translateX(-50%);
+      // transform: translateX(-50%);
     }
   }
 }

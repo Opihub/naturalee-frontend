@@ -10,8 +10,9 @@
 
     <Suspense>
       <ProductsGrid
-        class="u-pb-huge u-pt-medium"
+        class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :from="`shop/featured/products`"
+        paginate
       />
     </Suspense>
   </main>
@@ -23,6 +24,16 @@
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'featured'
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/featured',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 

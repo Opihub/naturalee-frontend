@@ -12,8 +12,9 @@
       </template>
       <template #after="{ itemClassName }">
         <li :class="itemClassName">
-          <!-- TODO: apertura popup delle company info -->
-          <u>Company Info</u>
+          <BaseLink :to="{ name: 'contacts' }" color="white" underline
+            >Company Info</BaseLink
+          >
         </li>
       </template>
     </InlineMenu>
@@ -28,7 +29,11 @@
       <template #after="{ className }">
         <li :class="className">
           R-innovazione by
-          <BaseLink to="https://www.opiquad.it/" target="_blank" color="white" underline
+          <BaseLink
+            to="https://www.opiquad.it/"
+            target="_blank"
+            color="white"
+            underline
             >Opiquad.it</BaseLink
           >
         </li>

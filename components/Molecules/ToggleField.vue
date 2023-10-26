@@ -29,8 +29,8 @@
 
 <script setup>
 // Imports
-import BaseRadio from '@/components/Atoms/BaseRadio.vue';
-import BaseCheckbox from '@/components/Atoms/BaseCheckbox.vue';
+import BaseRadio from '@/components/Atoms/BaseRadio.vue'
+import BaseCheckbox from '@/components/Atoms/BaseCheckbox.vue'
 
 // Constants
 const CSS_NAME = 'c-toggle-field'
@@ -58,13 +58,25 @@ const props = defineProps({
     default: null,
   },
   modelValue: {
-    type: Boolean,
+    type: [String, Number, Boolean],
     required: true,
   },
   radio: {
     type: Boolean,
     required: false,
   },
+  inline: {
+    type: Boolean,
+    required: false,
+  },
+  boxed: {
+    type: Boolean,
+    required: false,
+  },
+})
+
+defineOptions({
+  inheritAttrs: false,
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -82,10 +94,10 @@ const isValid = ref(null)
 // Computed
 const updatedValue = computed({
   get() {
-    return !!props.modelValue
+    return props.modelValue
   },
   set(newValue) {
-    emit('update:modelValue', !!newValue)
+    emit('update:modelValue', newValue)
   },
 })
 
@@ -109,6 +121,18 @@ const className = computed(() => {
 
   if (props.errorBefore) {
     className.push('has-error-before')
+  }
+
+  if (props.modelValue === props.value) {
+    className.push('is-active')
+  }
+
+  if (props.inline) {
+    className.push(`${CSS_NAME}--inline`)
+  }
+
+  if (props.boxed) {
+    className.push(`${CSS_NAME}--boxed`)
   }
 
   if (attrs.class) {
@@ -137,19 +161,41 @@ $prefix: 'toggle-field';
 
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   @include element('label') {
     order: 1;
     position: relative;
     margin: get-var(margin, 0, $prefix: $prefix-label);
-    padding: get-var(padding, 0 0 0 rem(30px), $prefix: $prefix-label);
+    padding: get-var(
+        padding-y,
+        get-var(padding, 0, $prefix: $prefix-label),
+        $prefix: $prefix-label
+      )
+      get-var(
+        padding-x,
+        get-var(padding, 0, $prefix: $prefix-label),
+        $prefix: $prefix-label
+      )
+      get-var(
+        padding-y,
+        get-var(padding, 0, $prefix: $prefix-label),
+        $prefix: $prefix-label
+      )
+      calc(
+        get-var(
+            padding-x,
+            get-var(padding, 0px, $prefix: $prefix-label),
+            $prefix: $prefix-label
+          ) + get-var(gap, rem(30px), $prefix: $prefix-label)
+      );
     cursor: pointer;
   }
 
   @include element('input') {
     position: absolute;
     top: get-var(offset-top, 0, $prefix: $prefix);
-    left: 0;
+    left: get-var(offset-left, 0, $prefix: $prefix);
   }
 
   @include element('error') {
@@ -197,6 +243,60 @@ $prefix: 'toggle-field';
           inset: 0 0 auto;
         }
       }
+    }
+  }
+
+  @include modifier('inline') {
+    width: auto;
+  }
+
+  @include modifier('boxed') {
+    background-color: get-var(
+      background-color,
+      get-var(color-white),
+      $prefix: $prefix
+    );
+    border-radius: rem(10px);
+    overflow: hidden;
+
+    @include transition(background-color);
+
+    @include is('active') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          background-color: get-var(color-yellow),
+        )
+      );
+    }
+
+    @include element('input') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          offset-top: 50%,
+          offset-left:
+            get-var(
+              padding-x,
+              get-var(padding, 0, $prefix: $prefix-label),
+              $prefix: $prefix-label
+            ),
+        )
+      );
+
+      transform: translateY(-50%);
+    }
+
+    @include element('label') {
+      border-radius: rem(10px);
+      border: 1px solid get-var(color-black);
+
+      @include set-local-vars(
+        $prefix: $prefix-label,
+        $map: (
+          padding: rem(20px),
+        )
+      );
     }
   }
 }

@@ -10,9 +10,10 @@
 
     <Suspense>
       <ProductsGrid
-        class="u-pb-huge u-pt-medium"
+        class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :from="`shop/categories/${$route.params.category}/products`"
         :filters="page.filters"
+        paginate
         sortable
       />
     </Suspense>
@@ -26,9 +27,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  validate: async (route) => {
-    return isCategory(route.params.category)
-  },
+  middleware: ['category'],
 })
 
 // Component life-cycle hooks

@@ -1,9 +1,11 @@
 <template>
   <div :class="className">
-    <slot name="before" />
-
     <button
-      :class="[`${CSS_NAME}__button`, `${CSS_NAME}__button--minus`]"
+      :class="[
+        `${CSS_NAME}__button`,
+        `${CSS_NAME}__button--minus`,
+        modelValue <= min ? 'is-limit' : '',
+      ]"
       type="button"
       @click="decrease"
     >
@@ -22,14 +24,16 @@
       @blur="check"
     />
     <button
-      :class="[`${CSS_NAME}__button`, `${CSS_NAME}__button--plus`]"
+      :class="[
+        `${CSS_NAME}__button`,
+        `${CSS_NAME}__button--plus`,
+        max !== null && modelValue >= max ? 'is-limit' : '',
+      ]"
       type="button"
       @click="increase"
     >
       <span>+</span>
     </button>
-
-    <slot name="after" />
   </div>
 </template>
 
@@ -47,7 +51,7 @@ const props = defineProps({
   },
   min: {
     type: Number,
-    default: 0,
+    default: 1,
   },
   step: {
     type: Number,
@@ -56,6 +60,10 @@ const props = defineProps({
   max: {
     type: Number,
     default: null,
+  },
+  big: {
+    type: Boolean,
+    default: false,
   },
   modelValue: {
     type: Number,
@@ -87,6 +95,10 @@ const className = computed(() => {
     className.push('is-init')
   }
 
+  if (props.big) {
+    className.push('is-big')
+  }
+
   return className
 })
 
@@ -105,7 +117,6 @@ const input = (event) => {
 
 const calculate = (negative = false) => {
   let value = parseFloat(props.modelValue) + props.step * (negative ? -1 : 1)
-
   if (props.min !== null && value < props.min) {
     value = props.min
   } else if (props.max !== null && value > props.max) {
@@ -187,11 +198,11 @@ $prefix: 'counter';
   text-align: center;
 
   @include element('button') {
-    width: rem(30px);
-    height: rem(30px);
+    width: get-var(size, rem(24px), $prefix: $prefix);
+    height: get-var(size, rem(24px), $prefix: $prefix);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 0;
     margin: 0;
     appearance: none;
@@ -201,6 +212,7 @@ $prefix: 'counter';
     padding: 0;
     position: relative;
     cursor: pointer;
+    flex: 0 0 auto;
     @include transition(border-color);
 
     span {
@@ -211,8 +223,8 @@ $prefix: 'counter';
     &::after {
       content: '';
       display: block;
-      width: rem(12px);
-      height: rem(2px);
+      width: calc(get-var(size, rem(24px), $prefix: $prefix) * 34.78 / 100);
+      height: rem(1px);
       position: absolute;
       top: 50%;
       left: 50%;
@@ -246,6 +258,11 @@ $prefix: 'counter';
         display: none;
       }
     }
+
+    @include is('limit') {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 
   @include element('input') {
@@ -254,6 +271,9 @@ $prefix: 'counter';
     text-align: center;
     padding: 0;
     margin: 0;
+    flex: 1 1 auto;
+    font-weight: get-var(weight-bold);
+    max-width: calc(100% - (get-var(size, rem(24px), $prefix: $prefix) * 2));
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
@@ -274,6 +294,15 @@ $prefix: 'counter';
 
   &::placeholder {
     opacity: 0.4;
+  }
+
+  @include is('big') {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        size: rem(28px),
+      )
+    );
   }
 
   @include is('init') {

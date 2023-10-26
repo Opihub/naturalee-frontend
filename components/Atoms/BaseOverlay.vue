@@ -1,11 +1,9 @@
 <template>
-  <Transition name="fade">
-    <section :class="CSS_NAME">
-      <SiteContainer :max-width="maxWidth" flex>
-        <slot />
-      </SiteContainer>
-    </section>
-  </Transition>
+  <section :class="CSS_NAME">
+    <SiteContainer :max-width="maxWidth" flex>
+      <slot />
+    </SiteContainer>
+  </section>
 </template>
 
 <script setup>
@@ -18,20 +16,6 @@ defineProps({
     type: [Number, String],
     default: '100%',
   },
-  size: {
-    type: Number,
-    required: true,
-  },
-  desktopFirst: {
-    type: Boolean,
-    default: false,
-  },
-  props: {
-    type: Object,
-    default() {
-      return {}
-    },
-  },
 })
 </script>
 
@@ -41,6 +25,8 @@ $prefix: 'overlay';
   position: fixed;
   inset: 0;
   z-index: get-var(z-#{$prefix});
-  background-color: get-var(color-light);
+  background-color: get-var(background-color, get-var(color-light), $prefix: $prefix);
+  opacity: get-var(opacity, 1, $prefix: $prefix);
+  cursor: get-var(cursor, default, $prefix: $prefix);
 }
 </style>

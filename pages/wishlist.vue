@@ -9,8 +9,9 @@
 
     <Suspense>
       <ProductsGrid
-        class="u-pb-huge u-pt-medium"
+        class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :use="wishlist"
+        paginate
       />
     </Suspense>
   </main>
@@ -23,6 +24,16 @@ import { useWishlistStore } from '@/stores/wishlist'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'wishlist',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/i-miei-preferiti',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 

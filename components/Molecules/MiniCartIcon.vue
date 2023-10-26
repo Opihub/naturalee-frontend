@@ -1,12 +1,12 @@
 <template>
   <BaseLink
-    to="/cart"
+    :to="{ name: 'cart' }"
     :class="CSS_NAME"
     :text="count"
     :label-class-name="`${CSS_NAME}__label`"
   >
     <template #svg="{ className }">
-      <NuxtIcon name="bag" :class="className" :filled="false" />
+      <BaseIcon name="bag" :class="className" :filled="false" />
     </template>
   </BaseLink>
 </template>

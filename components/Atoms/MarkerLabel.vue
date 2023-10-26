@@ -3,7 +3,7 @@
     <Suspense>
       <MarkerPlaceholder :class="`${CSS_NAME}__marker`" />
     </Suspense>
-    <span :class="`${CSS_NAME}__text`">{{ text }}</span>
+    <span :class="`${CSS_NAME}__text`">{{ marker.text }}</span>
   </div>
 </template>
 
@@ -13,22 +13,24 @@ import MarkerPlaceholder from 'assets/svg/marker-placeholder.svg'
 const CSS_NAME = 'o-marker'
 
 const props = defineProps({
-  text: {
-    type: String,
+  marker: {
+    type: Object,
     required: true,
-  },
-  color: {
-    type: String,
-    default: null,
+    validator(value) {
+      return 'text' in value
+    },
   },
 })
 
 const style = computed(() => {
   const style = {}
 
-  if (props.color) {
-    style['--marker-background'] = props.color
-    style['--marker-text'] = invertColor(props.color)
+  if (props.marker.color) {
+    style['--marker-background'] = props.marker.color
+  }
+
+  if (props.marker.textColor) {
+    style['--marker-text'] = props.marker.textColor || invertColor(props.marker.color)
   }
 
   return style
@@ -49,7 +51,7 @@ $prefix: 'marker';
   @include element('marker') {
     display: block;
     fill: get-var(background, get-var(color-green), $prefix: $prefix);
-    width: get-var(width, rem(117px), $prefix: $prefix);
+    width: get-var(width, rem(200px), $prefix: $prefix);
     height: get-var(height, rem(39px), $prefix: $prefix);
   }
 

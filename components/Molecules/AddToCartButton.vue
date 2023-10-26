@@ -3,10 +3,11 @@
     :class="className"
     type="button"
     :color="color"
-    :disabled="animating || sending"
+    :disabled="isDisabled"
+    :text="text"
     @click="add"
   >
-    <span v-if="sending" :class="`${CSS_NAME}__spinner`"> Caricamento... </span>
+    <span v-if="sending" :class="`${CSS_NAME}__spinner`" />
 
     <ClientOnly>
       <div v-if="animating" :class="`${CSS_NAME}__animation`">
@@ -23,7 +24,9 @@
       </div>
     </ClientOnly>
 
-    <span :class="`${CSS_NAME}__text`">Aggiungi al carrello</span>
+    <span :class="`${CSS_NAME}__text`"
+      ><slot>{{ text }}</slot></span
+    >
   </BaseButton>
 </template>
 
@@ -53,6 +56,14 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  text: {
+    type: String,
+    default: 'Aggiungi al carrello',
+  },
 })
 const emit = defineEmits(['api:start', 'api:end'])
 
@@ -78,6 +89,10 @@ const className = computed(() => {
   }
 
   return className
+})
+
+const isDisabled = computed(() => {
+  return props.disabled || animating.value || sending.value
 })
 
 const color = computed(() => {

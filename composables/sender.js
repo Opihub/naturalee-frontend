@@ -1,11 +1,13 @@
 import { ref } from '#imports'
 
-export function useSender(emit) {
+export function useSender(emit = null) {
   const sent = ref(false)
   const sending = ref(false)
 
   const send = async (callback) => {
-    emit('api:start')
+    if (emit) {
+      emit('api:start')
+    }
 
     sending.value = true
     sent.value = false
@@ -15,7 +17,9 @@ export function useSender(emit) {
     sending.value = false
     sent.value = true
 
-    emit('api:end')
+    if (emit) {
+      emit('api:end')
+    }
 
     return response
   }

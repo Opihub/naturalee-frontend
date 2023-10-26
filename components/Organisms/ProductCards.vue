@@ -6,12 +6,15 @@
       tag="h5"
       >{{ title }}</BaseHeading
     >
+
+    <slot />
+
     <ClientOnly>
       <Splide
         :class="CSS_NAME"
         :options="SPLIDE_OPTIONS"
         :has-track="false"
-        :aria-label="$t('products.recommended')"
+        :aria-label="title"
       >
         <SplideTrack>
           <SplideSlide v-for="product in products" :key="product.id">
@@ -83,6 +86,8 @@ $prefix: 'product-cards';
   }
 
   @include element('item') {
+    height: 100%;
+
     @include from(desktop) {
       width: rem(385px);
     }

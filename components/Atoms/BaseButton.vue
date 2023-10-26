@@ -1,12 +1,18 @@
 <template>
-  <component :is="is" :class="className" :type="type">
+  <component
+    :is="is"
+    :class="className"
+    :type="type"
+    active-class="is-current"
+    exact-active-class="is-exact"
+  >
     <slot>
       <span v-if="text">{{ text }}</span>
     </slot>
 
     <Suspense>
       <slot name="svg">
-        <NuxtIcon v-if="svg" :name="svg" :style="svgStyle" />
+        <BaseIcon v-if="svg" :name="svg" :icon-size="svgStyle" />
       </slot>
     </Suspense>
   </component>
@@ -20,7 +26,7 @@ const props = defineProps({
     type: String,
     default: 'button',
     validator(value) {
-      return ['button', 'link'].includes(value)
+      return ['button', 'div', 'span', 'link'].includes(value)
     },
   },
   svg: {
@@ -56,7 +62,9 @@ const props = defineProps({
     default: null,
     validator(value) {
       // The value must match one of these strings
-      return ['green', 'yellow', 'transparent', 'white'].includes(value)
+      return ['black', 'green', 'yellow', 'transparent', 'white'].includes(
+        value
+      )
     },
   },
 })
@@ -75,7 +83,6 @@ const svgStyle = computed(() => {
       height = props.svgSize[0]
     }
   }
-
   return {
     '--svg-width': typeof width === 'number' ? `${width}px` : width,
     '--svg-height': typeof height === 'number' ? `${height}px` : height,

@@ -1,0 +1,26 @@
+import { useRemoteApi } from '@/server/utils/remoteApi'
+
+export default defineEventHandler(async (event) => {
+  const slug = event.context.params?.slug
+ const body = await readBody(event)
+  if (!slug) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Missing mandatory form slug',
+      data: {
+        code: 'missing_slug',
+        success: false,
+      },
+    })
+  }
+
+  try {
+    const response = await useRemoteApi(event, `/v1/form/${slug}`,{method: 'POST',
+      body,})
+
+    return createResponse(response)
+  } catch (error) {
+    console.error(error)
+    return createErrorResponse(error)
+  }
+})

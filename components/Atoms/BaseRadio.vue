@@ -1,11 +1,11 @@
 <template>
   <span :class="className">
     <input
+      v-model="emitValue"
       :class="`${CSS_NAME}__input`"
       type="radio"
       :name="name"
       :value="value"
-      :checked="modelValue"
       v-bind="attributes"
       @change="input"
     />
@@ -21,7 +21,7 @@
 const CSS_NAME = 'o-radio'
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   name: {
     type: String,
     default: null,
@@ -31,11 +31,10 @@ defineProps({
     default: null,
   },
   modelValue: {
-    type: Boolean,
+    type: [String, Number, Boolean],
     default: null,
   },
 })
-
 const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
 
 // Component life-cycle hooks
@@ -78,9 +77,18 @@ const attributes = computed(() => {
   return attributes
 })
 
+const emitValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  },
+})
+
 // Methods
 const input = (event) => {
-  emit('update:modelValue', event.target.checked)
+  emit('update:modelValue', event.target.value)
 
   check(event)
 }

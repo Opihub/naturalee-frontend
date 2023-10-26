@@ -12,10 +12,11 @@ import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
 
 export const useWishlistStore = defineStore('wishlist', () => {
+  const { t } = useI18n()
+
   const profile = useAccountStore()
 
   const { isLoggedIn } = storeToRefs(profile)
-  const { t } = useI18n()
 
   // State
   const wishlist = useLocalStorage('wishlist', [], {
@@ -140,7 +141,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
           method: 'POST',
           body: {
             id: product.id,
-            variantId: product.variantId,
+            variationId: product.variationId,
           },
         },
         {
@@ -151,13 +152,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
       if (response.value.success) {
         return addToWishlist(product)
       } else {
-        throw new Error(response)
+        console.error(response.value)
+        throw new Error(response.value.message)
       }
     } catch (error) {
-      console.error(error)
-
       notify({
-        message: JSON.stringify(error.value),
+        message: error.message,
         status: 'danger',
       })
     }
@@ -177,7 +177,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
           method: 'DELETE',
           body: {
             id: product.id,
-            variantId: product.variantId,
+            variationId: product.variationId,
           },
         },
         {
@@ -188,13 +188,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
       if (response.value.success) {
         return removeFromWishlist(product)
       } else {
-        throw new Error(response)
+        console.error(response.value)
+        throw new Error(response.value.message)
       }
     } catch (error) {
-      console.error(error)
-
       notify({
-        message: JSON.stringify(error.value),
+        message: error.message,
         status: 'danger',
       })
     }
@@ -223,13 +222,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
         // a meno che il prodotto richiesto non sia presente nel carrello
         return clearWishlist()
       } else {
-        throw new Error(response)
+        console.error(response.value)
+        throw new Error(response.value.message)
       }
     } catch (error) {
-      console.error(error)
-
       notify({
-        message: JSON.stringify(error.value),
+        message: error.message,
         status: 'danger',
       })
     }

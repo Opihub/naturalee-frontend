@@ -1,30 +1,36 @@
 <template>
-  <BackgroundHolder :class="CSS_NAME" tag="section" :color="color">
-    <SiteContainer flex>
+  <BackgroundHolder :class="className" tag="section" :color="color">
+    <SiteContainer :style="style" flex>
       <div :class="`${CSS_NAME}__content`">
         <BaseHeading
-          v-if="slots['sup-title']"
+          v-if="$slots['sup-title']"
           :tag="supTitleTag"
           use="h6"
           class="u-mb-micro"
           ><slot name="sup-title"
         /></BaseHeading>
+
         <BaseHeading
-          v-if="slots.title"
+          v-if="$slots.title"
           :tag="titleTag"
           use="h2"
           class="u-mb-medium"
           ><slot name="title"
         /></BaseHeading>
 
-        <BaseParagraph v-if="slots.default" color="white"
-          ><slot
-        /></BaseParagraph>
+        <slot v-if="$slots.default" />
+        <BaseParagraph
+          v-else-if="$slots.text"
+          :color="color === 'white' ? 'black' : 'white'"
+        >
+          <slot name="text" />
+        </BaseParagraph>
 
         <BaseButton
-          v-if="button.text"
+          v-if="button?.text"
           :as="button.to ? 'link' : 'button'"
           :target="button.target || null"
+          :to="button.to || null"
           :color="button.color || 'yellow'"
           class="u-mt-large u-mt-huge@tablet"
           >{{ button.text }}</BaseButton
@@ -72,17 +78,34 @@ const props = defineProps({
     type: Number,
     default: 0.075,
   },
+  parallax: {
+    type: Boolean,
+    default: false,
+  },
   button: {
     type: Object,
     default: null,
+    required: false,
     validator(value) {
       return 'text' in value
     },
+  },
+  borderRadius: {
+    type: String,
+    default: null,
+  },
+  flipped: {
+    type: Boolean,
+    default: false,
   },
 })
 
 // Component life-cycle hooks
 onMounted(() => {
+  if (!props.parallax) {
+    return
+  }
+
   gsap.registerPlugin(ScrollTrigger)
 
   const parallax = getElement(parallaxElement)
@@ -97,11 +120,14 @@ onMounted(() => {
         scrub: true,
       },
     })
-    .to(parallax, { y: parallax.offsetHeight * props.offset, ease: 'none' }, 0)
+    .to(
+      parallax,
+      { y: parallax.offsetHeight * props.offset, ease: 'none' },
+      0
+    )
 })
 
 // Composables
-const slots = useSlots()
 const parallaxElement = ref(null)
 
 // Data
@@ -109,6 +135,29 @@ const parallaxElement = ref(null)
 // Watcher
 
 // Computed
+const className = computed(() => {
+  const className = [CSS_NAME]
+
+  if (props.flipped) {
+    className.push(`${CSS_NAME}--flipped`)
+  }
+
+  if (props.parallax) {
+    className.push(`has-parallax`)
+  }
+
+  return className
+})
+
+const style = computed(() => {
+  const style = {}
+
+  if (props.borderRadius) {
+    style['--image-border-radius'] = props.borderRadius
+  }
+
+  return style
+})
 
 // Methods
 </script>
@@ -117,6 +166,7 @@ const parallaxElement = ref(null)
 $prefix: 'content-row';
 @include component($prefix) {
   $prefix-parallax: '#{$prefix}-parallax';
+
   @include set-local-vars(
     $prefix: 'container',
     $map: (
@@ -146,9 +196,6 @@ $prefix: 'content-row';
     @include from(tablet) {
       order: 1;
       max-width: get-var(content-width, rem(520px), $prefix: $prefix);
-    }
-
-    @include from(tablet) {
       margin: get-var(margin, 0, $prefix: $prefix) 0;
     }
   }
@@ -157,20 +204,43 @@ $prefix: 'content-row';
     flex: 1 1 100%;
     width: 100%;
     order: 1;
-    align-self: stretch;
     position: relative;
 
     @include from(tablet) {
       order: 2;
-      margin-left: auto;
+      margin-left: get-var(parallax-margin-left, auto);
       max-width: get-var(width, rem(925px), $prefix: $prefix-parallax);
     }
 
     @include element('image') {
+      border-radius: get-var(image-radius, 0, $prefix: $prefix);
+
       @include from(tablet) {
-        position: absolute;
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
       }
+    }
+  }
+
+  @include has('parallax') {
+    @include element('parallax') {
+      align-self: stretch;
+
+      @include element('image') {
+        @include from(tablet) {
+          position: absolute;
+        }
+      }
+    }
+  }
+
+  @include from(tablet) {
+    @include modifier('flipped') {
+      @include set-local-vars(
+        $prefix: 'container',
+        $map: (
+          direction: row-reverse,
+        )
+      );
     }
   }
 }

@@ -5,6 +5,7 @@
     :name="name"
     :value="modelValue"
     :pattern="autoloadedPattern"
+    :placeholder="placeholder"
     @input="input"
     @blur="check"
   />
@@ -63,6 +64,11 @@ const props = defineProps({
   modelValue: {
     type: [String, Number, Boolean],
     default: null,
+  },
+  placeholder: {
+    type: String,
+    default: '',
+    require: false,
   },
 })
 
@@ -173,6 +179,7 @@ $prefix: 'input';
     )
   );
 }
+
 @include object($prefix) {
   $svg-prefix: 'svg';
 
@@ -201,6 +208,16 @@ $prefix: 'input';
   max-width: get-var(max-width, 100%, $prefix: $prefix);
 
   @include transition(border-color);
+
+  &[disabled] {
+    opacity: 0.8;
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-light),
+      )
+    );
+  }
 
   &:focus {
     @include set-local-vars(

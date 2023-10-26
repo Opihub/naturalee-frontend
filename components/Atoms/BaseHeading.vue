@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :class="className">
+  <component :is="tag" :class="className" :style="style">
     <slot>
       {{ text }}
     </slot>
@@ -23,7 +23,18 @@ const props = defineProps({
     type: String,
     default: 'h1',
     validator(value) {
-      return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'small', 'div', 'p'].includes(value)
+      return [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'span',
+        'small',
+        'div',
+        'p',
+      ].includes(value)
     },
   },
   /**
@@ -36,6 +47,23 @@ const props = defineProps({
       return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'custom'].includes(value)
     },
   },
+  color: {
+    type: String,
+    default: null,
+    validator(value) {
+      return [
+        'green',
+        'red',
+        'brown',
+        'orange',
+        'yellow',
+        'light',
+        'dark',
+        'white',
+        'black',
+      ].includes(value)
+    },
+  },
 })
 
 const className = computed(() => {
@@ -45,11 +73,24 @@ const className = computed(() => {
     if (props.use !== 'custom') {
       className.push(`${CSS_NAME}--${props.use}`)
     }
-  } else if (props.tag && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(props.tag)) {
+  } else if (
+    props.tag &&
+    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(props.tag)
+  ) {
     className.push(`${CSS_NAME}--${props.tag}`)
   }
 
   return className
+})
+
+const style = computed(() => {
+  const style = {}
+
+  if (props.color) {
+    style['--heading-text-color'] = `var(--color-${props.color})`
+  }
+
+  return style
 })
 </script>
 
@@ -181,10 +222,10 @@ $prefix: 'heading';
         font-weight: get-var(weight-extrabold),
         font-size: 18px,
         line-height: 23px,
-        text-transform: uppercase,
       )
     );
     color: get-var(text-color, get-var(color-white), $prefix: $prefix);
+    text-transform: get-var(text-transform, uppercase, $prefix: $prefix);
 
     @include media(desktop) {
       @include set-local-vars(

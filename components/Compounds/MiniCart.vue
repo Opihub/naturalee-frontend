@@ -5,12 +5,12 @@
         <template v-if="cart.length">
           <span>
             {{ $t('cart.your') }} -
-            {{ $t('product', cart.length, { count: cart.length }) }}
+            {{ $t('products.count', cart.length, { count: cart.length }) }}
           </span>
 
           <BaseLink
             :class="`${CSS_NAME}__review`"
-            to="/cart"
+            :to="{ name: 'cart' }"
             :underline="true"
             color="dark"
             >{{ $t('edit') }}</BaseLink
@@ -34,15 +34,18 @@
 
         <span :class="`${CSS_NAME_LIST_PRODUCT}__description`">
           <span :class="`${CSS_NAME_LIST_PRODUCT}__description__quantity`"
-            >{{ product.quantity }}{{ product.unit }}</span
+            >{{ product.quantity }} &times;</span
           >
           <span :class="`${CSS_NAME_LIST_PRODUCT}__description__title`">{{
             product.title
           }}</span>
         </span>
-        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">{{
-          $t('cart.productCode', { sku: product.sku })
-        }}</span>
+        <span :class="`${CSS_NAME_LIST_PRODUCT}__code`">
+          <span v-if="product.costDescription">{{
+            product.costDescription
+          }}</span>
+          <span v-if="product.selling">{{ product.selling }}</span>
+        </span>
 
         <PriceHolder
           :class="`${CSS_NAME_LIST_PRODUCT}__price`"
@@ -51,25 +54,25 @@
       </li>
     </ul>
 
-    <div v-if="cart.length" :class="CSS_NAME_TOTALS">
-      <dl :class="`${CSS_NAME_TOTALS}__calculation`">
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+    <div v-if="cart.length" :class="CSS_NAME_TOTAL">
+      <dl :class="`${CSS_NAME_TOTAL}__calculation`">
+        <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
           $t('cart.shippingCost')
         }}</span>
         <PriceHolder
-          :class="`${CSS_NAME_TOTALS_CALCULATION}__price`"
+          :class="`${CSS_NAME_TOTAL_CALCULATION}__price`"
           :price="shippingCost"
         />
 
-        <span :class="`${CSS_NAME_TOTALS_CALCULATION}__record`">{{
+        <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
           $t('cart.orderTotal')
         }}</span>
         <PriceHolder
           :class="[
-            `${CSS_NAME_TOTALS_CALCULATION}__price`,
-            `${CSS_NAME_TOTALS_CALCULATION}__price--final`,
+            `${CSS_NAME_TOTAL_CALCULATION}__price`,
+            `${CSS_NAME_TOTAL_CALCULATION}__price--final`,
           ]"
-          :price="totals"
+          :price="total"
         >
           <template #after>
             <small>{{ $t('cart.fee') }}</small>
@@ -77,12 +80,16 @@
         </PriceHolder>
       </dl>
 
-      <BaseButton :class="`${CSS_NAME}__submit`" color="green">{{
-        $t('cart.proceed')
-      }}</BaseButton>
+      <BaseButton
+        as="link"
+        :class="`${CSS_NAME}__submit`"
+        color="green"
+        :to="{ name: 'checkout' }"
+        >{{ $t('cart.proceed') }}</BaseButton
+      >
       <BaseLink
         :class="`${CSS_NAME}__review`"
-        to="/cart"
+        :to="{ name: 'cart' }"
         :underline="true"
         color="dark"
         >{{ $t('cart.goToCart') }}</BaseLink
@@ -98,8 +105,8 @@
 const CSS_NAME = 'c-mini-cart'
 const CSS_NAME_LIST = `${CSS_NAME}__list`
 const CSS_NAME_LIST_PRODUCT = `${CSS_NAME_LIST}__product`
-const CSS_NAME_TOTALS = `${CSS_NAME}__totals`
-const CSS_NAME_TOTALS_CALCULATION = `${CSS_NAME_TOTALS}__calculation`
+const CSS_NAME_TOTAL = `${CSS_NAME}__total`
+const CSS_NAME_TOTAL_CALCULATION = `${CSS_NAME_TOTAL}__calculation`
 
 // Define (Props, Emits, Page Meta)
 defineProps({
@@ -113,7 +120,7 @@ defineProps({
     type: Number,
     default: 0,
   },
-  totals: {
+  total: {
     type: Number,
     default: 0,
   },
@@ -141,7 +148,7 @@ $prefix: 'mini-cart';
       horizontal-padding: rem(22px),
       max-height: rem(368px),
       product-bound: rem(14px),
-      product-description-gap: rem(18px),
+      product-description-gap: rem(10px),
     )
   );
 
@@ -154,7 +161,7 @@ $prefix: 'mini-cart';
   }
 
   @include element('list') {
-    overflow: scroll visible;
+    overflow: visible scroll;
     max-height: get-var(max-height, $prefix: $prefix);
     list-style: none;
     padding: 0;
@@ -209,17 +216,6 @@ $prefix: 'mini-cart';
           margin-right: get-var(product-description-gap, $prefix: $prefix);
           position: relative;
           white-space: nowrap;
-
-          &::after {
-            content: '-';
-            position: absolute;
-            left: 100%;
-            top: 50%;
-            width: get-var(product-description-gap, $prefix: $prefix);
-            height: auto;
-            text-align: center;
-            transform: translateY(-50%);
-          }
         }
       }
 
@@ -227,8 +223,23 @@ $prefix: 'mini-cart';
         grid-area: code;
         padding-bottom: get-var(product-bound, $prefix: $prefix);
         font-weight: get-var(weight-light);
+        display: inline-flex;
+        justify-content: flex-start;
         @include typography(11px, 13px);
         @include letter-spacing(12);
+
+        & > * {
+          &::before {
+            content: '-';
+            margin: 0 4px;
+          }
+
+          &:first-child {
+            &::before {
+              display: none;
+            }
+          }
+        }
       }
 
       @include element('price') {
@@ -244,7 +255,7 @@ $prefix: 'mini-cart';
     }
   }
 
-  @include element('totals') {
+  @include element('total') {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

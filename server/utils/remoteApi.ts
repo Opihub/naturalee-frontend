@@ -5,6 +5,7 @@ import { H3Event } from 'h3'
 
 export async function useRemoteApi(event: H3Event, url: string, options = {}) {
   const config = useRuntimeConfig()
+  
 
   let params = {}
   if (event && event instanceof H3Event) {

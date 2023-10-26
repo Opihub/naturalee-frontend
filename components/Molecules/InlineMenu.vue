@@ -22,13 +22,15 @@
         :to="record.url"
         :text="record.title || record.text"
         :target="record.target"
-        :svg="record.image"
+        :svg="record.icon"
         :color="color"
         :arrow="arrow"
+        :svg-size="svgSize"
       />
-      <span v-else :class="CSS_NAME_ITEM_TEXT">{{
-        record.title || record.text
-      }}</span>
+
+      <span v-else :class="CSS_NAME_ITEM_TEXT"
+        >{{ record.title || record.text }}
+      </span>
     </li>
 
     <slot
@@ -87,6 +89,10 @@ const props = defineProps({
     validator(value) {
       return ['white', 'dark'].includes(value)
     },
+  },
+  svgSize: {
+    type: String,
+    default: '1em',
   },
 })
 

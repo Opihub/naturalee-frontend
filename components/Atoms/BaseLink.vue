@@ -6,7 +6,12 @@
   >
     <Suspense v-if="svg || slots.svg">
       <slot name="svg" :class-name="CSS_NAME_ICON">
-        <NuxtIcon :name="svg" :class="CSS_NAME_ICON" :filled="svgFilled" />
+        <BaseIcon
+          :name="svg"
+          :class="CSS_NAME_ICON"
+          :icon-size="svgSize"
+          :filled="svgFilled"
+        />
       </slot>
 
       <template #fallback>
@@ -41,11 +46,14 @@
 </template>
 
 <script setup>
+// Imports
 import ArrowSVG from 'assets/svg/arrow.svg'
 
+// Constants
 const CSS_NAME = 'o-link'
 const CSS_NAME_ICON = `${CSS_NAME}__icon`
 
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   svg: {
     type: String,
@@ -54,6 +62,10 @@ const props = defineProps({
   svgFilled: {
     type: Boolean,
     default: true,
+  },
+  svgSize: {
+    type: String,
+    default: '1em',
   },
   text: {
     type: String,
@@ -77,20 +89,28 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: null,
+    default: 'yellow',
     validator(value) {
       // The value must match one of these strings
-      return ['white', 'dark', 'green'].includes(value)
+      return ['yellow', 'white', 'dark', 'green'].includes(value)
     },
   },
 })
 
+// Component life-cycle hooks
+
+// Composables
 const slots = useSlots()
 
+// Data
+
+// Watcher
+
+// Computed
 const className = computed(() => {
   const className = [CSS_NAME]
 
-  if (props.color) {
+  if (props.color && props.color !== 'yellow') {
     className.push(`${CSS_NAME}--${props.color}`)
   }
 
@@ -112,6 +132,8 @@ const className = computed(() => {
 
   return className
 })
+
+// Methods
 </script>
 
 <style lang="scss">
@@ -141,16 +163,6 @@ $prefix: 'link';
   $arrow-prefix: 'arrow';
   $label-prefix: 'link-label';
 
-  @include set-vars(
-    $prefix: $prefix,
-    $map: (
-      display: inline-flex,
-      text-color: get-var(color-yellow),
-      gap: rem(4px) rem(18px),
-      font-weight: font-weight(bold),
-    )
-  );
-
   @include set-local-vars(
     $prefix: $svg-prefix,
     $map: (
@@ -168,13 +180,13 @@ $prefix: 'link';
   );
 
   text-decoration: none;
-  color: get-var(text-color, $prefix: $prefix);
-  display: get-var(display, $prefix: $prefix);
+  color: get-var(text-color, get-var(color-yellow), $prefix: $prefix);
+  display: get-var(display, inline-flex, $prefix: $prefix);
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: get-var(gap, $prefix: $prefix);
+  gap: get-var(gap, rem(4px) rem(18px), $prefix: $prefix);
   @include transition(color);
 
   // @include current(white);
@@ -209,11 +221,11 @@ $prefix: 'link';
   }
 
   @include element('label') {
-    display: get-var(display, $prefix: $prefix);
+    display: get-var(display, inline-flex, $prefix: $prefix);
     align-items: baseline;
     width: get-var(width, auto, $prefix: $label-prefix);
     justify-content: get-var(disposition, center, $prefix: $label-prefix);
-    gap: get-var(gap, $prefix: $prefix);
+    gap: get-var(gap, rem(4px) rem(18px), $prefix: $prefix);
     @include transition(color);
   }
 

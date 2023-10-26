@@ -4,7 +4,7 @@
       <BaseHeading
         tag="span"
         :class="[`${CSS_NAME}__heading`, `${CSS_NAME}__heading--header`]"
-        >{{ $t('shipping.checkPostCode') }}</BaseHeading
+        >{{ $t('addresses.checkPostCode') }}</BaseHeading
       >
     </template>
 
@@ -18,30 +18,30 @@
         <InputField
           v-model="formData.postcode"
           name="postcode"
-          :error="$t('shipping.invalidPostCode')"
+          :error="$t('addresses.invalidPostCode')"
           pattern="\d{5}"
           error-after
           rounded
           required
-          >{{ $t('shipping.cap') }}</InputField
+          >{{ $t('addresses.postcode') }}</InputField
         >
 
         <InputField
           v-model="formData.address"
           :class="`${CSS_NAME}__form__address`"
           name="address"
-          :error="$t('shipping.shippingAddressRequired')"
+          :error="$t('addresses.deliveryRequired')"
           error-after
           rounded
           required
-          >{{ $t('shipping.shippingAddress') }}</InputField
+          >{{ $t('addresses.delivery') }}</InputField
         >
 
         <BaseButton
           :disabled="sending"
           color="green"
           type="submit"
-          :text="$t('shipping.checkAddress')"
+          :text="$t('addresses.checkAddress')"
         />
       </form>
 
@@ -61,13 +61,19 @@
         </div>
 
         <div v-if="matchedPostcode || savedEmail" :class="`${CSS_NAME}__user`">
-          <BaseButton as="link" to="/my-account?login" color="green">{{
-            $t('form.login')
-          }}</BaseButton>
+          <BaseButton
+            as="link"
+            :to="{ name: 'my-account', query: { login: true } }"
+            color="green"
+            >{{ $t('form.login') }}</BaseButton
+          >
           oppure
-          <BaseButton as="link" to="/my-account?register" color="green">{{
-            $t('form.signUp')
-          }}</BaseButton>
+          <BaseButton
+            as="link"
+            :to="{ name: 'my-account', query: { register: true } }"
+            color="green"
+            >{{ $t('form.signUp') }}</BaseButton
+          >
         </div>
         <form
           v-else

@@ -1,13 +1,46 @@
-import { useFetch, ref, storeToRefs } from '#imports'
+import {
+  useFetch,
+  ref,
+  storeToRefs,
+  useRuntimeConfig,
+} from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
+import { useLogout } from '@/composables/logout'
+
+function getApiUrl(url, options = {}) {
+  let path = '/'
+  const paths = [url]
+
+  if (options?.version) {
+    paths.unshift(`v${options.version}`)
+  }
+
+  if (options?.local) {
+    paths.unshift('api')
+  }
+
+  path += paths.join('/').replaceAll(/\/+/g, '/')
+
+  if (options?.params) {
+    path += '?' + new URLSearchParams(options.params).toString()
+  }
+
+  return path
+}
 
 export async function useApi(url, options = {}, innerOptions = {}) {
+  const config = useRuntimeConfig()
+
+  const apiKeys = useSessionStorage('apiKeys', [], {
+    serializer: StorageSerializers.object,
+  })
+
   innerOptions = {
     version: 1,
     cache: true,
-    local: true,
+    local: false,
     dataOnly: false,
     ...innerOptions,
   }
@@ -17,40 +50,16 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const auth = useAccountStore()
   const { token, isLoggedIn } = storeToRefs(auth)
 
-  const apiUrl = (complete = false) => {
-    if (!innerOptions.local) {
-      let path = url
-
-      if (complete && options.params) {
-        path += '?' + new URLSearchParams(options.params).toString()
-      }
-
-      return path
-    }
-
-    let path = '/'
-    const paths = [url]
-
-    if (innerOptions.version) {
-      paths.unshift(`v${innerOptions.version}`)
-    }
-
-    paths.unshift('api')
-
-    path += paths.join('/').replaceAll(/\/+/g, '/')
-
-    if (complete && options.params) {
-      path += '?' + new URLSearchParams(options.params).toString()
-    }
-
-    return path
-  }
+  const apiUrl = getApiUrl(url, {
+    params: options.params,
+    version: innerOptions.version,
+    local: innerOptions.local,
+  })
 
   let cached = ref(null)
   if (innerOptions.cache) {
-    cached = useSessionStorage(apiUrl(true), null, {
-      // By passing null as default it can't automatically
-      // determine which serializer to use
+    apiKeys.value.push(apiUrl)
+    cached = useSessionStorage(apiUrl, null, {
       serializer: StorageSerializers.object,
     })
   }
@@ -59,24 +68,51 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     return cached
   }
 
-  const { data, error } = await useFetch(apiUrl(), {
+  const fetchOptions = {
     ...options,
     headers: {
-      Authorization: isLoggedIn.value ? `Bearer ${token.value}` : '',
+      Authorization:
+        isLoggedIn && isLoggedIn.value ? `Bearer ${token.value}` : '',
       ...options?.headers,
     },
     pick: null,
-  })
+  }
+
+  if (!innerOptions.local && config?.public?.endpoint) {
+    fetchOptions.baseURL = config.public.endpoint
+  }
+
+  const { data, error } = await useFetch(
+    getApiUrl(url, {
+      version: innerOptions.version,
+      local: innerOptions.local,
+    }),
+    fetchOptions
+  )
 
   let responseData = data.value
   if (error.value) {
     const errorData = error.value?.data || {}
-    if ('data' in errorData && typeof errorData.data === 'object') {
+
+    if (
+      'data' in errorData &&
+      'success' in errorData &&
+      'code' in errorData &&
+      'message' in errorData &&
+      'statusCode' in errorData
+    ) {
       /**
        * Server error, can happen
        */
-      responseData = errorData.data
-      console.warn(responseData)
+      responseData = errorData
+      console.warn('errore previsto generato dal server:', responseData)
+
+      if (responseData.code === 'jwt_auth_invalid_token') {
+        const { logout } = useLogout()
+        await logout(true)
+
+        return
+      }
     } else {
       /**
        * Client error, must not happen

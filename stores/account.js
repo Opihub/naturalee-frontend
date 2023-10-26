@@ -1,7 +1,13 @@
-import { defineStore, acceptHMRUpdate, skipHydrate, computed } from '#imports'
+import {
+  defineStore,
+  acceptHMRUpdate,
+  skipHydrate,
+  computed,
+} from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useCartStore } from '@/stores/cart'
+import { getPasswordPattern } from '@/utils/pattern'
 
 export const useAccountStore = defineStore('account', () => {
   const account = useLocalStorage('account', null, {
@@ -67,7 +73,6 @@ export const useAccountStore = defineStore('account', () => {
         cache: false,
       }
     )
-
     if (response.value.success) {
       await login(response.value.data)
     } else {
@@ -78,7 +83,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function login(profile) {
-    // TODO: verificare coi dati reali
+    // TODO: prova a cambiare con try catch
     const user = { ...profile }
 
     if (user.token) {
@@ -92,18 +97,86 @@ export const useAccountStore = defineStore('account', () => {
   async function logout() {
     const cart = useCartStore()
 
-    await cart.clearCart()
-
     account.value = null
     token.value = null
+
+    await cart.clearCart()
   }
 
-  function updateUser(profile) {
-    delete profile.oldPassword
-    delete profile.newPassword
-    delete profile.newPasswordCheck
+  async function forceLogout() {
+    await logout()
+  }
+
+  async function updateUser(profile) {
     const user = { ...profile }
+
+    if (
+      user.oldPassword === '' &&
+      (user.newPassword !== '' || user.confirmPassword !== '')
+    ) {
+      return {
+        value: {
+          success: false,
+          message: 'La passowrd corrente è errata',
+        },
+      }
+    }
+
+    if (
+      user.oldPassword === '' &&
+      !user.oldPassword &&
+      user.newPassword === '' &&
+      !user.newPassword &&
+      user.confirmPassword === '' &&
+      !user.confirmPassword
+    ) {
+      delete user.oldPassword
+      delete user.newPassword
+      delete user.confirmPassword
+    } else {
+      user.oldPassword = user.oldPassword.trim()
+      user.newPassword = user.newPassword.trim()
+      user.confirmPassword = user.confirmPassword.trim()
+
+      if (
+        !user.oldPassword.match(getPasswordPattern()) &&
+        !user.newPassword.match(getPasswordPattern()) &&
+        !user.confirmPassword.match(getPasswordPattern())
+      ) {
+        return {
+          value: {
+            success: false,
+            message: 'La password non è nel formato richiesto',
+          },
+        }
+      }
+      if (user.newPassword !== user.confirmPassword) {
+        return {
+          value: {
+            success: false,
+            message: 'Le password non corrispondono',
+          },
+        }
+      }
+    }
+
+    const response = await useApi(
+      `profile/update`,
+      {
+        method: 'POST',
+        body: user,
+      },
+      {
+        cache: false,
+      }
+    )
+
+    delete user.oldPassword
+    delete user.newPassword
+    delete user.confirmPassword
+
     account.value = user
+    return response
   }
 
   return {
@@ -115,6 +188,7 @@ export const useAccountStore = defineStore('account', () => {
     signUp,
     login,
     logout,
+    forceLogout,
     updateUser,
   }
 })

@@ -6,7 +6,12 @@
       }}</BaseHeading>
     </slot>
 
-    <InputField v-model="formData.username" class="u-mb-half" type="text" required>
+    <InputField
+      v-model="formData.username"
+      class="u-mb-half"
+      type="text"
+      required
+    >
       {{ $t('form.userField') }}</InputField
     >
     <InputField
@@ -14,7 +19,7 @@
       class="u-mb-tiny"
       type="password"
       required
-      >{{ $t('form.passwordField') }}</InputField
+      >{{ $t('form.password.field') }}</InputField
     >
 
     <div class="o-row s-remember-me">
@@ -97,6 +102,10 @@ const login = async () => {
   }
 
   notify(message)
+
+  await navigateTo({
+    name: 'dashboard'
+  })
 }
 </script>
 

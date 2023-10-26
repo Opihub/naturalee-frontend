@@ -1,0 +1,254 @@
+<template>
+  <BaseButton :class="className" type="button">
+    <slot />
+    <slot name="svg" />
+  </BaseButton>
+</template>
+
+<script setup>
+// Imports
+
+// Constants
+const CSS_NAME = 'o-button'
+
+// Define (Props, Emits, Page Meta)
+const props = defineProps({
+  align: {
+    type: String,
+    default: 'center',
+    validator(value) {
+      return ['center', 'left', 'right'].includes(value)
+    },
+  },
+  underline: {
+    type: [Boolean, String],
+    default: null,
+    validator(value) {
+      if (typeof value === 'boolean') {
+        return value
+      }
+
+      return ['black', 'green', 'yellow', 'white'].includes(value)
+    },
+  },
+})
+
+// Component life-cycle hooks
+
+// Composables
+
+// Data
+
+// Watcher
+
+// Computed
+const className = computed(() => {
+  const className = [`${CSS_NAME}--inline`]
+
+  if (props.align && props.align !== 'center') {
+    className.push(`is-${props.align}`)
+  }
+
+  if (props.underline) {
+    className.push('is-underline')
+  }
+
+  if (props.underline) {
+    const color =
+      typeof props.underline === 'string' ? props.underline : 'black'
+    className.push(`${CSS_NAME}--underline-${color}`)
+  }
+
+  return className
+})
+
+// Methods
+</script>
+
+<style lang="scss">
+$prefix: 'button';
+@include object($prefix) {
+  @include modifier('inline') {
+    font-family: get-var(font-family, inherit, $prefix: $prefix);
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background-color: transparent;
+    // TODO: metterlo a tutti = 0
+    outline-offset: 3px;
+    font-weight: get-var(
+      font-weight,
+      get-var(weight-regular),
+      $prefix: $prefix
+    );
+    text-transform: get-var(text-transform, none, $prefix: $prefix);
+    justify-content: get-var(align, center, $prefix: $prefix);
+
+    @include is('left') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          align: flex-start,
+        )
+      );
+    }
+
+    @include is('right') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          align: flex-end,
+        )
+      );
+    }
+
+    @include is('underline') {
+      text-decoration: underline;
+
+      @include transition(color, text-decoration-color);
+
+      text-decoration-color: get-var(
+        decoration-color,
+        inherit,
+        $prefix: $prefix
+      );
+
+      text-underline-offset: get-var(
+        decoration-offset,
+        rem(4px),
+        $prefix: $prefix
+      );
+
+      text-decoration-thickness: get-var(
+        decoration-thickness,
+        rem(1px),
+        $prefix: $prefix
+      );
+    }
+
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        text-color: get-var(color-black),
+      )
+    );
+
+    &:hover {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-green),
+        )
+      );
+    }
+
+    @include modifier('yellow') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-yellow),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            text-color: get-var(color-white),
+          )
+        );
+      }
+    }
+
+    @include modifier('green') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-green),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            text-color: get-var(color-yellow),
+          )
+        );
+      }
+    }
+
+    @include modifier('white') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-white),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            text-color: get-var(color-yellow),
+          )
+        );
+      }
+    }
+
+    @include modifier('underline-yellow') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          decoration-color: get-var(color-yellow),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            decoration-color: get-var(color-white),
+          )
+        );
+      }
+    }
+
+    @include modifier('underline-green') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          decoration-color: get-var(color-green),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            decoration-color: get-var(color-yellow),
+          )
+        );
+      }
+    }
+
+    @include modifier('underline-white') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          decoration-color: get-var(color-white),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            decoration-color: get-var(color-yellow),
+          )
+        );
+      }
+    }
+  }
+}
+</style>

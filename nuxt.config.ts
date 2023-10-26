@@ -1,6 +1,8 @@
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
+import { clearJSON } from './server/utils/storageApi'
+import { ofetch } from 'ofetch'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -10,6 +12,7 @@ export default defineNuxtConfig({
     public: {
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',
+      seoSeparator: '-',
     },
   },
   app: {
@@ -18,6 +21,12 @@ export default defineNuxtConfig({
     pageTransition: {
       name: 'page',
       mode: 'out-in',
+    },
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
     },
   },
   css: [
@@ -32,6 +41,40 @@ export default defineNuxtConfig({
           additionalData,
         },
       },
+    },
+  },
+  routeRules: {
+    '/my-account/**': { ssr: false },
+  },
+  hooks: {
+    ready: async () => {
+      console.info('Avviato pulizia file')
+      await clearJSON()
+      console.info('Puliti tutti i file')
+    },
+    close: async () => {
+      console.info('Avviato pulizia file')
+      await clearJSON()
+      console.info('Puliti tutti i file')
+    },
+    async 'nitro:config'(nitroConfig) {
+      if (nitroConfig.dev) {
+        return
+      }
+
+      const sitemap = await ofetch(
+        (process.env.API_ENDPOINT_URL || '/') + '/v1/sitemap/products',
+        { parseResponse: JSON.parse }
+      )
+
+      if (!sitemap.success) {
+        throw new Error(sitemap.message)
+      }
+
+      nitroConfig.prerender.routes = [
+        ...nitroConfig.prerender.routes,
+        ...sitemap.data,
+      ]
     },
   },
   modules: [
@@ -72,7 +115,7 @@ export default defineNuxtConfig({
   ],
   i18n: {
     compilation: {
-      jit: false,
+      jit: process.env?.COMPILATED_TRANSLATION ? false : true,
     },
     vueI18n: './i18n.config.ts', // if you are using custom path, default
   },

@@ -36,6 +36,7 @@ $container-padding: 20px;
 $responsive: (
   tablet: 768,
   desktop: 992,
+  large: 1200,
   full: 1600,
 );
 $responsive-offset: 0.02;
@@ -91,6 +92,16 @@ $utilities-without-sizes: (
       center,
       right,
       justify,
+    ),
+  ),
+  position: (
+    rule: position,
+    values: (
+      relative,
+      absolute,
+      fixed,
+      sticky,
+      static,
     ),
   ),
 );
