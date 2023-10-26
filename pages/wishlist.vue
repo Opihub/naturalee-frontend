@@ -24,6 +24,16 @@ import { useWishlistStore } from '@/stores/wishlist'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'wishlist',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/i-miei-preferiti',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 

@@ -23,6 +23,16 @@
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'search',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/cerca',
+  },
+  locales: ['it'],
+})
 
 // Data & Composables
 const config = useRuntimeConfig()

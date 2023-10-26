@@ -1,37 +1,41 @@
 <template>
-  <section>
-    <FormUpdateUserDetails :user-data="account" />
-  </section>
+  <main class="s-wip">
+    <WorkInProgress />
+  </main>
 </template>
 
 <script setup>
 // Imports
-import { useAccountStore } from '@/stores/account'
 
 // Constants
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'profile',
+  layout: 'standard',
+  name: 'terms-and-conditions',
 })
 
 defineI18nRoute({
   paths: {
-    it: '/il-mio-account/profilo',
+    it: '/termini-e-condizioni',
   },
   locales: ['it'],
 })
 
 // Component life-cycle hooks
 
-// Composables
-const store = useAccountStore()
-
 // Data
-const { account } = storeToRefs(store)
+
 // Watcher
 
 // Computed
 
 // Methods
 </script>
+
+<style lang="scss">
+@include scope('wip') {
+  flex: 1 1 100%;
+  display: flex;
+}
+</style>

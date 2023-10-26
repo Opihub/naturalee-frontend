@@ -48,7 +48,7 @@
       <ToggleField v-model="formData.acceptance" required>
         {{ $t('form.privacyPolicy.term1') }}
         <BaseLink
-          to="/term-and-conditions"
+          :to="{ name: 'privacy-policy' }"
           color="dark"
           underline
           target="_blank"

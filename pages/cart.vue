@@ -51,6 +51,16 @@ import { useShippingStore } from '@/stores/shipping'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'cart',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/carrello',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 

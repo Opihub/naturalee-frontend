@@ -42,6 +42,14 @@
 definePageMeta({
   name: 'addresses-details',
 })
+
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/indirizzi/[addresses]',
+  },
+  locales: ['it'],
+})
+
 const emit = defineEmits(['api:start', 'api:end'])
 
 // Component life-cycle hooks

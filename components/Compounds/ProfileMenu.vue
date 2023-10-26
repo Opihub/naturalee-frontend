@@ -20,12 +20,12 @@
           <span
             >Ciao <strong>{{ account.username }}</strong></span
           >
-          <BaseLink
-            to="/"
+          <InlineButton
             underline
+            color="yellow"
             :class="`${CSS_NAME}__logout`"
             @click.prevent="logout"
-            >{{ $t('form.logout') }}</BaseLink
+            >{{ $t('form.logout') }}</InlineButton
           >
         </li>
       </template>

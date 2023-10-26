@@ -43,6 +43,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  routeRules: {
+    '/my-account/**': { ssr: false },
+  },
   hooks: {
     ready: async () => {
       console.info('Avviato pulizia file')

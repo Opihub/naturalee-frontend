@@ -111,6 +111,9 @@ import HomeVideo from 'assets/video/homepage.mp4'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'home',
+})
 
 // Component life-cycle hooks
 
@@ -286,7 +289,7 @@ const { t } = useI18n({
     "fourthPoint": {
       "top": "Riordina",
       "bottom": "quando vuoi!"
-    },
+    }
   }
 }
 </i18n>

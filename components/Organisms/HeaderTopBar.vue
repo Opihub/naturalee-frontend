@@ -1,7 +1,7 @@
 <template>
   <section :class="className">
     <SiteContainer :class="`${CSS_NAME}__container`">
-      <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="mini" />
+      <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="stretch" />
 
       <ClientOnly>
         <div v-if="banners && banners.length" :class="`${CSS_NAME}__center`">

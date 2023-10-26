@@ -76,6 +76,13 @@ definePageMeta({
   name: 'contacts'
 })
 
+defineI18nRoute({
+  paths: {
+    it: '/contatti',
+  },
+  locales: ['it'],
+})
+
 // Data
 const { page } = await usePage('contatti')
 </script>
