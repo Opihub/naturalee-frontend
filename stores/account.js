@@ -19,27 +19,47 @@ export const useAccountStore = defineStore('account', () => {
     return !!token.value
   })
 
-  // async function load() {
-  //   if (isLoggedIn.value) {
-  //     return
-  //   }
+  const username = computed(() => {
+    if (!isLoggedIn.value) {
+      return null
+    }
 
-  //   if (account.value) {
-  //     return
-  //   }
+    if (account.value?.username) {
+      return account.value.username
+    }
 
-  //   const response = await useApi('profile', null, {
-  //     cache: false,
-  //   }).catch((error) => {
-  //     console.error('Errore durante il caricamento di "profile"', error)
-  //   })
+    if (account.value?.firstName) {
+      if (account.value?.lastName) {
+        return [account.value.firstName, account.value.lastName].join(' ')
+      }
 
-  //   if (response.value.success) {
-  //     login(response.value.data)
-  //   } else {
-  //     console.warn(response)
-  //   }
-  // }
+      return account.value.firstName
+    } else if (account.value?.lastName) {
+      return account.value.lastName
+    }
+
+    return account.value.email
+  })
+
+  async function load() {
+    if (!isLoggedIn.value) {
+      return account
+    }
+
+    const response = await useApi('profile', null, {
+      cache: false,
+    }).catch((error) => {
+      console.error('Errore durante il caricamento di "profile"', error)
+    })
+
+    if (!response.value.success) {
+      throw new Error(response)
+    }
+
+    account.value = response.value.data
+
+    return account
+  }
 
   async function signIn(formData) {
     const response = await useApi(
@@ -182,8 +202,9 @@ export const useAccountStore = defineStore('account', () => {
   return {
     token: skipHydrate(token),
     account: skipHydrate(account),
+    username,
     isLoggedIn,
-    // load,
+    load,
     signIn,
     signUp,
     login,
