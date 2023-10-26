@@ -20,7 +20,6 @@
         </template>
 
         <ShopAddress v-if="isAddressFilled(address)" :address="address" />
-
         <BaseParagraph v-else :text="$t('addresses.notSet')" />
       </BaseBox>
     </div>
@@ -79,6 +78,8 @@ const isAddressFilled = computed(() => (address) => {
 
 <style lang="scss" scoped>
 @include scope('addresses') {
+  @include typography(18px, 28px);
+
   @include set-vars(
     $prefix: 'row',
     $map: (
@@ -93,6 +94,13 @@ const isAddressFilled = computed(() => (address) => {
       head-display: flex,
       head-justify: space-between,
       head-align: center,
+    )
+  );
+
+  @include set-vars(
+    $prefix: 'paragraph',
+    $map: (
+      font-family: get-var(family-main),
     )
   );
 
