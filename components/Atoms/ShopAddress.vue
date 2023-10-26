@@ -37,14 +37,15 @@
           <b>{{ $t('addresses.sdi') }}:</b> {{ address.sdi }}
         </span>
 
-        <BaseLink
-          v-if="address.pec"
-          :to="`mailto:${address.pec}`"
-          :class="`${CSS_NAME}__row`"
-          color="green"
-        >
-          <b>{{ $t('addresses.pec') }}:</b> {{ address.pec }}
-        </BaseLink>
+        <span :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.pec') }}:</b>&nbsp;
+          <BaseLink
+            v-if="address.pec"
+            :to="`mailto:${address.pec}`"
+            color="green"
+            :text="address.pec"
+          />
+        </span>
       </template>
       <template v-else-if="address.invoice === 'private'">
         <span v-if="address.cf" :class="`${CSS_NAME}__row`">
@@ -52,23 +53,25 @@
         </span>
       </template>
 
-      <BaseLink
-        v-if="address.phone"
-        :to="`tel:${address.phone}`"
-        :class="`${CSS_NAME}__row`"
-        color="green"
-        underline
-        >{{ address.phone }}</BaseLink
-      >
+      <span :class="`${CSS_NAME}__row`">
+        <BaseLink
+          v-if="address.phone"
+          :to="`tel:${address.phone}`"
+          color="green"
+          underline
+          >{{ address.phone }}</BaseLink
+        >
+      </span>
 
-      <BaseLink
-        v-if="address.email"
-        :to="`mailto:${address.email}`"
-        :class="`${CSS_NAME}__row`"
-        color="green"
-        underline
-        >{{ address.email }}</BaseLink
-      >
+      <span :class="`${CSS_NAME}__row`">
+        <BaseLink
+          v-if="address.email"
+          :to="`mailto:${address.email}`"
+          color="green"
+          underline
+          >{{ address.email }}</BaseLink
+        >
+      </span>
     </template>
   </address>
 </template>
