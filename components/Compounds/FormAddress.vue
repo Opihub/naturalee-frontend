@@ -142,7 +142,7 @@ const emit = defineEmits(['update:address'])
 // Methods
 const updateAddress = (value, field) => {
   const newAddress = { ...props.address }
-  newAddress[field] = value
+  newAddress[field] = value.trim()
 
   if (newAddress[field] === props.address[field]) {
     return
