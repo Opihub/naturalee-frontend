@@ -25,6 +25,7 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
+await usePage('privacy-policy')
 
 // Watcher
 
