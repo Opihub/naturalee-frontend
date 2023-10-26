@@ -158,6 +158,13 @@ const updateInvoice = (value, field) => {
     )
   );
 
+  @include set-local-vars(
+    $prefix: 'toggle-field',
+    $map: (
+      offset-top: rem(6px),
+    )
+  );
+
   @include element('invoice') {
     font-weight: get-var(weight-bold);
   }

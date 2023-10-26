@@ -25,6 +25,7 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
+await usePage('cookie-policy')
 
 // Watcher
 

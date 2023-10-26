@@ -39,7 +39,8 @@ export default defineI18nConfig(() => ({
         stock:
           'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
         related: 'Potrebbero interessarti anche',
-        homepageFeatured: 'Scegli tra la nostra fresca selezione:',
+        categoriesFeatured: 'Scegli tra la nostra fresca selezione:',
+        homepageFeatured: 'Frutta e Verdura Fresca',
       },
       company: {
         pIva: 'PI {piva}',
@@ -149,6 +150,7 @@ export default defineI18nConfig(() => ({
         empty: 'Non hai alcun prodotto nella wishlist',
       },
       common: {
+        logout: 'Logout',
         date: 'Data',
         update: 'Aggiorna',
         actions: 'Azioni',
@@ -158,9 +160,6 @@ export default defineI18nConfig(() => ({
         no: 'No',
         yes: 'Sì',
         vatInclude: 'IVA inclusa',
-        video: {
-          clickHere: 'Clicca qui per visionare il video',
-        },
         timeSlot: 'Fascia oraria',
       },
       checkout: {
@@ -188,8 +187,7 @@ export default defineI18nConfig(() => ({
         empty: 'Non hai ancora alcun ordine',
         reorder: 'Riordina',
         details: 'Dettagli ordine',
-        createdAt:
-          "L'ordine {id} creato il {date} è attualmente {status}.",
+        createdAt: "L'ordine {id} creato il {date} è attualmente {status}.",
         notes: "Note sull'ordine",
       },
       addresses: {
@@ -240,8 +238,9 @@ export default defineI18nConfig(() => ({
       pages: {
         faq: {
           title: 'Le risposte alle domande più frequenti',
-          paragraph: 'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
-        }
+          paragraph:
+            'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
+        },
       },
     },
   },

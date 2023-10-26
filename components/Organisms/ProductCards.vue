@@ -6,6 +6,9 @@
       tag="h5"
       >{{ title }}</BaseHeading
     >
+
+    <slot />
+
     <ClientOnly>
       <Splide
         :class="CSS_NAME"
