@@ -1,6 +1,6 @@
 <template>
   <BaseLink
-    to="/my-account"
+    :to="{ name: 'login' }"
     :class="CSS_NAME"
     :label-class-name="`${CSS_NAME}__label`"
   >

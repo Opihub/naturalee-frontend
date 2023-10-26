@@ -28,9 +28,9 @@
         :svg-size="svgSize"
       />
 
-      <span v-else :class="CSS_NAME_ITEM_TEXT">{{
-        record.title || record.text
-      }}</span>
+      <span v-else :class="CSS_NAME_ITEM_TEXT"
+        >{{ record.title || record.text }}
+      </span>
     </li>
 
     <slot

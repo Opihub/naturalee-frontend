@@ -11,6 +11,7 @@
   <SVGDefinitions v-once />
 
   <NuxtLoadingIndicator />
+
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -32,18 +33,20 @@
 
 <script setup>
 // Imports
+import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
 import { StorageSerializers, useSessionStorage } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 // Constants
 
 // Define (Props, Emits, Page Meta)
 
-// Component life-cycle hooks
-
 // Composables
+const { t } = useI18n()
 const config = useRuntimeConfig()
 const notificationsStore = useNotificationsStore()
+const accountStore = useAccountStore()
 
 // Data
 const { notifications } = storeToRefs(notificationsStore)
@@ -87,6 +90,21 @@ if (process.client) {
 // Computed
 
 // Methods
+
+// Component life-cycle hooks
+accountStore.$onAction(({ name }) => {
+  console.debug(name)
+  if (name !== 'logout' && name !== 'forceLogout') {
+    return
+  }
+
+  notify({
+    status: 'warning',
+    notification: t(
+      name === 'forceLogout' ? 'notifications.forcedLogout' : 'notifications.logout'
+    ),
+  })
+})
 </script>
 
 <style lang="scss">

@@ -3,6 +3,7 @@
     <ProductImage
       :class="`${CSS_NAME}__thumbnail`"
       :src="product.image"
+      background="white"
     />
 
     <hgroup :class="`${CSS_NAME}__heading`">
@@ -18,18 +19,22 @@
 
     <div :class="`${CSS_NAME}__body`">
       <ul
-        v-if="product?.list && product.list.length > 0"
-        :class="[`${CSS_NAME}__variations`, 'u-mb-half']"
+        :class="{
+          [`${CSS_NAME}__variations`]: true,
+          'is-single': variations.length >= 1,
+        }"
+        class="u-mb-half"
       >
-        <li v-for="variation in product.list" :key="variation.id">
+        <li v-for="variation in variations" :key="variation.id">
           <DrawedButton
-            as="link"
-            :to="variation.link"
+            :as="variations.length > 1 ? 'link' : 'div'"
+            :to="variations.length > 1 ? variation.link : null"
             :inner-class="`${CSS_NAME}__variations__single`"
+            :class="{ 'is-current': variations.length <= 1 }"
           >
-            <BaseIcon
+            <ProductDescriptor
               :class="`${CSS_NAME}__variations__single__icon`"
-              :name="variation.selling.toLowerCase().replace(' ', '-').trim()"
+              :icon="variation.selling"
               icon-size="38px"
             />
             <strong :class="`${CSS_NAME}__variations__single__title`">{{
@@ -42,7 +47,7 @@
         </li>
       </ul>
 
-      <BaseMarkdown :content="product.description" />
+      <BaseMarkdown v-if="product.description" :content="product.description" />
 
       <TagsList
         v-if="product?.categories && product.categories.length > 0"
@@ -80,7 +85,7 @@
 const CSS_NAME = 'c-product-detail'
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   product: {
     type: Object,
     required: true,
@@ -97,6 +102,20 @@ const router = useRouter()
 // Watcher
 
 // Computed
+const variations = computed(() => {
+  if ('list' in props.product && props.product.list.length > 0) {
+    return props.product.list
+  }
+
+  return [
+    {
+      variationId: props.product.variationId,
+      selling: props.product.selling,
+      costDescription: props.product.costDescription,
+      link: props.product.link,
+    },
+  ]
+})
 
 // Methods
 const categoryLink = (category, filter = null) => {
@@ -261,6 +280,10 @@ $prefix: 'product-detail';
     margin: 0;
     gap: rem(14px);
     overflow: auto;
+
+    @include is('single') {
+      pointer-events: none;
+    }
 
     @include element('single') {
       display: grid;

@@ -10,12 +10,12 @@
       >
         <template #after="{ itemClassName, itemLinkClassName }">
           <li :class="[itemClassName, `${CSS_NAME}__menu__item`]">
-            <BaseLink
-              to="/"
+            <InlineButton
               :class="itemLinkClassName"
               color="dark"
+              align="left"
               @click.prevent="logout"
-              >{{ $t('form.logout') }}</BaseLink
+              >{{ $t('form.logout') }}</InlineButton
             >
           </li>
         </template>
@@ -30,7 +30,6 @@
 
 <script setup>
 // Imports
-import { useAccountStore } from '@/stores/account'
 
 // Constants
 const CSS_NAME = 'c-profile-dashboard'
@@ -40,7 +39,6 @@ const CSS_NAME = 'c-profile-dashboard'
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
 const menu = await useApi('menu/dashboard').catch((error) => {
   console.error('Errore durante il caricamento di "menu/categories"', error)
 })
@@ -52,7 +50,7 @@ const menu = await useApi('menu/dashboard').catch((error) => {
 // Computed
 
 // Methods
-const { logout } = store
+const { logout } = useLogout()
 </script>
 
 <style lang="scss">
@@ -78,6 +76,14 @@ $prefix: 'profile-dashboard';
 
     @include element('item') {
       border-bottom: 1px solid get-var(color-white);
+
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          text-transform: uppercase,
+          font-weight: get-var(weight-bold),
+        )
+      );
     }
 
     @include set-local-vars(

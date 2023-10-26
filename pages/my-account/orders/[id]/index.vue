@@ -2,7 +2,7 @@
   <section class="s-order-details">
     <BaseParagraph class="u-mb-tiny">{{
       $t('orders.createdAt', {
-        // id: orderId(order.id),
+        id: orderId(order.id),
         date,
         status: $t(`orders.status.${order.status}`),
       })
@@ -18,12 +18,16 @@
 
     <div class="o-row">
       <div class="o-row__column">
-        <BaseHeading tag="h5" class="u-mb-small">{{ $t('addresses.shipping') }}</BaseHeading>
+        <BaseHeading tag="h5" class="u-mb-small">{{
+          $t('addresses.shipping')
+        }}</BaseHeading>
         <ShopAddress :address="order.addresses.shipping" />
       </div>
 
       <div class="o-row__column">
-        <BaseHeading tag="h5" class="u-mb-small">{{ $t('addresses.billing') }}</BaseHeading>
+        <BaseHeading tag="h5" class="u-mb-small">{{
+          $t('addresses.billing')
+        }}</BaseHeading>
         <ShopAddress :address="order.addresses.billing" />
       </div>
     </div>
@@ -39,6 +43,13 @@
 definePageMeta({
   alias: '/my-account/orders/:id/view',
   name: 'order-view',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/ordini/[id]/visualizza',
+  },
+  locales: ['it'],
 })
 
 // Component life-cycle hooks
@@ -75,9 +86,17 @@ const date = computed(() => {
   @include set-local-vars(
     $prefix: 'row',
     $map: (
-      columns: 2,
+      columns: 1,
     )
   );
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 2,
+      )
+    );
+  }
 
   @include set-local-vars(
     $prefix: 'heading',

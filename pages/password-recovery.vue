@@ -66,6 +66,7 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'standard',
+  name: 'password-recovery',
   validate: async (route) => {
     // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
 
@@ -204,7 +205,7 @@ const updatePassword = async () => {
     }, 5000)
 
     await navigateTo({
-      path: '/my-account',
+      path: '/login',
     })
   } else {
     showMessage.value = true

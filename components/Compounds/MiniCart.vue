@@ -10,7 +10,7 @@
 
           <BaseLink
             :class="`${CSS_NAME}__review`"
-            to="/cart"
+            :to="{ name: 'cart' }"
             :underline="true"
             color="dark"
             >{{ $t('edit') }}</BaseLink
@@ -84,12 +84,12 @@
         as="link"
         :class="`${CSS_NAME}__submit`"
         color="green"
-        to="/checkout"
+        :to="{ name: 'checkout' }"
         >{{ $t('cart.proceed') }}</BaseButton
       >
       <BaseLink
         :class="`${CSS_NAME}__review`"
-        to="/cart"
+        :to="{ name: 'cart' }"
         :underline="true"
         color="dark"
         >{{ $t('cart.goToCart') }}</BaseLink

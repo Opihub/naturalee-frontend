@@ -3,30 +3,34 @@
     <SiteContainer :style="style" flex>
       <div :class="`${CSS_NAME}__content`">
         <BaseHeading
-          v-if="slots['sup-title']"
+          v-if="$slots['sup-title']"
           :tag="supTitleTag"
           use="h6"
           class="u-mb-micro"
           ><slot name="sup-title"
         /></BaseHeading>
+
         <BaseHeading
-          v-if="slots.title"
+          v-if="$slots.title"
           :tag="titleTag"
           use="h2"
           class="u-mb-medium"
           ><slot name="title"
         /></BaseHeading>
 
+        <slot v-if="$slots.default" />
         <BaseParagraph
-          v-if="slots.default"
-          :color="color == 'white' ? 'black' : 'white'"
-          ><slot
-        /></BaseParagraph>
+          v-else-if="$slots.text"
+          :color="color === 'white' ? 'black' : 'white'"
+        >
+          <slot name="text" />
+        </BaseParagraph>
 
         <BaseButton
           v-if="button?.text"
           :as="button.to ? 'link' : 'button'"
           :target="button.target || null"
+          :to="button.to || null"
           :color="button.color || 'yellow'"
           class="u-mt-large u-mt-huge@tablet"
           >{{ button.text }}</BaseButton
@@ -116,11 +120,14 @@ onMounted(() => {
         scrub: true,
       },
     })
-    .to(parallax, { y: parallax.offsetHeight * props.offset, ease: 'none' }, 0)
+    .to(
+      parallax,
+      { y: parallax.offsetHeight * props.offset, ease: 'none' },
+      0
+    )
 })
 
 // Composables
-const slots = useSlots()
 const parallaxElement = ref(null)
 
 // Data
@@ -133,6 +140,10 @@ const className = computed(() => {
 
   if (props.flipped) {
     className.push(`${CSS_NAME}--flipped`)
+  }
+
+  if (props.parallax) {
+    className.push(`has-parallax`)
   }
 
   return className
@@ -185,9 +196,6 @@ $prefix: 'content-row';
     @include from(tablet) {
       order: 1;
       max-width: get-var(content-width, rem(520px), $prefix: $prefix);
-    }
-
-    @include from(tablet) {
       margin: get-var(margin, 0, $prefix: $prefix) 0;
     }
   }
@@ -196,7 +204,6 @@ $prefix: 'content-row';
     flex: 1 1 100%;
     width: 100%;
     order: 1;
-    align-self: stretch;
     position: relative;
 
     @include from(tablet) {
@@ -206,10 +213,22 @@ $prefix: 'content-row';
     }
 
     @include element('image') {
-      border-radius: get-var(image-border-radius, 0);
+      border-radius: get-var(image-radius, 0, $prefix: $prefix);
+
       @include from(tablet) {
-        position: absolute;
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
+      }
+    }
+  }
+
+  @include has('parallax') {
+    @include element('parallax') {
+      align-self: stretch;
+
+      @include element('image') {
+        @include from(tablet) {
+          position: absolute;
+        }
       }
     }
   }

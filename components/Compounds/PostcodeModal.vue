@@ -61,13 +61,19 @@
         </div>
 
         <div v-if="matchedPostcode || savedEmail" :class="`${CSS_NAME}__user`">
-          <BaseButton as="link" to="/my-account?login" color="green">{{
-            $t('form.login')
-          }}</BaseButton>
+          <BaseButton
+            as="link"
+            :to="{ name: 'my-account', query: { login: true } }"
+            color="green"
+            >{{ $t('form.login') }}</BaseButton
+          >
           oppure
-          <BaseButton as="link" to="/my-account?register" color="green">{{
-            $t('form.signUp')
-          }}</BaseButton>
+          <BaseButton
+            as="link"
+            :to="{ name: 'my-account', query: { register: true } }"
+            color="green"
+            >{{ $t('form.signUp') }}</BaseButton
+          >
         </div>
         <form
           v-else

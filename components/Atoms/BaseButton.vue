@@ -26,7 +26,7 @@ const props = defineProps({
     type: String,
     default: 'button',
     validator(value) {
-      return ['button', 'link'].includes(value)
+      return ['button', 'div', 'span', 'link'].includes(value)
     },
   },
   svg: {

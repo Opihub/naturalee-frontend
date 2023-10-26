@@ -12,13 +12,14 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'standard',
-  alias: [
-    '/consegna',
-    '/privacy-policy',
-    '/cookie-policy',
-    '/term-and-conditions',
-    '/condizioni-di-vendita',
-  ],
+  name: 'cookie-policy',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/cookie-policy',
+  },
+  locales: ['it'],
 })
 
 // Component life-cycle hooks

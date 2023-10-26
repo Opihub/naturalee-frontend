@@ -102,6 +102,10 @@ const login = async () => {
   }
 
   notify(message)
+
+  await navigateTo({
+    name: 'dashboard'
+  })
 }
 </script>
 

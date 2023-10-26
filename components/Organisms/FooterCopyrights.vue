@@ -12,7 +12,7 @@
       </template>
       <template #after="{ itemClassName }">
         <li :class="itemClassName">
-          <BaseLink to="/contatti#company-info" color="white" underline
+          <BaseLink :to="{ name: 'contacts' }" color="white" underline
             >Company Info</BaseLink
           >
         </li>
