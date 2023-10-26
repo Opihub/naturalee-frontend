@@ -13,6 +13,7 @@
 definePageMeta({
   layout: 'standard',
   name: 'selling-conditions',
+  alias: '/condizioni-di-vendita',
 })
 
 defineI18nRoute({
@@ -25,6 +26,7 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
+await usePage('condizioni-di-vendita')
 
 // Watcher
 
