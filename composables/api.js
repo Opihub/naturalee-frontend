@@ -3,12 +3,11 @@ import {
   ref,
   storeToRefs,
   useRuntimeConfig,
-  navigateTo,
 } from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
-import { saveJSON, loadJSON } from '@/utils/storageApi'
+import { useLogout } from '@/composables/logout'
 
 function getApiUrl(url, options = {}) {
   let path = '/'
@@ -59,21 +58,28 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   let cached = ref(null)
   if (innerOptions.cache) {
-    if (process.server) {
-      const json = loadJSON(apiUrl, null)
-      cached = ref(json)
-    } else {
-      apiKeys.value.push(apiUrl)
-      cached = useSessionStorage(apiUrl, null, {
-        // By passing null as default it can't automatically
-        // determine which serializer to use
-        serializer: StorageSerializers.object,
-      })
-    }
+    apiKeys.value.push(apiUrl)
+    cached = useSessionStorage(apiUrl, null, {
+      serializer: StorageSerializers.object,
+    })
   }
 
   if (cached.value && cached.value.success) {
     return cached
+  }
+
+  const fetchOptions = {
+    ...options,
+    headers: {
+      Authorization:
+        isLoggedIn && isLoggedIn.value ? `Bearer ${token.value}` : '',
+      ...options?.headers,
+    },
+    pick: null,
+  }
+
+  if (!innerOptions.local && config?.public?.endpoint) {
+    fetchOptions.baseURL = config.public.endpoint
   }
 
   const { data, error } = await useFetch(
@@ -81,16 +87,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       version: innerOptions.version,
       local: innerOptions.local,
     }),
-    {
-      ...options,
-      baseURL: innerOptions.local ? null : config?.public?.endpoint,
-      headers: {
-        Authorization:
-          isLoggedIn && isLoggedIn.value ? `Bearer ${token.value}` : '',
-        ...options?.headers,
-      },
-      pick: null,
-    }
+    fetchOptions
   )
 
   let responseData = data.value
@@ -111,11 +108,10 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       console.warn('errore previsto generato dal server:', responseData)
 
       if (responseData.code === 'jwt_auth_invalid_token') {
-        await auth.logout(true)
+        const { logout } = useLogout()
+        await logout(true)
 
-        await navigateTo({
-          path: '/',
-        })
+        return
       }
     } else {
       /**
@@ -145,10 +141,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   }
 
   cached.value = innerOptions.dataOnly ? response.data : response
-
-  if (process.server) {
-    saveJSON(apiUrl, cached.value)
-  }
 
   return cached
 }

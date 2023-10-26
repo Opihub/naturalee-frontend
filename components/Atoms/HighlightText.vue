@@ -45,8 +45,9 @@ const style = computed(() => {
   const style = {}
 
   if (props.color) {
-    style['--highlight-color'] = `${props.color}`
+    style['--highlight-color'] = `var(--color-${props.color})`
   }
+
   return style
 })
 </script>
@@ -55,9 +56,9 @@ const style = computed(() => {
 $prefix: 'highlight-text';
 @include object($prefix) {
   position: relative;
-  top: 0;
-  left: 0;
   z-index: 1;
+  display: inline-block;
+
   &::before {
     content: '';
     display: block;
@@ -65,17 +66,19 @@ $prefix: 'highlight-text';
     top: 50%;
     left: 50%;
     width: 105%;
-    height: 30px;
-    background-color: get-var(highlight-color, $yellow);
+    height: rem(11px);
+    background-color: get-var(color, get-var(color-yellow), $prefix: $prefix);
     border-top-right-radius: 90px 90px;
     border-bottom-right-radius: 90px 90px;
     border-top-left-radius: 80px 80px;
     border-bottom-left-radius: 80px 80px;
     transform: translate(-50%, 0) rotateX(60deg);
-    @include from('desktop') {
+    z-index: -1;
+
+    @include from(desktop) {
+      height: rem(30px);
       transform: translate(-50%, 40%) rotateX(60deg);
     }
-    z-index: -1;
   }
 }
 </style>

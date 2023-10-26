@@ -2,12 +2,12 @@
   <CompleteLayout override-last-element>
     <slot />
 
-    <BackgroundHolder class="u-pt-huge u-mt-auto" color="white">
+    <BackgroundHolder class="u-pt-huge u-mt-auto" color="white" :class="{'u-pb-medium': marquee && marquee.data.length}">
       <CategoryCards
         v-if="categories && categories.data"
-        class="u-pb-huge"
-        :title="$t('products.homepageFeatured')"
+        :title="$t('products.categoriesFeatured')"
         :categories="categories.data"
+        class="u-mb-medium"
       />
 
       <MarqueeSlider
@@ -29,13 +29,17 @@ import CompleteLayout from '@/layouts/standard'
 // Component life-cycle hooks
 
 // Composables
-const categories = await useApi('shop/categories').catch((error) => {
-  console.error('Errore durante il caricamento di "shop/categories"', error)
-})
+const categories = await useApi('shop/categories', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "shop/categories"', error)
+  }
+)
 
-const marquee = await useApi('layout/marquee').catch((error) => {
-  console.error('Errore durante il caricamento di "layout/marquee"', error)
-})
+const marquee = await useApi('layout/marquee', {}, { local: true }).catch(
+  (error) => {
+    console.error('Errore durante il caricamento di "layout/marquee"', error)
+  }
+)
 
 // Data
 

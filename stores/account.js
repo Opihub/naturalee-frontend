@@ -1,14 +1,15 @@
-import { defineStore, acceptHMRUpdate, skipHydrate, computed } from '#imports'
+import {
+  defineStore,
+  acceptHMRUpdate,
+  skipHydrate,
+  computed,
+} from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useCartStore } from '@/stores/cart'
 import { getPasswordPattern } from '@/utils/pattern'
-import { useI18n } from 'vue-i18n'
-import { notify } from '@/utils/notify'
 
 export const useAccountStore = defineStore('account', () => {
-  const { t } = useI18n()
-
   const account = useLocalStorage('account', null, {
     serializer: StorageSerializers.object,
   })
@@ -93,20 +94,17 @@ export const useAccountStore = defineStore('account', () => {
     account.value = user
   }
 
-  async function logout(force = false) {
+  async function logout() {
     const cart = useCartStore()
 
     account.value = null
     token.value = null
 
-    notify({
-      status: 'warning',
-      notification: t(
-        force ? 'notifications.forcedLogout' : 'notifications.logout'
-      ),
-    })
-
     await cart.clearCart()
+  }
+
+  async function forceLogout() {
+    await logout()
   }
 
   async function updateUser(profile) {
@@ -156,7 +154,7 @@ export const useAccountStore = defineStore('account', () => {
         return {
           value: {
             success: false,
-            message: 'Le passwword non corrispondono',
+            message: 'Le password non corrispondono',
           },
         }
       }
@@ -190,6 +188,7 @@ export const useAccountStore = defineStore('account', () => {
     signUp,
     login,
     logout,
+    forceLogout,
     updateUser,
   }
 })

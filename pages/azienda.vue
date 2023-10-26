@@ -34,13 +34,11 @@
       flipped
       parallax
     >
-      <template #sup-title>{{
-        $t('pages.company.firstSection.supTitle')
-      }}</template>
-      <template #title>{{ $t('pages.company.firstSection.title') }}</template>
+      <template #sup-title>{{ t('firstSection.supTitle') }}</template>
+      <template #title>{{ t('firstSection.title') }}</template>
 
-      <template #default>
-        {{ $t('pages.company.firstSection.paragraph') }}
+      <template #text>
+        {{ t('firstSection.paragraph') }}
       </template>
     </ContentRow>
 
@@ -50,26 +48,32 @@
         :max-width="830"
       >
         <BaseHeading>
-          Coltiviamo passione,
-          <HighlightText>{{
-            $t('pages.company.secondSection.highlightText')
-          }}</HighlightText>
-          gusto
-          <CircularText
-            :text="$t('pages.company.secondSection.circularText')"
-          />
+          <i18n-t keypath="secondSection.title">
+            <template #highlight>
+              <HighlightText>{{
+                t('secondSection.highlightText')
+              }}</HighlightText>
+            </template>
+          </i18n-t>
+
+          <CircularText :text="t('secondSection.circularText')" />
         </BaseHeading>
 
         <BaseParagraph class="u-mt-large">
-          {{ $t('pages.company.secondSection.paragraph') }}
+          {{ t('secondSection.paragraph') }}
         </BaseParagraph>
       </SiteContainer>
     </BackgroundHolder>
 
-    <SiteContainer class="c-third-section u-pt-huge u-pb-huge@tablet">
-      <BaseHeading class="u-pb-huge" tag="h2">
-        {{ $t('pages.company.thirdSection.title') }}</BaseHeading
-      >
+    <SiteContainer
+      class="c-third-section u-pt-large u-pb-large u-pt-custom@tablet u-pb-custom@tablet"
+    >
+      <BaseHeading
+        class="u-mb-large"
+        tag="h2"
+        :text="t('thirdSection.title')"
+      />
+
       <div class="o-row">
         <BaseCard
           v-for="(card, index) in cards"
@@ -82,18 +86,21 @@
     </SiteContainer>
 
     <ContentRow
-      class="c-fourth-section u-pt-huge u-pb-huge"
+      class="c-fourth-section u-pt-large u-pb-large u-pt-custom@tablet u-pb-custom@tablet"
       image="/azienda/brb.png"
       flipped
       color="white"
     >
-      <template #sup-title>{{
-        $t('pages.company.fourthSection.supTitle')
-      }}</template>
-      <template #title>{{ $t('pages.company.fourthSection.title') }}</template>
+      <template #sup-title>{{ t('fourthSection.supTitle') }}</template>
+      <template #title>{{ t('fourthSection.title') }}</template>
 
       <template #default>
-        {{ $t('pages.company.fourthSection.paragraph') }}
+        <BaseParagraph class="u-mb-large">
+          {{ t('fourthSection.paragraph') }}
+        </BaseParagraph>
+        <BaseParagraph>
+          {{ t('fourthSection.paragraph2') }}
+        </BaseParagraph>
       </template>
     </ContentRow>
   </main>
@@ -101,36 +108,49 @@
 
 <script setup>
 // Imports
-import { useI18n } from 'vue-i18n'
 import FormaggioRapanello from '@/assets/svg/decorations/formaggio-rapanello.svg'
 import FragolaPera from '@/assets/svg/decorations/fragola-pera.svg'
-const { t } = useI18n()
 
 // Constants
-const { page } = await usePage('azienda')
-const ratio = [16, 8.8]
-const cards = ref([
-  {
-    image: '/azienda/delivery_1.png',
-    heading: t('pages.company.thirdSection.firstBox.title'),
-    paragraph: t('pages.company.thirdSection.firstBox.paragraph'),
-  },
-  {
-    image: '/azienda/delivery_2.png',
-    heading: t('pages.company.thirdSection.secondBox.title'),
-    paragraph: t('pages.company.thirdSection.secondBox.paragraph'),
-  },
-  {
-    image: '/azienda/delivery_3.png',
-    heading: t('pages.company.thirdSection.thirdBox.title'),
-    paragraph: t('pages.company.thirdSection.thirdBox.paragraph'),
-  },
-])
+
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'company',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/azienda',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 
 // Data
+const { t } = useI18n({
+  useScope: 'local',
+})
+const { page } = await usePage('azienda')
+const ratio = [16, 9]
+const cards = ref([
+  {
+    image: '/azienda/delivery_1.png',
+    heading: t('thirdSection.firstBox.title'),
+    paragraph: t('thirdSection.firstBox.paragraph'),
+  },
+  {
+    image: '/azienda/delivery_2.png',
+    heading: t('thirdSection.secondBox.title'),
+    paragraph: t('thirdSection.secondBox.paragraph'),
+  },
+  {
+    image: '/azienda/delivery_3.png',
+    heading: t('thirdSection.thirdBox.title'),
+    paragraph: t('thirdSection.thirdBox.paragraph'),
+  },
+])
+
 // Watcher
 
 // Computed
@@ -142,6 +162,7 @@ const cards = ref([
 @include scope('azienda') {
   @include component('first-section') {
     margin-top: 100px;
+
     @include object('container') {
       @include set-local-vars(
         $prefix: 'container',
@@ -150,31 +171,38 @@ const cards = ref([
         )
       );
     }
+
+    @include set-local-vars(
+      $prefix: 'paragraph',
+      $map: (
+        width: rem(520px),
+      )
+    );
+
     @include set-local-vars(
       $prefix: 'content-row',
       $map: (
         margin: rem(100px),
+        content-width: rem(610px),
+        parallax-offset: rem(-55px) 0 0,
       )
     );
+
     @include set-local-vars(
       $prefix: 'container',
       $map: (
         justify-content: start,
       )
     );
+
     @include set-local-vars(
       $prefix: 'parallax',
       $map: (
         margin-left: 0,
       )
     );
-    @include set-local-vars(
-      $prefix: 'content-row-parallax',
-      $map: (
-        offset: rem(-55px) 0 0,
-      )
-    );
   }
+
   @include component('second-section') {
     position: relative;
 
@@ -195,6 +223,14 @@ const cards = ref([
         );
       }
     }
+
+    @include set-local-vars(
+      $prefix: 'paragraph',
+      $map: (
+        white-space: pre-line,
+      )
+    );
+
     @include set-local-vars(
       $prefix: 'custom',
       $map: (
@@ -202,28 +238,70 @@ const cards = ref([
         pb: rem(120px),
       )
     );
+
     @include object('circular-text') {
-      font-weight: 400;
+      font-weight: get-var(weight-regular);
       top: rem(50px);
       right: calc(rem(100px) - 4vw);
-      @include from('tablet') {
+
+      @include from(tablet) {
         top: rem(120px);
         right: rem(100px);
       }
     }
   }
+
   @include component('third-section') {
+    text-align: center;
+    position: relative;
+
+    @include set-local-vars(
+      $prefix: 'card',
+      $map: (
+        width: rem(350px),
+      )
+    );
+
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'custom',
+        $map: (
+          pt: rem(70px),
+          pb: rem(70px),
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: 'paragraph',
+        $map: (
+          width: rem(385px),
+          white-space: pre-line,
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: 'card',
+        $map: (
+          width: rem(420px),
+        )
+      );
+    }
+
     @include object('row') {
       align-items: baseline;
+      justify-content: center;
+
       @include from('full') {
         flex-wrap: nowrap;
       }
+
       @include set-local-vars(
         $prefix: 'row',
         $map: (
           gap: rem(30px),
         )
       );
+
       @include from('tablet') {
         @include set-local-vars(
           $prefix: 'row',
@@ -232,45 +310,31 @@ const cards = ref([
           )
         );
       }
-      justify-content: center;
     }
-    text-align: center;
-    position: relative;
+
     @include object('heading') {
       @include set-local-vars(
         $prefix: 'heading',
         $map: (
-          'text-color': color-black,
+          text-color: get-var(color-black),
         )
       );
     }
   }
+
   @include component('fourth-section') {
-    @include object('container') {
-      @include component('content-row') {
-        background-color: red;
-        @include element('parallax') {
-          display: flex !important;
-          align-items: center !important;
-        }
-      }
-    }
-    margin-top: rem(100px);
     @include set-local-vars(
-      $prefix: 'content-row',
+      $prefix: 'custom',
       $map: (
-        margin: rem(100px),
+        pt: rem(60px),
+        pb: rem(80px),
       )
     );
+
     @include set-local-vars(
       $prefix: 'container',
       $map: (
         justify-content: space-around,
-      )
-    );
-    @include set-local-vars(
-      $prefix: 'container',
-      $map: (
         align-items: center,
       )
     );
@@ -281,39 +345,67 @@ const cards = ref([
         margin-left: 0,
       )
     );
+
     @include set-local-vars(
       $prefix: 'heading',
       $map: (
-        'text-color': color-black,
+        text-transform: none,
+        text-color: get-var(color-black),
       )
     );
+
     @include set-local-vars(
       $prefix: 'paragraph',
       $map: (
-        'text-color': color-black,
+        text-color: get-var(color-black),
       )
     );
 
     @include set-local-vars(
-      $prefix: 'content-row-content',
+      $prefix: 'content-row',
       $map: (
-        width: rem(537px),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'content-row-parallax',
-      $map: (
-        width: rem(790px),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'image',
-      $map: (
-        border-radius: rem(50px),
+        content-width: rem(537px),
+        parallax-width: rem(790px),
+        image-radius: rem(50px),
       )
     );
   }
 }
 </style>
+
+<i18n lang="json" locale="it">
+{
+  "firstSection": {
+    "supTitle": "Freschezza e qualità dalle nostre terre",
+    "title": "Una storia che abbraccia passato e futuro",
+    "paragraph": "Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte."
+  },
+  "secondSection": {
+    "circularText": "La natura a casa tua",
+    "title": "Coltiviamo passione, {highlight} gusto",
+    "highlightText": "Raccogliamo",
+    "paragraph": "La nostra missione è un connubio di tradizione e innovazione. Ci impegniamo a consegnare a voi e alla vostra attività la migliore selezione di frutta, verdura, latticini, vini, spezie e molto altro.\nLa freschezza di ieri incontra la comodità di oggi guardando avanti con entusiasmo.\nVolete frutta e verdura di alta qualità a portata di clic? Saremo il vostro punto di riferimento."
+  },
+  "thirdSection": {
+    "title": "Cuore e Impegno in ogni fase",
+    "firstBox": {
+      "title": "+20 Ettari",
+      "paragraph": "Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualità dei nostri prodotti. Un terreno ideale per la produzione di Naturalee."
+    },
+    "secondBox": {
+      "title": "25 Anni di esperienza",
+      "paragraph": "La nostra famiglia porta avanti una tradizione di generazioni nella vendita di frutta e verdura al mercato ortofrutticolo di Milano."
+    },
+    "thirdBox": {
+      "title": "Consegna in 24h",
+      "paragraph": "Naturale direttamente a casa vostra.\nPortiamo la tradizione nel futuro, rendendo più facile che mai l’acquisto online di prodotti di alta qualità."
+    }
+  },
+  "fourthSection": {
+    "supTitle": "Naturalee per l’Ho.re.ca.",
+    "title": "Hai un ristorante, bar o un bed&breakfast? ",
+    "paragraph": "Naturalee garantisce qualità e professionalità per soddisfare ogni cliente. Mense, ristoranti, frutterie, alberghi e professionisti della ristorazione possono contare su un servizio puntuale, flessibile e basato sulla onestà. ",
+    "paragraph2": "Forniamo all’ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche."
+  }
+}
+</i18n>

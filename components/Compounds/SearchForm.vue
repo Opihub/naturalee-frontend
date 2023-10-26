@@ -4,17 +4,20 @@
   <form
     :class="className"
     method="GET"
+    action="search"
     v-bind="$attrs"
     @submit.prevent="goToSearch"
   >
     <InputField
-      :value="searchValue"
+      v-model="searchValue"
       :class="`${CSS_NAME}__input`"
+      name="search"
       type="search"
+      required
+      :minlength="minlength"
       :placeholder="placeholder"
       :rounded="true"
       :borderless="true"
-      @update:model-value="updateSearch"
     />
 
     <BaseButton
@@ -23,8 +26,9 @@
       color="yellow"
       svg="search"
       :svg-size="svgSize"
-      >{{ $t('search') }}</BaseButton
     >
+      <span :class="`${CSS_NAME}__submit__text`">{{ $t('search') }}</span>
+    </BaseButton>
   </form>
 
   <slot name="after" />
@@ -53,6 +57,10 @@ const props = defineProps({
       return ['default', 'mini'].includes(value)
     },
   },
+  minlength: {
+    type: Number,
+    default: 3,
+  },
 })
 
 const emit = defineEmits(['update:search'])
@@ -60,7 +68,16 @@ const emit = defineEmits(['update:search'])
 // Component life-cycle hooks
 
 // Data
-const searchValue = ref(props.search ? props.search : '')
+const innerSearch = ref('')
+const searchValue = computed({
+  get() {
+    return props.search || innerSearch.value
+  },
+  set(value) {
+    innerSearch.value = value
+    emit('update:search', value)
+  },
+})
 
 // Watcher
 
@@ -84,25 +101,14 @@ const className = computed(() => {
 })
 
 // Methods
-const updateSearch = (event) => {
-  if (props.search === null) {
-    searchValue.value = event
-    return
-  }
-
-  emit('update:search', event)
-}
-
 const goToSearch = async () => {
-  if (props.search !== null) {
+  if (!searchValue.value) {
     return
   }
 
   await navigateTo({
     path: '/search',
-    query: {
-      search: searchValue.value,
-    },
+    query: { search: searchValue.value },
   })
 }
 </script>
@@ -139,6 +145,18 @@ $prefix: 'search';
   display: flex;
   align-items: stretch;
 
+  @include element('input') {
+    flex: 0 1 100%;
+  }
+
+  @include element('submit') {
+    flex: 0 0 auto;
+
+    @include element('text') {
+      display: get-var(display-label, inline, $prefix: $prefix);
+    }
+  }
+
   @include modifier('mini') {
     @include set-local-vars(
       $prefix: $prefix,
@@ -153,7 +171,7 @@ $prefix: 'search';
       $map: (
         font-size: get-var(font-size, $prefix: $prefix),
         line-height: get-var(line-height, $prefix: $prefix),
-        padding: rem(7px) rem(20px),
+        padding: rem(7px) rem(9px),
       )
     );
 
@@ -165,14 +183,29 @@ $prefix: 'search';
         padding: rem(7px) rem(20px),
       )
     );
-  }
 
-  @include element('input') {
-    flex: 0 1 100%;
-  }
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        display-label: none,
+      )
+    );
 
-  @include element('submit') {
-    flex: 0 0 auto;
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'button',
+        $map: (
+          padding: rem(7px) rem(20px),
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          display-label: inline,
+        )
+      );
+    }
   }
 }
 </style>

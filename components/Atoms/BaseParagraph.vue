@@ -53,6 +53,8 @@ $prefix: 'paragraph';
   font-size: get-var(font-size, rem(18px), $prefix: $prefix);
   line-height: get-var(line-height, rem(28px), $prefix: $prefix);
   font-family: get-var(font-family, get-var(family-text), $prefix: $prefix);
+  width: get-var(width, auto, $prefix: $prefix);
+  white-space: get-var(white-space, normal, $prefix: $prefix);
   display: block;
 
   @include modifier('white') {

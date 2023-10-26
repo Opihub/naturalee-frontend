@@ -1,7 +1,7 @@
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
-import { clearJSON } from './utils/storageApi'
+import { clearJSON } from './server/utils/storageApi'
 import { ofetch } from 'ofetch'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     public: {
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',
+      seoSeparator: '-',
     },
   },
   app: {
@@ -20,6 +21,12 @@ export default defineNuxtConfig({
     pageTransition: {
       name: 'page',
       mode: 'out-in',
+    },
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
     },
   },
   css: [
@@ -35,6 +42,9 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  routeRules: {
+    '/my-account/**': { ssr: false },
   },
   hooks: {
     ready: async () => {

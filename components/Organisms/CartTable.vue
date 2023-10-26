@@ -7,15 +7,19 @@
           <span :class="`${CSS_NAME}__counter`">({{ products.length }})</span>
         </th>
         <th>{{ $t('products.type') }}</th>
-        <th>{{ $t('products.price') }}</th>
-        <th>{{ $t('products.quantity') }}</th>
-        <th colspan="2">{{ $t('common.subTotal') }}</th>
+        <th align="center">{{ $t('products.price') }}</th>
+        <th align="center">{{ $t('products.quantity') }}</th>
+        <th align="center" colspan="2">{{ $t('common.subTotal') }}</th>
       </tr>
     </template>
 
     <template #body>
       <template v-if="products.length > 0">
-        <tr v-for="product in products" :key="product.id" :class="CSS_NAME_ITEM">
+        <tr
+          v-for="product in products"
+          :key="product.id"
+          :class="CSS_NAME_ITEM"
+        >
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
@@ -28,26 +32,29 @@
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
             :data-title="$t('products.price')"
+            align="center"
           >
             <PriceHolder :price="product.price" />
           </td>
           <td
-            :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
+            :class="[
+              CSS_NAME_ITEM_CELL,
+              `${CSS_NAME_ITEM_CELL}--emphasis`,
+              `${CSS_NAME_ITEM_CELL}--inline`,
+            ]"
             :data-title="$t('products.quantity')"
+            align="center"
           >
-            <BaseCounter v-model="product.quantity">
-              <template #after
-                ><span class="u-ml-tiny">{{ product.unit }}</span></template
-              >
-            </BaseCounter>
+            <BaseCounter v-model="product.quantity" />
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
             :data-title="$t('common.subTotal')"
+            align="center"
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL">
+          <td :class="CSS_NAME_ITEM_CELL" align="center">
             <CrossButton @click="onDelete(product)" />
           </td>
         </tr>
@@ -60,7 +67,7 @@
     </template>
     <template #footer>
       <tr :class="`${CSS_NAME}__footer`">
-        <td colspan="7" align="right">
+        <td colspan="7">
           <button
             :class="`${CSS_NAME}__empty`"
             type="button"
@@ -128,8 +135,19 @@ $prefix: 'cart-table';
   background-color: get-var(color-white);
   text-align: left;
 
+  @include set-local-vars(
+    $prefix: 'counter',
+    $map: (
+      width: rem(110px),
+    )
+  );
+
   @include element('counter') {
     font-weight: get-var(weight-regular);
+  }
+
+  @include element('unit') {
+    display-inline: block;
   }
 
   @include element('head') {
@@ -157,9 +175,11 @@ $prefix: 'cart-table';
   @include element('footer') {
     td,
     th {
-      padding: rem(24px) get-var(cell-padding, $prefix: $prefix);
+      padding: rem(0px) get-var(cell-padding, $prefix: $prefix) rem(24px);
 
       @include from(tablet) {
+        padding: rem(24px) get-var(cell-padding, $prefix: $prefix);
+        text-align: right;
         &:first-child {
           padding-left: get-var(x-offset, $prefix: $prefix);
         }
@@ -216,11 +236,28 @@ $prefix: 'cart-table';
 
     @include element('cell') {
       border-bottom: 1px solid transparent;
-      padding: get-var(cell-padding, $prefix: $prefix);
       @include typography(16px, 22px);
       vertical-align: middle;
+      padding-left: 50%;
+      margin-bottom: rem(20px);
+      @include until(tablet) {
+        text-align: start;
+        padding-right: rem(20px);
+      }
+      & > * {
+        vertical-align: middle;
+      }
+
+      &::before {
+        width: 0;
+        left: rem(20px);
+        font-weight: get-var(weight-bold);
+        @include typography(16px, 22px);
+        text-transform: uppercase;
+      }
 
       @include from(tablet) {
+        padding: get-var(cell-padding, $prefix: $prefix);
         &:first-child {
           padding-left: get-var(x-offset, $prefix: $prefix);
         }
@@ -237,16 +274,39 @@ $prefix: 'cart-table';
               $prefix: $prefix
             )}
         );
+        @include until('tablet') {
+          padding-left: 0;
+          padding-right: 0;
+          width: 150px;
+          margin: 0 auto;
+          margin-bottom: 20px;
+          padding-top: 20px;
+        }
       }
 
       @include modifier('emphasis') {
         @include typography(20px, 24px);
       }
 
+      @include modifier('inline') {
+        white-space: nowrap;
+      }
+
       @include object('cross') {
         display: block;
+        @include until('tablet') {
+          // padding-left: 95%;
+          // margin-top: -40px;
+          padding-bottom: rem(20px);
+        }
       }
     }
+  }
+}
+tfoot {
+  @include until(tablet) {
+    display: block;
+    text-align: center;
   }
 }
 </style>

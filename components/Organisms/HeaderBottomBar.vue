@@ -110,27 +110,33 @@ $prefix: 'bottom-bar';
     );
   }
 
-  @include element('breadcrumb') {
-    @include until(tablet) {
-      display: none;
-    }
-  }
-
   @include element('search') {
     width: 100%;
     max-width: 100%;
 
     @include from(tablet) {
       margin-left: auto;
+      max-width: get-var(search-width, rem(395px), $prefix: $prefix);
+    }
+
+    @include from(large) {
       max-width: get-var(search-width, rem(495px), $prefix: $prefix);
     }
   }
 
   @include element('container') {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column-reverse;
+    gap: rem(12px);
+
+    @include from(tablet) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
     gap: rem(8px);
+    }
   }
 }
 </style>

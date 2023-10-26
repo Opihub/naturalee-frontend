@@ -35,13 +35,8 @@ const SPLIDE_OPTIONS = {
   arrows: false,
   pagination: false,
   autoWidth: true,
-  gap: 130,
+  gap: 80,
   mediaQuery: 'min',
-  breakpoints: {
-    767.98: {
-      gap: 180,
-    },
-  },
 }
 
 defineProps({
@@ -61,10 +56,6 @@ defineProps({
     font-weight: get-var(weight-black);
     @include letter-spacing(16);
     @include typography(50px, 105px);
-
-    @include from(tablet) {
-      @include typography(72px, 150px);
-    }
   }
 }
 </style>

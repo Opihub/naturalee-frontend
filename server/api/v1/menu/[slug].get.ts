@@ -1,4 +1,5 @@
 import { useRemoteApi } from '@/server/utils/remoteApi'
+import storage from '@/server/utils/storageApi'
 
 export default defineEventHandler(async (event) => {
   const slug = event.context.params?.slug
@@ -14,10 +15,26 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  try {
-    const response = await useRemoteApi(event, `/v1/menu/${slug}`)
+  const URL = `/v1/menu/${slug}`
 
-    return createResponse(response)
+  try {
+    const json = await storage.load(URL)
+
+    if (json) {
+      return json
+    }
+
+    const data = await useRemoteApi(event, URL)
+    const response = createResponse(data)
+
+    try {
+      await storage.save(URL, response)
+      console.log(`File fetched from ${URL} and written locally!`)
+    } catch (error) {
+      console.error(`An error happened while fetching from ${URL}`, error)
+    }
+
+    return response
   } catch (error) {
     console.error(error)
     return createErrorResponse(error)

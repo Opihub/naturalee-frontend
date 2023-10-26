@@ -3,7 +3,7 @@
     <template #default="{ className }">
       <div :class="[className, `${CSS_NAME}__row`]">
         <PriceHolder
-          v-if="product?.discountKgPrice && product?.discountKgPrice > 0"
+          v-if="product?.costPerUnit && product?.costPerUnit > 0"
           :class="[`${CSS_NAME}__kg-price`, 'u-mb-half']"
           :price="product?.costPerUnit"
           :sales-price="product?.discountKgPrice"

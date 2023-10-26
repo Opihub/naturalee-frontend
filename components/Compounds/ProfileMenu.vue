@@ -20,12 +20,12 @@
           <span
             >Ciao <strong>{{ account.username }}</strong></span
           >
-          <BaseLink
-            to="/"
+          <InlineButton
             underline
+            color="yellow"
             :class="`${CSS_NAME}__logout`"
-            @click.prevent="quit"
-            >{{ $t('form.logout') }}</BaseLink
+            @click.prevent="logout"
+            >{{ $t('form.logout') }}</InlineButton
           >
         </li>
       </template>
@@ -54,8 +54,8 @@ defineProps({
 
 // Composables
 const store = useAccountStore()
-const { logout } = store
 const { account } = storeToRefs(store)
+const { logout } = useLogout()
 
 // Data
 
@@ -64,13 +64,6 @@ const { account } = storeToRefs(store)
 // Computed
 
 // Methods
-const quit = async () => {
-  await logout()
-
-  await navigateTo({
-    path: '/',
-  })
-}
 </script>
 
 <style lang="scss">
