@@ -10,7 +10,6 @@
       <InputField
         v-model="formData.firstName"
         :class="[columnClassName, columnHalfClassName]"
-        class="u-mb-ten"
         type="text"
         required
       >
@@ -20,7 +19,6 @@
       <InputField
         v-model="formData.lastName"
         :class="[columnClassName, columnHalfClassName]"
-        class="u-mb-ten"
         type="text"
         required
       >
@@ -30,7 +28,6 @@
       <InputField
         v-model="formData.email"
         :class="[columnClassName, columnFullClassName]"
-        class="u-mb-ten"
         type="text"
         required
       >
@@ -39,7 +36,6 @@
       <InputField
         v-model="formData.phone"
         :class="[columnClassName, columnFullClassName]"
-        class="u-mb-ten"
         type="text"
         required
       >
@@ -48,15 +44,14 @@
 
       <BaseHeading
         :class="[columnClassName, columnFullClassName]"
-        class="u-mt-large"
         tag="h6"
+        class="u-mt-large"
         >{{ $t('form.password.update') }}</BaseHeading
       >
 
       <InputField
         v-model="formData.oldPassword"
         :class="[columnClassName, columnFullClassName]"
-        class="u-mb-ten"
         type="password"
         >{{ $t('form.password.old') }} ({{ $t('form.leaveBlank') }})</InputField
       >
@@ -64,7 +59,6 @@
       <InputField
         v-model="formData.newPassword"
         :class="[columnClassName, columnFullClassName]"
-        class="u-mb-ten"
         type="password"
         >{{ $t('form.password.new') }} ({{ $t('form.leaveBlank') }})</InputField
       >
@@ -72,7 +66,6 @@
       <InputField
         v-model="formData.confirmPassword"
         :class="[columnClassName, columnFullClassName]"
-        class="u-mb-ten"
         type="password"
         >{{ $t('form.password.check') }}</InputField
       >
@@ -129,7 +122,7 @@ const feedback = reactive({
   message: null,
 })
 
-const { sending, send, sent } = useSender()
+const { sending, send } = useSender()
 
 const update = useAccountStore()
 
