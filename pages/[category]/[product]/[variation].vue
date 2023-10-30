@@ -49,3 +49,9 @@ const related = await useApi(
 
 // Methods
 </script>
+
+<style lang="scss" scoped>
+main img {
+  width: 100%;
+}
+</style>
