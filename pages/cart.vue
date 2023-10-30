@@ -1,5 +1,9 @@
 <template>
   <main class="s-cart">
+    <Transition name="fade">
+      <LoadingOverlay v-if="sending" />
+    </Transition>
+
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
     <BackgroundHolder v-if="isEmpty" class="u-pt-huge u-pb-huge" tag="section">
@@ -18,42 +22,48 @@
     </BackgroundHolder>
 
     <SiteContainer v-else class="u-pt-huge u-pb-huge">
-      <div class="o-row">
-        <SiteContainer :max-width="1060" padless>
-          <CartTable
-            :products="basket"
-            :on-delete="deleteFromCart"
-            :on-clear="clearCart"
-          />
-        </SiteContainer>
+      <FormWrapper class="o-form--cart" @submit.prevent="saveCart">
+        <template #default="{ columnClassName }">
+          <div :class="[columnClassName, 'o-form__basket']">
+            <CartTable
+              :products="basket"
+              :on-delete="deleteFromCart"
+              :on-clear="clearCart"
+            />
+          </div>
 
-        <SiteContainer :max-width="520" padless>
-          <OrderResume
-            :sub-total="subTotal"
-            :total="total"
-            :heading="$t('cart.total')"
-          >
-            <template #before="{ className }">
-              <div :class="className">
-                <span>{{ $t('coupon.formTitle') }}</span>
+          <div :class="[columnClassName, 'o-form__resume']">
+            <OrderResume
+              :sub-total="subTotal"
+              :total="total"
+              :heading="$t('cart.total')"
+            >
+              <template #before="{ className }">
+                <div :class="className">
+                  <span>{{ $t('coupon.formTitle') }}</span>
 
-                <FormCoupon
-                  class="u-mt-mini"
-                  :placeholder="$t('coupon.formPlaceholder')"
-                />
-              </div>
-            </template>
+                  <FormCoupon
+                    tag="div"
+                    class="u-mt-mini"
+                    :placeholder="$t('coupon.formPlaceholder')"
+                  />
+                </div>
+              </template>
 
-            <template #after="{ footerClassName }">
-              <div :class="footerClassName">
-                <BaseButton as="link" color="green" to="/checkout">{{
-                  $t('cart.proceed')
-                }}</BaseButton>
-              </div>
-            </template>
-          </OrderResume>
-        </SiteContainer>
-      </div>
+              <template #after="{ footerClassName }">
+                <div :class="footerClassName">
+                  <BaseButton
+                    :disabled="sending"
+                    type="submit"
+                    color="green"
+                    :text="$t('cart.proceed')"
+                  />
+                </div>
+              </template>
+            </OrderResume>
+          </div>
+        </template>
+      </FormWrapper>
     </SiteContainer>
   </main>
 </template>
@@ -61,7 +71,6 @@
 <script setup>
 // Imports
 import { useCartStore } from '@/stores/cart'
-import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 
@@ -83,38 +92,60 @@ defineI18nRoute({
 const { page } = await usePage('cart')
 const products = await useApi('shop/homepage/products')
 const cart = useCartStore()
-const shippingStore = useShippingStore()
+const { sending, send } = useSender()
 
 // Data
-const { isEmpty, subTotal, total, shippingMethod } = storeToRefs(cart)
+const { isEmpty, subTotal, total } = storeToRefs(cart)
 const basket = await cart.load()
-const shippingAddress = await shippingStore.load()
 
 // Watcher
 
 // Computed
 
 // Methods
-const updateAddress = (address) => {
-  shippingAddress.value = address
-}
-
-const updateShippingMethod = (method) => {
-  console.debug(shippingMethod.value)
-  shippingMethod.value = method
-}
 const { deleteFromCart, clearCart } = cart
+const saveCart = async () => {
+  if (sending.value) {
+    return
+  }
 
-// Provide
-provide('shipping', {
-  address: shippingAddress,
-  updateAddress,
-  method: shippingMethod,
-  updateMethod: updateShippingMethod,
-})
+  const response = await send(async () => await cart.save())
+
+  console.debug(response.value)
+  if (!response.value.success) {
+    notify({
+      status: 'danger',
+      message: response.value.data
+    })
+
+    return
+  }
+
+  await navigateTo({
+    name: 'checkout'
+  })
+}
 </script>
 
-<style lang="scss">
-@include scope('cart') {
+<style lang="scss" scoped>
+@include object('form') {
+  @include modifier('cart') {
+    @include element('basket') {
+      @include set-local-vars(
+        $prefix: 'field',
+        $map: (
+          width: rem(1060px),
+        )
+      );
+    }
+    @include element('resume') {
+      @include set-local-vars(
+        $prefix: 'field',
+        $map: (
+          width: rem(520px),
+        )
+      );
+    }
+  }
 }
 </style>
