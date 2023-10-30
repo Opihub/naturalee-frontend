@@ -6,9 +6,7 @@
       <ProductDetail :product="page" />
     </SiteContainer>
 
-    <template
-      v-if="page?.tag && page.tag.find((tag) => tag.slug === 'mioorto')"
-    >
+    <template v-if="page?.brand && page.brand === 'MIO ORTO'">
       <NuxtImg class="u-mb-huge" src="mioorto-row.png" />
     </template>
 
