@@ -91,7 +91,6 @@ const props = defineProps({
 
 // Computed
 const hasFreeShipping = computed(() => {
-  console.debug(50 - props.subTotal)
   return 50 - props.subTotal <= 0
 })
 
