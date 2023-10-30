@@ -150,6 +150,7 @@ export default defineI18nConfig(() => ({
         empty: 'Non hai alcun prodotto nella wishlist',
       },
       common: {
+        logout: 'Logout',
         date: 'Data',
         update: 'Aggiorna',
         actions: 'Azioni',

@@ -210,7 +210,13 @@ $prefix: 'input';
   @include transition(border-color);
 
   &[disabled] {
-    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+  &[disabled],
+  &[readonly] {
+    // opacity: 0.8;
+
     @include set-local-vars(
       $prefix: $prefix,
       $map: (

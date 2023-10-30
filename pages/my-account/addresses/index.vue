@@ -1,48 +1,28 @@
 <template>
-  <section>
-    <BaseParagraph class="u-mb-large">{{
-      $t('addresses.heading')
-    }}</BaseParagraph>
-    <SiteContainer flex>
-      <BaseBox v-for="(address, index) in response.data" :key="index">
+  <section class="s-addresses">
+    <BaseParagraph class="u-mb-large" :text="$t('addresses.heading')" />
+
+    <div class="o-row">
+      <BaseBox
+        v-for="(address, type) in response.data"
+        :key="type"
+        class="o-row__column"
+      >
         <template #head>
-          <BaseHeading tag="h4">{{
-            index == 'billing'
-              ? $t('addresses.billing')
-              : $t('addresses.shipping')
-          }}</BaseHeading>
+          <BaseHeading tag="h4" :text="$t(`addresses.${type}`)" />
+
           <BaseLink
             color="green"
             underline
-            :to="`/my-account/addresses/${index}`"
-            >{{
-              address.firstName == '' &&
-              address.lastName == '' &&
-              address.country == '' &&
-              address.address == '' &&
-              address.province == '' &&
-              address.city == '' &&
-              address.postcode == ''
-                ? $t('create')
-                : $t('edit')
-            }}</BaseLink
-          >
+            :to="{ name: 'address-details', params: { address: type } }"
+            :text="$t(isAddressFilled(address) ? 'edit' : 'create')"
+          />
         </template>
-        <ShopAddress
-          v-if="
-            address.firstName != '' &&
-            address.lastName != '' &&
-            address.country != '' &&
-            address.address != '' &&
-            address.province != '' &&
-            address.city != '' &&
-            address.postcode != ''
-          "
-          :address="address"
-        />
-        <BaseParagraph v-else>{{ $t('addresses.notSet') }}</BaseParagraph>
+
+        <ShopAddress v-if="isAddressFilled(address)" :address="address" />
+        <BaseParagraph v-else :text="$t('addresses.notSet')" />
       </BaseBox>
-    </SiteContainer>
+    </div>
   </section>
 </template>
 
@@ -81,63 +61,60 @@ const response = await useApi(
 // Watcher
 
 // Computed
+const isAddressFilled = computed(() => (address) => {
+  return (
+    address.firstName &&
+    address.lastName &&
+    address.country &&
+    address.address &&
+    address.province &&
+    address.city &&
+    address.postcode
+  )
+})
 
 // Methods
 </script>
 
 <style lang="scss" scoped>
-@include object('container') {
+@include scope('addresses') {
+  @include typography(18px, 28px);
+
   @include set-vars(
-    $prefix: 'container',
+    $prefix: 'row',
     $map: (
       gap: rem(30px),
+      columns: 2,
     )
   );
-  @include set-vars(
-    $prefix: 'container',
-    $map: (
-      justify-content: start,
-    )
-  );
-  @include set-vars(
-    $prefix: 'container',
-    $map: (
-      align-items: stretch,
-    )
-  );
+
   @include set-vars(
     $prefix: 'box',
     $map: (
       head-display: flex,
-    )
-  );
-  @include set-vars(
-    $prefix: 'box',
-    $map: (
       head-justify: space-between,
-    )
-  );
-  @include set-vars(
-    $prefix: 'box',
-    $map: (
       head-align: center,
     )
   );
-}
-@include object('heading') {
-  width: 50%;
-  margin-right: rem(35px);
+
   @include set-vars(
-    $prefix: 'heading',
+    $prefix: 'paragraph',
     $map: (
-      text-color: color-black,
+      font-family: get-var(family-main),
     )
   );
-  @include set-vars(
-    $prefix: 'heading',
-    $map: (
-      text-transform: none,
-    )
-  );
+
+  @include object('heading') {
+    width: 50%;
+    margin-right: rem(35px);
+
+    @include set-vars(
+      $prefix: 'heading',
+      $map: (
+        text-color: color-black,
+        text-transform: none,
+      )
+    );
+  }
 }
 </style>

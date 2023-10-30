@@ -38,7 +38,9 @@ const props = defineProps({
 // Computed
 const style = computed(() => {
   const style = {}
+
   if (props.coordinates) {
+
     for (const coordinate in props.coordinates) {
       const value = !isNaN(props.coordinates[coordinate])
         ? `${props.coordinates[coordinate]}px`
@@ -51,22 +53,24 @@ const style = computed(() => {
   }
 
   if (props.svgSize) {
-    const size = !isNaN(props.svgSize) ? `${props.svgSize}px` : props.svgSize
-    style['--svg-width'] = size
-    style['--svg-height'] = size
     if (typeof props.svgSize === 'object') {
       style['--svg-width'] = !isNaN(props.svgSize?.width)
         ? `${props.svgSize?.width}px`
         : props.svgSize?.width
-      style['--svg-height'] = !isNaN(props.svgSize?.width)
-        ? `${props.svgSize?.width}px`
+      style['--svg-height'] = !isNaN(props.svgSize?.height)
+        ? `${props.svgSize?.height}px`
         : props.svgSize?.height
+    } else {
+      const size = !isNaN(props.svgSize) ? `${props.svgSize}px` : props.svgSize
+      style['--svg-width'] = size
+      style['--svg-height'] = size
     }
   }
 
   if (!isNaN(props.zIndex)) {
     style['--floating-icon-zindex'] = props.zIndex
   }
+
   return style
 })
 

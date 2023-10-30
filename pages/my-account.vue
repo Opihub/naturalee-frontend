@@ -52,7 +52,7 @@ watch(
       path = orderRoute.path
     }
 
-    const isAddressesChild = ['addresses-details'].includes(route.name)
+    const isAddressesChild = ['address-details'].includes(route.name)
 
     if (isAddressesChild) {
       const addressesRoute = router.resolve({

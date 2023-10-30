@@ -1,5 +1,5 @@
 <template>
-  <InputField type="select" :data="country.data" label-key="name">
+  <InputField type="select" :data="countries.data" label-key="name">
     <slot />
   </InputField>
 </template>
@@ -16,7 +16,7 @@
 // Composables
 
 // Data
-const country = await useApi('/countries/')
+const countries = await useApi('countries')
 
 // Watcher
 
