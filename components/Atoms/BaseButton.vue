@@ -240,7 +240,8 @@ $prefix: 'button';
       @include set-local-vars(
         $prefix: $prefix,
         $map: (
-          background-color: get-var(color-dark),
+          background-color:
+            get-var(color-background, get-var(color-dark), $prefix: $prefix),
           text-color: get-var(color-white),
         )
       );
