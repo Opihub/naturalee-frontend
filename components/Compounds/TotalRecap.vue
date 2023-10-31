@@ -1,22 +1,55 @@
 <template>
   <div :class="CSS_NAME">
     <template v-if="!withoutSubTotal">
-      <span>{{ $t('common.subTotal') }}</span>
-      <PriceHolder :price="subTotal" />
+      <span :class="[`${CSS_NAME}__label`, 'is-label']">{{
+        $t('common.subTotal')
+      }}</span>
+      <PriceHolder class="is-data" :price="subTotal" />
     </template>
 
     <template v-if="!withoutShipping">
-      <span>{{ $t('orders.shipping') }}</span>
-      <ShippingMethods :class="`${CSS_NAME}__shipping`" />
+      <span :class="[`${CSS_NAME}__label`, 'is-label']">{{
+        $t('orders.shipping')
+      }}</span>
+      <!-- <ShippingMethods :class="`${CSS_NAME}__shipping`" /> -->
+
+      <PriceHolder
+        v-if="$route.name === 'checkout'"
+        :class="[`${CSS_NAME}__shipping`, 'is-data']"
+        :price="3"
+      />
+      <strong v-else-if="hasFreeShipping" :class="`${CSS_NAME}__shipping`"
+        >Gratuita</strong
+      >
+      <template v-else>
+        <PriceHolder :class="[`${CSS_NAME}__shipping`, 'is-data']" :price="3" />
+        <span :class="[`${CSS_NAME}__full`, 'is-label', 'is-data']"
+          >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere la
+          spedizione gratuita</span
+        >
+      </template>
     </template>
 
-    <span :class="[`${CSS_NAME}__sum`, totalClassName]">{{
-      $t('common.total')
-    }}</span>
-    <PriceHolder
-      :class="[`${CSS_NAME}__sum`, `${CSS_NAME}__sum--price`, totalClassName]"
-      :price="total || subTotal"
-    />
+    <template v-if="!withoutTotal">
+      <span
+        :class="[
+          `${CSS_NAME}__label`,
+          `${CSS_NAME}__sum`,
+          totalClassName,
+          'is-label',
+        ]"
+        >{{ $t('common.total') }}</span
+      >
+      <PriceHolder
+        :class="[
+          `${CSS_NAME}__sum`,
+          `${CSS_NAME}__sum--price`,
+          totalClassName,
+          'is-data',
+        ]"
+        :price="total || subTotal"
+      />
+    </template>
   </div>
 </template>
 
@@ -27,7 +60,7 @@
 const CSS_NAME = 'c-total'
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   subTotal: {
     type: Number,
     required: true,
@@ -37,6 +70,10 @@ defineProps({
     default: null,
   },
   withoutSubTotal: {
+    type: Boolean,
+    default: false,
+  },
+  withoutTotal: {
     type: Boolean,
     default: false,
   },
@@ -63,6 +100,9 @@ defineProps({
 // Watcher
 
 // Computed
+const hasFreeShipping = computed(() => {
+  return 50 - props.subTotal <= 0
+})
 
 // Methods
 </script>
@@ -74,12 +114,16 @@ $prefix: 'total';
   gap: rem(20px) 0;
   grid-template-columns: 1fr auto;
 
-  & > *:nth-child(odd) {
+  @include element('label') {
     padding-right: rem(20px);
   }
 
   @include element('sum') {
     font-weight: get-var(weight-bold);
+  }
+
+  @include element('full') {
+    grid-column: 1 / 3;
   }
 }
 </style>

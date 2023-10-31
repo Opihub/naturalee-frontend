@@ -100,12 +100,12 @@ $prefix: 'order-resume';
     );
 
     & > * {
-      &:nth-child(even) {
-        padding-right: get-var(padding, $prefix: 'receipt');
+      @include is('label') {
+        padding-left: get-var(padding, $prefix: 'receipt');
       }
 
-      &:nth-child(odd) {
-        padding-left: get-var(padding, $prefix: 'receipt');
+      @include is('data') {
+        padding-right: get-var(padding, $prefix: 'receipt');
       }
     }
 
