@@ -1,3 +1,27 @@
+@mixin column-width($parent, $child) {
+  width: get-var(
+    width,
+    calc(
+      (
+          100% / get-var(columns, 1, $prefix: $parent) *
+            get-var(size, 1, $prefix: $child)
+        ) -
+        (
+          get-var(
+              column-gap,
+              get-var(gap, rem(20px), $prefix: $parent),
+              $prefix: $parent
+            ) *
+            (
+              get-var(columns, 1, $prefix: $parent) -
+                get-var(size, 1, $prefix: $child)
+            ) / get-var(columns, 1, $prefix: $parent)
+        )
+    ),
+    $prefix: $child
+  );
+}
+
 @mixin layout($parent, $child, $sub: null) {
   %row {
     display: flex;
@@ -24,27 +48,7 @@
     }
 
     @include element($child) {
-      width: get-var(
-        width,
-        calc(
-          (
-              100% / get-var(columns, 1, $prefix: $parent) *
-                get-var(size, 1, $prefix: $child)
-            ) -
-            (
-              get-var(
-                  column-gap,
-                  get-var(gap, rem(20px), $prefix: $parent),
-                  $prefix: $parent
-                ) *
-                (
-                  get-var(columns, 1, $prefix: $parent) -
-                    get-var(size, 1, $prefix: $child)
-                ) / get-var(columns, 1, $prefix: $parent)
-            )
-        ),
-        $prefix: $child
-      );
+      @include column-width($parent, $child);
     }
 
     @content;

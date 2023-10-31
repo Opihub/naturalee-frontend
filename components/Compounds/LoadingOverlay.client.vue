@@ -1,7 +1,7 @@
 <template>
   <BaseOverlay :class="CSS_NAME">
     <Vue3Lottie
-     :class="`${CSS_NAME}__spinner`"
+      :class="`${CSS_NAME}__spinner`"
       :animation-data="SpinnerLottie"
       loop
       :width="500"

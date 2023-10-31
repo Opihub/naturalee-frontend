@@ -6,13 +6,18 @@
     active-class="is-current"
     exact-active-class="is-exact"
   >
-    <slot>
+    <slot :svg-style="svgStyle" :filled="svgFilled">
       <span v-if="text">{{ text }}</span>
     </slot>
 
     <Suspense>
-      <slot name="svg">
-        <BaseIcon v-if="svg" :name="svg" :icon-size="svgStyle" />
+      <slot name="svg" :svg-style="svgStyle" :filled="svgFilled">
+        <BaseIcon
+          v-if="svg"
+          :name="svg"
+          :icon-size="svgStyle"
+          :filled="svgFilled"
+        />
       </slot>
     </Suspense>
   </component>
@@ -36,6 +41,10 @@ const props = defineProps({
   svgSize: {
     type: Array,
     default: () => [],
+  },
+  svgFilled: {
+    type: Boolean,
+    default: false,
   },
   text: {
     type: String,
@@ -157,7 +166,7 @@ $prefix: 'button';
   color: get-var(text-color, get-var(color-green), $prefix: $prefix);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: get-var(justify-content, center, $prefix: $prefix);
   font-size: get-var(font-size, 1em, $prefix: $prefix);
   line-height: get-var(line-height, inherit, $prefix: $prefix);
   gap: get-var(svg-gap, rem(18px), $prefix: $prefix);
@@ -168,10 +177,14 @@ $prefix: 'button';
     margin: 0;
     width: #{get-var(width, $prefix: $svg-prefix)};
     height: #{get-var(height, $prefix: $svg-prefix)};
+    fill: get-var(fill, currentColor, $prefix: $prefix);
+    stroke: get-var(stroke, currentColor, $prefix: $prefix);
+
+    @include transition(fill, stroke);
   }
 
   @include has('svg') {
-    justify-content: space-between;
+    justify-content: get-var(justify-content, space-between, $prefix: $prefix);
   }
 
   @include transition(background-color, color, border-color, opacity);
