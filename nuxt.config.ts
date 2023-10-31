@@ -32,7 +32,6 @@ export default defineNuxtConfig({
   css: [
     '@splidejs/vue-splide/css/core',
     '@/assets/css/main.scss',
-    '@/assets/css/nuxt-google-fonts.css',
   ],
   vite: {
     css: {
@@ -122,6 +121,8 @@ export default defineNuxtConfig({
   googleFonts: {
     inject: false,
     outputDir: 'assets',
+    stylePath: 'css/google-fonts.css',
+    fontsDir: 'fonts',
     display: 'swap',
     families: {
       Mulish: [400, 700, 800],
