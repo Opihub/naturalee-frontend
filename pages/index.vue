@@ -66,7 +66,10 @@
       class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
       tag="section"
     >
-      <ProductCards :products="products.data" :title="$t('products.homepageFeatured')" />
+      <ProductCards
+        :products="products.data"
+        :title="$t('products.homepageFeatured')"
+      />
     </BackgroundHolder>
 
     <TrackRow class="c-fifth-section">
@@ -120,7 +123,7 @@ definePageMeta({
 // Data (Reactive, Composables & Inject)
 await usePage()
 const products = await useApi('shop/homepage/products')
-const { togglePostcodeModal } = inject('postcodeModal')
+const { togglePostcodeModal } = inject('postcodeModal', () => {})
 const { t } = useI18n({
   useScope: 'local',
 })
