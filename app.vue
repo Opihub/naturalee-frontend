@@ -110,20 +110,13 @@ accountStore.$onAction(({ name }) => {
 <style lang="scss">
 #notifications {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: get-var(z-notification);
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @include from(desktop) {
-    left: auto;
-    right: 0;
-    transform: none;
-    align-items: flex-end;
-  }
 
   @include set-local-vars(
     $prefix: 'notification',

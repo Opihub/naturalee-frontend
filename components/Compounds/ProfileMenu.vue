@@ -18,7 +18,7 @@
           ]"
         >
           <span
-            >Ciao <strong>{{ account.username }}</strong></span
+            >Ciao <strong>{{ username }}</strong></span
           >
           <InlineButton
             underline
@@ -54,7 +54,7 @@ defineProps({
 
 // Composables
 const store = useAccountStore()
-const { account } = storeToRefs(store)
+const { username } = storeToRefs(store)
 const { logout } = useLogout()
 
 // Data

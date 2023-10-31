@@ -53,6 +53,7 @@
             </span>
           </ToggleField>
         </div>
+        <BaseDatePicker />
       </fieldset>
     </template>
 

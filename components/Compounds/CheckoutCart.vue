@@ -28,7 +28,7 @@
       <div :class="[className, `${CSS_NAME}__footer`]">
         <TotalRecap
           :sub-total="subTotal"
-          without-sub-total
+          without-total
           without-shipping
           without-payment
         />

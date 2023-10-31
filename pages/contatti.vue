@@ -73,7 +73,7 @@ import yellowDots from '@/assets/svg/decorations/yellow-dots.svg'
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'contacts'
+  name: 'contacts',
 })
 
 defineI18nRoute({

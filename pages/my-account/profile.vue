@@ -22,6 +22,7 @@ import { useAccountStore } from '@/stores/account'
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'profile',
+  key: 'profile',
 })
 
 defineI18nRoute({

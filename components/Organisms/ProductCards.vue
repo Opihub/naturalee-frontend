@@ -9,7 +9,7 @@
 
     <slot />
 
-    <ClientOnly>
+    <!-- <ClientOnly> -->
       <Splide
         :class="CSS_NAME"
         :options="SPLIDE_OPTIONS"
@@ -31,7 +31,7 @@
           </button>
         </div>
       </Splide>
-    </ClientOnly>
+    <!-- </ClientOnly> -->
   </SiteContainer>
 </template>
 
@@ -79,6 +79,7 @@ defineProps({
 <style lang="scss">
 $prefix: 'product-cards';
 @include component($prefix) {
+  visibility: visible;
   padding: 0 rem(30px);
 
   @include from(desktop) {
