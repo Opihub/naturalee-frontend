@@ -13,16 +13,20 @@
       }}</span>
       <!-- <ShippingMethods :class="`${CSS_NAME}__shipping`" /> -->
 
-      <strong v-if="hasFreeShipping" :class="`${CSS_NAME}__shipping`">Gratuita</strong>
-      <template v-else>
       <PriceHolder
+        v-if="$route.name === 'checkout'"
         :class="[`${CSS_NAME}__shipping`, 'is-data']"
         :price="3"
       />
-      <span :class="[`${CSS_NAME}__full`, 'is-label', 'is-data']"
-        >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere la spedizione
-        gratuita</span
+      <strong v-else-if="hasFreeShipping" :class="`${CSS_NAME}__shipping`"
+        >Gratuita</strong
       >
+      <template v-else>
+        <PriceHolder :class="[`${CSS_NAME}__shipping`, 'is-data']" :price="3" />
+        <span :class="[`${CSS_NAME}__full`, 'is-label', 'is-data']"
+          >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere la
+          spedizione gratuita</span
+        >
       </template>
     </template>
 
