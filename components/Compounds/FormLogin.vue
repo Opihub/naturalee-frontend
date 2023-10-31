@@ -9,10 +9,10 @@
     <InputField
       v-model="formData.username"
       class="u-mb-half"
-      type="text"
+      type="email"
       required
     >
-      {{ $t('form.userField') }}</InputField
+      {{ $t('form.mailField') }}</InputField
     >
     <InputField
       v-model="formData.password"
