@@ -9,7 +9,7 @@
 
     <slot />
 
-    <ClientOnly>
+    <!-- <ClientOnly> -->
       <Splide
         :class="CSS_NAME"
         :options="SPLIDE_OPTIONS"
@@ -31,7 +31,7 @@
           </button>
         </div>
       </Splide>
-    </ClientOnly>
+    <!-- </ClientOnly> -->
   </SiteContainer>
 </template>
 
