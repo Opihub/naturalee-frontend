@@ -26,24 +26,26 @@
       </template>
     </template>
 
-    <span
-      :class="[
-        `${CSS_NAME}__label`,
-        `${CSS_NAME}__sum`,
-        totalClassName,
-        'is-label',
-      ]"
-      >{{ $t('common.total') }}</span
-    >
-    <PriceHolder
-      :class="[
-        `${CSS_NAME}__sum`,
-        `${CSS_NAME}__sum--price`,
-        totalClassName,
-        'is-data',
-      ]"
-      :price="total || subTotal"
-    />
+    <template v-if="!withoutTotal">
+      <span
+        :class="[
+          `${CSS_NAME}__label`,
+          `${CSS_NAME}__sum`,
+          totalClassName,
+          'is-label',
+        ]"
+        >{{ $t('common.total') }}</span
+      >
+      <PriceHolder
+        :class="[
+          `${CSS_NAME}__sum`,
+          `${CSS_NAME}__sum--price`,
+          totalClassName,
+          'is-data',
+        ]"
+        :price="total || subTotal"
+      />
+    </template>
   </div>
 </template>
 
@@ -64,6 +66,10 @@ const props = defineProps({
     default: null,
   },
   withoutSubTotal: {
+    type: Boolean,
+    default: false,
+  },
+  withoutTotal: {
     type: Boolean,
     default: false,
   },
