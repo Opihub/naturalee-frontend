@@ -7,26 +7,40 @@
     :text="text"
     @click="add"
   >
-    <span v-if="sending" :class="`${CSS_NAME}__spinner`" />
+    <template #default="{ svgStyle, svgFilled }">
+      <Vue3Lottie
+        v-if="sending"
+        :class="`${CSS_NAME}__spinner`"
+        :animation-data="SpinnerLottie"
+        loop
+        :width="21"
+        :height="21"
+        no-margin
+      />
 
-    <ClientOnly>
-      <div v-if="animating" :class="`${CSS_NAME}__animation`">
+      <template v-else-if="animating">
         <Vue3Lottie
+          :class="`${CSS_NAME}__animation`"
           :animation-data="BasketLottie"
           :loop="false"
           :play-animation="animating"
-          :width="30"
-          :height="30"
+          :width="21"
+          :height="21"
           no-margin
           @on-complete="reset"
         />
-        Aggiunto con successo!
-      </div>
-    </ClientOnly>
+        <span :class="`${CSS_NAME}__text`">
+          <slot name="added">{{ $t('cart.addedSuccessfully') }}</slot>
+        </span>
+      </template>
 
-    <span :class="`${CSS_NAME}__text`"
-      ><slot>{{ text }}</slot></span
-    >
+      <template v-else>
+        <span :class="`${CSS_NAME}__text`"
+          ><slot>{{ text }}</slot></span
+        >
+        <slot name="svg" :svg-style="svgStyle" :filled="svgFilled" />
+      </template>
+    </template>
   </BaseButton>
 </template>
 
@@ -34,6 +48,7 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import BasketLottie from 'assets/lotties/CaMQMFqXYq.json'
+import SpinnerLottie from 'assets/lotties/spinner.json'
 
 // Constants
 const CSS_NAME = 'c-add-to-cart'
@@ -124,19 +139,6 @@ const reset = () => {
 </script>
 
 <style lang="scss">
-%centered {
-  inset: 0;
-  z-index: 1;
-  position: absolute;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
-  gap: rem(5px);
-  opacity: 0;
-  visibility: hidden;
-}
-
 $prefix: 'add-to-cart';
 @include component($prefix) {
   position: relative;
@@ -153,54 +155,35 @@ $prefix: 'add-to-cart';
   }
 
   @include element('spinner') {
-    @extend %centered;
-
-    &::before {
-      content: '';
-      display: block;
-      border: 5px solid;
-      border-top-color: rgba(get-var(rgb-green), 1);
-      border-right-color: rgba(get-var(rgb-green), 0.66);
-      border-bottom-color: rgba(get-var(rgb-green), 0.33);
-      border-left-color: rgba(get-var(rgb-green), 0);
-      border-radius: 100%;
-      width: rem(30px);
-      height: rem(30px);
-
-      @include spinner($time: 0.5s);
-    }
+    transform: scale(1.4);
   }
 
   @include element('animation') {
-    @extend %centered;
-
-    svg {
-      transform: scale(1.75) !important;
-    }
+    transform: scale(3);
   }
 
-  @include is('sending') {
-    @include element('text') {
-      opacity: 0;
-      visibility: hidden;
-    }
+  // @include is('sending') {
+  //   @include element('text') {
+  //     opacity: 0;
+  //     visibility: hidden;
+  //   }
 
-    @include element('spinner') {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
+  //   @include element('spinner') {
+  //     opacity: 1;
+  //     visibility: visible;
+  //   }
+  // }
 
-  @include is('confirming') {
-    @include element('text') {
-      opacity: 0;
-      visibility: hidden;
-    }
+  // @include is('confirming') {
+  //   @include element('text') {
+  //     opacity: 0;
+  //     visibility: hidden;
+  //   }
 
-    @include element('animation') {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
+  //   @include element('animation') {
+  //     opacity: 1;
+  //     visibility: visible;
+  //   }
+  // }
 }
 </style>

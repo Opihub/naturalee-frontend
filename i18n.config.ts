@@ -52,6 +52,8 @@ export default defineI18nConfig(() => ({
         your: 'Il tuo carrello',
         add: 'Aggiungi',
         addTo: 'Aggiungi al carrello',
+        added: 'Aggiunto!',
+        addedSuccessfully: 'Aggiunto con successo!',
         empty: 'Non hai alcun prodotto nel carrello',
         cleared: 'Il carrello è stato svuotato',
         missingProduct: 'Prodotto non trovato nel carrello',
