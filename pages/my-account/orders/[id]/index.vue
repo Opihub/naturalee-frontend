@@ -43,6 +43,7 @@
 definePageMeta({
   alias: '/my-account/orders/:id/view',
   name: 'order-view',
+  key: 'order-view',
 })
 
 defineI18nRoute({

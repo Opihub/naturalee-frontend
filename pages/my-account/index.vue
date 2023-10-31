@@ -67,6 +67,7 @@ import { useAccountStore } from '@/stores/account'
 definePageMeta({
   alias: 'dashboard',
   name: 'dashboard',
+  key: 'dashboard',
 })
 
 defineI18nRoute({

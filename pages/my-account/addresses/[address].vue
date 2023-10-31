@@ -58,6 +58,7 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'address-details',
+  key: 'address-details',
 })
 
 defineI18nRoute({
