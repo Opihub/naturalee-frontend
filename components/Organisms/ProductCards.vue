@@ -79,6 +79,7 @@ defineProps({
 <style lang="scss">
 $prefix: 'product-cards';
 @include component($prefix) {
+  visibility: visible;
   padding: 0 rem(30px);
 
   @include from(desktop) {
