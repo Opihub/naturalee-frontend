@@ -64,16 +64,16 @@
       <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
       <AddToCartButton
+        :class="`${CSS_NAME}__button`"
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
       >
         <span>{{ $t('cart.add') }}</span>
-        <NuxtIcon
-          name="bag"
-          :class="`${CSS_NAME}__button__svg`"
-          :filled="false"
-        />
+        <template #added>{{ $t('cart.added') }}</template>
+        <template #svg="{ svgStyle }">
+          <BaseIcon name="bag" :icon-size="svgStyle" :filled="true" />
+        </template>
       </AddToCartButton>
     </div>
 
@@ -354,7 +354,7 @@ $prefix: 'product-card';
         margin-bottom: 0;
       }
 
-      @include object('button') {
+      @include element('button') {
         margin: 0;
         flex: 0 0 get-var(button-width, rem(200px), $prefix: $prefix);
       }
@@ -373,30 +373,32 @@ $prefix: 'product-card';
       flex: 0 0 rem(108px);
     }
 
-    @include object('button') {
+    @include element('button', true) {
       flex: 1 1 auto;
       max-width: rem(190px);
 
-      svg {
+      @include element('svg') {
         display: inline-block;
-        margin-left: rem(14px);
-        margin-top: rem(-5px);
-        color: get-var(color-yellow);
         transition: all 0.5s;
       }
-
-      &:hover svg {
-        color: get-var(color-green);
-      }
-
-      // margin: rem(20px) auto rem(12px);
 
       @include set-local-vars(
         $prefix: 'button',
         $map: (
+          justify-content: center,
           padding: rem(12px) rem(80px),
+          fill: get-var(color-yellow),
         )
       );
+
+      &:hover svg {
+        @include set-local-vars(
+          $prefix: 'button',
+          $map: (
+            fill: get-var(color-green),
+          )
+        );
+      }
 
       @include from(tablet) {
         @include set-local-vars(

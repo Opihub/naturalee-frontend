@@ -1,0 +1,105 @@
+@font-face {
+  font-family: 'icon-naturalee';
+  src:  url('fonts/icon-naturalee.eot?4x7qq9');
+  src:  url('fonts/icon-naturalee.eot?4x7qq9#iefix') format('embedded-opentype'),
+    url('fonts/icon-naturalee.ttf?4x7qq9') format('truetype'),
+    url('fonts/icon-naturalee.woff?4x7qq9') format('woff'),
+    url('fonts/icon-naturalee.svg?4x7qq9#icon-naturalee') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="i-"], [class*=" i-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icon-naturalee' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.i-close:before {
+  content: "\e90e";
+}
+.i-arrows:before {
+  content: "\e90f";
+}
+.i-caret:before {
+  content: "\e910";
+}
+.i-instagram:before {
+  content: "\e916";
+}
+.i-facebook:before {
+  content: "\e917";
+}
+.i-eye-on:before {
+  content: "\e918";
+}
+.i-eye-off:before {
+  content: "\e919";
+}
+.i-search:before {
+  content: "\e911";
+}
+.i-tiktok:before {
+  content: "\e912";
+}
+.i-linkedin:before {
+  content: "\e913";
+}
+.i-whatsapp:before {
+  content: "\e914";
+}
+.i-youtube:before {
+  content: "\e915";
+}
+.i-busta-bio:before {
+  content: "\e900";
+}
+.i-busta:before {
+  content: "\e901";
+}
+.i-bustina:before {
+  content: "\e902";
+}
+.i-ciotola-compostabile:before {
+  content: "\e903";
+}
+.i-ciotola:before {
+  content: "\e904";
+}
+.i-confezione-salvafreschezza:before {
+  content: "\e905";
+}
+.i-confezione:before {
+  content: "\e906";
+}
+.i-mazzo:before {
+  content: "\e907";
+}
+.i-peso:before {
+  content: "\e908";
+}
+.i-sacco:before {
+  content: "\e909";
+}
+.i-sfuso:before {
+  content: "\e90a";
+}
+.i-vaschetta-rotonda:before {
+  content: "\e90b";
+}
+.i-vaschetta:before {
+  content: "\e90c";
+}
+.i-vaso:before {
+  content: "\e90d";
+}
