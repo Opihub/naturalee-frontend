@@ -47,7 +47,11 @@
         </li>
       </ul>
 
-      <BaseMarkdown v-if="product.description" :content="product.description" />
+      <BaseMarkdown
+        v-if="product.description"
+        :class="`${CSS_NAME}__description`"
+        :content="product.description"
+      />
 
       <TagsList
         v-if="product?.categories && product.categories.length > 0"
@@ -179,6 +183,10 @@ $prefix: 'product-detail';
   @include element('body') {
     padding-top: rem(20px);
     border-top: rem(3px) solid get-var(color-white);
+  }
+
+  @include element('description') {
+    @include typography(18px, 28px);
   }
 
   @include from(tablet) {
