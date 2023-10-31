@@ -77,6 +77,7 @@ import { useCartStore } from '@/stores/cart'
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'cart',
+  layout: 'standard'
 })
 
 defineI18nRoute({
