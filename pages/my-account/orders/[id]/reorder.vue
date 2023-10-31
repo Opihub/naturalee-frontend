@@ -19,6 +19,7 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'order-products',
+  key: 'order-products',
 })
 
 defineI18nRoute({

@@ -88,7 +88,7 @@
             :error="$t('form.validEmail')"
             rounded
             required
-            >{{ $t('form.toMailAddress') }}</InputField
+            >{{ $t('form.mailField') }}</InputField
           >
 
           <BaseButton

@@ -13,10 +13,10 @@
     <InputField
       v-model="formData.username"
       class="u-mb-tiny"
-      type="text"
+      type="email"
       required
     >
-      {{ $t('form.userField') }}</InputField
+      {{ $t('form.mailField') }}</InputField
     >
 
     <slot name="profileLink" />
@@ -32,7 +32,6 @@
       <template v-if="success">
         {{
           $t('form.password.recoverySent', {
-            field: isEmail ? $t('form.toEmail') : $t('form.toUserEmail'),
             userParam: user,
           })
         }}
@@ -40,7 +39,6 @@
       <template v-else>
         {{
           $t('form.noUserFound', {
-            field: isEmail ? $t('form.toMailAddress') : $t('form.toUser'),
             userParam: user,
           })
         }}
@@ -79,9 +77,6 @@ const formData = reactive({
 // Watcher
 
 // Computed
-const isEmail = computed(() => {
-  return user.value.match(getEmailPattern())
-})
 
 // Methods
 const passwordRecovery = async () => {

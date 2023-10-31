@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!body.email) {
     throw createError({
       statusCode: 403,
-      statusMessage: 'È obbligatorio inserire il nome utente o la mail',
+      statusMessage: 'È obbligatorio inserire il tuo indirizzo mail',
       data: {
         code: 'missing_email',
         success: false,
