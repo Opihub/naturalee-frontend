@@ -255,6 +255,15 @@ $prefix-filter: '#{$prefix}-filter';
       @include from(desktop) {
         width: auto;
       }
+
+      @include is('active') {
+        @include set-local-vars(
+          $prefix: 'button',
+          $map: (
+            color-background: get-var(color-green),
+          )
+        );
+      }
     }
   }
 

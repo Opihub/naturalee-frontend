@@ -55,7 +55,8 @@ defineProps({
     color: get-var(color-green);
     font-weight: get-var(weight-black);
     @include letter-spacing(16);
-    @include typography(50px, 105px);
+    @include typography(28px, 50px);
+    // @include typography(50px, 105px);
   }
 }
 </style>

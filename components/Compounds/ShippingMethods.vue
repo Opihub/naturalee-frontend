@@ -11,9 +11,7 @@
         class="u-mb-tiny"
         :value="shippingMethod.id"
         :model-value="method?.id"
-        @update:model-value="
-          (value) => updateShippingMethod(value)
-        "
+        @update:model-value="(value) => updateShippingMethod(value)"
       >
         {{ shippingMethod.title }}
         <PriceHolder
@@ -69,7 +67,10 @@ const CSS_NAME = 'c-shipping'
 // Data
 const shippingMethods = ref([])
 const isShippingFormOpen = ref(false)
-const { address, updateAddress, method, updateMethod } = inject('shipping')
+const { address, updateAddress, method, updateMethod } = inject(
+  'shipping',
+  () => {}
+)
 const city = ref(null)
 const message = ref(
   'Inserisci il tuo indirizzo per visualizzare le opzioni di spedizione.'

@@ -3,17 +3,16 @@
     <div :class="`${CSS_NAME}__links`">
       <SiteLogo :alt="true" />
 
-      <InlineMenu
-        v-if="socialsMenu"
-        :menu="socialsMenu"
-        svg-size="18px"
-      />
+      <InlineMenu v-if="socialsMenu" :menu="socialsMenu" svg-size="18px" />
     </div>
 
     <InlineMenu v-if="menu" :menu="menu" :class="`${CSS_NAME}__menu`">
       <template #after="{ itemClassName, itemLinkClassName }">
         <li :class="itemClassName">
-          <InlineButton :class="itemLinkClassName" color="yellow" @click="togglePostcodeModal"
+          <InlineButton
+            :class="itemLinkClassName"
+            color="yellow"
+            @click="togglePostcodeModal"
             >Consegna</InlineButton
           >
         </li>
@@ -49,7 +48,7 @@ defineProps({
 // Component life-cycle hooks
 
 // Data (Reactive, Composables & Inject)
-const { togglePostcodeModal } = inject('postcodeModal')
+const { togglePostcodeModal } = inject('postcodeModal', () => {})
 
 // Watcher
 

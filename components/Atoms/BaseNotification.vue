@@ -46,7 +46,7 @@ const props = defineProps({
   },
   vertical: {
     type: [String, Object],
-    default: 'top',
+    default: 'bottom',
     validator(value) {
       if (typeof value !== 'object') {
         value = { 0: value }
@@ -162,6 +162,7 @@ $prefix: 'notification';
     $prefix: $prefix
   );
   font-weight: get-var(weight-regular);
+  box-shadow: 0 0 20px 1px rgba(get-var(rgb-dark), 0.3);
   @include typography(16px, 22px);
 
   @include element('close') {

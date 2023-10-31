@@ -66,7 +66,7 @@ export default defineI18nConfig(() => ({
         shippingCost: 'Spese di consegna',
         orderTotal: "Totale dell'ordine",
         fee: 'IVA Inc',
-        proceed: "Procedere con l'ordine",
+        proceed: "Procedi all'ordine",
         goToCart: 'Vai al carrello',
         total: 'Totale carrello',
         shippingTo: 'Spedizione a <b>city</b>',
@@ -209,7 +209,7 @@ export default defineI18nConfig(() => ({
         address: 'Via e Numero',
         address2: 'Appartamento, suite, unità, piano, ecc. (opzionale)',
         addressPlaceholder: 'Via/Piazza e Numero Civico',
-        timeSlot: 'Scegli una fascia oraria per la consegna:',
+        timeSlot: 'Scegli la fascia oraria preferita e il giorno di consegna:',
 
         company: 'Azienda',
         cf: 'CF',

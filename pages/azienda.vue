@@ -398,7 +398,7 @@ const cards = ref([
     },
     "thirdBox": {
       "title": "Consegna in 24h",
-      "paragraph": "Naturale direttamente a casa vostra.\nPortiamo la tradizione nel futuro, rendendo più facile che mai l’acquisto online di prodotti di alta qualità."
+      "paragraph": "Naturalee direttamente a casa vostra.\nPortiamo la tradizione nel futuro, rendendo più facile che mai l’acquisto online di prodotti di alta qualità."
     }
   },
   "fourthSection": {

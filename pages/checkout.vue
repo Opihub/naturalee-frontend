@@ -104,6 +104,7 @@ import { useShippingStore } from '@/stores/shipping'
 definePageMeta({
   layout: 'green',
   name: 'checkout',
+  middleware: 'auth',
 })
 
 defineI18nRoute({
