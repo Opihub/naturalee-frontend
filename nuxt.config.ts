@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     public: {
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',
+      seoSeparator: '-',
     },
   },
   app: {
@@ -41,6 +42,9 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  routeRules: {
+    '/my-account/**': { ssr: false },
   },
   hooks: {
     ready: async () => {

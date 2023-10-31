@@ -1,5 +1,5 @@
 <template>
-  <BaseLink to="/" :class="CSS_NAME">
+  <BaseLink :to="{ name: 'home' }" :class="CSS_NAME">
     <template #svg>
       <!-- <ClientOnly> -->
       <AltLogo v-if="alt" :class="`${CSS_NAME}__image`" />

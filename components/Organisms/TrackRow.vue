@@ -441,7 +441,7 @@ $prefix: 'track-row';
           bottom: 0;
         }
 
-        strong {
+        b, strong {
           font-size: get-var(strong-font-size, $prefix: $prefix-point);
           display: block;
         }

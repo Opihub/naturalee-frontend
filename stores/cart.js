@@ -94,6 +94,45 @@ export const useCartStore = defineStore('cart', () => {
     return cart
   }
 
+  async function save() {
+    if (!isLoggedIn.value) {
+      return true
+    }
+
+    const body = []
+
+    for (const product of cart.value) {
+      body.push({
+        key: product.key,
+        id: product.id,
+        quantity: product.quantity,
+        variationId: product.variationId,
+      })
+    }
+
+    const response = await useApi('shop/cart/update/batch', {
+      method: 'PUT',
+      body
+    }, {
+      cache: false,
+    }).catch((error) => {
+      console.error(
+        'Errore durante il caricamento di "shop/cart/update/batch"',
+        error
+      )
+    })
+
+    if (!response.value.success) {
+      throw new Error(response)
+    }
+
+    for (const product of response.value.data) {
+      updateCartQuantity(product, product.quantity, null)
+    }
+
+    return response
+  }
+
   function clearCart() {
     cart.value = []
 
@@ -119,6 +158,8 @@ export const useCartStore = defineStore('cart', () => {
       costDescription,
       image,
     } = product
+
+    quantity = parseInt(quantity)
 
     const existingProduct = pickProduct(variationId)
 
@@ -172,22 +213,27 @@ export const useCartStore = defineStore('cart', () => {
     const { variationId: id } = product
     const existingProduct = pickProduct(id)
 
+    quantity = parseInt(quantity)
+
     if (existingProduct) {
       const index = cart.value.indexOf(existingProduct)
       const diff = quantity - cart.value[index].quantity
       cart.value[index].quantity = quantity
 
-      notify({
-        message: !server
-          ? t('cart.quantityUpdated')
-          : t('cart.addedToCart', diff, {
-              named: {
-                name: product.title,
-                count: diff,
-              },
-            }),
-        status: 'success',
-      })
+      // TODO: sistemare questo schifo
+      if (server !== null) {
+        notify({
+          message: !server
+            ? t('cart.quantityUpdated')
+            : t('cart.addedToCart', diff, {
+                named: {
+                  name: product.title,
+                  count: diff,
+                },
+              }),
+          status: 'success',
+        })
+      }
 
       return true
     }
@@ -408,6 +454,7 @@ export const useCartStore = defineStore('cart', () => {
     subTotal,
     checkout,
     load,
+    save,
     pickProduct,
     deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,

@@ -12,20 +12,20 @@
 
       <template #default="{ className }">
         <SiteContainer :max-width="912" :class="className">
-          <SearchForm placeholder="Inizia la tua spesa">
+          <SearchForm :placeholder="t('hero.searchPlaceholder')">
             <template #before>
-              <BaseHeading class="u-mb-half" tag="h4"
-                >Esplora una spesa Fresca e Naturalee. Ordina
-                subito!</BaseHeading
-              >
+              <BaseHeading class="u-mb-half" tag="h4" :text="t('hero.title')" />
             </template>
             <template #after>
-              <p class="u-mt-tiny">
-                Non sai da dove iniziare?
-                <BaseLink to="/featured" underline
-                  >Ti consigliamo noi!</BaseLink
-                >
-              </p>
+              <i18n-t keypath="hero.paragraph" tag="p" class="u-mt-tiny">
+                <template #featured>
+                  <BaseLink
+                    :to="{ name: 'featured' }"
+                    underline
+                    :text="t('hero.featured')"
+                  />
+                </template>
+              </i18n-t>
             </template>
           </SearchForm>
         </SiteContainer>
@@ -39,59 +39,71 @@
     >
       <SiteContainer>
         <p class="u-mb-tiny u-mb-none@tablet">
-          Il servizio è attivo su Milano città e hinterland
+          {{ t('deliverySection.title') }}
         </p>
-        <BaseButton color="white" @click="togglePostcodeModal"
-          >Verifica se il tuo indirizzo è coperto dal servizio</BaseButton
-        >
+        <BaseButton color="white" @click="togglePostcodeModal">{{
+          t('deliverySection.cta')
+        }}</BaseButton>
       </SiteContainer>
     </BackgroundHolder>
 
     <ContentRow
       class="c-third-section"
-      :button="{ text: 'Chi siamo', to: 'chi-siamo' }"
+      :button="{ text: t('firstSection.cta'), to: { name: 'company' } }"
       image="/home/chi-siamo.png"
       parallax
     >
-      <template #sup-title>LOREM IPSUM DOLOR SIT</template>
-      <template #title>Amet consectetur adipiscing elit</template>
+      <template #sup-title>{{ t('firstSection.supTitle') }}</template>
+      <template #title>{{ t('firstSection.title') }}</template>
 
-      <template #default>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore.
+      <template #text>
+        {{ t('firstSection.paragraph') }}
       </template>
     </ContentRow>
 
     <BackgroundHolder
+      id="frutta-verdura"
       class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
       tag="section"
     >
-      <ProductCards :products="products.data" title="Frutta e Verdura Fresca" />
+      <ProductCards
+        :products="products.data"
+        :title="$t('products.homepageFeatured')"
+      />
     </BackgroundHolder>
 
     <TrackRow class="c-fifth-section">
-      <template #title>Amet consectetur adipiscing elit</template>
+      <template #title>{{ t('fifthSection.title') }}</template>
 
-      <template #firstPoint><strong>Scegli</strong> i tuoi prodotti</template>
+      <template #firstPoint>
+        <i18n-t keypath="fifthSection.firstPoint.text">
+          <template #top>
+            <b>{{ t('fifthSection.firstPoint.top') }}</b>
+          </template>
+        </i18n-t>
+      </template>
 
-      <template #secondPoint><strong>Conferma</strong> il tuo ordine</template>
+      <template #secondPoint>
+        <i18n-t keypath="fifthSection.secondPoint.text">
+          <template #top>
+            <b>{{ t('fifthSection.secondPoint.top') }}</b>
+          </template>
+        </i18n-t>
+      </template>
 
-      <template #thirdPoint><strong>Ricevi</strong> la tua spesa</template>
+      <template #thirdPoint>
+        <i18n-t keypath="fifthSection.thirdPoint.text">
+          <template #top>
+            <b>{{ t('fifthSection.thirdPoint.top') }}</b>
+          </template>
+        </i18n-t>
+      </template>
 
-      <template #fourthPoint
-        ><strong>Riordina<br />quando vuoi!</strong></template
-      >
+      <template #fourthPoint>
+        <b>{{ t('fifthSection.fourthPoint.top') }}</b>
+        <b>{{ t('fifthSection.fourthPoint.bottom') }}</b>
+      </template>
     </TrackRow>
-
-    <Teleport to="body">
-      <PostcodeModal
-        v-show="isPostcodeModalOpen"
-        @close="togglePostcodeModal(false)"
-      />
-    </Teleport>
   </main>
 </template>
 
@@ -102,26 +114,25 @@ import HomeVideo from 'assets/video/homepage.mp4'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'home',
+})
 
 // Component life-cycle hooks
 
-// Composables
+// Data (Reactive, Composables & Inject)
 await usePage()
-
-// Data
-const isPostcodeModalOpen = ref(false)
-
 const products = await useApi('shop/homepage/products')
+const { togglePostcodeModal } = inject('postcodeModal', () => {})
+const { t } = useI18n({
+  useScope: 'local',
+})
 
 // Watcher
 
 // Computed
 
 // Methods
-const togglePostcodeModal = (status = null) => {
-  isPostcodeModalOpen.value =
-    status !== null ? !!status : !isPostcodeModalOpen.value
-}
 </script>
 
 <style lang="scss" scoped>
@@ -242,3 +253,43 @@ const togglePostcodeModal = (status = null) => {
   }
 }
 </style>
+
+<i18n lang="json" locale="it">
+{
+  "hero": {
+    "title": "Esplora una spesa Fresca e Naturalee. Ordina subito!",
+    "paragraph": "Non sai da dove iniziare? {featured}",
+    "featured": "Ti consigliamo noi!",
+    "searchPlaceholder": "Inizia la tua spesa"
+  },
+  "deliverySection": {
+    "title": "Il servizio è attivo su Milano città e hinterland",
+    "cta": "Verifica se il tuo indirizzo è coperto dal servizio"
+  },
+  "firstSection": {
+    "supTitle": "Freschezza e qualità dalle nostre terre",
+    "title": "Una storia che abbraccia passato e futuro",
+    "paragraph": "Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.",
+    "cta": "Chi siamo"
+  },
+  "fifthSection": {
+    "title": "Dalla terra a casa tua!",
+    "firstPoint": {
+      "top": "Scegli",
+      "text": "{top} i tuoi prodotti"
+    },
+    "secondPoint": {
+      "top": "Conferma",
+      "text": "{top} il tuo ordine"
+    },
+    "thirdPoint": {
+      "top": "Ricevi",
+      "text": "{top} la tua spesa"
+    },
+    "fourthPoint": {
+      "top": "Riordina",
+      "bottom": "quando vuoi!"
+    }
+  }
+}
+</i18n>

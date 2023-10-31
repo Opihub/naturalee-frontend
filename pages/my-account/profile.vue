@@ -1,5 +1,14 @@
 <template>
   <section>
+    <BaseHeading
+      tag="h1"
+      use="h3"
+      class="u-mb-large"
+      color="black"
+    >
+    Modifica il tuo profilo
+    </BaseHeading>
+
     <FormUpdateUserDetails :user-data="account" />
   </section>
 </template>
@@ -11,14 +20,24 @@ import { useAccountStore } from '@/stores/account'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'profile',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/profilo',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 
 // Composables
-const store = useAccountStore()
+const user = useAccountStore()
 
 // Data
-const { account } = storeToRefs(store)
+const account = await user.load()
 // Watcher
 
 // Computed

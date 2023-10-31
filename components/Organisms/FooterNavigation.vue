@@ -2,10 +2,22 @@
   <SiteContainer :class="CSS_NAME">
     <div :class="`${CSS_NAME}__links`">
       <SiteLogo :alt="true" />
-      <InlineMenu v-if="socialsMenu" :menu="socialsMenu" svg-size="24px" gap="mini" />
+
+      <InlineMenu v-if="socialsMenu" :menu="socialsMenu" svg-size="18px" />
     </div>
 
-    <InlineMenu v-if="menu" :menu="menu" :class="`${CSS_NAME}__menu`" />
+    <InlineMenu v-if="menu" :menu="menu" :class="`${CSS_NAME}__menu`">
+      <template #after="{ itemClassName, itemLinkClassName }">
+        <li :class="itemClassName">
+          <InlineButton
+            :class="itemLinkClassName"
+            color="yellow"
+            @click="togglePostcodeModal"
+            >Consegna</InlineButton
+          >
+        </li>
+      </template>
+    </InlineMenu>
 
     <NuxtImg :class="`${CSS_NAME}__payment`" src="/pagamenti-sicuri.png" />
   </SiteContainer>
@@ -35,9 +47,8 @@ defineProps({
 
 // Component life-cycle hooks
 
-// Composables
-
-// Data
+// Data (Reactive, Composables & Inject)
+const { togglePostcodeModal } = inject('postcodeModal', () => {})
 
 // Watcher
 
@@ -89,7 +100,7 @@ $prefix: 'footer-navigation';
     grid-column: 1 / 2;
     display: flex;
     align-items: center;
-    gap: rem(30px);
+    gap: rem(24px);
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
@@ -108,8 +119,7 @@ $prefix: 'footer-navigation';
     }
 
     @include from(desktop) {
-      flex-direction: row;
-      align-items: baseline;
+      align-items: flex-start;
     }
 
     @include between(tablet, desktop) {
@@ -126,6 +136,13 @@ $prefix: 'footer-navigation';
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+
+    @include set-local-vars(
+      $prefix: 'button',
+      $map: (
+        font-weight: get-var(weight-bold),
+      )
+    );
 
     @include set-local-vars(
       $prefix: 'menu-item',

@@ -103,6 +103,15 @@ import { useShippingStore } from '@/stores/shipping'
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'green',
+  name: 'checkout',
+  middleware: 'auth'
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/checkout',
+  },
+  locales: ['it'],
 })
 
 // Component life-cycle hooks

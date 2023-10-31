@@ -9,10 +9,14 @@
 
     <Suspense>
       <ProductsGrid
+      v-if="wishlist.length > 0"
         class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :use="wishlist"
         paginate
       />
+      <SiteContainer v-else class="u-pb-huge u-pt-huge">
+        <BaseMessage>Non hai ancora aggiunto i tuoi prodotti preferiti</BaseMessage>
+      </SiteContainer>
     </Suspense>
   </main>
 </template>
@@ -24,6 +28,16 @@ import { useWishlistStore } from '@/stores/wishlist'
 // Constants
 
 // Define (Props, Emits, Page Meta)
+definePageMeta({
+  name: 'wishlist',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/i-miei-preferiti',
+  },
+  locales: ['it'],
+})
 
 // Component life-cycle hooks
 

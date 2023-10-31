@@ -18,7 +18,14 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'order-products'
+  name: 'order-products',
+})
+
+defineI18nRoute({
+  paths: {
+    it: '/il-mio-account/ordini/[id]/riordina',
+  },
+  locales: ['it'],
 })
 
 // Component life-cycle hooks

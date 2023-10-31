@@ -91,6 +91,10 @@ const providers = useState('videoProviders', () => [])
 const className = computed(() => {
   const className = [CSS_NAME]
 
+  if (!player.value) {
+    className.push('is-loading')
+  }
+
   if (props.aspectRatio) {
     className.push(`${CSS_CUSTOM_RATIO}`)
   }
@@ -113,6 +117,7 @@ const style = computed(() => {
   if (props.aspectRatio) {
     style['--video-ratio'] = formatAspectRatio(props.aspectRatio)
   }
+
   return style
 })
 
@@ -165,28 +170,31 @@ onMounted(() => {
       props.aspectRatio
     )}`
   }
-
-  const bigPlay = player.value.outerContainer.querySelector('.v-bigPlay')
-  if (bigPlay) {
-    const span = document.createElement('span')
-    span.innerText = t('common.video.clickHere')
-
-    bigPlay.appendChild(span)
-  }
 })
 </script>
 
 <style lang="scss">
 @import 'vlitejs/vlite.css';
 
+$video-radius: rem(50px);
+
 $prefix: 'video';
+@include object($prefix) {
+  @include is('loading') {
+    width: 100%;
+    aspect-ratio: get-var(video-ratio, "16 / 9");
+    background-color: get-var(color-black);
+    border-radius: #{$video-radius};
+  }
+}
 
 .v-vlite.v-#{$prefix} {
+  aspect-ratio: get-var(video-ratio);
+
   &.is-iframe {
     width: 100%;
     height: auto;
     position: relative;
-    //aspect-ratio: get-var(video-ratio);
 
     iframe {
       height: 200%;
@@ -200,10 +208,9 @@ $prefix: 'video';
       }
     }
   }
-  aspect-ratio: get-var(video-ratio);
 
   &.v-border-radius {
-    border-radius: 50px;
+    border-radius: #{$video-radius};
   }
 
   .v-bigPlay {
@@ -221,22 +228,6 @@ $prefix: 'video';
       stroke: none;
       background: get-var(color-green);
       border-radius: 100%;
-    }
-
-    span {
-      display: none;
-      color: white;
-      width: rem(430px);
-      @include typography(50px, 60px);
-      font-weight: get-var(weight-extrabold);
-    }
-  }
-
-  &.v-firstStart {
-    .v-bigPlay {
-      span {
-        display: block;
-      }
     }
   }
 }

@@ -32,6 +32,13 @@
       :class="`${CSS_NAME}__categories`"
       :categories="categoriesMenu.data"
     />
+
+    <Teleport to="body">
+      <PostcodeModal
+        v-show="isPostcodeModalOpen"
+        @close="togglePostcodeModal(false)"
+      />
+    </Teleport>
   </LayoutWrapper>
 </template>
 
@@ -112,6 +119,7 @@ const categoriesMenu = await useApi(
 const layoutElement = ref(null)
 const headerElement = ref(null)
 const categoriesMenuElement = ref(null)
+const isPostcodeModalOpen = ref(false)
 
 // Watcher
 
@@ -139,6 +147,17 @@ const setHeaderGap = () => {
     `${headerElement.value.$el.clientHeight}px`
   )
 }
+
+const togglePostcodeModal = (status = null) => {
+  isPostcodeModalOpen.value =
+    status !== null ? !!status : !isPostcodeModalOpen.value
+}
+
+// Provide
+provide('postcodeModal', {
+  isPostcodeModalOpen,
+  togglePostcodeModal,
+})
 </script>
 
 <style lang="scss">

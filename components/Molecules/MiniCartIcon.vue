@@ -1,6 +1,6 @@
 <template>
   <BaseLink
-    to="/cart"
+    :to="{ name: 'cart' }"
     :class="CSS_NAME"
     :text="count"
     :label-class-name="`${CSS_NAME}__label`"

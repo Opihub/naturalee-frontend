@@ -39,7 +39,8 @@ export default defineI18nConfig(() => ({
         stock:
           'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
         related: 'Potrebbero interessarti anche',
-        homepageFeatured: 'Scegli tra la nostra fresca selezione:',
+        categoriesFeatured: 'Scegli tra la nostra fresca selezione:',
+        homepageFeatured: 'Frutta e Verdura Fresca',
       },
       company: {
         pIva: 'PI {piva}',
@@ -65,7 +66,7 @@ export default defineI18nConfig(() => ({
         shippingCost: 'Spese di consegna',
         orderTotal: "Totale dell'ordine",
         fee: 'IVA Inc',
-        proceed: "Procedere con l'ordine",
+        proceed: "Procedi all'ordine",
         goToCart: 'Vai al carrello',
         total: 'Totale carrello',
         shippingTo: 'Spedizione a <b>city</b>',
@@ -149,6 +150,7 @@ export default defineI18nConfig(() => ({
         empty: 'Non hai alcun prodotto nella wishlist',
       },
       common: {
+        logout: 'Logout',
         date: 'Data',
         update: 'Aggiorna',
         actions: 'Azioni',
@@ -158,9 +160,7 @@ export default defineI18nConfig(() => ({
         no: 'No',
         yes: 'Sì',
         vatInclude: 'IVA inclusa',
-        video: {
-          clickHere: 'Clicca qui per visionare il video',
-        },
+        timeSlot: 'Fascia oraria',
       },
       checkout: {
         payment: 'Pagamento',
@@ -187,8 +187,7 @@ export default defineI18nConfig(() => ({
         empty: 'Non hai ancora alcun ordine',
         reorder: 'Riordina',
         details: 'Dettagli ordine',
-        createdAt:
-          "L'ordine {id} è stato creato il {date} ed è attualmente {status}.",
+        createdAt: "L'ordine {id} creato il {date} è attualmente {status}.",
         notes: "Note sull'ordine",
       },
       addresses: {
@@ -210,7 +209,7 @@ export default defineI18nConfig(() => ({
         address: 'Via e Numero',
         address2: 'Appartamento, suite, unità, piano, ecc. (opzionale)',
         addressPlaceholder: 'Via/Piazza e Numero Civico',
-        timeSlot: 'Scegli una fascia oraria per la consegna:',
+        timeSlot: 'Scegli la fascia oraria preferita e il giorno di consegna:',
 
         company: 'Azienda',
         cf: 'CF',
@@ -237,51 +236,11 @@ export default defineI18nConfig(() => ({
           'La sessione è scaduta, si prega di rieffettuare il login',
       },
       pages: {
-        company: {
-          firstSection: {
-            supTitle: 'freschezza e qualità dalle nostre terre',
-            title: 'una storia che abbraccia passato e futuro',
-            paragraph:
-              'Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.',
-          },
-          secondSection: {
-            circularText: 'Lorem ipsum dolor sit amet',
-            title: 'Coltiviamo passione, {highlight} gusto',
-            highlightText: 'Raccogliamo',
-            paragraph:
-              'La nostra missione è un connubio di tradizione e innovazione. Ci impegniamo a consegnare a voi e alla vostra attività la migliore selezione di frutta, verdura, latticini, vini, spezie e molto altro.La freschezza di ieri incontra la comodità di oggi guardando avanti con entusiasmo. Volete frutta e verdura di alta qualità a portata di clic? Saremo il vostro punto di riferimento.',
-          },
-          thirdSection: {
-            title: 'Cuore e Impegno in ogni fase',
-            firstBox: {
-              title: '+20 Ettari',
-              paragraph:
-                'Le fertili terre del Lazio, con il loro ricco patrimonio naturale, sono la fonte della straordinaria qualità dei nostri prodotti. Un terreno ideale per la produzione di Naturalee.',
-            },
-            secondBox: {
-              title: '25 Anni di esperienza',
-              paragraph:
-                'La nostra famiglia porta avanti una tradizione di generazioni nella vendita di frutta e verdura al mercato ortofrutticolo di Milano.',
-            },
-            thirdBox: {
-              title: 'Consegna in 24h',
-              paragraph:
-                "Naturale direttamente a casa vostra. Portiamo la tradizione nel futuro, rendendo più facile che mai l'acquisto online di prodotti di alta qualità.",
-            },
-          },
-          fourthSection: {
-            supTitle: "Naturalee per l'Ho.re.ca.",
-            title: 'una storia che abbraccia passato e futuro',
-            paragraph:
-              'Naturalee garantisce qualità e professionalità per soddisfare ogni cliente. Mense, ristoranti, frutterie, alberghi e professionisti della ristorazione possono contare su un servizio puntuale, flessibile e basato sulla onestà.',
-            paragraph2:
-              "Forniamo all'ingrosso frutta e verdura di origine e qualità certificate, offrendo sempre la migliore frutta al prezzo più conveniente. Per i palati più esigenti, offriamo una vasta gamma di prodotti regionali italiani e stranieri, oltre a prelibatezze esotiche.",
-          },
-        },
         faq: {
           title: 'Le risposte alle domande più frequenti',
-          paragraph: 'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
-        }
+          paragraph:
+            'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
+        },
       },
     },
   },

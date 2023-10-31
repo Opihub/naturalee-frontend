@@ -192,6 +192,22 @@ $prefix: 'select';
 
   @include transition(border-color);
 
+  &[disabled] {
+    cursor: not-allowed;
+  }
+
+  &[disabled],
+  &[readonly] {
+    // opacity: 0.8;
+
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        background-color: get-var(color-light),
+      )
+    );
+  }
+
   &:focus {
     @include set-local-vars(
       $prefix: $prefix,
