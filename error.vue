@@ -45,6 +45,7 @@ onMounted(() => {
 })
 
 // Composables
+const config = useRuntimeConfig()
 const { t } = useI18n()
 
 // Data
@@ -60,8 +61,23 @@ const message = computed(() => {
   return props.error.statusMessage
 })
 
+const seoTitle = computed(() => {
+  let title = message.value
+
+  if (config.public.title) {
+    title += ` ${config.public.seoSeparator || '|'} ${config.public.title}`
+  }
+
+  return title
+})
+
 // Methods
 const handleError = () => clearError({ redirect: '/' })
+
+// Component life-cycle hooks
+usePageSeo({
+  title: seoTitle
+})
 </script>
 
 <style lang="scss">
