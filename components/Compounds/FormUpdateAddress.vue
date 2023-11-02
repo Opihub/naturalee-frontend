@@ -1,0 +1,126 @@
+<template>
+  <FormAddress
+    v-model:address="data.address"
+    method="POST"
+    @submit.prevent="updateAddress"
+  >
+    <template #after="{ columnClassName, columnFullClassName }">
+      <template v-if="isBilling">
+        <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
+          <slot name="billingHeading">
+            <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
+          </slot>
+        </div>
+
+        <FormInvoice v-model:invoice="data.invoice" />
+      </template>
+
+      <div :class="[columnClassName, columnFullClassName]">
+        <BaseButton
+          class="u-mt-half"
+          color="green"
+          type="submit"
+          :disabled="sending"
+          >{{ $t('form.saveChanges') }}</BaseButton
+        >
+      </div>
+
+      <div
+        v-if="showFeedback"
+        :class="[columnClassName, columnFullClassName, 'u-mt-ten']"
+      >
+        <FeedbackMessage :feedback="feedback" />
+      </div>
+    </template>
+  </FormAddress>
+</template>
+
+<script setup>
+// Define (Props, Emits, Page Meta)
+const props = defineProps({
+  isBilling: {
+    type: Boolean,
+    default: false,
+  },
+  address: {
+    type: Object,
+    required: true,
+  },
+  invoice: {
+    type: Object,
+    default: null,
+  },
+})
+const emit = defineEmits(['update:address', 'update:invoice', 'completed'])
+
+// Composables
+const { sending, send } = useSender()
+
+// Data
+const data = ref({
+  address: props.address,
+  invoice: props.invoice,
+})
+
+const {
+  feedback,
+  showFeedback,
+  hasErrors,
+  resetFeedback,
+  setSuccess,
+  validateAddress,
+  validateInvoice,
+} = useFeedback()
+
+// Watcher
+// Methods
+const updateAddress = async () => {
+  if (sending.value) {
+    return
+  }
+
+  resetFeedback()
+
+  const formData = data.value
+
+  if (!validateAddress(formData.address)) {
+    return
+  }
+
+  if (props.isBilling && !validateInvoice(formData.invoice)) {
+    return
+  }
+
+  if (hasErrors.value) {
+    return
+  }
+
+  const response = await send(
+    async () =>
+      await useApi(
+        `/shop/addresses/${props.isBilling ? 'billing' : 'shipping'}/update`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+        {
+          cache: false,
+        }
+      )
+  )
+
+  if (response.value.success) {
+    setSuccess()
+
+    emit('update:address', formData.address)
+
+    if (props.isBilling) {
+      emit('update:invoice', formData.invoice)
+    }
+
+    emit('completed')
+  }
+
+  feedback.message = response.value.message
+}
+</script>
