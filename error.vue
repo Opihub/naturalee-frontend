@@ -61,7 +61,7 @@ const message = computed(() => {
     return t('errors.pageNotFound')
   }
 
-  return props.error.statusMessage
+  return props.error.statusMessage || t('errors.generic')
 })
 
 const seoTitle = computed(() => {
