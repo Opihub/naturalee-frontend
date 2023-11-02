@@ -23,7 +23,7 @@ export function useFeedback() {
     feedback.status = 'success'
   }
 
-  const validateAddress = (address) => {
+  const validateAddress = (address, after = '') => {
     if (
       !address.firstName ||
       !address.lastName ||
@@ -36,31 +36,31 @@ export function useFeedback() {
       feedback.message = 'Compila tutti i campi obbligatori'
 
       if (!address.firstName) {
-        feedback.errors.push('Il nome è un campo obbligatorio')
+        feedback.errors.push(`Il nome è un campo obbligatorio${after}`)
       }
 
       if (!address.lastName) {
-        feedback.errors.push('Il cognome è un campo obbligatorio')
+        feedback.errors.push(`Il cognome è un campo obbligatorio${after}`)
       }
 
       if (!address.country) {
-        feedback.errors.push('La nazione è un campo obbligatorio')
+        feedback.errors.push(`La nazione è un campo obbligatorio${after}`)
       }
 
       if (!address.address) {
-        feedback.errors.push("L'indirizzo è un campo obbligatorio")
+        feedback.errors.push(`L'indirizzo è un campo obbligatorio${after}`)
       }
 
       if (!address.province) {
-        feedback.errors.push('La provincia è un campo obbligatorio')
+        feedback.errors.push(`La provincia è un campo obbligatorio${after}`)
       }
 
       if (!address.city) {
-        feedback.errors.push('La città è un campo obbligatorio')
+        feedback.errors.push(`La città è un campo obbligatorio${after}`)
       }
 
       if (!address.postcode) {
-        feedback.errors.push('Il CAP è un campo obbligatorio')
+        feedback.errors.push(`Il CAP è un campo obbligatorio${after}`)
       }
 
       return false
@@ -85,15 +85,17 @@ export function useFeedback() {
         }
 
         if (!invoice.company) {
-          errors.push("L'azienda è un campo obbligatorio")
+          errors.push('La ragione sociale è un campo obbligatorio')
         }
 
         if (!invoice.vat) {
           errors.push('La partita IVA è obbligatoria')
         }
 
-        if (!invoice.sdi && invoice.pec) {
-          errors.push('Codice univoco o PEC obbligatoria')
+        if (!invoice.sdi && !invoice.pec) {
+          errors.push(
+            'È necessario specificare almeno un campo tra la PEC ed il Codice univoco'
+          )
         }
         break
 
