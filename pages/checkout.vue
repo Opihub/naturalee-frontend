@@ -5,90 +5,251 @@
     </Transition>
 
     <SiteContainer>
-      <BaseMessage v-if="errors.length > 0" status="danger" class="u-mb-medium">
-        <ul>
-          <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
-        </ul>
-      </BaseMessage>
+      <BaseMessage v-if="isEmpty" :message="$t('cart.empty')" />
 
-      <form method="POST" class="o-row" @submit.prevent="submitOrder">
-        <!-- <template v-if="!isEmpty"> -->
-        <SiteContainer :max-width="1060" padless>
-          <BaseBox class="u-mb-large">
-            <template #head>
-              <BaseHeading tag="span" use="custom">{{
-                $t('orders.shipping')
-              }}</BaseHeading>
-            </template>
+      <template v-else>
+        <BaseMessage
+          v-if="errors.length > 0"
+          status="danger"
+          class="u-mb-medium"
+        >
+          <ul>
+            <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+          </ul>
+        </BaseMessage>
 
-            <FormCheckoutShipping
-              v-model:address="shippingAddress"
-              v-model:shipping="shippingData"
-              tag="div"
-              :time-slots="timeSlots"
-            />
-          </BaseBox>
-
-          <BaseBox>
-            <template #head>
-              <BaseHeading tag="span" use="custom">{{
-                $t('orders.billing')
-              }}</BaseHeading>
-            </template>
-
-            <BaseParagraph class="u-mb-tiny">{{
-              $t('invoice.requestInvoice')
-            }}</BaseParagraph>
-
-            <FormInvoice
-              v-model:invoice="billingData"
-              class="u-mb-half"
-              tag="div"
-            />
-
-            <ToggleField
-              v-model="useDifferentAddress"
-              class="s-different-billing"
-              ><BaseHeading tag="h5">{{
-                $t('addresses.differentBilling')
-              }}</BaseHeading></ToggleField
-            >
-
-            <FormAddress
-              v-if="useDifferentAddress"
-              v-model:address="billingAddress"
-              class="u-mt-half"
-              tag="div"
-            />
-          </BaseBox>
-        </SiteContainer>
-
-        <SiteContainer :max-width="520" padless>
-          <CheckoutCart :products="basket || []" :sub-total="subTotal" />
-
-          <OrderResume
-            v-model:address="shippingAddress"
-            container-class="u-mt-huge"
-            :sub-total="total"
-            :heading="$t('checkout.payment')"
-            without-sub-total
+        <BaseMessage
+          v-if="!hasFreeShipping"
+          status="warning"
+          class="u-mb-medium"
+          >Ti mancano <PriceHolder :price="50 - subTotal" /> per avere la
+          spedizione gratuita!
+          <BaseLink :to="{ name: 'cart' }" underline color="dark"
+            >Vuoi aggiungere altri prodotti al carrello?</BaseLink
           >
-            <template #after="{ footerClassName }">
-              <div :class="footerClassName">
-                <PaymentMethods v-model="paymentMethod">
-                  <BaseButton type="submit" color="yellow" :disabled="sending"
-                    >Paga ora</BaseButton
-                  >
-                </PaymentMethods>
-              </div>
-            </template>
-          </OrderResume>
-        </SiteContainer>
-        <!-- </template> -->
+        </BaseMessage>
 
-        <!-- <BaseMessage v-else :message="$t('cart.empty')" /> -->
-      </form>
+        <FormWrapper
+          method="POST"
+          class="o-form--checkout"
+          @submit.prevent="submitOrder"
+        >
+          <template
+            #default="{
+              columnClassName,
+              columnHalfClassName,
+              columnFullClassName,
+              rowClassName: fieldSetClassName,
+            }"
+          >
+            <div :class="[fieldSetClassName, 'o-form__resume']">
+              <div :class="fieldSetClassName">
+                <div :class="[columnClassName, columnHalfClassName]">
+                  <BaseBox class="u-mb-large">
+                    <template #head>
+                      <BaseHeading tag="span" use="custom">{{
+                        $t('orders.shipping')
+                      }}</BaseHeading>
+
+                      <InlineButton
+                        color="green"
+                        underline
+                        :text="$t('edit')"
+                        @click="toggleShippingModal(true)"
+                      />
+                    </template>
+
+                    <ShopAddress :address="shippingAddress">
+                      <template #default="{ className }">
+                        <template v-if="shippingData.timeSlot">
+                          <b :class="[className, 'u-mt-tiny']">Consegna:</b>
+                          <span :class="className">
+                            <b class="u-mr-micro">{{
+                              shippingData.timeSlot.title
+                            }}</b>
+                            <span>
+                              <time>{{ shippingData.timeSlot.from }}</time> -
+                              <time>{{ shippingData.timeSlot.to }}</time>
+                            </span>
+                          </span>
+                        </template>
+                      </template>
+                    </ShopAddress>
+                  </BaseBox>
+                </div>
+
+                <div :class="[columnClassName, columnHalfClassName]">
+                  <BaseBox>
+                    <template #head>
+                      <BaseHeading tag="span" use="custom">{{
+                        $t('orders.billing')
+                      }}</BaseHeading>
+
+                      <InlineButton
+                        color="green"
+                        underline
+                        :text="$t('edit')"
+                        @click="toggleBillingModal(true)"
+                      />
+                    </template>
+
+                    <ShopAddress :address="billingAddress" />
+                  </BaseBox>
+                </div>
+              </div>
+
+              <CartTable
+                readonly
+                :products="basket"
+                :class="[columnClassName, columnFullClassName]"
+              />
+            </div>
+
+            <div :class="[fieldSetClassName, 'o-form__action']">
+              <div :class="[columnClassName, columnFullClassName]">
+                <OrderResume
+                  v-model:address="shippingAddress"
+                  :heading="$t('checkout.payment')"
+                >
+                  <template
+                    #default="{
+                      className,
+                      rowClassName,
+                      totalClassName,
+                      gridClassName,
+                      gridCellLeftClassName,
+                      gridCellRightClassName,
+                      gridCellFullClassName,
+                    }"
+                  >
+                    <div
+                      class="u-pt-half u-pb-half"
+                      :class="[gridClassName, rowClassName]"
+                    >
+                      <span :class="gridCellLeftClassName">{{
+                        $t('orders.subTotal')
+                      }}</span>
+                      <PriceHolder
+                        :class="gridCellRightClassName"
+                        :price="subTotal"
+                      />
+
+                      <span :class="gridCellLeftClassName">
+                        {{ $t('orders.delivery') }}<br />
+                        <b class="u-mr-micro">{{
+                          shippingData.timeSlot.title
+                        }}</b>
+                        <span>
+                          <time>{{ shippingData.timeSlot.from }}</time> -
+                          <time>{{ shippingData.timeSlot.to }}</time>
+                        </span></span
+                      >
+                      <!-- <ShippingMethods :class="gridCellRightClassName" /> -->
+
+                      <strong
+                        v-if="hasFreeShipping"
+                        :class="gridCellRightClassName"
+                        >{{ $t('common.free') }}</strong
+                      >
+                      <PriceHolder
+                        v-else
+                        :class="gridCellRightClassName"
+                        :price="3"
+                      />
+                    </div>
+
+                    <div
+                      class="u-pt-half u-pb-half"
+                      :class="[gridClassName, rowClassName]"
+                    >
+                      <b :class="[gridCellLeftClassName, totalClassName]">{{
+                        $t('common.total')
+                      }}</b>
+                      <PriceHolder
+                        :class="[gridCellRightClassName, totalClassName]"
+                        :price="total || subTotal"
+                      />
+                    </div>
+
+                    <div :class="[className, rowClassName]">
+                      <span>{{ $t('coupon.formTitle') }}</span>
+
+                      <FormCoupon
+                        tag="div"
+                        class="u-mt-mini"
+                        :placeholder="$t('coupon.formPlaceholder')"
+                      />
+                    </div>
+                  </template>
+
+                  <template #after="{ footerClassName }">
+                    <div :class="footerClassName">
+                      <PaymentMethods v-model="paymentMethod">
+                        <BaseButton
+                          type="submit"
+                          color="yellow"
+                          :disabled="sending"
+                          >Paga ora</BaseButton
+                        >
+                      </PaymentMethods>
+                    </div>
+                  </template>
+                </OrderResume>
+              </div>
+            </div>
+          </template>
+        </FormWrapper>
+      </template>
     </SiteContainer>
+
+    <Teleport to="body">
+      <ModalContainer
+        v-show="isShippingModalOpen"
+        :max-width="1088"
+        @close="toggleShippingModal(false)"
+      >
+        <template #header>
+          <BaseHeading tag="h5">{{ $t('orders.shipping') }}</BaseHeading>
+        </template>
+
+        <FormCheckoutShipping
+          v-model:address="shippingAddress"
+          v-model:shipping="shippingData"
+          :time-slots="timeSlots"
+        />
+      </ModalContainer>
+
+      <ModalContainer
+        v-show="isBillingModalOpen"
+        :max-width="1088"
+        @close="toggleBillingModal(false)"
+      >
+        <template #header>
+          <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
+        </template>
+
+        <FormAddress v-model:address="billingAddress" class="u-mb-half">
+          <template #after="{ columnClassName, columnFullClassName }">
+            <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
+              <BaseParagraph>{{
+                $t('invoice.requestInvoice')
+              }}</BaseParagraph>
+            </div>
+
+            <FormInvoice v-model:invoice="billingData" />
+
+            <div :class="[columnClassName, columnFullClassName]">
+              <BaseButton
+                class="u-mt-half"
+                color="green"
+                type="submit"
+                >{{ $t('form.saveChanges') }}</BaseButton
+              >
+            </div>
+          </template>
+        </FormAddress>
+      </ModalContainer>
+    </Teleport>
   </main>
 </template>
 
@@ -96,7 +257,6 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 
@@ -132,13 +292,25 @@ onMounted(async () => {
   )
 
   billingAddress.value = { ...userBillingAddress.value }
+
+  const userShippingAddress = await useApi(
+    'shop/addresses/shipping',
+    {
+      method: 'GET',
+    },
+    {
+      cache: false,
+      dataOnly: true,
+    }
+  )
+
+  shippingAddress.value = { ...userShippingAddress.value }
 })
 
 // Composables
 const { sending, send } = useSender()
 const cart = useCartStore()
 const user = useAccountStore()
-const shippingStore = useShippingStore()
 const timeSlots = await useApi(
   'time-slots',
   {},
@@ -148,15 +320,34 @@ const timeSlots = await useApi(
 )
 
 // Data
-const { isEmpty, subTotal, total, paymentMethod, shippingMethod } =
-  storeToRefs(cart)
+const {
+  isEmpty,
+  subTotal,
+  total,
+  paymentMethod,
+  shippingMethod,
+  hasFreeShipping,
+} = storeToRefs(cart)
 const { isLoggedIn } = storeToRefs(user)
 
+const isShippingModalOpen = ref(false)
+const isBillingModalOpen = ref(false)
+
 const basket = await cart.load()
-const shippingAddress = await shippingStore.load()
 
 const useDifferentAddress = ref(false)
 const errors = ref([])
+
+const shippingAddress = ref({
+  firstName: null,
+  lastName: null,
+  country: null,
+  address: null,
+  address2: null,
+  province: null,
+  city: null,
+  postcode: null,
+})
 
 const billingAddress = ref({
   firstName: null,
@@ -193,6 +384,16 @@ const order = useState('order', () => {})
 // Computed
 
 // Methods
+const toggleShippingModal = (status = null) => {
+  isShippingModalOpen.value =
+    status !== null ? !!status : !isShippingModalOpen.value
+}
+
+const toggleBillingModal = (status = null) => {
+  isBillingModalOpen.value =
+    status !== null ? !!status : !isBillingModalOpen.value
+}
+
 const updateAddress = (address) => {
   shippingAddress.value = address
 }
@@ -376,13 +577,37 @@ provide('shipping', {
 </script>
 
 <style lang="scss" scoped>
+@include object('form') {
+  @include set-local-vars(
+    $prefix: 'form',
+    $map: (
+      row-gap: rem(20px),
+    )
+  );
+
+  @include modifier('checkout') {
+    @include element('resume') {
+      width: 100%;
+      max-width: rem(1060px);
+    }
+
+    @include element('action') {
+      width: 100%;
+      max-width: rem(520px);
+    }
+  }
+}
+
 @include scope('checkout') {
   font-family: get-var(family-text);
 
   @include set-local-vars(
     $prefix: 'box',
     $map: (
-      body-background: get-var(color-light),
+      background-color: get-var(color-light),
+      head-display: flex,
+      head-justify: space-between,
+      head-align: center,
     )
   );
 
@@ -394,6 +619,10 @@ provide('shipping', {
   );
 
   @include typography(18px, 22px);
+
+  @include component('box') {
+    height: 100%;
+  }
 
   @include scope('different-billing') {
     @include set-local-vars(
