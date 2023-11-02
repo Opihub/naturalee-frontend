@@ -66,6 +66,10 @@ export const useCartStore = defineStore('cart', () => {
     payment: paymentMethod,
   })
 
+  const hasFreeShipping = computed(() => {
+    return 50 - subTotal.value <= 0
+  })
+
   // Actions
   function pickProduct(id) {
     return cart.value.find((product) => product.variationId === id)
@@ -453,6 +457,7 @@ export const useCartStore = defineStore('cart', () => {
     total,
     subTotal,
     checkout,
+    hasFreeShipping,
     load,
     save,
     pickProduct,

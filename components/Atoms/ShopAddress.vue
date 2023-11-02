@@ -73,6 +73,8 @@
         >
       </span>
     </template>
+
+    <slot :class-name="`${CSS_NAME}__row`" />
   </address>
 </template>
 

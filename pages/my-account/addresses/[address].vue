@@ -19,7 +19,7 @@
             <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
           </div>
 
-          <FormInvoice v-model:invoice="data.invoice" class="s-invoice" />
+          <FormInvoice v-model:invoice="data.invoice" />
         </template>
 
         <div :class="[columnClassName, columnFullClassName]">
@@ -196,9 +196,3 @@ const updateAddress = async () => {
   feedback.message = response.value.message
 }
 </script>
-
-<style lang="scss" scoped>
-@include scope('invoice') {
-  width: 100%;
-}
-</style>

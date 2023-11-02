@@ -154,19 +154,22 @@ export default defineI18nConfig(() => ({
         total: 'Totale',
         subTotal: 'Subtotale',
         loading: 'Caricamento',
+        free: 'Gratuita',
         no: 'No',
         yes: 'Sì',
         vatInclude: 'IVA inclusa',
         timeSlot: 'Fascia oraria',
       },
       checkout: {
-        payment: 'Pagamento',
+        payment: 'Il tuo scontrino',
         notesPlaceholder:
           "Note sull'ordine, ad esempio richieste particolare per la consegna...",
       },
       orders: {
         your: 'Il tuo ordine',
+        subTotal: 'Prodotti',
         shipping: 'Spedizione',
+        delivery: 'Consegna',
         billing: 'Fatturazione',
         payment: 'Metodo di pagamento',
         name: 'Ordine | Ordini',

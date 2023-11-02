@@ -8,24 +8,6 @@
         columnThirdClassName,
       }"
     >
-      <fieldset :class="rowClassName">
-        <div :class="[columnClassName, columnFullClassName]">
-          {{ $t('coupon.asking') }}
-          <InlineButton
-            underline
-            @click="isCouponFormOpen = !isCouponFormOpen"
-            >{{ $t('coupon.insertHere') }}</InlineButton
-          >
-
-          <FormCoupon
-            v-show="isCouponFormOpen"
-            tag="div"
-            class="u-mt-mini"
-            :placeholder="$t('coupon.formPlaceholder')"
-          />
-        </div>
-      </fieldset>
-
       <div :class="[columnClassName, columnFullClassName]">
         {{ $t('addresses.timeSlot') }}
       </div>
@@ -125,7 +107,6 @@ const emit = defineEmits(['update:shipping'])
 // Composables
 
 // Data
-const isCouponFormOpen = ref(false)
 let datePicked = ref(null)
 
 // Watcher
