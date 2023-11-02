@@ -12,6 +12,9 @@
         <BaseHeading tag="h2" use="h3" class="u-mb-huge">{{
           $t('errors.generic')
         }}</BaseHeading>
+
+        <BaseHeading tag="h4">{{ error.message }}</BaseHeading>
+        <div class="u-mt-large u-mb-large" v-html="error.stack"></div>
       </template>
 
       <BaseButton @click="handleError">{{
@@ -40,7 +43,7 @@ const props = defineProps({
 // Component life-cycle hooks
 onMounted(() => {
   if (props.error.statusCode !== 404) {
-    console.warn({ ...props.error })
+    console.error({ ...props.error })
   }
 })
 
