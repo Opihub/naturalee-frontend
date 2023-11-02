@@ -114,6 +114,27 @@ defineI18nRoute({
   locales: ['it'],
 })
 
+provide('holiday', [
+  new Date(`${new Date().getFullYear()}-1-1`),
+  new Date(`${new Date().getFullYear()}-1-6`),
+  new Date(`${new Date().getFullYear()}-4-25`),
+  new Date(`${new Date().getFullYear()}-5-1`),
+  new Date(`${new Date().getFullYear()}-6-2`),
+  new Date(`${new Date().getFullYear()}-8-15`),
+  new Date(`${new Date().getFullYear()}-11-1`),
+  new Date(`${new Date().getFullYear()}-12-25`),
+  new Date(`${new Date().getFullYear()}-12-26`),
+  new Date(`${new Date().getFullYear() + 1}-1-1`),
+  new Date(`${new Date().getFullYear() + 1}-1-6`),
+  new Date(`${new Date().getFullYear() + 1}-4-25`),
+  new Date(`${new Date().getFullYear() + 1}-5-1`),
+  new Date(`${new Date().getFullYear() + 1}-6-2`),
+  new Date(`${new Date().getFullYear() + 1}-8-15`),
+  new Date(`${new Date().getFullYear() + 1}-11-1`),
+  new Date(`${new Date().getFullYear() + 1}-12-25`),
+  new Date(`${new Date().getFullYear() + 1}-12-26`),
+])
+
 // Component life-cycle hooks
 onMounted(async () => {
   if (!isLoggedIn.value) {
@@ -174,6 +195,7 @@ const shippingData = ref({
   email: null,
   phone: null,
   timeSlot: timeSlots.value.find(() => true),
+  date: null,
 })
 
 const billingData = ref({
@@ -207,7 +229,7 @@ const submitOrder = async () => {
   }
 
   errors.value = []
-  const { timeSlot, note, email, phone } = shippingData.value
+  const { timeSlot, note, email, phone, date } = shippingData.value
   const { invoice } = billingData.value
 
   if (!timeSlot) {
@@ -222,6 +244,10 @@ const submitOrder = async () => {
 
   if (!phone) {
     errors.value.push('È obbligatorio indicare un numero di telefono valido')
+  }
+
+  if (!date) {
+    errors.value.push('È obbligatorio indicare una data di spedizione')
   }
 
   if (!shippingMethod.value) {
@@ -241,6 +267,7 @@ const submitOrder = async () => {
     shipping: shippingAddress.value,
     timeSlot,
     note,
+    date,
     email,
     phone,
     invoice,

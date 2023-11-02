@@ -53,7 +53,10 @@
             </span>
           </ToggleField>
         </div>
-        <BaseDatePicker />
+        <BaseDatePicker
+          @update:picke-date="updateDatePicked"
+          @update:model-value="updateShippingData(datePicked, 'date')"
+        />
       </fieldset>
     </template>
 
@@ -123,12 +126,17 @@ const emit = defineEmits(['update:shipping'])
 
 // Data
 const isCouponFormOpen = ref(false)
+let datePicked = ref(null)
 
 // Watcher
 
 // Computed
 
 // Methods
+const updateDatePicked = (date) => {
+  datePicked = date
+}
+
 const updateShippingData = (value, field) => {
   const newAddress = { ...props.shipping }
 
