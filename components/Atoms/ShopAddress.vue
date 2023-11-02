@@ -27,7 +27,10 @@
           invoice.company
         }}</span>
 
-        <span v-if="invoice.cfCompany || invoice.cf" :class="`${CSS_NAME}__row`">
+        <span
+          v-if="invoice.cfCompany || invoice.cf"
+          :class="`${CSS_NAME}__row`"
+        >
           <b>{{ $t('addresses.cf') }}:</b> {{ invoice.cfCompany || invoice.cf }}
         </span>
         <span v-if="invoice.vat" :class="`${CSS_NAME}__row`">
@@ -37,10 +40,9 @@
           <b>{{ $t('addresses.sdi') }}:</b> {{ invoice.sdi }}
         </span>
 
-        <span :class="`${CSS_NAME}__row`">
+        <span v-if="invoice.pec" :class="`${CSS_NAME}__row`">
           <b>{{ $t('addresses.pec') }}:</b>&nbsp;
           <BaseLink
-            v-if="invoice.pec"
             :to="`mailto:${invoice.pec}`"
             color="green"
             :text="invoice.pec"
@@ -48,7 +50,10 @@
         </span>
       </template>
       <template v-else-if="invoice.invoice === 'private'">
-        <span v-if="invoice.cfPrivate || invoice.cf" :class="`${CSS_NAME}__row`">
+        <span
+          v-if="invoice.cfPrivate || invoice.cf"
+          :class="`${CSS_NAME}__row`"
+        >
           <b>{{ $t('addresses.cf') }}:</b> {{ invoice.cfPrivate || invoice.cf }}
         </span>
       </template>
