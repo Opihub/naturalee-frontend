@@ -40,7 +40,11 @@
           :quantity="quantity"
           :disabled="isDisabled"
         >
-          <span>{{ $t('cart.addTo') }}</span>
+          <span>{{
+            product.stockStatus === 'instock'
+              ? $t('cart.addTo')
+              : $t('cart.notAvailable')
+          }}</span>
         </AddToCartButton>
       </div>
 
@@ -88,7 +92,8 @@ const stockClassName = computed(() => {
 const isDisabled = computed(() => {
   return (
     props.product.price <= 0 ||
-    ('status' in props.product && props.product.status === 'disabled')
+    ('status' in props.product && props.product.status === 'disabled') ||
+    props.product.stockStatus === 'outofstock'
   )
 })
 
