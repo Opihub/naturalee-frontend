@@ -24,7 +24,9 @@
           $t('common.vatInclude')
         }}</span>
 
-        <strong :class="stockClassName">{{ $t('products.stock', 2) }}</strong>
+        <strong :class="stockClassName">{{
+          $t('products.stock', stock)
+        }}</strong>
       </div>
 
       <div :class="[className, `${CSS_NAME}__row`]">
@@ -95,6 +97,19 @@ const isDisabled = computed(() => {
     ('status' in props.product && props.product.status === 'disabled') ||
     props.product.stockStatus === 'outofstock'
   )
+})
+
+const stock = computed(() => {
+  switch (props.product.stockStatus) {
+    case 'outofstock':
+      return 0
+
+    case 'instock':
+      return 2
+
+    default:
+      return 1
+  }
 })
 
 // Methods
