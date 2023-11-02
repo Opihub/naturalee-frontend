@@ -26,7 +26,7 @@ const emit = defineEmits(['update:pickeDate'])
 // Component life-cycle hooks
 
 // Data
-const date = ref(new Date())
+const date = ref(new Date(new Date().setDate(new Date().getDate() + 1)))
 const disabledDays = inject('holiday', () => {})
 // Watcher
 

@@ -231,20 +231,15 @@
         <FormAddress v-model:address="billingAddress" class="u-mb-half">
           <template #after="{ columnClassName, columnFullClassName }">
             <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
-              <BaseParagraph>{{
-                $t('invoice.requestInvoice')
-              }}</BaseParagraph>
+              <BaseParagraph>{{ $t('invoice.requestInvoice') }}</BaseParagraph>
             </div>
 
             <FormInvoice v-model:invoice="billingData" />
 
             <div :class="[columnClassName, columnFullClassName]">
-              <BaseButton
-                class="u-mt-half"
-                color="green"
-                type="submit"
-                >{{ $t('form.saveChanges') }}</BaseButton
-              >
+              <BaseButton class="u-mt-half" color="green" type="submit">{{
+                $t('form.saveChanges')
+              }}</BaseButton>
             </div>
           </template>
         </FormAddress>
