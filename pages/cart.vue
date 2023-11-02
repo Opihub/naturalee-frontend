@@ -55,7 +55,10 @@
                   />
                 </div>
 
-                <div class="u-pt-half u-pb-half" :class="[gridClassName, rowClassName]">
+                <div
+                  class="u-pt-half u-pb-half"
+                  :class="[gridClassName, rowClassName]"
+                >
                   <span :class="gridCellLeftClassName">{{
                     $t('common.subTotal')
                   }}</span>
@@ -82,18 +85,11 @@
                 </div>
 
                 <div class="u-pt-half u-pb-half" :class="gridClassName">
-                  <b
-                    :class="[
-                      gridCellLeftClassName,
-                      totalClassName,
-                    ]"
-                    >{{ $t('common.total') }}</b
-                  >
+                  <b :class="[gridCellLeftClassName, totalClassName]">{{
+                    $t('common.total')
+                  }}</b>
                   <PriceHolder
-                    :class="[
-                      gridCellRightClassName,
-                      totalClassName,
-                    ]"
+                    :class="[gridCellRightClassName, totalClassName]"
                     :price="total || subTotal"
                   />
                 </div>
@@ -145,7 +141,7 @@ const cart = useCartStore()
 const { sending, send } = useSender()
 
 // Data
-const { isEmpty, } = storeToRefs(cart)
+const { isEmpty } = storeToRefs(cart)
 const remoteBasket = await cart.load()
 const basket = ref(remoteBasket.value)
 
