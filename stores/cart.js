@@ -94,14 +94,14 @@ export const useCartStore = defineStore('cart', () => {
     return cart
   }
 
-  async function save() {
+  async function save(basket = []) {
     if (!isLoggedIn.value) {
       return true
     }
 
     const body = []
 
-    for (const product of cart.value) {
+    for (const product of basket.value) {
       body.push({
         key: product.key,
         id: product.id,

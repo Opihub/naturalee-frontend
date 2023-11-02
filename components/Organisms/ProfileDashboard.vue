@@ -12,7 +12,7 @@
           <li :class="[itemClassName, `${CSS_NAME}__menu__item`]">
             <InlineButton
               :class="itemLinkClassName"
-              color="dark"
+              color="black"
               align="left"
               @click.prevent="logout"
               >{{ $t('form.logout') }}</InlineButton

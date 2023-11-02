@@ -33,19 +33,68 @@
           </div>
 
           <div :class="[columnClassName, 'o-form__resume']">
-            <OrderResume
-              :sub-total="subTotal"
-              :total="total"
-              :heading="$t('cart.total')"
-            >
-              <template #before="{ className }">
-                <div :class="className">
+            <OrderResume :heading="$t('cart.total')">
+              <template
+                #default="{
+                  className,
+                  rowClassName,
+                  totalClassName,
+                  gridClassName,
+                  gridCellLeftClassName,
+                  gridCellRightClassName,
+                  gridCellFullClassName,
+                }"
+              >
+                <div :class="[className, rowClassName]">
                   <span>{{ $t('coupon.formTitle') }}</span>
 
                   <FormCoupon
                     tag="div"
                     class="u-mt-mini"
                     :placeholder="$t('coupon.formPlaceholder')"
+                  />
+                </div>
+
+                <div class="u-pt-half u-pb-half" :class="[gridClassName, rowClassName]">
+                  <span :class="gridCellLeftClassName">{{
+                    $t('common.subTotal')
+                  }}</span>
+                  <PriceHolder
+                    :class="gridCellRightClassName"
+                    :price="subTotal"
+                  />
+
+                  <span :class="gridCellLeftClassName">{{
+                    $t('orders.shipping')
+                  }}</span>
+                  <!-- <ShippingMethods :class="gridCellRightClassName" /> -->
+
+                  <strong v-if="hasFreeShipping" :class="gridCellRightClassName"
+                    >Gratuita</strong
+                  >
+                  <template v-else>
+                    <PriceHolder :class="gridCellRightClassName" :price="3" />
+                    <span :class="gridCellFullClassName"
+                      >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere
+                      la spedizione gratuita</span
+                    >
+                  </template>
+                </div>
+
+                <div class="u-pt-half u-pb-half" :class="gridClassName">
+                  <b
+                    :class="[
+                      gridCellLeftClassName,
+                      totalClassName,
+                    ]"
+                    >{{ $t('common.total') }}</b
+                  >
+                  <PriceHolder
+                    :class="[
+                      gridCellRightClassName,
+                      totalClassName,
+                    ]"
+                    :price="total || subTotal"
                   />
                 </div>
               </template>
@@ -77,6 +126,7 @@ import { useCartStore } from '@/stores/cart'
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'cart',
+  layout: 'standard',
 })
 
 defineI18nRoute({
@@ -95,12 +145,22 @@ const cart = useCartStore()
 const { sending, send } = useSender()
 
 // Data
-const { isEmpty, subTotal, total } = storeToRefs(cart)
-const basket = await cart.load()
-
-// Watcher
+const { isEmpty, } = storeToRefs(cart)
+const remoteBasket = await cart.load()
+const basket = ref(remoteBasket.value)
 
 // Computed
+const hasFreeShipping = computed(() => {
+  return 50 - subTotal.value <= 0
+})
+const shippingMethod = computed(() => {
+  return hasFreeShipping.value ? 0 : 3
+})
+const { subTotal, granTotal: total } = useTotal(basket, {
+  shipping: shippingMethod,
+})
+
+// Watcher
 
 // Methods
 const { deleteFromCart, clearCart } = cart
@@ -109,20 +169,20 @@ const saveCart = async () => {
     return
   }
 
-  const response = await send(async () => await cart.save())
+  const response = await send(async () => await cart.save(basket))
 
   console.debug(response.value)
   if (!response.value.success) {
     notify({
       status: 'danger',
-      message: response.value.data
+      message: response.value.data,
     })
 
     return
   }
 
   await navigateTo({
-    name: 'checkout'
+    name: 'checkout',
   })
 }
 </script>
@@ -138,6 +198,7 @@ const saveCart = async () => {
         )
       );
     }
+
     @include element('resume') {
       @include set-local-vars(
         $prefix: 'field',

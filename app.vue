@@ -1,13 +1,4 @@
 <template>
-  <Head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,700&family=Mulish:wght@400;700;800&display=swap"
-      rel="stylesheet"
-    />
-  </Head>
-
   <SVGDefinitions v-once />
 
   <NuxtLoadingIndicator />
@@ -110,20 +101,13 @@ accountStore.$onAction(({ name }) => {
 <style lang="scss">
 #notifications {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: get-var(z-notification);
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @include from(desktop) {
-    left: auto;
-    right: 0;
-    transform: none;
-    align-items: flex-end;
-  }
 
   @include set-local-vars(
     $prefix: 'notification',

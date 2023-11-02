@@ -3,7 +3,7 @@
     <HeaderBottomBar v-if="breadcrumbs" :breadcrumb="breadcrumbs" />
 
     <ProfileDashboard>
-      <NuxtPage />
+      <NuxtPage :page-key="pageKey" />
     </ProfileDashboard>
   </main>
 </template>
@@ -17,13 +17,6 @@
 definePageMeta({
   layout: 'standard',
   name: 'my-account',
-  key: (route) => {
-    if (route.name === 'my-account') {
-      return 'dashboard'
-    }
-
-    return route.name
-  },
   middleware: 'auth',
 })
 
@@ -102,4 +95,13 @@ watch(
 // Computed
 
 // Methods
+const pageKey = (route) => {
+  console.debug(route.name)
+
+  if (route.name === 'my-account') {
+    return 'dashboard'
+  }
+
+  return route.name
+}
 </script>

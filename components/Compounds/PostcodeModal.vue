@@ -88,7 +88,7 @@
             :error="$t('form.validEmail')"
             rounded
             required
-            >{{ $t('form.toMailAddress') }}</InputField
+            >{{ $t('form.mailField') }}</InputField
           >
 
           <BaseButton
@@ -162,7 +162,8 @@ const checkPostcode = async () => {
 
   feedback.value = response.value.data
 
-  matchedPostcode.value = response.value.success
+  matchedPostcode.value =
+    response.value.success && response.value.code !== 'cap_not_available'
   sending.value = false
 }
 
@@ -176,7 +177,7 @@ const registerEmail = async () => {
   sending.value = true
 
   const response = await useApi(
-    `postcodes/validate/${feedback.value}`,
+    `postcodes/update/${feedback.value}`,
     {
       method: 'POST',
       body: formData,
