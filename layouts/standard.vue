@@ -10,6 +10,13 @@
       ref="headerElement"
       :categories="categoriesMenu.data"
       :profile-menu="profileMenu.data"
+      @menu-mobile:toggle="updateMobileMenuStatus"
+    />
+
+    <HeaderMainMobile
+      v-show="isMobileMenuOpen"
+      :categories="categoriesMenu.data"
+      :primary-menu="primaryMenu.data"
     />
 
     <slot />
@@ -120,6 +127,7 @@ const layoutElement = ref(null)
 const headerElement = ref(null)
 const categoriesMenuElement = ref(null)
 const isPostcodeModalOpen = ref(false)
+const isMobileMenuOpen = ref(false)
 
 // Watcher
 
@@ -151,6 +159,10 @@ const setHeaderGap = () => {
 const togglePostcodeModal = (status = null) => {
   isPostcodeModalOpen.value =
     status !== null ? !!status : !isPostcodeModalOpen.value
+}
+
+const updateMobileMenuStatus = (status) => {
+  isMobileMenuOpen.value = status
 }
 
 // Provide
