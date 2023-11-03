@@ -27,8 +27,8 @@
           <div :class="[columnClassName, 'o-form__basket']">
             <CartTable
               :products="basket"
-              :on-delete="deleteFromCart"
-              :on-clear="clearCart"
+              :on-delete="deleteFromBasket"
+              :on-clear="clearBasket"
             />
           </div>
 
@@ -164,6 +164,26 @@ const { subTotal, granTotal: total } = useTotal(basket, {
 
 // Methods
 const { deleteFromCart, clearCart } = cart
+const deleteFromBasket = async (product) => {
+  const success = await deleteFromCart(product)
+
+  if (!success) {
+    return
+  }
+
+  basket.value = basket.value.filter((item) => item.variationId !== product.variationId)
+}
+
+const clearBasket = async () => {
+  const success = await clearCart()
+
+  if (!success) {
+    return
+  }
+
+  basket.value = []
+}
+
 const saveCart = async () => {
   if (sending.value) {
     return
