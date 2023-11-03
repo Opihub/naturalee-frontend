@@ -4,7 +4,47 @@
     method="POST"
     @submit.prevent="updateAddress"
   >
-    <template #after="{ columnClassName, columnFullClassName }">
+    <template
+      #before="{
+        rowClassName,
+        columnClassName,
+        columnFullClassName,
+        columnThirdClassName,
+        columnHalfClassName,
+      }"
+    >
+      <slot
+        name="before"
+        v-bind="{
+          rowClassName,
+          columnClassName,
+          columnFullClassName,
+          columnThirdClassName,
+          columnHalfClassName,
+        }"
+      />
+    </template>
+
+    <template
+      #after="{
+        rowClassName,
+        columnClassName,
+        columnFullClassName,
+        columnThirdClassName,
+        columnHalfClassName,
+      }"
+    >
+      <slot
+        name="after"
+        v-bind="{
+          rowClassName,
+          columnClassName,
+          columnFullClassName,
+          columnThirdClassName,
+          columnHalfClassName,
+        }"
+      />
+
       <template v-if="isBilling">
         <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
           <slot name="billingHeading">
