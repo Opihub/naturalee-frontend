@@ -1,6 +1,6 @@
 <template>
   <Datepicker
-    v-model="date"
+    :model-value="date"
     :class="CSS_NAME"
     :enable-time-picker="false"
     :auto-apply="true"
@@ -9,6 +9,7 @@
     :disabled-dates="holydays"
     :locale="$i18n.locale"
     :format="format"
+    @update:model-value="handleDate"
   />
 </template>
 
@@ -21,11 +22,12 @@ import '@vuepic/vue-datepicker/dist/main.css'
 const CSS_NAME = 'o-date-picker'
 
 // Define (Props, Emits, Page Meta)
-
+const emit = defineEmits(['update:pickeDate'])
 // Component life-cycle hooks
 
 // Data
-const date = ref(new Date())
+const date = ref(new Date(new Date().setDate(new Date().getDate() + 1)))
+const disabledDays = inject('holiday', () => {})
 // Watcher
 
 // Computed
@@ -42,32 +44,13 @@ const allowedDates = computed(() => {
 
 const holydays = computed(() => {
   const year = new Date().getFullYear()
-  let holidays = [
-    new Date(`${year}-1-1`),
-    new Date(`${year}-1-6`),
-    new Date(`${year}-4-25`),
-    new Date(`${year}-5-1`),
-    new Date(`${year}-6-2`),
-    new Date(`${year}-8-15`),
-    new Date(`${year}-11-1`),
-    new Date(`${year}-12-25`),
-    new Date(`${year}-12-26`),
-    new Date(`${year + 1}-1-1`),
-    new Date(`${year + 1}-1-6`),
-    new Date(`${year + 1}-4-25`),
-    new Date(`${year + 1}-5-1`),
-    new Date(`${year + 1}-6-2`),
-    new Date(`${year + 1}-8-15`),
-    new Date(`${year + 1}-11-1`),
-    new Date(`${year + 1}-12-25`),
-    new Date(`${year + 1}-12-26`),
-  ]
+  let holidays = disabledDays
   holidays = holidays.concat(pasqua([year, year + 1]))
   return holidays
 })
 
 //Methods
-// ritorna pasqua e pasquetta
+// ritorna pasquetta
 const pasqua = (years) => {
   const dates = []
   years.forEach((year) => {
@@ -108,6 +91,11 @@ const format = (date) => {
   const year = date.getFullYear()
 
   return `${day}/${month}/${year}`
+}
+
+const handleDate = (pickeDate) => {
+  date.value = pickeDate
+  emit('update:pickeDate', pickeDate)
 }
 </script>
 
