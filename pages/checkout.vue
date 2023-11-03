@@ -291,37 +291,6 @@ provide('holiday', [
 ])
 
 // Component life-cycle hooks
-onMounted(async () => {
-  if (!isLoggedIn.value) {
-    return
-  }
-
-  const userBillingAddress = await useApi(
-    'shop/addresses/billing',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  billingAddress.value = { ...userBillingAddress.value }
-
-  const userShippingAddress = await useApi(
-    'shop/addresses/shipping',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  shippingAddress.value = { ...userShippingAddress.value }
-})
 
 // Composables
 const { sending, send } = useSender()
@@ -394,7 +363,36 @@ const billingData = ref({
   cfPrivate: null,
 })
 
-const order = useState('order', () => {})
+if (isLoggedIn.value) {
+  const userBillingAddress = await useApi(
+    'shop/addresses/billing',
+    {
+      method: 'GET',
+    },
+    {
+      cache: false,
+      dataOnly: true,
+    }
+  )
+
+  const { address, invoice } = useBillingAddress(userBillingAddress)
+
+  billingAddress.value = address.value
+  billingData.value = invoice.value
+
+  const userShippingAddress = await useApi(
+    'shop/addresses/shipping',
+    {
+      method: 'GET',
+    },
+    {
+      cache: false,
+      dataOnly: true,
+    }
+  )
+
+  shippingAddress.value = { ...userShippingAddress.value }
+}
 
 // Watcher
 

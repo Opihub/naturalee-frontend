@@ -9,8 +9,8 @@
     />
 
     <FormUpdateAddress
-      v-model:address="data.address"
-      v-model:invoice="data.invoice"
+      v-model:address="address"
+      v-model:invoice="invoice"
       :is-billing="isBilling"
     />
   </section>
@@ -51,27 +51,7 @@ const response = await useApi(
 
 // Data
 const isBilling = ref(route.params.address === 'billing')
-const data = ref({
-  address: {
-    firstName: response.value.firstName,
-    lastName: response.value.lastName,
-    country: response.value.country,
-    address: response.value.address,
-    address2: response.value.address2,
-    province: response.value.province,
-    city: response.value.city,
-    postcode: response.value.postcode,
-  },
-  invoice: {
-    invoice: response.value.invoice,
-    company: response.value.company,
-    cfPrivate: response.value.cfPrivate,
-    cfCompany: response.value.cfCompany,
-    vat: response.value.vat,
-    sdi: response.value.sdi,
-    pec: response.value.pec,
-  },
-})
+const { address, invoice } = useBillingAddress(response)
 // Watcher
 
 // Computed
