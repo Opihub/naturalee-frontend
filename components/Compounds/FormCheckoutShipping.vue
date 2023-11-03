@@ -1,5 +1,5 @@
 <template>
-  <FormAddress :class="CSS_NAME">
+  <FormUpdateAddress :class="CSS_NAME">
     <template
       #before="{
         rowClassName,
@@ -78,7 +78,7 @@
         {{ $t('orders.notes') }}
       </InputField>
     </template>
-  </FormAddress>
+  </FormUpdateAddress>
 </template>
 
 <script setup>
