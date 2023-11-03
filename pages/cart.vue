@@ -81,28 +81,29 @@
                   </template>
                 </div>
 
-                <div class="u-pt-half u-pb-half" :class="gridClassName">
-                  <b
-                    :class="[
-                      gridCellLeftClassName,
-                      totalClassName,
-                    ]"
-                    >{{ $t('common.total') }}</b
-                  >
+                <div class="u-pt-half" :class="gridClassName">
+                  <b :class="[gridCellLeftClassName, totalClassName]">{{
+                    $t('common.total')
+                  }}</b>
                   <PriceHolder
                     :class="[
                       gridCellRightClassName,
                       totalClassName,
                     ]"
-                    :price="total || subTotal"
+                    :price="total"
                   />
+                </div>
+
+                <div v-if="!hasMinimumOrderCost" :class="[className, rowClassName]">
+                  Raggiungi <PriceHolder :price="20" /> di spesa per andare alla cassa!
+                  <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
                 </div>
               </template>
 
               <template #after="{ footerClassName }">
                 <div :class="footerClassName">
                   <BaseButton
-                    :disabled="sending"
+                    :disabled="sending || !hasMinimumOrderCost"
                     type="submit"
                     color="green"
                     :text="$t('cart.proceed')"
@@ -152,6 +153,9 @@ const basket = ref(remoteBasket.value)
 // Computed
 const hasFreeShipping = computed(() => {
   return 50 - subTotal.value <= 0
+})
+const hasMinimumOrderCost = computed(() => {
+  return subTotal.value >= 20
 })
 const shippingMethod = computed(() => {
   return hasFreeShipping.value ? 0 : 3
