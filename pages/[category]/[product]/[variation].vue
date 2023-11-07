@@ -27,7 +27,9 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  middleware: ['category', 'product'],
+  validate: async (route) => {
+    return isCategory(route.params.category)
+  },
 })
 
 // Component life-cycle hooks
