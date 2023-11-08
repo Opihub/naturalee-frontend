@@ -253,7 +253,6 @@ import { useAccountStore } from '@/stores/account'
 definePageMeta({
   layout: 'green',
   name: 'checkout',
-  middleware: 'auth',
 })
 
 defineI18nRoute({
