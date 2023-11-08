@@ -33,7 +33,7 @@
               :class="[columnClassName, columnFullClassName]"
               >Ti mancano <PriceHolder :price="50 - subTotal" /> per avere la
               spedizione gratuita!
-              <BaseLink :to="{ name: 'cart' }" underline color="dark"
+              <BaseLink :to="{ name: 'featured' }" underline color="dark"
                 >Vuoi aggiungere altri prodotti al carrello?</BaseLink
               >
             </BaseMessage>
