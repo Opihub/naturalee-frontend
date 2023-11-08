@@ -195,7 +195,7 @@ $prefix: 'accordion';
     border-bottom: 1px solid
       rgba(get-var(rgb-dark), get-var(border-opacity, $prefix: $prefix));
     @include transition(border-color);
-
+    color: get-var(color, color-black, $prefix: title);
     &::webkit-details-marker {
       display: none;
     }
