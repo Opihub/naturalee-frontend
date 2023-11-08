@@ -34,7 +34,7 @@ export default defineI18nConfig(() => ({
         price: 'Prezzo',
         quantity: 'Quantità',
         viewDetails: 'Vai alla scheda prodotto',
-        brand: 'Brand: ',
+        brand: 'Brand: {brand}',
         category: 'Categoria',
         tag: 'Tag',
         stock:

@@ -57,8 +57,7 @@
         :class="`${CSS_NAME}__brand`"
         class="u-mt-half"
       >
-        <span>{{ $t('products.brand') }}</span>
-        <span>{{ product.brand }}</span>
+        <span>{{ $t('products.brand', { brand: product.brand }) }}</span>
       </div>
 
       <TagsList
