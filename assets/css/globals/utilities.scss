@@ -2,11 +2,25 @@
 @use 'sass:meta';
 
 @mixin assemble-utilities-with-sizes($media: false) {
-  @each $prop, $rule in $utilities-with-sizes {
+  @each $prop, $rules in $utilities-with-sizes {
+    $rules: if(meta.type-of($rules) == list, $rules, ($rules));
+
     @each $key, $value in $utilities-sizes {
       @if ($media) {
         @include from($media) {
           @include utility(#{$prop}-#{$key}\@#{$media}) {
+            @each $rule in $rules {
+              #{$rule}: if(
+                meta.type-of($value) == number,
+                rem($value),
+                $value
+              ) !important;
+            }
+          }
+        }
+      } @else {
+        @include utility(#{$prop}-#{$key}) {
+          @each $rule in $rules {
             #{$rule}: if(
               meta.type-of($value) == number,
               rem($value),
@@ -14,26 +28,22 @@
             ) !important;
           }
         }
-      } @else {
-        @include utility(#{$prop}-#{$key}) {
-          #{$rule}: if(
-            meta.type-of($value) == number,
-            rem($value),
-            $value
-          ) !important;
-        }
       }
     }
 
     @if ($media) {
       @include from($media) {
         @include utility(#{$prop}-custom\@#{$media}) {
-          #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+          @each $rule in $rules {
+            #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+          }
         }
       }
     } @else {
       @include utility(#{$prop}-custom) {
-        #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+        @each $rule in $rules {
+          #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+        }
       }
     }
   }
