@@ -2,7 +2,10 @@
   <form :class="CSS_NAME" method="POST" @submit.prevent="login">
     <slot name="header">
       <BaseHeading class="u-mb-small" tag="h3">{{
-        $t('form.login')
+        $t('form.loginTitle')
+      }}</BaseHeading>
+      <BaseHeading class="u-mb-small" tag="h5" color="dark">{{
+        $t('form.loginSubtitle')
       }}</BaseHeading>
     </slot>
 
