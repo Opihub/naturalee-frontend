@@ -229,6 +229,12 @@ $prefix: 'menu';
   }
 
   @include element('item') {
+    border-bottom: get-var(border, 0, $prefix: $item-prefix);
+
+    &:last-child {
+      border-bottom: get-var(last-border, 0, $prefix: $item-prefix);
+    }
+
     @include element('text') {
       width: get-var(width, auto, $prefix: $item-prefix);
     }
