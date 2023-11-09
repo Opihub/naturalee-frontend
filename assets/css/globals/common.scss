@@ -53,6 +53,10 @@ sup {
   height: max(100vh, 100%);
 }
 
+img {
+  user-select: none;
+}
+
 ::-webkit-scrollbar {
   width: rem(8px);
 }
