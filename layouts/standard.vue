@@ -18,6 +18,7 @@
         v-show="isMobileMenuOpen"
         :socials-menu="socialsMenu.data"
         :primary-menu="primaryMenu.data"
+        :profile-menu="profileMenu.data"
       />
     </Transition>
 
