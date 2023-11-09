@@ -56,7 +56,7 @@ export default defineI18nConfig(() => ({
         added: 'Aggiunto!',
         addedSuccessfully: 'Aggiunto con successo!',
         notAvailable: 'Non disponibile',
-        empty: 'Non hai alcun prodotto nel carrello',
+        empty: 'Il tuo carrello è vuoto',
         cleared: 'Il carrello è stato svuotato',
         missingProduct: 'Prodotto non trovato nel carrello',
         quantity: '@:products.quantity / U',
