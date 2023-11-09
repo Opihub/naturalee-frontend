@@ -175,7 +175,7 @@ $prefix: 'accordion';
   @include set-vars(
     $prefix: $prefix,
     $map: (
-      border-opacity: 1,
+      border-opacity: 0.2,
       status-size: rem(16px),
     )
   );
@@ -184,7 +184,7 @@ $prefix: 'accordion';
     list-style-type: none;
     user-select: none;
     font-weight: get-var(weight-bold);
-    @include typography(20px, 35px);
+    @include typography(20px, 24px);
     padding: rem(20px) 0;
     display: flex;
     flex-wrap: nowrap;
@@ -194,10 +194,23 @@ $prefix: 'accordion';
     cursor: pointer;
     border-bottom: 1px solid
       rgba(get-var(rgb-dark), get-var(border-opacity, $prefix: $prefix));
-    @include transition(border-color);
-    color: get-var(color, color-black, $prefix: title);
-    &::webkit-details-marker {
+    @include transition(color, border-color);
+    color: get-var(color, get-var(color-black), $prefix: $prefix);
+
+
+    &::marker,
+    &::-webkit-details-marker {
       display: none;
+      content: "";
+    }
+
+    &:hover {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          color: get-var(color-green),
+        )
+      );
     }
 
     @include element('status') {
@@ -250,7 +263,7 @@ $prefix: 'accordion';
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
-        border-opacity: 0.4,
+        border-opacity: 1,
       )
     );
 
