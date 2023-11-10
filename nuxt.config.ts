@@ -29,7 +29,11 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
+  css: [
+    '@splidejs/vue-splide/css/core',
+    'assets/css/main.scss',
+    // 'assets/css/google-fonts.css',
+  ],
   vite: {
     css: {
       preprocessorOptions: {
@@ -75,24 +79,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxtjs/i18n',
-    [
-      '@nuxtjs/google-fonts',
-      {
-        download: true,
-        inject: true,
-        outputDir: 'assets',
-        stylePath: 'css/google-fonts.css',
-        fontsDir: 'fonts',
-        display: 'swap',
-        families: {
-          Mulish: [400, 700, 800],
-          Lato: {
-            wght: [300, 400, 700],
-            ital: [400],
-          },
-        },
-      },
-    ],
+    '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
     '@nuxt/image',
@@ -108,6 +95,23 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  googleFonts: {
+    download: true,
+    inject: true,
+    outputDir: 'public',
+    stylePath: 'google-fonts.css',
+    fontsDir: 'fonts',
+    // useStylesheet: true,
+    fontsPath: '/fonts',
+    display: 'swap',
+    families: {
+      Mulish: [400, 700, 800],
+      Lato: {
+        wght: [300, 400, 700],
+        ital: [400],
+      },
+    },
+  },
   components: [
     {
       path: '~/components/Atoms',
