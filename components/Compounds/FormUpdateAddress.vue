@@ -127,8 +127,14 @@ const updateAddress = async () => {
     return
   }
 
-  if (props.isBilling && !validateInvoice(formData.invoice)) {
-    return
+  if (props.isBilling) {
+    if (!validateInvoice(formData.invoice)) {
+      return
+    }
+
+    if (formData.invoice.invoice === 'false') {
+      formData.invoice.invoice = false
+    }
   }
 
   if (hasErrors.value) {
