@@ -166,6 +166,8 @@ export default defineI18nConfig(() => ({
         yes: 'Sì',
         vatInclude: 'IVA inclusa',
         timeSlot: 'Fascia oraria',
+        followUs: 'Seguici su',
+        account: 'Account',
       },
       checkout: {
         payment: 'Pagamento',
