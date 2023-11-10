@@ -11,9 +11,18 @@
         :total-class-name="`${CSS_NAME}__total`"
         :grid-class-name="CSS_GRID_NAME"
         :grid-cell-class-name="CSS_GRID_CELL_NAME"
-        :grid-cell-left-class-name="[CSS_GRID_CELL_NAME, `${CSS_NAME}__grid__cell--left`]"
-        :grid-cell-right-class-name="[CSS_GRID_CELL_NAME, `${CSS_NAME}__grid__cell--right`]"
-        :grid-cell-full-class-name="[CSS_GRID_CELL_NAME, `${CSS_NAME}__grid__cell--full`]"
+        :grid-cell-left-class-name="[
+          CSS_GRID_CELL_NAME,
+          `${CSS_NAME}__grid__cell--left`,
+        ]"
+        :grid-cell-right-class-name="[
+          CSS_GRID_CELL_NAME,
+          `${CSS_NAME}__grid__cell--right`,
+        ]"
+        :grid-cell-full-class-name="[
+          CSS_GRID_CELL_NAME,
+          `${CSS_NAME}__grid__cell--full`,
+        ]"
       />
 
       <slot
@@ -68,6 +77,11 @@ $prefix: 'order-resume';
   @include element('row') {
     border-bottom: get-var(border-bottom, rem(2px), $prefix: $prefix) solid
       get-var(color-light);
+
+    &:last-child {
+      border-bottom: get-var(last-border-bottom, 0, $prefix: $prefix) solid
+        get-var(color-light);
+    }
   }
 
   @include element('grid') {
