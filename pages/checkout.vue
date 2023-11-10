@@ -14,9 +14,11 @@
           :shipping-data="{
             note,
             date,
+            timeSlot: currentTimeSlot,
+            newAccount,
+            password,
             email,
             phone,
-            timeSlot: currentTimeSlot,
           }"
           :billing-data="billingData"
           :payment-method="paymentMethod"
@@ -130,8 +132,27 @@
               >
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
+                    <ToggleField
+                      v-if="!isLoggedIn"
+                      v-model="newAccount"
+                      class="u-mb-tiny u-white-pre-line"
+                      >{{ $t('checkout.register') }}</ToggleField
+                    >
+
+                    <InputField
+                      v-model="email"
+                      class="u-mb-tiny"
+                      type="email"
+                      name="email"
+                      required
+                      :readonly="isLoggedIn"
+                    >
+                      {{ $t('form.mailField') }}
+                    </InputField>
+
                     <InputField
                       v-model="phone"
+                      :class="{ 'u-mb-tiny': newAccount && !isLoggedIn }"
                       type="tel"
                       name="phone"
                       required
@@ -140,12 +161,13 @@
                     </InputField>
 
                     <InputField
-                      v-model="email"
-                      type="email"
-                      name="email"
+                      v-if="newAccount && !isLoggedIn"
+                      v-model="password"
+                      type="password"
+                      name="password"
                       required
                     >
-                      {{ $t('form.mailField') }}
+                      {{ $t('form.password.field') }}
                     </InputField>
                   </div>
                 </template>
@@ -387,10 +409,13 @@ const billingAddress = ref({
 
 const account = await user.load()
 
+const newAccount = ref(false)
+
 const note = ref('')
 const date = ref(getToday())
 const email = ref(account.value?.email || null)
 const phone = ref(account.value?.phone || null)
+const password = ref(null)
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
 const billingData = ref({

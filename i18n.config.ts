@@ -174,6 +174,7 @@ export default defineI18nConfig(() => ({
         payment: 'Il tuo scontrino',
         notesPlaceholder:
           "Note sull'ordine, ad esempio richieste particolare per la consegna...",
+        register: "Non hai ancora un account? \nSpunta qui per registrarti durante l'acquisto!"
       },
       orders: {
         your: 'Il tuo ordine',
