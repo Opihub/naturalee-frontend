@@ -134,4 +134,13 @@ $utilities-without-sizes: (
       flex,
     ),
   ),
+  white: (
+    rule: white-space,
+    values: (
+      normal,
+      nowrap,
+      pre,
+      pre-line,
+    ),
+  ),
 );
