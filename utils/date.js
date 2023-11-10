@@ -1,3 +1,19 @@
+import { capitalize } from '@/utils/capitalize'
+
+export function getFormattedDate(date, locale = 'it-IT') {
+  const newDate = date.toLocaleDateString(locale, {
+    weekday: 'short',
+    // year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+
+  return newDate
+    .split(' ')
+    .map((part) => capitalize(part))
+    .join(' ')
+}
+
 export function getToday() {
   return new Date(new Date().setDate(new Date().getDate() + 1))
 }

@@ -11,7 +11,7 @@
     :year-range="yearsToShow"
     :disabled-dates="holidays"
     :locale="$i18n.locale"
-    :format="format"
+    :format="getFormattedDate"
     @update:model-value="updateDate"
   />
 </template>
@@ -59,15 +59,6 @@ const yearsToShow = computed(() => {
 })
 
 // Methods
-
-const format = (date) => {
-  const day = date.getDate()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
-
-  return `${day}/${month}/${year}`
-}
-
 const updateDate = (date) => {
   emit('update:date', date)
 }
