@@ -15,6 +15,7 @@
           :billing-data="billingData"
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
+          :time-slots="timeSlots"
           :cart="cart.checkout"
           @api:start="sending = true"
           @api:end="sending = false"
@@ -54,22 +55,7 @@
                     />
                   </template>
 
-                  <ShopAddress :address="shippingAddress">
-                    <template #default="{ className }">
-                      <template v-if="shippingData.timeSlot">
-                        <b :class="[className, 'u-mt-tiny']">Consegna:</b>
-                        <span :class="className">
-                          <b class="u-mr-micro">{{
-                            shippingData.timeSlot.title
-                          }}</b>
-                          <span>
-                            <time>{{ shippingData.timeSlot.from }}</time> -
-                            <time>{{ shippingData.timeSlot.to }}</time>
-                          </span>
-                        </span>
-                      </template>
-                    </template>
-                  </ShopAddress>
+                  <ShopAddress :address="shippingAddress" />
                 </BaseBox>
               </div>
 
@@ -106,9 +92,66 @@
           <template #action="{ columnClassName, columnFullClassName }">
             <div :class="[columnClassName, columnFullClassName]">
               <OrderResume
-                v-model:address="shippingAddress"
-                :heading="$t('checkout.payment')"
+                :heading="$t('orders.delivery')"
+                container-class="u-mb-large"
               >
+                <template #default="{ className, rowClassName }">
+                  <div :class="[className, rowClassName]">
+                    <div v-for="slot in timeSlots" :key="slot.id">
+                      <ToggleField
+                        v-model="shippingData.timeSlot"
+                        class="u-mb-tiny"
+                        radio
+                        boxed
+                        required
+                        :value="slot.id"
+                      >
+                        <b class="u-mr-micro">{{ slot.title }}</b>
+                        <span>
+                          <time>{{ slot.from }}</time> -
+                          <time>{{ slot.to }}</time>
+                        </span>
+                      </ToggleField>
+                    </div>
+
+                    <!-- <BaseDatePicker
+                      @update:picke-date="updateDatePicked"
+                      @update:model-value="
+                        updateShippingData(datePicked, 'date')
+                      "
+                    /> -->
+                  </div>
+                </template>
+              </OrderResume>
+
+              <OrderResume
+                :heading="$t('common.account')"
+                container-class="u-mb-large"
+              >
+                <template #default="{ className, rowClassName }">
+                  <div :class="[className, rowClassName]">
+                    <InputField
+                      v-model="shippingData.phone"
+                      type="tel"
+                      name="phone"
+                      required
+                    >
+                      {{ $t('form.phone') }}
+                    </InputField>
+
+                    <InputField
+                      v-model="shippingData.email"
+                      type="email"
+                      name="email"
+                      required
+                    >
+                      {{ $t('form.mailField') }}
+                    </InputField>
+                  </div>
+                </template>
+              </OrderResume>
+
+              <OrderResume :heading="$t('checkout.payment')">
                 <template
                   #default="{
                     className,
@@ -141,7 +184,6 @@
                         <time>{{ shippingData.timeSlot.to }}</time>
                       </span></span
                     >
-                    <!-- <ShippingMethods :class="gridCellRightClassName" /> -->
 
                     <strong
                       v-if="hasFreeShipping"
@@ -208,10 +250,8 @@
           <BaseHeading tag="h5">{{ $t('orders.shipping') }}</BaseHeading>
         </template>
 
-        <FormCheckoutShipping
+        <FormUpdateAddress
           v-model:address="shippingAddress"
-          v-model:shipping="shippingData"
-          :time-slots="timeSlots"
           @completed="closeShippingModal"
         />
       </ModalContainer>
@@ -342,7 +382,7 @@ const shippingData = ref({
   note: null,
   email: account.value?.email || null,
   phone: account.value?.phone || null,
-  timeSlot: timeSlots.value.find(() => true),
+  timeSlot: timeSlots.value.find(() => true)?.id,
   date: null,
 })
 
