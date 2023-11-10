@@ -51,6 +51,12 @@ defineProps({
 
 <style lang="scss">
 @include component(marquee) {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
   @include element(item) {
     color: get-var(color-green);
     font-weight: get-var(weight-black);

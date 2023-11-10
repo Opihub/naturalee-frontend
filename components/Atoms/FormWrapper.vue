@@ -52,7 +52,14 @@ $prefix: 'form';
 $prefix-field: 'field';
 $prefix-fieldset: 'fieldset';
 @include layout($prefix, $prefix-field, $prefix-fieldset) {
-  @include typography(18px, 35px);
+  @include typography(18px, 26px);
+
+  @include set-local-vars(
+    $prefix: 'toggle-field',
+    $map: (
+      offset-top: rem(2px),
+    )
+  );
 
   @include until(tablet) {
     justify-content: center;

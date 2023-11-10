@@ -21,11 +21,13 @@ export default defineI18nConfig(() => ({
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
       errors: {
-        backToHome: 'Torna alla homepage',
-        ops: 'Ops!',
+        backToHome: 'Torna in home',
+        ops: 'Oops! È avvenuto un errore...',
         generic: 'È avvenuto un errore inaspettato...',
-        pageNotFound:
-          'La pagina che stavi cercando non esiste oppure è stata spostata.',
+        404: {
+          title: 'Cercavi qualcosa di fresco?',
+          subtitle: 'Questa pagina è troppo cruda e non è ancora maturata!',
+        },
       },
       products: {
         count: '{count} @:products.label',
@@ -34,6 +36,7 @@ export default defineI18nConfig(() => ({
         price: 'Prezzo',
         quantity: 'Quantità',
         viewDetails: 'Vai alla scheda prodotto',
+        brand: 'Brand: {brand}',
         category: 'Categoria',
         tag: 'Tag',
         stock:
@@ -55,7 +58,7 @@ export default defineI18nConfig(() => ({
         added: 'Aggiunto!',
         addedSuccessfully: 'Aggiunto con successo!',
         notAvailable: 'Non disponibile',
-        empty: 'Non hai alcun prodotto nel carrello',
+        empty: 'Il tuo carrello è vuoto',
         cleared: 'Il carrello è stato svuotato',
         missingProduct: 'Prodotto non trovato nel carrello',
         quantity: '@:products.quantity / U',
@@ -78,7 +81,11 @@ export default defineI18nConfig(() => ({
         mailField: 'Indirizzo email',
         phone: 'Telefono',
         login: 'Accedi',
+        loginTitle: 'Hai già un account?',
+        loginSubtitle: "Effettua l'accesso",
         signUp: 'Registrati',
+        signUpTitle: 'Nuovo cliente?',
+        signUpSubtitle: 'Crea un account',
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',
@@ -160,6 +167,8 @@ export default defineI18nConfig(() => ({
         yes: 'Sì',
         vatInclude: 'IVA inclusa',
         timeSlot: 'Fascia oraria',
+        followUs: 'Seguici su',
+        account: 'Account',
       },
       checkout: {
         payment: 'Il tuo scontrino',

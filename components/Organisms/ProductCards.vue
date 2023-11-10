@@ -100,8 +100,6 @@ const options = computed(() => {
       options.breakpoints[breakpoint].perPage >= props.products.length
   }
 
-  console.debug(options.breakpoints)
-
   return options
 })
 </script>

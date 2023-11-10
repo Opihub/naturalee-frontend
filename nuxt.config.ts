@@ -29,7 +29,11 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ['@splidejs/vue-splide/css/core', '@/assets/css/main.scss'],
+  css: [
+    '@splidejs/vue-splide/css/core',
+    'assets/css/main.scss',
+    // 'assets/css/google-fonts.css',
+  ],
   vite: {
     css: {
       preprocessorOptions: {
@@ -41,6 +45,15 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/my-account/**': { ssr: false },
+    ...(process.env?.SKIP_SITEMAP
+      ? {
+          '/frutta/**': { ssr: false },
+          '/verdura/**': { ssr: false },
+          '/dispensa/**': { ssr: false },
+          '/esotico/**': { ssr: false },
+          '/aromi/**': { ssr: false },
+        }
+      : {}),
   },
   hooks: {
     ready: async () => {
@@ -58,14 +71,28 @@ export default defineNuxtConfig({
         return
       }
 
+      if (process.env?.SKIP_SITEMAP) {
+        console.info('Sitemap saltata')
+        return
+      }
+
+      if (!nitroConfig?.prerender?.routes) {
+        return
+      }
+
+      console.info('Download della Sitemap in corso')
       const sitemap = await ofetch(
         (process.env.API_ENDPOINT_URL || '/') + '/v1/sitemap/products',
         { parseResponse: JSON.parse }
       )
 
       if (!sitemap.success) {
+        console.warn('È avvenuto errore durante il fetch della Sitemap')
         throw new Error(sitemap.message)
       }
+      console.info(
+        `Download della Sitemap completato! Sono stato trovati ${sitemap.data.length} prodotti`
+      )
 
       nitroConfig.prerender.routes = [
         ...nitroConfig.prerender.routes,
@@ -75,24 +102,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxtjs/i18n',
-    [
-      '@nuxtjs/google-fonts',
-      {
-        download: true,
-        inject: true,
-        outputDir: 'assets',
-        stylePath: 'css/google-fonts.css',
-        fontsDir: 'fonts',
-        display: 'swap',
-        families: {
-          Mulish: [400, 700, 800],
-          Lato: {
-            wght: [300, 400, 700],
-            ital: [400],
-          },
-        },
-      },
-    ],
+    '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
     '@nuxt/image',
@@ -108,6 +118,23 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  googleFonts: {
+    download: true,
+    inject: true,
+    outputDir: 'public',
+    stylePath: 'google-fonts.css',
+    fontsDir: 'fonts',
+    // useStylesheet: true,
+    fontsPath: '/fonts',
+    display: 'swap',
+    families: {
+      Mulish: [400, 700, 800],
+      Lato: {
+        wght: [300, 400, 700],
+        ital: [400],
+      },
+    },
+  },
   components: [
     {
       path: '~/components/Atoms',
