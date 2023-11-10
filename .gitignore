@@ -23,3 +23,5 @@ logs
 !.env.array
 
 storybook-static
+public/fonts/*
+public/google-fonts.css
