@@ -21,11 +21,13 @@ export default defineI18nConfig(() => ({
       asc: 'Prezzo crescente',
       desc: 'Prezzo decrescente',
       errors: {
-        backToHome: 'Torna alla homepage',
-        ops: 'Ops!',
+        backToHome: 'Torna in home',
+        ops: 'Oops! È avvenuto un errore...',
         generic: 'È avvenuto un errore inaspettato...',
-        pageNotFound:
-          'La pagina che stavi cercando non esiste oppure è stata spostata.',
+        404: {
+          title: 'Cercavi qualcosa di fresco?',
+          subtitle: 'Questa pagina è troppo cruda e non è ancora maturata!',
+        },
       },
       products: {
         count: '{count} @:products.label',

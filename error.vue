@@ -1,11 +1,19 @@
 <template>
-  <NuxtLayout name="standard" class="s-error">
+  <NuxtLoadingIndicator />
+
+  <NuxtLayout name="error">
     <SiteContainer flex class="u-pt-huge u-pb-huge">
       <template v-if="error.statusCode === 404">
-        <BaseHeading class="u-mt-large">{{ error.statusCode }}</BaseHeading>
-        <BaseHeading tag="h2" use="h3" class="u-mb-huge">
-          {{ message }}
+        <BaseParagraph class="">
+          {{ $t('errors.ops') }}
+        </BaseParagraph>
+        <BaseHeading tag="h1" use="custom" class="u-mb-large _error-title">{{ error.statusCode }}</BaseHeading>
+        <BaseHeading tag="h2" use="h3" class="u-mb-tiny">
+          {{ $t('errors.404.title') }}
         </BaseHeading>
+        <BaseParagraph class="u-mb-huge">
+          {{ $t('errors.404.subtitle') }}
+        </BaseParagraph>
       </template>
       <template v-else>
         <BaseHeading class="u-mt-large">{{ $t('errors.ops') }}</BaseHeading>
@@ -53,16 +61,8 @@ const { t } = useI18n()
 // Watcher
 
 // Computed
-const message = computed(() => {
-  if (props.error.statusMessage.indexOf('Page Not Found:') > -1) {
-    return t('errors.pageNotFound')
-  }
-
-  return props.error.statusMessage
-})
-
 const seoTitle = computed(() => {
-  let title = message.value
+  let title = t('errors.ops')
 
   if (config.public.title) {
     title += ` ${config.public.seoSeparator || '|'} ${config.public.title}`
@@ -80,20 +80,12 @@ usePageSeo({
 })
 </script>
 
-<style lang="scss">
-@include scope('error') {
-  @include set-local-vars(
-    $prefix: 'heading',
-    $map: (
-      text-color: get-var(color-black),
-    )
-  );
-
-  @include set-local-vars(
-    $prefix: 'container',
-    $map: (
-      direction: column,
-    )
-  );
+<style lang="scss" scoped>
+@include hack('error-title') {
+  @include set-local-vars($prefix: 'heading', $map: (
+    font-weight: get-var(weight-bold),
+    font-size: rem(120px),
+    line-height: rem(130px),
+  ));
 }
 </style>
