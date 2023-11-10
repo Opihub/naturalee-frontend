@@ -198,7 +198,9 @@
 
                     <span :class="gridCellLeftClassName">
                       {{ $t('orders.delivery') }}<br />
-                      <b class="u-mr-micro">{{ currentTimeSlot.title }}</b>
+
+                      <b>{{ getFormattedDate(date) }}</b
+                      >,
                       <span>
                         <time>{{ currentTimeSlot.from }}</time> -
                         <time>{{ currentTimeSlot.to }}</time>
