@@ -180,6 +180,7 @@ export default defineI18nConfig(() => ({
         subTotal: 'Prodotti',
         shipping: 'Spedizione',
         delivery: 'Consegna',
+        deliveryInfos: 'Informazioni di consegna',
         billing: 'Fatturazione',
         payment: 'Metodo di pagamento',
         name: 'Ordine | Ordini',

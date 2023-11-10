@@ -69,12 +69,6 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  timeSlots: {
-    type: Array,
-    default() {
-      return []
-    },
-  },
   cart: {
     type: Array,
     required: true,
@@ -96,21 +90,13 @@ const submitOrder = async () => {
 
   resetFeedback()
 
-  const { timeSlot: timeSlotId, note, email, phone } = props.shippingData
+  const { timeSlot, note, email, phone } = props.shippingData
   const { invoice } = props.billingData
 
-  if (!timeSlotId) {
+  if (!timeSlot) {
     feedback.value.errors.push(
       'È obbligatorio riportare la fascia oraria per la consegna'
     )
-  } else {
-    const timeSlot = props.timeSlots.find(
-      (timeSlot) => timeSlot.id === timeSlotId
-    )
-
-    if (!timeSlot) {
-      feedback.value.errors.push('La fascia oraria indicata non è valida')
-    }
   }
 
   if (!email) {

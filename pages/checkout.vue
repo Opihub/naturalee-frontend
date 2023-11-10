@@ -11,11 +11,16 @@
         <FormCheckout
           :shipping-address="shippingAddress"
           :billing-address="billingAddress"
-          :shipping-data="shippingData"
+          :shipping-data="{
+            note,
+            date,
+            email,
+            phone,
+            timeSlot: currentTimeSlot,
+          }"
           :billing-data="billingData"
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
-          :time-slots="timeSlots"
           :cart="cart.checkout"
           @api:start="sending = true"
           @api:end="sending = false"
@@ -92,14 +97,14 @@
           <template #action="{ columnClassName, columnFullClassName }">
             <div :class="[columnClassName, columnFullClassName]">
               <OrderResume
-                :heading="$t('orders.delivery')"
+                :heading="$t('orders.deliveryInfos')"
                 container-class="u-mb-large"
               >
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
                     <div v-for="slot in timeSlots" :key="slot.id">
                       <ToggleField
-                        v-model="shippingData.timeSlot"
+                        v-model="timeSlot"
                         class="u-mb-tiny"
                         radio
                         boxed
@@ -114,12 +119,7 @@
                       </ToggleField>
                     </div>
 
-                    <!-- <BaseDatePicker
-                      @update:picke-date="updateDatePicked"
-                      @update:model-value="
-                        updateShippingData(datePicked, 'date')
-                      "
-                    /> -->
+                    <BaseDatePicker v-model:date="date" />
                   </div>
                 </template>
               </OrderResume>
@@ -131,7 +131,7 @@
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
                     <InputField
-                      v-model="shippingData.phone"
+                      v-model="phone"
                       type="tel"
                       name="phone"
                       required
@@ -140,7 +140,7 @@
                     </InputField>
 
                     <InputField
-                      v-model="shippingData.email"
+                      v-model="email"
                       type="email"
                       name="email"
                       required
@@ -176,12 +176,10 @@
 
                     <span :class="gridCellLeftClassName">
                       {{ $t('orders.delivery') }}<br />
-                      <b class="u-mr-micro">{{
-                        shippingData.timeSlot.title
-                      }}</b>
+                      <b class="u-mr-micro">{{ currentTimeSlot.title }}</b>
                       <span>
-                        <time>{{ shippingData.timeSlot.from }}</time> -
-                        <time>{{ shippingData.timeSlot.to }}</time>
+                        <time>{{ currentTimeSlot.from }}</time> -
+                        <time>{{ currentTimeSlot.to }}</time>
                       </span></span
                     >
 
@@ -218,6 +216,17 @@
                       class="u-mt-mini"
                       :placeholder="$t('coupon.formPlaceholder')"
                     />
+                  </div>
+
+                  <div :class="[className, rowClassName]">
+                    <InputField
+                      v-model="note"
+                      type="textarea"
+                      name="note"
+                      :placeholder="$t('checkout.notesPlaceholder')"
+                    >
+                      {{ $t('orders.notes') }}
+                    </InputField>
                   </div>
                 </template>
 
@@ -378,13 +387,11 @@ const billingAddress = ref({
 
 const account = await user.load()
 
-const shippingData = ref({
-  note: null,
-  email: account.value?.email || null,
-  phone: account.value?.phone || null,
-  timeSlot: timeSlots.value.find(() => true)?.id,
-  date: null,
-})
+const note = ref('')
+const date = ref(getToday())
+const email = ref(account.value?.email || null)
+const phone = ref(account.value?.phone || null)
+const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
 const billingData = ref({
   invoice: false,
@@ -430,6 +437,9 @@ if (isLoggedIn.value) {
 // Watcher
 
 // Computed
+const currentTimeSlot = computed(() => {
+  return timeSlots.value.find((slot) => slot.id === timeSlot.value)
+})
 
 // Methods
 const toggleShippingModal = (status = null) => {
