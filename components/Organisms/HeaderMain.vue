@@ -213,10 +213,10 @@ $prefix: 'header';
 
       @include from(tablet) {
         width: rem(80px);
-        border-right: 1px solid rgba(get-var(rgb-green), 0.45);
+        border-left: 1px solid rgba(get-var(rgb-green), 0.45);
 
-        &:last-child {
-          border-right: 0;
+        &:first-child {
+          border-left: 0;
         }
       }
 
