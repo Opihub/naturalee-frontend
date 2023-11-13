@@ -100,8 +100,13 @@ const submitOrder = async () => {
 
   resetFeedback()
 
-  const { timeSlot, note, email, phone } = props.shippingData
+  const { timeSlot, date, note, email, phone, password, newAccount } =
+    props.shippingData
   const { invoice } = props.billingData
+
+  if (!date) {
+    feedback.errors.push('È obbligatorio indicare una data per la consegna')
+  }
 
   if (!timeSlot) {
     feedback.errors.push(
@@ -132,7 +137,7 @@ const submitOrder = async () => {
   validateAddress(props.shippingAddress, ' per la spedizione')
 
   const formData = {
-    shipping: props.shippingAddress.value,
+    shipping: { ...props.shippingAddress },
     timeSlot,
     note,
     email,
@@ -141,6 +146,17 @@ const submitOrder = async () => {
     products: props.cart,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
+  }
+
+  if (newAccount) {
+    if (!password) {
+      feedback.errors.push(
+        'È obbligatorio inserire una password se si vuole creare un account'
+      )
+    } else {
+      formData.newAccount = true
+      formData.password = password
+    }
   }
 
   if (props.isBilling && !validateInvoice(formData.invoice)) {
@@ -160,9 +176,9 @@ const submitOrder = async () => {
   }
 
   // if (useDifferentAddress.value) {
-  //   formData.billing = props.billingAddress.value
+  formData.billing = { ...props.billingAddress }
 
-  //   validateAddress(props.billingAddress, ' per la fatturazione')
+  validateAddress(props.billingAddress, ' per la fatturazione')
   // }
 
   if (hasErrors.value) {
