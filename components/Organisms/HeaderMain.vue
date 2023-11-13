@@ -21,7 +21,7 @@
           <ClientOnly>
             <Transition name="fade">
               <MiniCart
-              v-show="isMiniCartMenuOpen"
+                v-show="isMiniCartMenuOpen"
                 x-centered
                 :cart="cart"
                 :shipping-cost="shippingCost"
@@ -30,20 +30,6 @@
               />
             </Transition>
           </ClientOnly>
-        </li>
-        <li
-          :class="[
-            `${CSS_NAME_ACTIONS}__single`,
-            `${CSS_NAME_ACTIONS}__single--menu`,
-          ]"
-        >
-          <HamburgerMenu
-            :class="{
-              [`${CSS_NAME_ACTIONS}__icon`]: true,
-              'is-active': isMobileMenuOpen,
-            }"
-            @click="openMenuMobile"
-          />
         </li>
         <li
           :class="[
@@ -63,7 +49,7 @@
           <ClientOnly>
             <Transition name="fade">
               <ProfileMenu
-              v-if="isLoggedIn"
+                v-if="isLoggedIn"
                 v-show="isProfileMenuOpen"
                 x-centered
                 :menu="profileMenu"
@@ -71,6 +57,20 @@
               />
             </Transition>
           </ClientOnly>
+        </li>
+        <li
+          :class="[
+            `${CSS_NAME_ACTIONS}__single`,
+            `${CSS_NAME_ACTIONS}__single--menu`,
+          ]"
+        >
+          <HamburgerMenu
+            :class="{
+              [`${CSS_NAME_ACTIONS}__icon`]: true,
+              'is-active': isMobileMenuOpen,
+            }"
+            @click="openMenuMobile"
+          />
         </li>
       </ul>
     </SiteContainer>
@@ -167,6 +167,10 @@ $prefix: 'header';
     align-items: center;
     gap: rem(8px);
 
+    @include until(tablet) {
+      padding-right: 0;
+    }
+
     @include between(tablet, desktop) {
       grid-template-columns: 1fr 1fr;
     }
@@ -213,18 +217,10 @@ $prefix: 'header';
 
       @include from(tablet) {
         width: rem(80px);
-        border-right: 1px solid rgba(get-var(rgb-green), 0.45);
+        border-left: 1px solid rgba(get-var(rgb-green), 0.45);
 
-        &:last-child {
-          border-right: 0;
-        }
-      }
-
-      @include modifier('profile') {
-        display: none;
-
-        @include from(tablet) {
-          display: block;
+        &:first-child {
+          border-left: 0;
         }
       }
 
@@ -252,7 +248,13 @@ $prefix: 'header';
       top: 100%;
       left: 0;
       left: 50%;
+      display: none;
       // transform: translateX(-50%);
+
+      @include from(tablet) {
+        display: block;
+        padding: 0;
+      }
     }
   }
 }

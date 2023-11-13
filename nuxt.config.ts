@@ -45,6 +45,15 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/my-account/**': { ssr: false },
+    ...(process.env?.SKIP_SITEMAP
+      ? {
+          '/frutta/**': { ssr: false },
+          '/verdura/**': { ssr: false },
+          '/dispensa/**': { ssr: false },
+          '/esotico/**': { ssr: false },
+          '/aromi/**': { ssr: false },
+        }
+      : {}),
   },
   hooks: {
     ready: async () => {
@@ -62,14 +71,28 @@ export default defineNuxtConfig({
         return
       }
 
+      if (process.env?.SKIP_SITEMAP) {
+        console.info('Sitemap saltata')
+        return
+      }
+
+      if (!nitroConfig?.prerender?.routes) {
+        return
+      }
+
+      console.info('Download della Sitemap in corso')
       const sitemap = await ofetch(
         (process.env.API_ENDPOINT_URL || '/') + '/v1/sitemap/products',
         { parseResponse: JSON.parse }
       )
 
       if (!sitemap.success) {
+        console.warn('È avvenuto errore durante il fetch della Sitemap')
         throw new Error(sitemap.message)
       }
+      console.info(
+        `Download della Sitemap completato! Sono stato trovati ${sitemap.data.length} prodotti`
+      )
 
       nitroConfig.prerender.routes = [
         ...nitroConfig.prerender.routes,

@@ -100,7 +100,9 @@ $prefix: 'modal';
   }
 
   @include element('main') {
+    overflow: auto;
     padding: rem(20px) rem(30px) rem(30px);
+    max-height: calc(100vh - get-var(max-height, rem(120px), $prefix: $prefix));
 
     @include from(tablet) {
       padding-top: rem(30px);

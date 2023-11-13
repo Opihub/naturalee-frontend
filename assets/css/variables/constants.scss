@@ -65,6 +65,7 @@ $utilities-sizes: (
   medium: 24,
   large: 30,
   huge: 40,
+  container: get-var(container-default-padding),
 );
 
 $utilities-with-sizes: (
@@ -72,8 +73,26 @@ $utilities-with-sizes: (
   ml: margin-left,
   mr: margin-right,
   mb: margin-bottom,
+  my: (
+    margin-top,
+    margin-bottom,
+  ),
+  mx: (
+    margin-left,
+    margin-right,
+  ),
   pt: padding-top,
+  // pl: padding-left,
+  // pr: padding-right,
   pb: padding-bottom,
+  py: (
+    padding-top,
+    padding-bottom,
+  ),
+  px: (
+    padding-left,
+    padding-right,
+  ),
 );
 
 $z-index: (
@@ -103,6 +122,25 @@ $utilities-without-sizes: (
       fixed,
       sticky,
       static,
+    ),
+  ),
+  d: (
+    rule: display,
+    values: (
+      inline,
+      inline-block,
+      block,
+      inline-flex,
+      flex,
+    ),
+  ),
+  white: (
+    rule: white-space,
+    values: (
+      normal,
+      nowrap,
+      pre,
+      pre-line,
     ),
   ),
 );

@@ -69,9 +69,13 @@
         :quantity="quantity"
         :disabled="isDisabled"
       >
-        <span>{{ $t('cart.add') }}</span>
+        <span>{{
+          product.stockStatus === 'instock'
+            ? $t('cart.add')
+            : $t('cart.notAvailable')
+        }}</span>
         <template #added>{{ $t('cart.added') }}</template>
-        <template #svg="{ svgStyle }">
+        <template v-if="product.stockStatus === 'instock'" #svg="{ svgStyle }">
           <BaseIcon name="bag" :icon-size="svgStyle" :filled="true" />
         </template>
       </AddToCartButton>
@@ -156,7 +160,8 @@ const fit = computed(() => {
 const isDisabled = computed(() => {
   return (
     props.product.price <= 0 ||
-    ('status' in props.product && props.product.status === 'disabled')
+    ('status' in props.product && props.product.status === 'disabled') ||
+    props.product.stockStatus === 'outofstock'
   )
 })
 </script>

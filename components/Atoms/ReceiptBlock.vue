@@ -81,7 +81,6 @@ $prefix: 'receipt';
   padding: get-var(border-gap, $prefix: $prefix) 0;
   font-family: get-var(family-text);
   font-weight: get-var(weight-regular);
-  @include typography(18px, 28px);
 
   &::before,
   &::after {
