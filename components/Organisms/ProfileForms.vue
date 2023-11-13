@@ -148,33 +148,83 @@ const registrationFormBounding = useElementBounding(registrationFormElement)
 const svgs = ref({
   arancia: {
     rotate: 0,
-    sizes: { width: 50.86, height: 54.59 },
-    coordinates: { left: 0, top: 0 },
+    sizes: {
+      default: {
+        width: 50.86,
+        height: 54.59,
+      },
+    },
+    coordinates: {
+      default: {
+        left: 0,
+        top: 0,
+      },
+    },
   },
   ravanello: {
     rotate: 0,
-    sizes: { width: 111.01, height: 157.07 },
-    coordinates: { left: 0, top: 0 },
+    sizes: {
+      default: {
+        width: 111.01,
+        height: 157.07,
+      },
+    },
+    coordinates: {
+      default: {
+        left: 0,
+        top: 0,
+      },
+    },
   },
   lime: {
     rotate: 0,
-    sizes: { width: 75.13, height: 45.87 },
-    coordinates: { left: 0, top: 0 },
+    sizes: {
+      default: {
+        width: 75.13,
+        height: 45.87,
+      },
+    },
+    coordinates: {
+      default: {
+        left: 0,
+        top: 0,
+      },
+    },
   },
   banana: {
     rotate: 0,
-    sizes: { width: 63.81, height: 57.06 },
-    coordinates: { left: 0, top: 0 },
+    sizes: {
+      default: {
+        width: 63.81,
+        height: 57.06,
+      },
+    },
+    coordinates: {
+      default: {
+        left: 0,
+        top: 0,
+      },
+    },
   },
   mango: {
     rotate: 0,
-    sizes: { width: 72.51, height: 61.43 },
-    coordinates: { left: 0, top: 0 },
+    sizes: {
+      default: {
+        width: 72.51,
+        height: 61.43,
+      },
+    },
+    coordinates: { default: { left: 0, top: 0 } },
   },
   mora: {
     rotate: 0,
-    sizes: { width: 50.16, height: 56.39 },
-    coordinates: { left: 0, top: 0 },
+    sizes: {
+      default: {
+        width: 50.16,
+        height: 56.39,
+      },
+    },
+    coordinates: { default: { left: 0, top: 0 } },
   },
 })
 
@@ -230,62 +280,64 @@ onMounted(() => {
   const data = svgs.value
 
   data.arancia.rotate = random(-rotationRange, rotationRange)
-  data.arancia.coordinates = {
+  data.arancia.coordinates.default = {
     left: random(
-      0 - data.arancia.sizes.width / 2,
-      loginLeft - data.arancia.sizes.width
+      0 - data.arancia.sizes.default.width / 2,
+      loginLeft - data.arancia.sizes.default.width
     ),
     top: random(
-      0 - data.arancia.sizes.height / 2,
-      loginY - data.arancia.sizes.height / 2
+      0 - data.arancia.sizes.default.height / 2,
+      loginY - data.arancia.sizes.default.height / 2
     ),
   }
 
   data.ravanello.rotate = random(-rotationRange, rotationRange)
-  data.ravanello.coordinates = {
-    left: random(loginRight, loginX - data.ravanello.sizes.width / 2),
+  data.ravanello.coordinates.default = {
+    left: random(loginRight, loginX - data.ravanello.sizes.default.width / 2),
     top: random(
-      0 - data.ravanello.sizes.height / 2,
-      loginY - data.ravanello.sizes.height
+      0 - data.ravanello.sizes.default.height / 2,
+      loginY - data.ravanello.sizes.default.height
     ),
   }
 
   data.lime.rotate = random(-rotationRange, rotationRange)
-  data.lime.coordinates = {
+  data.lime.coordinates.default = {
     left: random(loginLeft, loginRight),
-    top: random(loginBottom, loginY - data.lime.sizes.height / 2),
+    top: random(loginBottom, loginY - data.lime.sizes.default.height / 2),
   }
 
   data.banana.rotate = random(-rotationRange, rotationRange)
-  data.banana.coordinates = {
+  data.banana.coordinates.default = {
     left: random(
-      0 - data.banana.sizes.width / 2,
-      registrationLeft - data.banana.sizes.width
+      0 - data.banana.sizes.default.width / 2,
+      registrationLeft - data.banana.sizes.default.width
     ),
     top: random(
-      0 - data.banana.sizes.height / 2,
-      registrationY - data.banana.sizes.height / 2
+      0 - data.banana.sizes.default.height / 2,
+      registrationY - data.banana.sizes.default.height / 2
     ),
   }
 
   data.mango.rotate = random(-rotationRange, rotationRange)
-  data.mango.coordinates = {
-    left: random(registrationRight, registrationX - data.mango.sizes.width / 2),
+  data.mango.coordinates.default = {
+    left: random(
+      registrationRight,
+      registrationX - data.mango.sizes.default.width / 2
+    ),
     top: random(
-      0 - data.mango.sizes.height / 2,
-      registrationY - data.mango.sizes.height / 2
+      0 - data.mango.sizes.default.height / 2,
+      registrationY - data.mango.sizes.default.height / 2
     ),
   }
 
   data.mora.rotate = random(-rotationRange, rotationRange)
-  data.mora.coordinates = {
+  data.mora.coordinates.default = {
     left: random(registrationLeft, registrationRight),
     top: random(
-      0 - data.mora.sizes.height / 2,
-      registrationTop - data.mora.sizes.height
+      0 - data.mora.sizes.default.height / 2,
+      registrationTop - data.mora.sizes.default.height
     ),
   }
-
 
   svgs.value = data
 })

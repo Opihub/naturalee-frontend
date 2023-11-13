@@ -66,18 +66,18 @@ $prefix: 'highlight-text';
     top: 50%;
     left: 50%;
     width: 105%;
-    height: rem(11px);
+    height: get-var(height, rem(18px), $prefix: $prefix);
     background-color: get-var(color, get-var(color-yellow), $prefix: $prefix);
     border-top-right-radius: 90px 90px;
     border-bottom-right-radius: 90px 90px;
     border-top-left-radius: 80px 80px;
     border-bottom-left-radius: 80px 80px;
-    transform: translate(-50%, 0) rotateX(60deg);
+    transform: translate(get-var(translate, #{-50%, 0}, $prefix: $prefix))
+      rotateX(get-var(rotate, 60deg, $prefix: $prefix));
     z-index: -1;
 
     @include from(desktop) {
-      height: rem(30px);
-      transform: translate(-50%, 40%) rotateX(60deg);
+      height: get-var(height, rem(45px), $prefix: $prefix);
     }
   }
 }
