@@ -1,5 +1,9 @@
 <template>
-  <FeedbackMessage v-if="showFeedback" class="u-mb-medium" />
+  <FeedbackMessage
+    v-if="showFeedback"
+    :feedback="feedback"
+    class="u-mb-medium"
+  />
 
   <FormWrapper
     method="POST"
@@ -79,8 +83,14 @@ const props = defineProps({
 const { sending, send } = useSender(emit)
 
 // Data
-const { feedback, showFeedback, hasErrors, resetFeedback, validateAddress } =
-  useFeedback()
+const {
+  feedback,
+  showFeedback,
+  hasErrors,
+  resetFeedback,
+  validateAddress,
+  validateInvoice,
+} = useFeedback()
 
 // Methods
 const submitOrder = async () => {
@@ -94,31 +104,29 @@ const submitOrder = async () => {
   const { invoice } = props.billingData
 
   if (!timeSlot) {
-    feedback.value.errors.push(
+    feedback.errors.push(
       'È obbligatorio riportare la fascia oraria per la consegna'
     )
   }
 
   if (!email) {
-    feedback.value.errors.push('È obbligatorio indicare una mail')
+    feedback.errors.push('È obbligatorio indicare una mail')
   }
 
   if (!phone) {
-    feedback.value.errors.push(
-      'È obbligatorio indicare un numero di telefono valido'
-    )
+    feedback.errors.push('È obbligatorio indicare un numero di telefono valido')
   }
 
-  if (!props.shippingMethod.value) {
-    feedback.value.errors.push('Nessun metodo di spedizione indicato')
+  if (!props.shippingMethod?.value) {
+    feedback.errors.push('Nessun metodo di spedizione indicato')
   }
 
-  if (!props.paymentMethod.value) {
-    feedback.value.errors.push('Nessun metodo di spedizione indicato')
+  if (!props.paymentMethod?.value) {
+    feedback.errors.push('Nessun metodo di spedizione indicato')
   }
 
   if (props.cart.length <= 0) {
-    feedback.value.errors.push('Nessun prodotto presente nel carrello')
+    feedback.errors.push('Nessun prodotto presente nel carrello')
   }
 
   validateAddress(props.shippingAddress, ' per la spedizione')
