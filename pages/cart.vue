@@ -81,7 +81,7 @@
                   </template>
                 </div>
 
-                <div class="u-pt-half" :class="gridClassName">
+                <div class="u-pt-half u-pb-half" :class="[gridClassName, rowClassName]">
                   <b :class="[gridCellLeftClassName, totalClassName]">{{
                     $t('common.total')
                   }}</b>
@@ -100,8 +100,11 @@
                 </div>
               </template>
 
-              <template #after="{ footerClassName }">
+              <template #after="{ footerClassName, }">
                 <div :class="footerClassName">
+                  <div v-if="!hasMinimumOrderCost" class="u-mb-tiny">
+                    Raggiungi <PriceHolder :price="20" /> di spesa per andare alla cassa!
+                  </div>
                   <BaseButton
                     :disabled="sending || !hasMinimumOrderCost"
                     type="submit"
