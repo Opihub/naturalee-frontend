@@ -2,18 +2,22 @@
   <main class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
-    <SiteContainer flex class="u-mt-huge u-position-relative" :max-width="1370">
+    <SiteContainer
+      flex
+      class="u-mt-huge u-position-relative c-video-section"
+      :max-width="1370"
+    >
       <FloatingIcon
-        :svg-size="{ width: 150, height: 140 }"
-        :coordinates="{ bottom: -20, left: -90 }"
+        :svg-size="svgs.fragolaPera.size"
+        :coordinates="svgs.fragolaPera.coordinates"
       >
         <template #default>
           <FragolaPera />
         </template>
       </FloatingIcon>
       <FloatingIcon
-        :svg-size="{ width: 260, height: 360 }"
-        :coordinates="{ bottom: -20, right: -170 }"
+        :svg-size="svgs.formaggioRapanello.size"
+        :coordinates="svgs.formaggioRapanello.coordinates"
       >
         <template #default>
           <FormaggioRapanello />
@@ -47,7 +51,8 @@
         class="c-second-section u-pt-huge@tablet u-pb-huge@tablet u-pt-custom@tablet u-pb-custom@tablet"
         :max-width="830"
       >
-        <BaseHeading>
+        <BaseHeading class="u-position-relative">
+          <CircularText :text="t('secondSection.circularText')" />
           <i18n-t keypath="secondSection.title">
             <template #highlight>
               <HighlightText>{{
@@ -55,8 +60,6 @@
               }}</HighlightText>
             </template>
           </i18n-t>
-
-          <CircularText :text="t('secondSection.circularText')" />
         </BaseHeading>
 
         <BaseParagraph class="u-mt-large">
@@ -151,6 +154,33 @@ const cards = ref([
   },
 ])
 
+const svgs = ref({
+  fragolaPera: {
+    size: {
+      default: { width: 81, height: 73 },
+      desktop: { width: 110, height: 100 },
+      full: { width: 150, height: 140 },
+    },
+    coordinates: {
+      default: { bottom: -10, left: 0 },
+      desktop: { bottom: -20, left: 0 },
+      full: { bottom: -20, left: -90 },
+    },
+  },
+  formaggioRapanello: {
+    size: {
+      default: { width: 120, height: 170 },
+      desktop: { width: 200, height: 300 },
+      full: { width: 260, height: 360 },
+    },
+    coordinates: {
+      default: { bottom: -20, right: -30 },
+      desktop: { bottom: -20, right: -105 },
+      full: { bottom: -20, right: -195 },
+    },
+  },
+})
+
 // Watcher
 
 // Computed
@@ -160,6 +190,16 @@ const cards = ref([
 
 <style lang="scss" scoped>
 @include scope('azienda') {
+  @include component('video-section') {
+    @include between(tablet, full) {
+      @include set-local-vars(
+        $prefix: 'container',
+        $map: (
+          padding: rem(60px),
+        )
+      );
+    }
+  }
   @include component('first-section') {
     margin-top: 100px;
 
@@ -172,17 +212,40 @@ const cards = ref([
       );
     }
 
+    @include until(tablet) {
+      @include set-local-vars(
+        $prefix: 'paragraph',
+        $map: (
+          width: 100%,
+        )
+      );
+      // @include set-local-vars(
+      //   $prefix: 'content-row',
+      //   $map: (
+      //     margin: rem(230px),
+      //   )
+      // );
+    }
+
     @include set-local-vars(
       $prefix: 'paragraph',
       $map: (
         width: rem(520px),
       )
     );
-
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'content-row',
+        $map: (
+          margin: rem(100px),
+          content-width: rem(610px),
+          parallax-offset: rem(-55px) 0 0,
+        )
+      );
+    }
     @include set-local-vars(
       $prefix: 'content-row',
       $map: (
-        margin: rem(100px),
         content-width: rem(610px),
         parallax-offset: rem(-55px) 0 0,
       )
@@ -213,17 +276,31 @@ const cards = ref([
     padding-top: rem(60px);
     padding-bottom: rem(60px);
 
-    @media screen and (max-width: 375px) {
-      & h1 {
-        @include set-local-vars(
-          $prefix: 'heading',
-          $map: (
-            font-size: rem(30px),
-          )
-        );
-      }
+    @include set-local-vars(
+      $prefix: 'heading',
+      $map: (
+        white-space: pre-line,
+        display: inline,
+      )
+    );
+    @include customMedia(440px, true) {
+      @include set-local-vars(
+        $prefix: 'circular-text',
+        $map: (
+          position: static,
+          letter-position: static,
+          font-size: rem(20px),
+        )
+      );
     }
-
+    @include customMedia(400px, true) {
+      @include set-local-vars(
+        $prefix: 'heading',
+        $map: (
+          display: block,
+        )
+      );
+    }
     @include set-local-vars(
       $prefix: 'paragraph',
       $map: (
@@ -241,26 +318,70 @@ const cards = ref([
 
     @include object('circular-text') {
       font-weight: get-var(weight-regular);
-      top: rem(50px);
-      right: calc(rem(100px) - 4vw);
+      // top: rem(50px);
+      // right: calc(rem(100px) - 4vw);
 
-      @include from(tablet) {
-        top: rem(120px);
-        right: rem(100px);
+      // @include media(400px, reverse) {
+      //   top: rem(0px);
+      //   right: rem(60px);
+      // }
+
+      top: rem(0px);
+      right: rem(0px);
+      // @include until(tablet) {
+      // }
+
+      @include until(tablet) {
+        top: rem(10px);
+        right: rem(30px);
       }
+      // @include from(tablet) {
+      //   top: rem(120px);
+      //   right: rem(80px);
+      // }
+
+      // @include from(desktop) {
+      //   right: rem(0px);
+      // }
+    }
+
+    @include until(tablet) {
+      @include set-local-vars(
+        $prefix: 'highlight-text',
+        $map: (
+          translate: #{-50%,
+          30%},
+          rotate: 50deg,
+        )
+      );
+    }
+
+    @include from(tablet) {
+      @include set-local-vars(
+        $prefix: 'highlight-text',
+        $map: (
+          translate: #{-50%,
+          30%},
+          rotate: 50deg,
+        )
+      );
+    }
+
+    @include from(desktop) {
+      @include set-local-vars(
+        $prefix: 'highlight-text',
+        $map: (
+          translate: #{-50%,
+          5%},
+          rotate: 65deg,
+        )
+      );
     }
   }
 
   @include component('third-section') {
     text-align: center;
     position: relative;
-
-    @include set-local-vars(
-      $prefix: 'card',
-      $map: (
-        width: rem(350px),
-      )
-    );
 
     @include from(tablet) {
       @include set-local-vars(
@@ -274,15 +395,43 @@ const cards = ref([
       @include set-local-vars(
         $prefix: 'paragraph',
         $map: (
-          width: rem(385px),
+          width: 100%,
           white-space: pre-line,
+        )
+      );
+    }
+
+    @include from(desktop) {
+      @include set-local-vars(
+        $prefix: 'card',
+        $map: (
+          width: rem(280px),
+        )
+      );
+    }
+
+    @include from(large) {
+      @include set-local-vars(
+        $prefix: 'card',
+        $map: (
+          width: rem(300px),
         )
       );
 
       @include set-local-vars(
+        $prefix: 'paragraph',
+        $map: (
+          width: rem(385px),
+          white-space: pre-line,
+        )
+      );
+    }
+
+    @include from(full) {
+      @include set-local-vars(
         $prefix: 'card',
         $map: (
-          width: rem(420px),
+          width: rem(350px),
         )
       );
     }
@@ -291,7 +440,7 @@ const cards = ref([
       align-items: baseline;
       justify-content: center;
 
-      @include from('full') {
+      @include from('tablet') {
         flex-wrap: nowrap;
       }
 
@@ -302,13 +451,17 @@ const cards = ref([
         )
       );
 
-      @include from('tablet') {
+      @include from('desktop') {
         @include set-local-vars(
           $prefix: 'row',
           $map: (
             gap: rem(128px),
           )
         );
+      }
+
+      @include object('card') {
+        flex-shrink: 1;
       }
     }
 
@@ -369,6 +522,39 @@ const cards = ref([
         image-radius: rem(50px),
       )
     );
+
+    @include between(tablet, desktop) {
+      @include set-local-vars(
+        $prefix: 'content-row',
+        $map: (
+          margin: rem(30px),
+          content-width: rem(600px),
+        )
+      );
+      @include set-local-vars(
+        $prefix: 'container',
+        $map: (
+          direction: column-reverse,
+        )
+      );
+    }
+
+    @include between(desktop, large) {
+      @include set-local-vars(
+        $prefix: 'container',
+        $map: (
+          gap: rem(40px),
+        )
+      );
+
+      @include set-local-vars(
+        $prefix: 'content-row',
+        $map: (
+          content-width: rem(400px),
+          parallax-width: rem(790px),
+        )
+      );
+    }
   }
 }
 </style>
@@ -382,7 +568,7 @@ const cards = ref([
   },
   "secondSection": {
     "circularText": "La natura a casa tua",
-    "title": "Coltiviamo passione, {highlight} gusto",
+    "title": "Coltiviamo passione,\n {highlight} gusto",
     "highlightText": "Raccogliamo",
     "paragraph": "La nostra missione è un connubio di tradizione e innovazione. Ci impegniamo a consegnare a voi e alla vostra attività la migliore selezione di frutta, verdura, latticini, vini, spezie e molto altro.\nLa freschezza di ieri incontra la comodità di oggi guardando avanti con entusiasmo.\nVolete frutta e verdura di alta qualità a portata di clic? Saremo il vostro punto di riferimento."
   },
