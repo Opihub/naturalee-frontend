@@ -64,7 +64,7 @@ $prefix: 'category-cards';
     );
   }
 
-  @include from(full) {
+  @include from(desktop) {
     @include set-local-vars(
       $prefix: 'row',
       $map: (

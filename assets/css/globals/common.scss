@@ -50,7 +50,11 @@ sup {
 }
 
 #app {
-  height: max(100vh, 100%);
+  min-height: max(100vh, 100%);
+}
+
+img {
+  user-select: none;
 }
 
 ::-webkit-scrollbar {
@@ -63,6 +67,10 @@ sup {
 
 ::-webkit-scrollbar-thumb {
   border-radius: get-var(border-circle);
-  border: 1px solid get-var(scrollbar-track-color);
   background-color: get-var(scrollbar-thumb-color);
+}
+
+::selection {
+  color: get-var(color-green);
+  background-color: get-var(color-yellow);
 }

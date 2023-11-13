@@ -55,7 +55,10 @@
                   />
                 </div>
 
-                <div class="u-pt-half u-pb-half" :class="[gridClassName, rowClassName]">
+                <div
+                  class="u-pt-half u-pb-half"
+                  :class="[gridClassName, rowClassName]"
+                >
                   <span :class="gridCellLeftClassName">{{
                     $t('common.subTotal')
                   }}</span>
@@ -86,15 +89,11 @@
                     $t('common.total')
                   }}</b>
                   <PriceHolder
-                    :class="[
-                      gridCellRightClassName,
-                      totalClassName,
-                    ]"
                     :price="total"
                   />
                 </div>
 
-                <div v-if="!hasMinimumOrderCost" :class="[className, rowClassName]">
+                <div :class="[className, rowClassName]">
                   Raggiungi <PriceHolder :price="20" /> di spesa per andare alla cassa!
                   <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
                 </div>
@@ -149,7 +148,7 @@ const cart = useCartStore()
 const { sending, send } = useSender()
 
 // Data
-const { isEmpty, } = storeToRefs(cart)
+const { isEmpty } = storeToRefs(cart)
 const remoteBasket = await cart.load()
 const basket = ref(remoteBasket.value)
 

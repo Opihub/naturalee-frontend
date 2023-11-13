@@ -11,7 +11,7 @@
       fullAddress
     }}</span>
 
-    <template v-if="'invoice' in address">
+    <template v-if="invoice.invoice">
       <i18n-t
         keypath="invoice.answerRequestInvoice"
         tag="b"
@@ -22,57 +22,64 @@
         </template>
       </i18n-t>
 
-      <template v-if="address.invoice === 'company'">
-        <span v-if="address.company" :class="`${CSS_NAME}__row`">{{
-          address.company
+      <template v-if="invoice.invoice === 'company'">
+        <span v-if="invoice.company" :class="`${CSS_NAME}__row`">{{
+          invoice.company
         }}</span>
 
-        <span v-if="address.cf" :class="`${CSS_NAME}__row`">
-          <b>{{ $t('addresses.cf') }}:</b> {{ address.cf }}
+        <span
+          v-if="invoice.cfCompany || invoice.cf"
+          :class="`${CSS_NAME}__row`"
+        >
+          <b>{{ $t('addresses.cf') }}:</b> {{ invoice.cfCompany || invoice.cf }}
         </span>
-        <span v-if="address.vat" :class="`${CSS_NAME}__row`">
-          <b>{{ $t('addresses.vat') }}:</b> {{ address.vat }}
+        <span v-if="invoice.vat" :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.vat') }}:</b> {{ invoice.vat }}
         </span>
-        <span v-if="address.sdi" :class="`${CSS_NAME}__row`">
-          <b>{{ $t('addresses.sdi') }}:</b> {{ address.sdi }}
+        <span v-if="invoice.sdi" :class="`${CSS_NAME}__row`">
+          <b>{{ $t('addresses.sdi') }}:</b> {{ invoice.sdi }}
         </span>
 
-        <span :class="`${CSS_NAME}__row`">
+        <span v-if="invoice.pec" :class="`${CSS_NAME}__row`">
           <b>{{ $t('addresses.pec') }}:</b>&nbsp;
           <BaseLink
-            v-if="address.pec"
-            :to="`mailto:${address.pec}`"
+            :to="`mailto:${invoice.pec}`"
             color="green"
-            :text="address.pec"
+            :text="invoice.pec"
           />
         </span>
       </template>
-      <template v-else-if="address.invoice === 'private'">
-        <span v-if="address.cf" :class="`${CSS_NAME}__row`">
-          <b>{{ $t('addresses.cf') }}:</b> {{ address.cf }}
+      <template v-else-if="invoice.invoice === 'private'">
+        <span
+          v-if="invoice.cfPrivate || invoice.cf"
+          :class="`${CSS_NAME}__row`"
+        >
+          <b>{{ $t('addresses.cf') }}:</b> {{ invoice.cfPrivate || invoice.cf }}
         </span>
       </template>
-
-      <span :class="`${CSS_NAME}__row`">
-        <BaseLink
-          v-if="address.phone"
-          :to="`tel:${address.phone}`"
-          color="green"
-          underline
-          >{{ address.phone }}</BaseLink
-        >
-      </span>
-
-      <span :class="`${CSS_NAME}__row`">
-        <BaseLink
-          v-if="address.email"
-          :to="`mailto:${address.email}`"
-          color="green"
-          underline
-          >{{ address.email }}</BaseLink
-        >
-      </span>
     </template>
+
+    <span :class="`${CSS_NAME}__row`">
+      <BaseLink
+        v-if="address.phone"
+        :to="`tel:${address.phone}`"
+        color="green"
+        underline
+        >{{ address.phone }}</BaseLink
+      >
+    </span>
+
+    <span :class="`${CSS_NAME}__row`">
+      <BaseLink
+        v-if="address.email"
+        :to="`mailto:${address.email}`"
+        color="green"
+        underline
+        >{{ address.email }}</BaseLink
+      >
+    </span>
+
+    <slot :class-name="`${CSS_NAME}__row`" />
   </address>
 </template>
 
@@ -89,6 +96,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  invoice: {
+    type: Object,
+    default: null,
+  },
 })
 
 // Component life-cycle hooks
@@ -101,6 +112,25 @@ const { t } = useI18n()
 // Watcher
 
 // Computed
+const invoice = computed(() => {
+  if (props.invoice) {
+    return props.invoice
+  }
+
+  const { invoice, company, cfCompany, vat, sdi, pec, cfPrivate } =
+    props.address
+
+  return {
+    invoice: invoice || false,
+    company: company || null,
+    cfCompany: cfCompany || null,
+    vat: vat || null,
+    sdi: sdi || null,
+    pec: pec || null,
+    cfPrivate: cfPrivate || null,
+  }
+})
+
 const fullName = computed(() => {
   return [props.address.firstName, props.address.lastName]
     .filter((part) => part)
@@ -108,8 +138,8 @@ const fullName = computed(() => {
 })
 
 const answerRequestInvoice = computed(() => {
-  if (['private', 'company'].includes(props.address.invoice)) {
-    return t(`invoice.is${capitalize(props.address.invoice)}`)
+  if (['private', 'company'].includes(invoice.value.invoice)) {
+    return t(`invoice.is${capitalize(invoice.value.invoice)}`)
   }
 
   return t('common.no')

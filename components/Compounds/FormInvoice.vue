@@ -150,6 +150,8 @@ const updateInvoice = (value, field) => {
 
 <style lang="scss">
 @include component('form-invoice') {
+  width: 100%;
+
   @include set-local-vars(
     $prefix: 'form',
     $map: (
