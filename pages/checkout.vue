@@ -496,22 +496,6 @@ const closeBillingModal = () => {
 
   toggleBillingModal(false)
 }
-
-const updateAddress = (address) => {
-  shippingAddress.value = address
-}
-
-const updateShippingMethod = (method) => {
-  shippingMethod.value = method
-}
-
-// Provide
-provide('shipping', {
-  address: shippingAddress,
-  updateAddress,
-  method: shippingMethod,
-  updateMethod: updateShippingMethod,
-})
 </script>
 
 <style lang="scss" scoped>
