@@ -3,10 +3,10 @@
     <div :class="`${CSS_NAME}__links`">
       <SiteLogo :alt="true" />
 
-      <InlineMenu v-if="socialsMenu" :menu="socialsMenu" svg-size="18px" />
+      <InlineMenu v-if="socialsMenu && socialsMenu.length" :menu="socialsMenu" svg-size="18px" />
     </div>
 
-    <InlineMenu v-if="menu" :menu="menu" :class="`${CSS_NAME}__menu`">
+    <InlineMenu v-if="menu && menu.length" :menu="menu" :class="`${CSS_NAME}__menu`">
       <template #after="{ itemClassName, itemLinkClassName }">
         <li :class="itemClassName">
           <InlineButton

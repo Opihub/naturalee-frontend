@@ -88,6 +88,14 @@ const style = computed(() => {
   @include from(tablet) {
     height: auto;
     aspect-ratio: get-var(aspect-ratio, $prefix: $prefix);
+    @include typography(30px, 40px);
+  }
+
+  @include between(tablet, large) {
+    @include typography(22px, 32px);
+  }
+
+  @include from(large) {
     @include typography(40px, 50px);
   }
 

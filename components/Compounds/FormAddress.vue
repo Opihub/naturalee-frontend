@@ -142,6 +142,10 @@ const emit = defineEmits(['update:address'])
 // Methods
 const updateAddress = (value, field) => {
   const newAddress = { ...props.address }
+  if (!newAddress.country) {
+    newAddress.country = 'IT'
+  }
+
   newAddress[field] = value.trim()
 
   if (newAddress[field] === props.address[field]) {

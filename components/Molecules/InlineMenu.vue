@@ -87,7 +87,7 @@ const props = defineProps({
     type: String,
     default: null,
     validator(value) {
-      return ['white', 'dark'].includes(value)
+      return ['white', 'dark', 'green'].includes(value)
     },
   },
   svgSize: {
@@ -147,6 +147,7 @@ $prefix: 'menu';
   list-style: none;
   display: flex;
   align-items: get-var(align-items, baseline, $prefix: $prefix);
+  justify-content: get-var(justify-content, start, $prefix: $prefix);
   flex-direction: get-var(direction, row, $prefix: $prefix);
   gap: get-var(
       row-gap,
@@ -228,6 +229,12 @@ $prefix: 'menu';
   }
 
   @include element('item') {
+    border-bottom: get-var(border, 0, $prefix: $item-prefix);
+
+    &:last-child {
+      border-bottom: get-var(last-border, 0, $prefix: $item-prefix);
+    }
+
     @include element('text') {
       width: get-var(width, auto, $prefix: $item-prefix);
     }
