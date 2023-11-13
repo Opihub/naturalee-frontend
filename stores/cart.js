@@ -35,9 +35,9 @@ export const useCartStore = defineStore('cart', () => {
     }
   )
 
-  const shippingMethod = useSessionStorage('shippingMethod', null, {
-    serializer: StorageSerializers.object,
-  })
+  // const shippingMethod = useSessionStorage('shippingMethod', null, {
+  //   serializer: StorageSerializers.object,
+  // })
 
   const paymentMethod = useSessionStorage('paymentMethod', null, {
     serializer: StorageSerializers.object,
@@ -52,6 +52,26 @@ export const useCartStore = defineStore('cart', () => {
     return count.value <= 0
   })
 
+  const hasFreeShipping = computed(() => {
+    return 50 - subTotal.value <= 0
+  })
+
+  const shippingMethod = computed(() => {
+    if (hasFreeShipping.value) {
+      return {
+        cost: 0,
+        id: 'free_shipping:1',
+        // id: 'free_shipping',
+      }
+    }
+
+    return {
+      cost: 3,
+      id: 'flat_rate:5',
+      // id: 'flat_rate',
+    }
+  })
+
   const checkout = computed(() => {
     return cart.value.map((item) => ({
       id: item.id,
@@ -64,10 +84,6 @@ export const useCartStore = defineStore('cart', () => {
   const { subTotal, granTotal: total } = useTotal(cart, {
     shipping: shippingMethod,
     payment: paymentMethod,
-  })
-
-  const hasFreeShipping = computed(() => {
-    return 50 - subTotal.value <= 0
   })
 
   // Actions
@@ -114,12 +130,16 @@ export const useCartStore = defineStore('cart', () => {
       })
     }
 
-    const response = await useApi('shop/cart/update/batch', {
-      method: 'PUT',
-      body
-    }, {
-      cache: false,
-    }).catch((error) => {
+    const response = await useApi(
+      'shop/cart/update/batch',
+      {
+        method: 'PUT',
+        body,
+      },
+      {
+        cache: false,
+      }
+    ).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/cart/update/batch"',
         error
@@ -450,7 +470,8 @@ export const useCartStore = defineStore('cart', () => {
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
-    shippingMethod: skipHydrate(shippingMethod),
+    shippingMethod,
+    // shippingMethod: skipHydrate(shippingMethod),
     paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
     count,
