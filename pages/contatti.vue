@@ -41,8 +41,8 @@
           padless
         >
           <FloatingIcon
-            :svg-size="svgs.Papaya.size"
-            :coordinates="svgs.Papaya.coordinates"
+            :svg-size="svgs.papaya.size"
+            :coordinates="svgs.papaya.coordinates"
           >
             <template #default>
               <Papaya />
@@ -94,11 +94,10 @@ const svgs = ref({
     },
     coordinates: {
       default: { top: -30, right: -20 },
-      tablet: { top: -30, right: -70 },
     },
     rotate: 90,
   },
-  Papaya: {
+  papaya: {
     size: {
       default: { width: 102, height: 86 },
       tablet: { width: 235, height: 200 },

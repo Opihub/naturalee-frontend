@@ -52,6 +52,9 @@
 
       <div :class="[className, `${CSS_NAME}__row`, `${CSS_NAME}__row--footer`]">
         <WishlistButton :product="product" />
+        <b class="u-ml-micro" @click="() => update(product)">{{
+          $t('wishlist.add')
+        }}</b>
       </div>
     </template>
   </ReceiptBlock>
@@ -59,7 +62,7 @@
 
 <script setup>
 // Imports
-
+import { useWishlistStore } from '@/stores/wishlist'
 // Constants
 const CSS_NAME = 'c-product-card-detail'
 
@@ -74,7 +77,7 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
-
+const wishlist = useWishlistStore()
 // Data
 const quantity = ref(1)
 
@@ -113,6 +116,7 @@ const stock = computed(() => {
 })
 
 // Methods
+const { update } = wishlist
 </script>
 
 <style lang="scss">
@@ -146,6 +150,18 @@ $prefix: 'product-card-detail';
       border-bottom: 0;
       flex-direction: row;
       justify-content: center;
+      align-items: center;
+      &:hover button {
+        @include set-local-vars(
+          $prefix: 'wishlist-button',
+          $map: (
+            heart-color: red,
+          )
+        );
+      }
+      & b {
+        cursor: pointer;
+      }
     }
   }
 
