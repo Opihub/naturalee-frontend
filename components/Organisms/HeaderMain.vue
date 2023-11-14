@@ -69,7 +69,7 @@
               [`${CSS_NAME_ACTIONS}__icon`]: true,
               'is-active': isMobileMenuOpen,
             }"
-            @click.prevent="openMenuMobile"
+            @click="openMenuMobile"
           />
         </li>
       </ul>
@@ -125,12 +125,11 @@ const { cart, count, shippingCost, total } = storeToRefs(cartStore)
 const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
-
 // Watcher
 watch(
   () => props.menuMobileStatus,
   () => {
-    if (!props.menuMobileStatus) {
+    if (props.menuMobileStatus) {
       openMenuMobile()
     }
   }
@@ -140,8 +139,8 @@ watch(
 // Methods
 const openMenuMobile = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
-
   const event = isMobileMenuOpen.value ? 'open' : 'close'
+  console.log(event)
   emit('menuMobile:toggle', isMobileMenuOpen.value)
   emit(`menuMobile:${event}`, isMobileMenuOpen.value)
 }
