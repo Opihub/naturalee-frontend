@@ -125,22 +125,23 @@ const { cart, count, shippingCost, total } = storeToRefs(cartStore)
 const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
+
+const nuxtApp = useNuxtApp()
+nuxtApp.hook('page:start', () => {
+  openMenuMobile(null)
+})
 // Watcher
-watch(
-  () => props.menuMobileStatus,
-  () => {
-    if (props.menuMobileStatus) {
-      openMenuMobile()
-    }
-  }
-)
+
 // Computed
 
 // Methods
-const openMenuMobile = () => {
+const openMenuMobile = (value) => {
+  if (value == null && isMobileMenuOpen.value == false) {
+    return
+  }
   isMobileMenuOpen.value = !isMobileMenuOpen.value
   const event = isMobileMenuOpen.value ? 'open' : 'close'
-  console.log(event)
+
   emit('menuMobile:toggle', isMobileMenuOpen.value)
   emit(`menuMobile:${event}`, isMobileMenuOpen.value)
 }

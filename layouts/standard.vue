@@ -11,7 +11,6 @@
       ref="headerElement"
       :categories="categoriesMenu.data"
       :profile-menu="profileMenu.data"
-      :menu-mobile-status="isMobileMenuClose"
       @menu-mobile:toggle="updateMobileMenuStatus"
     />
     <Transition name="fade">
@@ -20,7 +19,6 @@
         :socials-menu="socialsMenu.data"
         :primary-menu="primaryMenu.data"
         :profile-menu="profileMenu.data"
-        @close-menu-mobile="closeMobileMenu"
       />
     </Transition>
 
@@ -139,19 +137,12 @@ const topBarElement = ref(null)
 const categoriesMenuElement = ref(null)
 const isPostcodeModalOpen = ref(false)
 const isMobileMenuOpen = ref(false)
-const isMobileMenuClose = ref(false)
 const { top } = useElementBounding(headerElement)
 const document = ref(globalThis.window?.document.body || null)
 const isLocked = useScrollLock(document)
-//const route = useRoute()
 
-// Watcher
-// watch(
-//   () => route.path,
-//   () => {
+//Watcher
 
-//   }
-// )
 // Computed
 
 // Methods
@@ -194,15 +185,8 @@ const togglePostcodeModal = (status = null) => {
 
 const updateMobileMenuStatus = (status) => {
   isMobileMenuOpen.value = status
-  isMobileMenuClose.value = false
   setHeaderOffset()
 
-  isLocked.value = status
-}
-
-const closeMobileMenu = (status) => {
-  isMobileMenuClose.value = true
-  isMobileMenuOpen.value = false
   isLocked.value = status
 }
 
