@@ -6,6 +6,7 @@
       direction="vertical"
       color="dark"
       arrow
+      @click.prevent="closeMenuMobile"
     />
 
     <span class="u-mt-large u-d-block u-ml-container u-mr-container">{{
@@ -17,6 +18,7 @@
       direction="vertical"
       color="dark"
       arrow
+      @click.prevent="closeMenuMobile"
     >
       <template v-if="isLoggedIn" #after="{ itemClassName, itemLinkClassName }">
         <li :class="[itemClassName]">
@@ -40,6 +42,7 @@
       class="u-mt-tiny"
       color="green"
       svg-size="22px"
+      @click.prevent="closeMenuMobile"
     />
   </BaseOverlay>
 </template>
@@ -73,12 +76,23 @@ defineProps({
   },
 })
 
+const emit = defineEmits(['closeMenuMobile'])
+
 // Composables
 const accountStore = useAccountStore()
 const { logout } = useLogout()
 
 // Data
 const { isLoggedIn } = storeToRefs(accountStore)
+
+// Watcher
+
+// Computed
+
+// Methods
+const closeMenuMobile = () => {
+  emit('closeMenuMobile', false)
+}
 </script>
 
 <style lang="scss" scoped>

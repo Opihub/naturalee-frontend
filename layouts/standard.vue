@@ -11,6 +11,7 @@
       ref="headerElement"
       :categories="categoriesMenu.data"
       :profile-menu="profileMenu.data"
+      :menu-mobile-status="isMobileMenuOpen"
       @menu-mobile:toggle="updateMobileMenuStatus"
     />
     <Transition name="fade">
@@ -19,6 +20,7 @@
         :socials-menu="socialsMenu.data"
         :primary-menu="primaryMenu.data"
         :profile-menu="profileMenu.data"
+        @close-menu-mobile="closeMobileMenu"
       />
     </Transition>
 
@@ -54,7 +56,7 @@
 
 <script setup>
 // Imports
-import { useElementBounding, useScrollLock, useToggle } from '@vueuse/core'
+import { useElementBounding, useScrollLock } from '@vueuse/core'
 // Constants
 const CSS_NAME = 'o-layout'
 
@@ -187,6 +189,11 @@ const updateMobileMenuStatus = (status) => {
   isMobileMenuOpen.value = status
   setHeaderOffset()
 
+  isLocked.value = status
+}
+
+const closeMobileMenu = (status) => {
+  isMobileMenuOpen.value = false
   isLocked.value = status
 }
 

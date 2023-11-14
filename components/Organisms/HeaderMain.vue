@@ -69,7 +69,7 @@
               [`${CSS_NAME_ACTIONS}__icon`]: true,
               'is-active': isMobileMenuOpen,
             }"
-            @click="openMenuMobile"
+            @click.prevent="openMenuMobile"
           />
         </li>
       </ul>
@@ -88,7 +88,7 @@ const CSS_NAME_CONTAINER = `${CSS_NAME}__container`
 const CSS_NAME_ACTIONS = `${CSS_NAME}__actions`
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   categories: {
     type: Array,
     default() {
@@ -100,6 +100,10 @@ defineProps({
     default() {
       return []
     },
+  },
+  menuMobileStatus: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -123,7 +127,14 @@ const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
 
 // Watcher
-
+watch(
+  () => props.menuMobileStatus,
+  () => {
+    if (!props.menuMobileStatus) {
+      openMenuMobile()
+    }
+  }
+)
 // Computed
 
 // Methods
