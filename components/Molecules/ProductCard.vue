@@ -182,6 +182,14 @@ $prefix: 'product-card';
     @include set-local-vars(
       $prefix: 'row',
       $map: (
+        columns: 3,
+      )
+    );
+  }
+  @include from(full) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
         columns: 4,
       )
     );
@@ -391,7 +399,7 @@ $prefix: 'product-card';
         $prefix: 'button',
         $map: (
           justify-content: center,
-          padding: rem(12px) rem(80px),
+          padding: rem(12px) rem(40px),
           fill: get-var(color-yellow),
         )
       );
@@ -418,7 +426,7 @@ $prefix: 'product-card';
         @include set-local-vars(
           $prefix: 'button',
           $map: (
-            padding: rem(12px) rem(30px),
+            padding: rem(12px) rem(10px),
           )
         );
       }

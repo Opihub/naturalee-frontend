@@ -46,7 +46,7 @@ defineProps({
 $prefix: 'circular-text';
 @include object($prefix) {
   display: block;
-  position: absolute;
+  position: get-var(position, absolute, $prefix: $prefix);
   z-index: 3;
   & [style*='--index'] {
     --inner-angle: calc((360 / var(--total)) * 0.65deg);
@@ -57,14 +57,14 @@ $prefix: 'circular-text';
     --radius: calc(
       (var(--character-width, 1) / sin(var(--inner-angle))) * -1ch
     );
-    font-size: get-var(circular-font-size, rem(10px));
-    @include from('tablet') {
-      font-size: get-var(circular-font-size, rem(12px));
-    }
+    font-size: get-var(font-size, rem(16px), $prefix: $prefix);
+    // @include from('tablet') {
+    //   font-size: get-var(circular-font-size, rem(12px));
+    // }
     @include from('desktop') {
-      font-size: get-var(circular-font-size, rem(18px));
+      font-size: get-var(font-size, rem(18px), $prefix: $prefix);
     }
-    position: absolute;
+    position: get-var(letter-position, absolute, $prefix: $prefix);
     top: 30%;
     left: 50%;
     color: $red;

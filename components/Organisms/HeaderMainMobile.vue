@@ -79,6 +79,12 @@ const { logout } = useLogout()
 
 // Data
 const { isLoggedIn } = storeToRefs(accountStore)
+
+// Watcher
+
+// Computed
+
+// Methods
 </script>
 
 <style lang="scss" scoped>

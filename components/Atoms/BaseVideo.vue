@@ -176,20 +176,22 @@ onMounted(() => {
 <style lang="scss">
 @import 'vlitejs/vlite.css';
 
-$video-radius: rem(50px);
-
 $prefix: 'video';
 @include object($prefix) {
   @include is('loading') {
     width: 100%;
-    aspect-ratio: get-var(video-ratio, "16 / 9");
+    aspect-ratio: get-var(video-ratio, '16 / 9');
     background-color: get-var(color-black);
-    border-radius: #{$video-radius};
+    border-radius: rem(50px);
+    @include customMedia(600px, true) {
+      border-radius: rem(30px);
+    }
   }
 }
 
 .v-vlite.v-#{$prefix} {
   aspect-ratio: get-var(video-ratio);
+  height: 100%;
 
   &.is-iframe {
     width: 100%;
@@ -210,7 +212,10 @@ $prefix: 'video';
   }
 
   &.v-border-radius {
-    border-radius: #{$video-radius};
+    border-radius: rem(50px);
+    @include customMedia(600px, true) {
+      border-radius: rem(30px);
+    }
   }
 
   .v-bigPlay {
@@ -224,6 +229,10 @@ $prefix: 'video';
     svg {
       width: rem(215px);
       height: rem(215px);
+      @include until(tablet) {
+        width: rem(115px);
+        height: rem(115px);
+      }
       margin: 0 auto rem(18px);
       stroke: none;
       background: get-var(color-green);

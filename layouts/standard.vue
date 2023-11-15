@@ -54,7 +54,7 @@
 
 <script setup>
 // Imports
-import { useElementBounding, useScrollLock, useToggle } from '@vueuse/core'
+import { useElementBounding, useScrollLock } from '@vueuse/core'
 // Constants
 const CSS_NAME = 'o-layout'
 
@@ -141,7 +141,7 @@ const { top } = useElementBounding(headerElement)
 const document = ref(globalThis.window?.document.body || null)
 const isLocked = useScrollLock(document)
 
-// Watcher
+//Watcher
 
 // Computed
 
