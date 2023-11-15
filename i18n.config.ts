@@ -147,7 +147,7 @@ export default defineI18nConfig(() => ({
         notValid: 'Coupon non valido!',
       },
       wishlist: {
-        add: 'Aggiungi ai preferiti!',
+        add: 'Salva nei preferiti!',
         added: '{name} aggiunto ai preferiti',
         removed: '{name} rimosso dai preferiti',
         missingProduct: 'Prodotto non trovato nei preferiti',

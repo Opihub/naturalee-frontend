@@ -129,13 +129,13 @@ $prefix: 'contacts';
         @include from('tablet') {
           padding: 50px;
         }
-        border-radius: 30px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
       }
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding-top: 10px;
-      padding-bottom: 10px;
       @include from('tablet') {
         flex-direction: row;
         gap: 4em;

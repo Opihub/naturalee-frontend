@@ -43,10 +43,11 @@
           :disabled="isDisabled"
         >
           <span>{{
-            product.stockStatus === 'instock'
+            product.stockStatus === 'instock' && product.price > 0
               ? $t('cart.addTo')
               : $t('cart.notAvailable')
           }}</span>
+          <template #added>{{ $t('cart.added') }}</template>
         </AddToCartButton>
       </div>
 
@@ -111,7 +112,7 @@ const stock = computed(() => {
       return 2
 
     default:
-      return 1
+      console.debug(props.product.stockStatus)
   }
 })
 
@@ -133,6 +134,16 @@ $prefix: 'product-card-detail';
       line-height: rem(18px),
     )
   );
+
+  @include object('counter') {
+    align-self: center;
+    @include set-local-vars(
+      $prefix: 'counter',
+      $map: (
+        width: 60%,
+      )
+    );
+  }
 
   @include set-local-vars(
     $prefix: 'receipt',

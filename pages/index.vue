@@ -251,6 +251,7 @@ const { t } = useI18n({
   }
 
   @include component('fifth-section') {
+    overflow: hidden;
     @include set-local-vars(
       $prefix: 'custom',
       $map: (
