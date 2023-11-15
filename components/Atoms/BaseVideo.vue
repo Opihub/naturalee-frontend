@@ -191,6 +191,7 @@ $prefix: 'video';
 
 .v-vlite.v-#{$prefix} {
   aspect-ratio: get-var(video-ratio);
+  height: 100%;
 
   &.is-iframe {
     width: 100%;

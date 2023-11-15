@@ -215,6 +215,10 @@ $prefix: 'header';
     display: flex;
     justify-content: flex-end;
     align-items: stretch;
+
+    @include until(tablet) {
+      align-items: baseline;
+    }
     padding: 0;
     align-self: stretch;
 
@@ -237,6 +241,7 @@ $prefix: 'header';
 
       @include modifier('menu') {
         display: block;
+        align-self: center;
 
         @include from(tablet) {
           display: none;
@@ -248,6 +253,9 @@ $prefix: 'header';
       width: 100%;
       height: 100%;
       padding: rem(20px) rem(14px);
+      @include customMedia(400px, true) {
+        padding: rem(20px) rem(7px);
+      }
 
       @include from(tablet) {
         padding: 0;

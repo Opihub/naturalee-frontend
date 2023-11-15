@@ -10,7 +10,7 @@
 
     <Suspense>
       <ProductsGrid
-        class="u-pb-huge u-pt-none u-pt-medium@desktop"
+        class="u-pb-huge u-pt-none u-pt-medium@desktop u-mt-huge u-mt-none@desktop"
         :from="`shop/featured/products`"
         paginate
       />
@@ -25,7 +25,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'featured'
+  name: 'featured',
 })
 
 defineI18nRoute({
