@@ -1,36 +1,37 @@
 <template>
   <main class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
-
-    <SiteContainer
-      flex
-      class="u-mt-huge u-position-relative c-video-section"
-      :max-width="1370"
-    >
-      <FloatingIcon
-        :svg-size="svgs.fragolaPera.size"
-        :coordinates="svgs.fragolaPera.coordinates"
+    <div class="s-overflow">
+      <SiteContainer
+        flex
+        class="u-mt-huge u-position-relative c-video-section"
+        :max-width="1370"
       >
-        <template #default>
-          <FragolaPera />
-        </template>
-      </FloatingIcon>
-      <FloatingIcon
-        :svg-size="svgs.formaggioRapanello.size"
-        :coordinates="svgs.formaggioRapanello.coordinates"
-      >
-        <template #default>
-          <FormaggioRapanello />
-        </template>
-      </FloatingIcon>
-      <BaseVideo
-        id="player"
-        src="shZXLvznzWk"
-        provider="youtube"
-        :aspect-ratio="ratio"
-        poster="/azienda/poster-azienda.svg"
-      />
-    </SiteContainer>
+        <FloatingIcon
+          :svg-size="svgs.fragolaPera.size"
+          :coordinates="svgs.fragolaPera.coordinates"
+        >
+          <template #default>
+            <FragolaPera />
+          </template>
+        </FloatingIcon>
+        <FloatingIcon
+          :svg-size="svgs.formaggioRapanello.size"
+          :coordinates="svgs.formaggioRapanello.coordinates"
+        >
+          <template #default>
+            <FormaggioRapanello />
+          </template>
+        </FloatingIcon>
+        <BaseVideo
+          id="player"
+          src="shZXLvznzWk"
+          provider="youtube"
+          :aspect-ratio="ratio"
+          poster="/azienda/poster-azienda.svg"
+        />
+      </SiteContainer>
+    </div>
 
     <ContentRow
       class="c-first-section"
@@ -190,6 +191,11 @@ const svgs = ref({
 
 <style lang="scss" scoped>
 @include scope('azienda') {
+  @include scope('overflow') {
+    width: 100%;
+    padding-bottom: 30px;
+    overflow: hidden;
+  }
   @include component('video-section') {
     @include between(tablet, full) {
       @include set-local-vars(
@@ -200,9 +206,9 @@ const svgs = ref({
       );
     }
   }
-  @include component('first-section') {
-    margin-top: 100px;
 
+  @include component('first-section') {
+    margin-top: 70px;
     @include object('container') {
       @include set-local-vars(
         $prefix: 'container',
