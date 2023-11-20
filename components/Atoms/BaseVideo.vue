@@ -90,7 +90,7 @@ const providers = useState('videoProviders', () => [])
 // Computed
 const className = computed(() => {
   const className = [CSS_NAME]
-
+  className.push(`is-${props.provider}`)
   if (!player.value) {
     className.push('is-loading')
   }
@@ -180,12 +180,16 @@ $prefix: 'video';
 @include object($prefix) {
   @include is('loading') {
     width: 100%;
+    height: 100%;
     aspect-ratio: get-var(video-ratio, '16 / 9');
     background-color: get-var(color-black);
     border-radius: rem(50px);
     @include customMedia(600px, true) {
       border-radius: rem(30px);
     }
+  }
+  @include is('html5') {
+    border-radius: 0;
   }
 }
 
