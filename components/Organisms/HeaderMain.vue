@@ -178,7 +178,7 @@ $prefix: 'header';
     align-items: center;
     gap: rem(8px);
 
-    @include until(tablet) {
+    @include until(desktop) {
       padding-right: 0;
     }
 
@@ -216,7 +216,7 @@ $prefix: 'header';
     justify-content: flex-end;
     align-items: stretch;
 
-    @include until(tablet) {
+    @include until(desktop) {
       align-items: baseline;
     }
     padding: 0;
@@ -230,7 +230,7 @@ $prefix: 'header';
       height: 100%;
       position: relative;
 
-      @include from(tablet) {
+      @include from(desktop) {
         width: rem(80px);
         border-left: 1px solid rgba(get-var(rgb-green), 0.45);
 
@@ -243,7 +243,7 @@ $prefix: 'header';
         display: block;
         align-self: center;
 
-        @include from(tablet) {
+        @include from(desktop) {
           display: none;
         }
       }
@@ -257,7 +257,7 @@ $prefix: 'header';
         padding: rem(20px) rem(7px);
       }
 
-      @include from(tablet) {
+      @include from(desktop) {
         padding: 0;
       }
     }
@@ -270,7 +270,7 @@ $prefix: 'header';
       display: none;
       // transform: translateX(-50%);
 
-      @include from(tablet) {
+      @include from(desktop) {
         display: block;
         padding: 0;
       }
