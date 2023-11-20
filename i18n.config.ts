@@ -209,6 +209,7 @@ export default defineI18nConfig(() => ({
         billing: 'Indirizzo di fatturazione',
         shipping: 'Indirizzo di spedizione',
         notSet: 'Indirizzo non impostato',
+        checkouNotSet: 'Inserisci un indirizzo di {type} per completare l\'ordine',
         delivery: 'Indirizzo di consegna',
         deliveryRequired: "L'indirizzo di consegna è obbligatorio",
         differentBilling: 'Fatturare ad un indirizzo differente?',
@@ -223,6 +224,7 @@ export default defineI18nConfig(() => ({
         address2: 'Appartamento, suite, unità, piano, ecc. (opzionale)',
         addressPlaceholder: 'Via/Piazza e Numero Civico',
         timeSlot: 'Scegli la fascia oraria preferita e il giorno di consegna:',
+        updated: 'Indirizzo di {type} aggiornato',
 
         company: 'Azienda',
         cf: 'CF',
