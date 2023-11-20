@@ -30,7 +30,8 @@ const style = computed(() => {
   }
 
   if (props.marker.textColor) {
-    style['--marker-text'] = props.marker.textColor || invertColor(props.marker.color)
+    style['--marker-text'] =
+      props.marker.textColor || invertColor(props.marker.color)
   }
 
   return style
@@ -53,6 +54,15 @@ $prefix: 'marker';
     fill: get-var(background, get-var(color-green), $prefix: $prefix);
     width: get-var(width, rem(200px), $prefix: $prefix);
     height: get-var(height, rem(39px), $prefix: $prefix);
+  }
+
+  @include customMedia(370px, true) {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        width: rem(130px),
+      )
+    );
   }
 
   @include element('text') {
