@@ -41,16 +41,17 @@
           padless
         >
           <FloatingIcon
-            :svg-size="{ width: 285, height: 250 }"
-            :coordinates="{ bottom: -70, left: -220 }"
+            :svg-size="svgs.papaya.size"
+            :coordinates="svgs.papaya.coordinates"
           >
             <template #default>
               <Papaya />
             </template>
           </FloatingIcon>
           <FloatingIcon
-            :svg-size="{ width: 150, height: 140 }"
-            :coordinates="{ top: -30, right: -70 }"
+            class="c-yellow-dots"
+            :svg-size="svgs.yellowDots.size"
+            :coordinates="svgs.yellowDots.coordinates"
             z-index="-1"
           >
             <template #default>
@@ -85,6 +86,30 @@ defineI18nRoute({
 
 // Data
 const { page } = await usePage('contatti')
+const svgs = ref({
+  yellowDots: {
+    size: {
+      default: { width: 67, height: 81 },
+      tablet: { width: 150, height: 140 },
+    },
+    coordinates: {
+      default: { top: -30, right: -20 },
+    },
+    rotate: 90,
+  },
+  papaya: {
+    size: {
+      default: { width: 102, height: 86 },
+      tablet: { width: 235, height: 200 },
+      large: { width: 285, height: 250 },
+    },
+    coordinates: {
+      default: { bottom: -50, left: -30 },
+      tablet: { bottom: -70, left: -180 },
+      large: { bottom: -70, left: -220 },
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>
@@ -104,13 +129,13 @@ $prefix: 'contacts';
         @include from('tablet') {
           padding: 50px;
         }
-        border-radius: 30px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
       }
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding-top: 10px;
-      padding-bottom: 10px;
       @include from('tablet') {
         flex-direction: row;
         gap: 4em;
@@ -118,7 +143,12 @@ $prefix: 'contacts';
     }
     @include element('container') {
       display: block;
-      @include from('tablet') {
+      @include component('yellow-dots') {
+        @include until(tablet) {
+          transform: rotate(180deg);
+        }
+      }
+      @include from(tablet) {
         @include set-local-vars(
           $prefix: 'container',
           $map: (

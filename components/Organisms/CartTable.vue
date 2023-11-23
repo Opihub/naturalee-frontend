@@ -45,7 +45,8 @@
             :data-title="$t('products.quantity')"
             align="center"
           >
-            <BaseCounter v-model="product.quantity" />
+            <BaseCounter v-if="!readonly" v-model="product.quantity" />
+            <span v-else>{{ product.quantity }}</span>
           </td>
           <td
             :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
@@ -54,7 +55,7 @@
           >
             <PriceHolder :price="product.price * product.quantity" />
           </td>
-          <td :class="CSS_NAME_ITEM_CELL" align="center">
+          <td v-if="!readonly" :class="CSS_NAME_ITEM_CELL" align="center">
             <CrossButton @click="onDelete(product)" />
           </td>
         </tr>
@@ -65,7 +66,7 @@
         </td>
       </tr>
     </template>
-    <template #footer>
+    <template v-if="!readonly" #footer>
       <tr :class="`${CSS_NAME}__footer`">
         <td colspan="7">
           <button
@@ -93,17 +94,25 @@ const CSS_NAME_ITEM_CELL = `${CSS_NAME_ITEM}__cell`
 
 // Define (Props, Emits, Page Meta)
 defineProps({
-  onDelete: {
-    type: Function,
-    required: true,
-  },
-  onClear: {
-    type: Function,
-    required: true,
-  },
   products: {
     type: Array,
     required: true,
+  },
+  onDelete: {
+    type: Function,
+    default() {
+      return () => {}
+    },
+  },
+  onClear: {
+    type: Function,
+    default() {
+      return () => {}
+    },
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -229,7 +238,7 @@ $prefix: 'cart-table';
       position: absolute;
       left: get-var(x-offset, $prefix: $prefix);
       right: get-var(x-offset, $prefix: $prefix);
-      bottom: 0;
+      bottom: get-var(after-bottom, 0, $prefix: $prefix);
       height: 1px;
       background-color: get-var(color-light);
     }

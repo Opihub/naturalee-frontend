@@ -21,7 +21,7 @@
       <ul
         :class="{
           [`${CSS_NAME}__variations`]: true,
-          'is-single': variations.length >= 1,
+          'is-single': variations.length <= 1,
         }"
         class="u-mb-half"
       >
@@ -52,6 +52,13 @@
         :class="`${CSS_NAME}__description`"
         :content="product.description"
       />
+      <div
+        v-if="product?.brand && product?.brand.length > 0"
+        :class="`${CSS_NAME}__brand`"
+        class="u-mt-half"
+      >
+        <span>{{ $t('products.brand', { brand: product.brand }) }}</span>
+      </div>
 
       <TagsList
         v-if="product?.categories && product.categories.length > 0"

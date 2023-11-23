@@ -13,6 +13,8 @@
     "Pinia",
     "Splide",
     "vlite",
-    "Vlitejs"
+    "Vlitejs",
+    "vuepic",
+    "wght"
   ]
 }

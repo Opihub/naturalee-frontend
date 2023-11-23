@@ -23,9 +23,13 @@ defineProps({
 $prefix: 'overlay';
 @include object($prefix) {
   position: fixed;
-  inset: 0;
+  inset: get-var(inset, 0, $prefix: $prefix);
   z-index: get-var(z-#{$prefix});
-  background-color: get-var(background-color, get-var(color-light), $prefix: $prefix);
+  background-color: get-var(
+    background-color,
+    get-var(color-light),
+    $prefix: $prefix
+  );
   opacity: get-var(opacity, 1, $prefix: $prefix);
   cursor: get-var(cursor, default, $prefix: $prefix);
 }

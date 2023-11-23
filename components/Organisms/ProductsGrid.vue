@@ -215,7 +215,7 @@ const fetchProducts = async () => {
   if (!props.from) {
     if (!props.use) {
       noProductsMessage.value =
-        'È avvenuto un errore durante il caricamento dei prodotti. Ci scusiamo per il disagio'
+        'Ops! Si è verificato un errore... Ricarica la pagina'
       return
     }
 
@@ -319,7 +319,7 @@ const fetchProducts = async () => {
     console.error(error)
     canFetch.value = false
     noProductsMessage.value =
-      'È avvenuto un errore durante il caricamento dei prodotti. Ci scusiamo per il disagio'
+      'Ops! Si è verificato un errore... Ricarica la pagina'
   } finally {
     isFetching.value = false
   }

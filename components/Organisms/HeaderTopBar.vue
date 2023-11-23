@@ -1,7 +1,11 @@
 <template>
   <section :class="className">
     <SiteContainer :class="`${CSS_NAME}__container`">
-      <InlineMenu :menu="socialsMenu" :class="`${CSS_NAME}__left`" gap="stretch" />
+      <InlineMenu
+        :menu="socialsMenu"
+        :class="`${CSS_NAME}__left`"
+        gap="stretch"
+      />
 
       <ClientOnly>
         <div v-if="banners && banners.length" :class="`${CSS_NAME}__center`">
@@ -116,7 +120,9 @@ $prefix: 'topbar';
   background-color: get-var(color-green);
   padding: rem(8px) 0;
   position: relative;
-
+  @include between(tablet, desktop) {
+    padding-bottom: 0;
+  }
   @include element('container') {
     grid-template-columns: 1fr auto 1fr;
     justify-content: space-between;
@@ -153,7 +159,7 @@ $prefix: 'topbar';
       );
     }
 
-    @include until(tablet) {
+    @include until(desktop) {
       display: none;
     }
 
@@ -182,7 +188,7 @@ $prefix: 'topbar';
     justify-self: end;
     margin-left: auto;
 
-    @include until(tablet) {
+    @include until(desktop) {
       display: none;
     }
 

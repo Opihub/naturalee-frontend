@@ -50,6 +50,12 @@ $prefix: 'profile-icon';
   justify-content: center;
   flex-direction: row;
 
+  @include until(desktop) {
+    @include element('label') {
+      display: none;
+    }
+  }
+
   @include element('caret') {
     svg {
       height: 4.48px;

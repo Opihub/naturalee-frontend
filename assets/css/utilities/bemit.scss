@@ -96,6 +96,18 @@
   }
 }
 
+@function compose-hack($selector) {
+  @return selector.append('._', $selector);
+}
+
+@mixin hack($element) {
+  $selector: compose-hack($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
 @function compose-state($selector, $has: false) {
   @if ($has) {
     @return selector.append('.has-', $selector);
@@ -145,5 +157,17 @@
     @include state($element, true) {
       @content;
     }
+  }
+}
+
+@mixin is-not($element) {
+  &:not(#{compose-state($element, false)}) {
+    @content;
+  }
+}
+
+@mixin has-not($element) {
+  &:not(#{compose-state($element, true)}) {
+    @content;
   }
 }

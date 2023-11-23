@@ -5,90 +5,337 @@
     </Transition>
 
     <SiteContainer>
-      <BaseMessage v-if="errors.length > 0" status="danger" class="u-mb-medium">
-        <ul>
-          <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
-        </ul>
-      </BaseMessage>
+      <BaseMessage v-if="isEmpty" :message="$t('cart.empty')" />
 
-      <form method="POST" class="o-row" @submit.prevent="submitOrder">
-        <!-- <template v-if="!isEmpty"> -->
-        <SiteContainer :max-width="1060" padless>
-          <BaseBox class="u-mb-large">
-            <template #head>
-              <BaseHeading tag="span" use="custom">{{
-                $t('orders.shipping')
-              }}</BaseHeading>
-            </template>
-
-            <FormCheckoutShipping
-              v-model:address="shippingAddress"
-              v-model:shipping="shippingData"
-              tag="div"
-              :time-slots="timeSlots"
-            />
-          </BaseBox>
-
-          <BaseBox>
-            <template #head>
-              <BaseHeading tag="span" use="custom">{{
-                $t('orders.billing')
-              }}</BaseHeading>
-            </template>
-
-            <BaseParagraph class="u-mb-tiny">{{
-              $t('invoice.requestInvoice')
-            }}</BaseParagraph>
-
-            <FormInvoice
-              v-model:invoice="billingData"
-              class="u-mb-half"
-              tag="div"
-            />
-
-            <ToggleField
-              v-model="useDifferentAddress"
-              class="s-different-billing"
-              ><BaseHeading tag="h5">{{
-                $t('addresses.differentBilling')
-              }}</BaseHeading></ToggleField
-            >
-
-            <FormAddress
-              v-if="useDifferentAddress"
-              v-model:address="billingAddress"
-              class="u-mt-half"
-              tag="div"
-            />
-          </BaseBox>
-        </SiteContainer>
-
-        <SiteContainer :max-width="520" padless>
-          <CheckoutCart :products="basket || []" :sub-total="subTotal" />
-
-          <OrderResume
-            v-model:address="shippingAddress"
-            container-class="u-mt-huge"
-            :sub-total="total"
-            :heading="$t('checkout.payment')"
-            without-sub-total
+      <template v-else>
+        <FormCheckout
+          :shipping-address="shippingAddress"
+          :billing-address="billingAddress"
+          :shipping-data="{
+            note,
+            date,
+            timeSlot: currentTimeSlot,
+            newAccount,
+            password,
+            email,
+            phone,
+          }"
+          :billing-data="billingData"
+          :payment-method="paymentMethod"
+          :shipping-method="shippingMethod"
+          :cart="cart.checkout"
+          @api:start="sending = true"
+          @api:end="sending = false"
+        >
+          <template
+            #resume="{
+              columnClassName,
+              columnHalfClassName,
+              columnFullClassName,
+              rowClassName,
+            }"
           >
-            <template #after="{ footerClassName }">
-              <div :class="footerClassName">
-                <PaymentMethods v-model="paymentMethod">
-                  <BaseButton type="submit" color="yellow" :disabled="sending"
-                    >Paga ora</BaseButton
-                  >
-                </PaymentMethods>
-              </div>
-            </template>
-          </OrderResume>
-        </SiteContainer>
-        <!-- </template> -->
+            <BaseMessage
+              v-if="!hasFreeShipping"
+              status="warning"
+              :class="[columnClassName, columnFullClassName]"
+              >Ti mancano <PriceHolder :price="50 - subTotal" /> per avere la
+              spedizione gratuita!
+              <BaseLink :to="{ name: 'featured' }" underline color="dark"
+                >Vuoi aggiungere altri prodotti al carrello?</BaseLink
+              >
+            </BaseMessage>
 
-        <!-- <BaseMessage v-else :message="$t('cart.empty')" /> -->
-      </form>
+            <div :class="rowClassName">
+              <div :class="[columnClassName, columnHalfClassName]">
+                <BaseBox class="u-mb-large">
+                  <template #head>
+                    <BaseHeading tag="span" use="custom">{{
+                      $t('orders.shipping')
+                    }}</BaseHeading>
+
+                    <InlineButton
+                      color="green"
+                      underline
+                      :text="
+                        $t(isAddressFilled(shippingAddress) ? 'edit' : 'create')
+                      "
+                      @click="toggleShippingModal(true)"
+                    />
+                  </template>
+
+                  <ShopAddress
+                    v-if="isAddressFilled(shippingAddress)"
+                    :address="shippingAddress"
+                  />
+                  <BaseParagraph
+                    v-else
+                    :text="
+                      $t('addresses.checkouNotSet', {
+                        type: $t('orders.shipping'),
+                      })
+                    "
+                  />
+                </BaseBox>
+              </div>
+
+              <div :class="[columnClassName, columnHalfClassName]">
+                <BaseBox>
+                  <template #head>
+                    <BaseHeading tag="span" use="custom">{{
+                      $t('orders.billing')
+                    }}</BaseHeading>
+
+                    <InlineButton
+                      color="green"
+                      underline
+                      :text="
+                        $t(isAddressFilled(billingAddress) ? 'edit' : 'create')
+                      "
+                      @click="toggleBillingModal(true)"
+                    />
+                  </template>
+
+                  <ShopAddress
+                    v-if="isAddressFilled(billingAddress)"
+                    :address="billingAddress"
+                    :invoice="billingData"
+                  />
+                  <BaseParagraph
+                    v-else
+                    :text="
+                      $t('addresses.checkouNotSet', {
+                        type: $t('orders.billing'),
+                      })
+                    "
+                  />
+                </BaseBox>
+              </div>
+            </div>
+
+            <CartTable
+              readonly
+              :products="basket"
+              :class="[columnClassName, columnFullClassName]"
+            />
+          </template>
+
+          <template #action="{ columnClassName, columnFullClassName }">
+            <div :class="[columnClassName, columnFullClassName]">
+              <OrderResume
+                :heading="$t('orders.deliveryInfos')"
+                container-class="u-mb-large"
+              >
+                <template #default="{ className, rowClassName }">
+                  <div :class="[className, rowClassName]">
+                    <div v-for="slot in timeSlots" :key="slot.id">
+                      <ToggleField
+                        v-model="timeSlot"
+                        class="u-mb-tiny"
+                        radio
+                        boxed
+                        required
+                        :value="slot.id"
+                      >
+                        <b class="u-mr-micro">{{ slot.title }}</b>
+                        <span>
+                          <time>{{ slot.from }}</time> -
+                          <time>{{ slot.to }}</time>
+                        </span>
+                      </ToggleField>
+                    </div>
+
+                    <BaseDatePicker v-model:date="date" />
+                  </div>
+                </template>
+              </OrderResume>
+
+              <OrderResume
+                :heading="$t('common.account')"
+                container-class="u-mb-large"
+              >
+                <template #default="{ className, rowClassName }">
+                  <div :class="[className, rowClassName]">
+                    <ToggleField
+                      v-if="!isLoggedIn"
+                      v-model="newAccount"
+                      class="u-mb-tiny u-white-pre-line"
+                      >{{ $t('checkout.register') }}</ToggleField
+                    >
+
+                    <InputField
+                      v-model="email"
+                      class="u-mb-tiny"
+                      type="email"
+                      name="email"
+                      required
+                      :readonly="isLoggedIn"
+                    >
+                      {{ $t('form.mailField') }}
+                    </InputField>
+
+                    <InputField
+                      v-model="phone"
+                      :class="{ 'u-mb-tiny': newAccount && !isLoggedIn }"
+                      type="tel"
+                      name="phone"
+                      required
+                    >
+                      {{ $t('form.phone') }}
+                    </InputField>
+
+                    <InputField
+                      v-if="newAccount && !isLoggedIn"
+                      v-model="password"
+                      type="password"
+                      name="password"
+                      required
+                    >
+                      {{ $t('form.password.field') }}
+                    </InputField>
+                  </div>
+                </template>
+              </OrderResume>
+
+              <OrderResume :heading="$t('checkout.payment')">
+                <template
+                  #default="{
+                    className,
+                    rowClassName,
+                    totalClassName,
+                    gridClassName,
+                    gridCellLeftClassName,
+                    gridCellRightClassName,
+                  }"
+                >
+                  <div
+                    class="u-pt-half u-pb-half"
+                    :class="[gridClassName, rowClassName]"
+                  >
+                    <span :class="gridCellLeftClassName">{{
+                      $t('orders.subTotal')
+                    }}</span>
+                    <PriceHolder
+                      :class="gridCellRightClassName"
+                      :price="subTotal"
+                    />
+
+                    <span :class="gridCellLeftClassName">
+                      {{ $t('orders.delivery') }}<br />
+
+                      <b>{{ getFormattedDate(date) }}</b
+                      >,
+                      <span>
+                        <time>{{ currentTimeSlot.from }}</time> -
+                        <time>{{ currentTimeSlot.to }}</time>
+                      </span></span
+                    >
+
+                    <strong
+                      v-if="hasFreeShipping"
+                      :class="gridCellRightClassName"
+                      >{{ $t('common.free') }}</strong
+                    >
+                    <PriceHolder
+                      v-else
+                      :class="gridCellRightClassName"
+                      :price="3"
+                    />
+                  </div>
+
+                  <div
+                    class="u-pt-half u-pb-half"
+                    :class="[gridClassName, rowClassName]"
+                  >
+                    <b :class="[gridCellLeftClassName, totalClassName]">{{
+                      $t('common.total')
+                    }}</b>
+                    <PriceHolder
+                      :class="[gridCellRightClassName, totalClassName]"
+                      :price="total"
+                    />
+                  </div>
+
+                  <div :class="[className, rowClassName]">
+                    <span>{{ $t('coupon.formTitle') }}</span>
+
+                    <FormCoupon
+                      tag="div"
+                      class="u-mt-mini"
+                      :placeholder="$t('coupon.formPlaceholder')"
+                    />
+                  </div>
+
+                  <div :class="[className, rowClassName]">
+                    <InputField
+                      v-model="note"
+                      type="textarea"
+                      name="note"
+                      :placeholder="$t('checkout.notesPlaceholder')"
+                    >
+                      {{ $t('orders.notes') }}
+                    </InputField>
+                  </div>
+                </template>
+
+                <template #after="{ footerClassName }">
+                  <div :class="footerClassName">
+                    <PaymentMethods v-model="paymentMethod">
+                      <BaseButton
+                        type="submit"
+                        color="yellow"
+                        :disabled="sending"
+                        >Paga ora</BaseButton
+                      >
+                    </PaymentMethods>
+                  </div>
+                </template>
+              </OrderResume>
+            </div>
+          </template>
+        </FormCheckout>
+      </template>
     </SiteContainer>
+
+    <Transition name="fade">
+      <ModalContainer
+        v-if="isShippingModalOpen"
+        :max-width="1088"
+        @close="toggleShippingModal(false)"
+      >
+        <template #header>
+          <BaseHeading tag="h5">{{ $t('orders.shipping') }}</BaseHeading>
+        </template>
+
+        <FormUpdateAddress
+          v-model:address="shippingAddress"
+          @completed="closeShippingModal"
+        />
+      </ModalContainer>
+    </Transition>
+
+    <Transition name="fade">
+      <ModalContainer
+        v-if="isBillingModalOpen"
+        :max-width="1088"
+        @close="toggleBillingModal(false)"
+      >
+        <template #header>
+          <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
+        </template>
+
+        <FormUpdateAddress
+          v-model:address="billingAddress"
+          v-model:invoice="billingData"
+          is-billing
+          @completed="closeBillingModal"
+        >
+          <template #billingHeading>
+            <BaseParagraph>{{ $t('invoice.requestInvoice') }}</BaseParagraph>
+          </template>
+        </FormUpdateAddress>
+      </ModalContainer>
+    </Transition>
   </main>
 </template>
 
@@ -96,7 +343,6 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-import { useShippingStore } from '@/stores/shipping'
 
 // Constants
 
@@ -104,7 +350,6 @@ import { useShippingStore } from '@/stores/shipping'
 definePageMeta({
   layout: 'green',
   name: 'checkout',
-  middleware: 'auth',
 })
 
 defineI18nRoute({
@@ -114,31 +359,32 @@ defineI18nRoute({
   locales: ['it'],
 })
 
+provide('holiday', [
+  new Date(`${new Date().getFullYear()}-1-1`),
+  new Date(`${new Date().getFullYear()}-1-6`),
+  new Date(`${new Date().getFullYear()}-4-25`),
+  new Date(`${new Date().getFullYear()}-5-1`),
+  new Date(`${new Date().getFullYear()}-6-2`),
+  new Date(`${new Date().getFullYear()}-8-15`),
+  new Date(`${new Date().getFullYear()}-11-1`),
+  new Date(`${new Date().getFullYear()}-12-25`),
+  new Date(`${new Date().getFullYear()}-12-26`),
+  new Date(`${new Date().getFullYear() + 1}-1-1`),
+  new Date(`${new Date().getFullYear() + 1}-1-6`),
+  new Date(`${new Date().getFullYear() + 1}-4-25`),
+  new Date(`${new Date().getFullYear() + 1}-5-1`),
+  new Date(`${new Date().getFullYear() + 1}-6-2`),
+  new Date(`${new Date().getFullYear() + 1}-8-15`),
+  new Date(`${new Date().getFullYear() + 1}-11-1`),
+  new Date(`${new Date().getFullYear() + 1}-12-25`),
+  new Date(`${new Date().getFullYear() + 1}-12-26`),
+])
+
 // Component life-cycle hooks
-onMounted(async () => {
-  if (!isLoggedIn.value) {
-    return
-  }
-
-  const userBillingAddress = await useApi(
-    'shop/addresses/billing',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  billingAddress.value = { ...userBillingAddress.value }
-})
 
 // Composables
-const { sending, send } = useSender()
 const cart = useCartStore()
 const user = useAccountStore()
-const shippingStore = useShippingStore()
 const timeSlots = await useApi(
   'time-slots',
   {},
@@ -148,15 +394,33 @@ const timeSlots = await useApi(
 )
 
 // Data
-const { isEmpty, subTotal, total, paymentMethod, shippingMethod } =
-  storeToRefs(cart)
+const sending = ref(false)
+const {
+  isEmpty,
+  subTotal,
+  total,
+  paymentMethod,
+  shippingMethod,
+  hasFreeShipping,
+} = storeToRefs(cart)
 const { isLoggedIn } = storeToRefs(user)
 
-const basket = await cart.load()
-const shippingAddress = await shippingStore.load()
+const isShippingModalOpen = ref(false)
+const isBillingModalOpen = ref(false)
 
+const basket = await cart.load()
 const useDifferentAddress = ref(false)
-const errors = ref([])
+
+const shippingAddress = ref({
+  firstName: null,
+  lastName: null,
+  country: null,
+  address: null,
+  address2: null,
+  province: null,
+  city: null,
+  postcode: null,
+})
 
 const billingAddress = ref({
   firstName: null,
@@ -169,12 +433,16 @@ const billingAddress = ref({
   postcode: null,
 })
 
-const shippingData = ref({
-  note: null,
-  email: null,
-  phone: null,
-  timeSlot: timeSlots.value.find(() => true),
-})
+const account = await user.load()
+
+const newAccount = ref(false)
+
+const note = ref('')
+const date = ref(getToday())
+const email = ref(account.value?.email || null)
+const phone = ref(account.value?.phone || null)
+const password = ref(null)
+const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
 const billingData = ref({
   invoice: false,
@@ -186,193 +454,84 @@ const billingData = ref({
   cfPrivate: null,
 })
 
-const order = useState('order', () => {})
+if (isLoggedIn.value) {
+  const userBillingAddress = await useApi(
+    'shop/addresses/billing',
+    {
+      method: 'GET',
+    },
+    {
+      cache: false,
+      dataOnly: true,
+    }
+  )
+
+  const { address, invoice } = useBillingAddress(userBillingAddress)
+
+  billingAddress.value = address.value
+  billingData.value = invoice.value
+
+  const userShippingAddress = await useApi(
+    'shop/addresses/shipping',
+    {
+      method: 'GET',
+    },
+    {
+      cache: false,
+      dataOnly: true,
+    }
+  )
+
+  shippingAddress.value = { ...userShippingAddress.value }
+}
 
 // Watcher
 
 // Computed
+const currentTimeSlot = computed(() => {
+  return timeSlots.value.find((slot) => slot.id === timeSlot.value)
+})
+
+const isAddressFilled = computed(() => (address) => {
+  return (
+    address.firstName &&
+    address.lastName &&
+    address.country &&
+    address.address &&
+    address.province &&
+    address.city &&
+    address.postcode
+  )
+})
 
 // Methods
-const updateAddress = (address) => {
-  shippingAddress.value = address
+const toggleShippingModal = (status = null) => {
+  isShippingModalOpen.value =
+    status !== null ? !!status : !isShippingModalOpen.value
 }
 
-const updateShippingMethod = (method) => {
-  shippingMethod.value = method
+const closeShippingModal = () => {
+  notify({
+    status: 'success',
+    message: 'Indirizzo di spedizione aggiornato',
+  })
+
+  toggleShippingModal(false)
 }
 
-const submitOrder = async () => {
-  if (sending.value) {
-    return
-  }
-
-  errors.value = []
-  const { timeSlot, note, email, phone } = shippingData.value
-  const { invoice } = billingData.value
-
-  if (!timeSlot) {
-    errors.value.push(
-      'È obbligatorio riportare la fascia oraria per la consegna'
-    )
-  }
-
-  if (!email) {
-    errors.value.push('È obbligatorio indicare una mail')
-  }
-
-  if (!phone) {
-    errors.value.push('È obbligatorio indicare un numero di telefono valido')
-  }
-
-  if (!shippingMethod.value) {
-    errors.value.push('Nessun metodo di spedizione indicato')
-  }
-
-  if (cart.checkout.length <= 0) {
-    errors.value.push('Nessun prodotto presente nel carrello')
-  }
-
-  errors.value = [
-    ...errors.value,
-    ...validateAddress(shippingAddress, ' per la spedizione'),
-  ]
-
-  const formData = {
-    shipping: shippingAddress.value,
-    timeSlot,
-    note,
-    email,
-    phone,
-    invoice,
-    products: cart.checkout,
-    shippingMethod: shippingMethod.value.id,
-    paymentMethod: paymentMethod.value.id,
-  }
-
-  if (invoice === 'private') {
-    formData.cf = billingData.value.cfPrivate
-
-    if (!billingData.value.cfPrivate) {
-      errors.value.push(
-        'Il Codice fiscale è obbligatorio per richiedere la fattura'
-      )
-    }
-  } else if (invoice === 'company') {
-    formData.vat = billingData.value.vat
-    formData.cf = billingData.value.cfCompany
-    formData.pec = billingData.value.pec
-    formData.sdi = billingData.value.sdi
-    formData.company = billingData.value.company
-
-    if (!billingData.value.pec && !billingData.value.sdi) {
-      errors.value.push(
-        'È necessario specificare almeno un campo tra la PEC ed il Codice univoco'
-      )
-    }
-
-    if (!billingData.value.company) {
-      errors.value.push(
-        'La ragione sociale è obbligatoria per richiedere la fattura'
-      )
-    }
-
-    if (!billingData.value.vat) {
-      errors.value.push(
-        'La partita IVA è obbligatoria per richiedere la fattura'
-      )
-    }
-
-    if (!billingData.value.cfCompany) {
-      errors.value.push(
-        'Il Codice fiscale è obbligatorio per richiedere la fattura'
-      )
-    }
-  }
-
-  if (useDifferentAddress.value) {
-    formData.billing = billingAddress.value
-
-    errors.value = [
-      ...errors.value,
-      ...validateAddress(billingAddress, ' per la fatturazione'),
-    ]
-  }
-
-  if (errors.value.length > 0) {
-    window.scrollTo(0, 0)
-    return
-  }
-
-  const response = await send(
-    async () =>
-      await useApi(
-        'shop/checkout/save',
-        {
-          method: 'POST',
-          body: formData,
-        },
-        {
-          cache: false,
-        }
-      )
-  )
-  console.debug({ ...response.value })
-
-  if (response.value.success) {
-    order.value = response.value.data
-
-    await navigateTo({
-      path: '/order-confirmed',
-      query: {
-        orderId: order.value.id,
-      },
-    })
-  } else {
-    errors.value = response.value.errors
-  }
+const toggleBillingModal = (status = null) => {
+  isBillingModalOpen.value =
+    status !== null ? !!status : !isBillingModalOpen.value
 }
 
-const validateAddress = (address, after = '') => {
-  const errors = []
+const closeBillingModal = () => {
+  notify({
+    status: 'success',
+    message: 'Indirizzo di fatturazione aggiornato',
+  })
 
-  if (!address.value.firstName) {
-    errors.push(`Il nome è un campo obbligatorio${after}`)
-  }
-
-  if (!address.value.lastName) {
-    errors.push(`Il cognome è un campo obbligatorio${after}`)
-  }
-
-  if (!address.value.country) {
-    errors.push(`La nazione è un campo obbligatorio${after}`)
-  }
-
-  if (!address.value.address) {
-    errors.push(`L'indirizzo è un campo obbligatorio${after}`)
-  }
-
-  if (!address.value.postcode) {
-    errors.push(`IL CAP è un campo obbligatorio${after}`)
-  }
-
-  if (!address.value.city) {
-    errors.push(`La città è un campo obbligatorio${after}`)
-  }
-
-  if (!address.value.province) {
-    errors.push(`La provincia è un campo obbligatorio${after}`)
-  }
-
-  return errors
+  toggleBillingModal(false)
 }
-
-// Provide
-provide('shipping', {
-  address: shippingAddress,
-  updateAddress,
-  method: shippingMethod,
-  updateMethod: updateShippingMethod,
-})
 </script>
 
 <style lang="scss" scoped>
@@ -382,7 +541,10 @@ provide('shipping', {
   @include set-local-vars(
     $prefix: 'box',
     $map: (
-      body-background: get-var(color-light),
+      background-color: get-var(color-light),
+      head-display: flex,
+      head-justify: space-between,
+      head-align: center,
     )
   );
 
@@ -392,8 +554,20 @@ provide('shipping', {
       border-bottom: 2px,
     )
   );
+  @include until(tablet) {
+    @include set-local-vars(
+      $prefix: 'cart-table',
+      $map: (
+        after-bottom: -20px,
+      )
+    );
+  }
 
   @include typography(18px, 22px);
+
+  @include component('box') {
+    height: 100%;
+  }
 
   @include scope('different-billing') {
     @include set-local-vars(

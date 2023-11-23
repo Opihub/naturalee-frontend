@@ -27,19 +27,25 @@
           <div :class="[columnClassName, 'o-form__basket']">
             <CartTable
               :products="basket"
-              :on-delete="deleteFromCart"
-              :on-clear="clearCart"
+              :on-delete="deleteFromBasket"
+              :on-clear="clearBasket"
             />
           </div>
 
           <div :class="[columnClassName, 'o-form__resume']">
-            <OrderResume
-              :sub-total="subTotal"
-              :total="total"
-              :heading="$t('cart.total')"
-            >
-              <template #before="{ className }">
-                <div :class="className">
+            <OrderResume :heading="$t('cart.total')">
+              <template
+                #default="{
+                  className,
+                  rowClassName,
+                  totalClassName,
+                  gridClassName,
+                  gridCellLeftClassName,
+                  gridCellRightClassName,
+                  gridCellFullClassName,
+                }"
+              >
+                <div :class="[className, rowClassName]">
                   <span>{{ $t('coupon.formTitle') }}</span>
 
                   <FormCoupon
@@ -48,12 +54,61 @@
                     :placeholder="$t('coupon.formPlaceholder')"
                   />
                 </div>
+
+                <div
+                  class="u-pt-half u-pb-half"
+                  :class="[gridClassName, rowClassName]"
+                >
+                  <span :class="gridCellLeftClassName">{{
+                    $t('common.subTotal')
+                  }}</span>
+                  <PriceHolder
+                    :class="gridCellRightClassName"
+                    :price="subTotal"
+                  />
+
+                  <span :class="gridCellLeftClassName">{{
+                    $t('orders.shipping')
+                  }}</span>
+                  <!-- <ShippingMethods :class="gridCellRightClassName" /> -->
+
+                  <strong v-if="hasFreeShipping" :class="gridCellRightClassName"
+                    >Gratuita</strong
+                  >
+                  <template v-else>
+                    <PriceHolder :class="gridCellRightClassName" :price="3" />
+                    <span :class="gridCellFullClassName"
+                      >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere
+                      la spedizione gratuita</span
+                    >
+                  </template>
+                </div>
+
+                <div
+                  class="u-pt-half u-pb-half"
+                  :class="[gridClassName, rowClassName]"
+                >
+                  <b :class="[gridCellLeftClassName, totalClassName]">{{
+                    $t('common.total')
+                  }}</b>
+                  <PriceHolder :class="gridCellRightClassName" :price="total" />
+                </div>
+
+                <div :class="[className, rowClassName]">
+                  Raggiungi <PriceHolder :price="20" /> di spesa per andare alla
+                  cassa!
+                  <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
+                </div>
               </template>
 
               <template #after="{ footerClassName }">
                 <div :class="footerClassName">
+                  <div v-if="!hasMinimumOrderCost" class="u-mb-tiny">
+                    Raggiungi <PriceHolder :price="20" /> di spesa per andare
+                    alla cassa!
+                  </div>
                   <BaseButton
-                    :disabled="sending"
+                    :disabled="sending || !hasMinimumOrderCost"
                     type="submit"
                     color="green"
                     :text="$t('cart.proceed')"
@@ -77,7 +132,7 @@ import { useCartStore } from '@/stores/cart'
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'cart',
-  layout: 'standard'
+  layout: 'standard',
 })
 
 defineI18nRoute({
@@ -96,34 +151,69 @@ const cart = useCartStore()
 const { sending, send } = useSender()
 
 // Data
-const { isEmpty, subTotal, total } = storeToRefs(cart)
-const basket = await cart.load()
+const { isEmpty } = storeToRefs(cart)
+const remoteBasket = await cart.load()
+const basket = ref(remoteBasket.value)
+
+// Computed
+const hasFreeShipping = computed(() => {
+  return 50 - subTotal.value <= 0
+})
+const hasMinimumOrderCost = computed(() => {
+  return subTotal.value >= 20
+})
+const shippingMethod = computed(() => {
+  return hasFreeShipping.value ? 0 : 3
+})
+const { subTotal, granTotal: total } = useTotal(basket, {
+  shipping: shippingMethod,
+})
 
 // Watcher
 
-// Computed
-
 // Methods
 const { deleteFromCart, clearCart } = cart
+const deleteFromBasket = async (product) => {
+  const success = await deleteFromCart(product)
+
+  if (!success) {
+    return
+  }
+
+  basket.value = basket.value.filter(
+    (item) => item.variationId !== product.variationId
+  )
+}
+
+const clearBasket = async () => {
+  const success = await clearCart()
+
+  if (!success) {
+    return
+  }
+
+  basket.value = []
+}
+
 const saveCart = async () => {
   if (sending.value) {
     return
   }
 
-  const response = await send(async () => await cart.save())
+  const response = await send(async () => await cart.save(basket))
 
   console.debug(response.value)
   if (!response.value.success) {
     notify({
       status: 'danger',
-      message: response.value.data
+      message: response.value.data,
     })
 
     return
   }
 
   await navigateTo({
-    name: 'checkout'
+    name: 'checkout',
   })
 }
 </script>
@@ -139,6 +229,7 @@ const saveCart = async () => {
         )
       );
     }
+
     @include element('resume') {
       @include set-local-vars(
         $prefix: 'field',

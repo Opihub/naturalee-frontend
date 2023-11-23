@@ -153,6 +153,13 @@ const { t } = useI18n({
       )
     );
 
+    @include set-local-vars(
+      $prefix: 'background-back',
+      $map: (
+        height: 100%,
+      )
+    );
+
     text-align: center;
     color: get-var(color-white);
 
@@ -183,6 +190,7 @@ const { t } = useI18n({
     }
     @include object('video') {
       width: 100%;
+      object-fit: cover;
     }
   }
 
@@ -243,6 +251,7 @@ const { t } = useI18n({
   }
 
   @include component('fifth-section') {
+    overflow: hidden;
     @include set-local-vars(
       $prefix: 'custom',
       $map: (

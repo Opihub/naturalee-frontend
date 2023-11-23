@@ -21,7 +21,7 @@
           <ClientOnly>
             <Transition name="fade">
               <MiniCart
-              v-show="isMiniCartMenuOpen"
+                v-show="isMiniCartMenuOpen"
                 x-centered
                 :cart="cart"
                 :shipping-cost="shippingCost"
@@ -30,20 +30,6 @@
               />
             </Transition>
           </ClientOnly>
-        </li>
-        <li
-          :class="[
-            `${CSS_NAME_ACTIONS}__single`,
-            `${CSS_NAME_ACTIONS}__single--menu`,
-          ]"
-        >
-          <HamburgerMenu
-            :class="{
-              [`${CSS_NAME_ACTIONS}__icon`]: true,
-              'is-active': isMobileMenuOpen,
-            }"
-            @click="openMenuMobile"
-          />
         </li>
         <li
           :class="[
@@ -63,7 +49,7 @@
           <ClientOnly>
             <Transition name="fade">
               <ProfileMenu
-              v-if="isLoggedIn"
+                v-if="isLoggedIn"
                 v-show="isProfileMenuOpen"
                 x-centered
                 :menu="profileMenu"
@@ -71,6 +57,20 @@
               />
             </Transition>
           </ClientOnly>
+        </li>
+        <li
+          :class="[
+            `${CSS_NAME_ACTIONS}__single`,
+            `${CSS_NAME_ACTIONS}__single--menu`,
+          ]"
+        >
+          <HamburgerMenu
+            :class="{
+              [`${CSS_NAME_ACTIONS}__icon`]: true,
+              'is-active': isMobileMenuOpen,
+            }"
+            @click="openMenuMobile"
+          />
         </li>
       </ul>
     </SiteContainer>
@@ -88,7 +88,7 @@ const CSS_NAME_CONTAINER = `${CSS_NAME}__container`
 const CSS_NAME_ACTIONS = `${CSS_NAME}__actions`
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   categories: {
     type: Array,
     default() {
@@ -100,6 +100,10 @@ defineProps({
     default() {
       return []
     },
+  },
+  menuMobileStatus: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -122,15 +126,22 @@ const isMiniCartMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const isProfileMenuOpen = ref(false)
 
+const nuxtApp = useNuxtApp()
+nuxtApp.hook('page:start', () => {
+  openMenuMobile(null)
+})
 // Watcher
 
 // Computed
 
 // Methods
-const openMenuMobile = () => {
+const openMenuMobile = (value) => {
+  if (value == null && isMobileMenuOpen.value == false) {
+    return
+  }
   isMobileMenuOpen.value = !isMobileMenuOpen.value
-
   const event = isMobileMenuOpen.value ? 'open' : 'close'
+
   emit('menuMobile:toggle', isMobileMenuOpen.value)
   emit(`menuMobile:${event}`, isMobileMenuOpen.value)
 }
@@ -167,6 +178,10 @@ $prefix: 'header';
     align-items: center;
     gap: rem(8px);
 
+    @include until(desktop) {
+      padding-right: 0;
+    }
+
     @include between(tablet, desktop) {
       grid-template-columns: 1fr 1fr;
     }
@@ -200,6 +215,10 @@ $prefix: 'header';
     display: flex;
     justify-content: flex-end;
     align-items: stretch;
+
+    @include until(desktop) {
+      align-items: baseline;
+    }
     padding: 0;
     align-self: stretch;
 
@@ -211,27 +230,20 @@ $prefix: 'header';
       height: 100%;
       position: relative;
 
-      @include from(tablet) {
+      @include from(desktop) {
         width: rem(80px);
-        border-right: 1px solid rgba(get-var(rgb-green), 0.45);
+        border-left: 1px solid rgba(get-var(rgb-green), 0.45);
 
-        &:last-child {
-          border-right: 0;
-        }
-      }
-
-      @include modifier('profile') {
-        display: none;
-
-        @include from(tablet) {
-          display: block;
+        &:first-child {
+          border-left: 0;
         }
       }
 
       @include modifier('menu') {
         display: block;
+        align-self: center;
 
-        @include from(tablet) {
+        @include from(desktop) {
           display: none;
         }
       }
@@ -241,8 +253,11 @@ $prefix: 'header';
       width: 100%;
       height: 100%;
       padding: rem(20px) rem(14px);
+      @include customMedia(400px, true) {
+        padding: rem(20px) rem(7px);
+      }
 
-      @include from(tablet) {
+      @include from(desktop) {
         padding: 0;
       }
     }
@@ -252,7 +267,13 @@ $prefix: 'header';
       top: 100%;
       left: 0;
       left: 50%;
+      display: none;
       // transform: translateX(-50%);
+
+      @include from(desktop) {
+        display: block;
+        padding: 0;
+      }
     }
   }
 }

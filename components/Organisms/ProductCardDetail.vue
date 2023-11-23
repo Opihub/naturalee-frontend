@@ -24,7 +24,9 @@
           $t('common.vatInclude')
         }}</span>
 
-        <strong :class="stockClassName">{{ $t('products.stock', 2) }}</strong>
+        <strong :class="stockClassName">{{
+          $t('products.stock', stock)
+        }}</strong>
       </div>
 
       <div :class="[className, `${CSS_NAME}__row`]">
@@ -40,12 +42,20 @@
           :quantity="quantity"
           :disabled="isDisabled"
         >
-          <span>{{ $t('cart.addTo') }}</span>
+          <span>{{
+            product.stockStatus === 'instock' && product.price > 0
+              ? $t('cart.addTo')
+              : $t('cart.notAvailable')
+          }}</span>
+          <template #added>{{ $t('cart.added') }}</template>
         </AddToCartButton>
       </div>
 
       <div :class="[className, `${CSS_NAME}__row`, `${CSS_NAME}__row--footer`]">
         <WishlistButton :product="product" />
+        <b class="u-ml-micro" @click="() => update(product)">{{
+          $t('wishlist.add')
+        }}</b>
       </div>
     </template>
   </ReceiptBlock>
@@ -53,7 +63,7 @@
 
 <script setup>
 // Imports
-
+import { useWishlistStore } from '@/stores/wishlist'
 // Constants
 const CSS_NAME = 'c-product-card-detail'
 
@@ -68,7 +78,7 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
-
+const wishlist = useWishlistStore()
 // Data
 const quantity = ref(1)
 
@@ -88,11 +98,26 @@ const stockClassName = computed(() => {
 const isDisabled = computed(() => {
   return (
     props.product.price <= 0 ||
-    ('status' in props.product && props.product.status === 'disabled')
+    ('status' in props.product && props.product.status === 'disabled') ||
+    props.product.stockStatus === 'outofstock'
   )
 })
 
+const stock = computed(() => {
+  switch (props.product.stockStatus) {
+    case 'outofstock':
+      return 0
+
+    case 'instock':
+      return 2
+
+    default:
+      console.debug(props.product.stockStatus)
+  }
+})
+
 // Methods
+const { update } = wishlist
 </script>
 
 <style lang="scss">
@@ -110,6 +135,16 @@ $prefix: 'product-card-detail';
     )
   );
 
+  @include object('counter') {
+    align-self: center;
+    @include set-local-vars(
+      $prefix: 'counter',
+      $map: (
+        width: 60%,
+      )
+    );
+  }
+
   @include set-local-vars(
     $prefix: 'receipt',
     $map: (
@@ -126,6 +161,18 @@ $prefix: 'product-card-detail';
       border-bottom: 0;
       flex-direction: row;
       justify-content: center;
+      align-items: center;
+      &:hover button {
+        @include set-local-vars(
+          $prefix: 'wishlist-button',
+          $map: (
+            heart-color: red,
+          )
+        );
+      }
+      & b {
+        cursor: pointer;
+      }
     }
   }
 

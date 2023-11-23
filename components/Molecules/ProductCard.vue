@@ -64,16 +64,20 @@
       <BaseCounter v-model="quantity" :disabled="isDisabled" />
 
       <AddToCartButton
+        :class="`${CSS_NAME}__button`"
         :product="product"
         :quantity="quantity"
         :disabled="isDisabled"
       >
-        <span>{{ $t('cart.add') }}</span>
-        <NuxtIcon
-          name="bag"
-          :class="`${CSS_NAME}__button__svg`"
-          :filled="false"
-        />
+        <span>{{
+          product.stockStatus === 'instock'
+            ? $t('cart.add')
+            : $t('cart.notAvailable')
+        }}</span>
+        <template #added>{{ $t('cart.added') }}</template>
+        <template v-if="product.stockStatus === 'instock'" #svg="{ svgStyle }">
+          <BaseIcon name="bag" :icon-size="svgStyle" :filled="true" />
+        </template>
       </AddToCartButton>
     </div>
 
@@ -156,7 +160,8 @@ const fit = computed(() => {
 const isDisabled = computed(() => {
   return (
     props.product.price <= 0 ||
-    ('status' in props.product && props.product.status === 'disabled')
+    ('status' in props.product && props.product.status === 'disabled') ||
+    props.product.stockStatus === 'outofstock'
   )
 })
 </script>
@@ -174,6 +179,14 @@ $prefix: 'product-card';
     );
   }
   @include from(desktop) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 3,
+      )
+    );
+  }
+  @include from(full) {
     @include set-local-vars(
       $prefix: 'row',
       $map: (
@@ -239,6 +252,10 @@ $prefix: 'product-card';
     padding-top: rem(30px);
 
     svg {
+      @include until(large) {
+        padding: 0 rem(15px);
+      }
+      width: 100%;
       margin: 0 auto;
       max-width: get-var(width, rem(300px), $prefix: $prefix);
 
@@ -354,7 +371,7 @@ $prefix: 'product-card';
         margin-bottom: 0;
       }
 
-      @include object('button') {
+      @include element('button') {
         margin: 0;
         flex: 0 0 get-var(button-width, rem(200px), $prefix: $prefix);
       }
@@ -373,30 +390,32 @@ $prefix: 'product-card';
       flex: 0 0 rem(108px);
     }
 
-    @include object('button') {
+    @include element('button', true) {
       flex: 1 1 auto;
       max-width: rem(190px);
 
-      svg {
+      @include element('svg') {
         display: inline-block;
-        margin-left: rem(14px);
-        margin-top: rem(-5px);
-        color: get-var(color-yellow);
         transition: all 0.5s;
       }
-
-      &:hover svg {
-        color: get-var(color-green);
-      }
-
-      // margin: rem(20px) auto rem(12px);
 
       @include set-local-vars(
         $prefix: 'button',
         $map: (
-          padding: rem(12px) rem(80px),
+          justify-content: center,
+          padding: rem(12px) rem(40px),
+          fill: get-var(color-yellow),
         )
       );
+
+      &:hover svg {
+        @include set-local-vars(
+          $prefix: 'button',
+          $map: (
+            fill: get-var(color-green),
+          )
+        );
+      }
 
       @include from(tablet) {
         @include set-local-vars(
@@ -411,7 +430,7 @@ $prefix: 'product-card';
         @include set-local-vars(
           $prefix: 'button',
           $map: (
-            padding: rem(12px) rem(30px),
+            padding: rem(12px) rem(10px),
           )
         );
       }

@@ -103,7 +103,8 @@ $prefix: 'heading';
   line-height: get-var(line-height, $prefix: $prefix);
   text-transform: get-var(text-transform, none, $prefix: $prefix);
   font-family: get-var(font-family, get-var(family-main), $prefix: $prefix);
-  display: block;
+  white-space: get-var(white-space, normal, $prefix: $prefix);
+  display: get-var(display, block, $prefix: $prefix);
 
   @include modifier('h1') {
     @include set-local-vars(

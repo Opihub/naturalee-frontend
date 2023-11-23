@@ -142,6 +142,10 @@ const emit = defineEmits(['update:address'])
 // Methods
 const updateAddress = (value, field) => {
   const newAddress = { ...props.address }
+  if (!newAddress.country) {
+    newAddress.country = 'IT'
+  }
+
   newAddress[field] = value.trim()
 
   if (newAddress[field] === props.address[field]) {
@@ -151,7 +155,9 @@ const updateAddress = (value, field) => {
   switch (field) {
     case 'province':
       newAddress.city = cities.value(value).find(() => true).id
-      newAddress.postcode = postcodes.value(newAddress.city, value).find(() => true).id
+      newAddress.postcode = postcodes
+        .value(newAddress.city, value)
+        .find(() => true).id
       break
     case 'city':
       newAddress.postcode = postcodes.value(value).find(() => true).id
@@ -336,7 +342,8 @@ const provinces = computed(() => {
 
 const cities = computed(() => (province = null) => {
   const currentProvince = locations.value.find(
-    (currentProvince) => currentProvince.id === (province || props.address.province)
+    (currentProvince) =>
+      currentProvince.id === (province || props.address.province)
   )
   if (!currentProvince) {
     return []
@@ -354,7 +361,8 @@ const cities = computed(() => (province = null) => {
 
 const postcodes = computed(() => (city = null, province = null) => {
   const currentProvince = locations.value.find(
-    (currentProvince) => currentProvince.id === (province || props.address.province)
+    (currentProvince) =>
+      currentProvince.id === (province || props.address.province)
   )
   if (!currentProvince) {
     return []
@@ -388,10 +396,20 @@ $prefix: 'addresses-form';
   @include set-local-vars(
     $prefix: 'form',
     $map: (
-      columns: 3,
+      columns: 1,
       fieldset-gap: rem(20px),
       fieldset-border: 2px solid get-var(color-white),
     )
   );
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'form',
+      $map: (
+        columns: 3,
+        fieldset-gap: rem(20px),
+        fieldset-border: 2px solid get-var(color-white),
+      )
+    );
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
+      ref="topBarElement"
       :socials-menu="socialsMenu.data"
       :primary-menu="primaryMenu.data"
       :banners="topbarBanners.data"
@@ -10,7 +11,16 @@
       ref="headerElement"
       :categories="categoriesMenu.data"
       :profile-menu="profileMenu.data"
+      @menu-mobile:toggle="updateMobileMenuStatus"
     />
+    <Transition name="fade">
+      <HeaderMainMobile
+        v-show="isMobileMenuOpen"
+        :socials-menu="socialsMenu.data"
+        :primary-menu="primaryMenu.data"
+        :profile-menu="profileMenu.data"
+      />
+    </Transition>
 
     <slot />
 
@@ -44,7 +54,7 @@
 
 <script setup>
 // Imports
-
+import { useElementBounding, useScrollLock } from '@vueuse/core'
 // Constants
 const CSS_NAME = 'o-layout'
 
@@ -60,14 +70,19 @@ defineProps({
 onMounted(() => {
   setBottomGap()
   setHeaderGap()
+  setHeaderOffset()
 
   window.addEventListener('resize', setBottomGap)
   window.addEventListener('resize', setHeaderGap)
+  window.addEventListener('resize', setHeaderOffset)
+  window.addEventListener('scroll', setHeaderOffset)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', setBottomGap)
   window.removeEventListener('resize', setHeaderGap)
+  window.removeEventListener('resize', setHeaderOffset)
+  window.removeEventListener('scroll', setHeaderOffset)
 })
 
 // Composables
@@ -118,10 +133,15 @@ const categoriesMenu = await useApi(
 // Data
 const layoutElement = ref(null)
 const headerElement = ref(null)
+const topBarElement = ref(null)
 const categoriesMenuElement = ref(null)
 const isPostcodeModalOpen = ref(false)
+const isMobileMenuOpen = ref(false)
+const { top } = useElementBounding(headerElement)
+const document = ref(globalThis.window?.document.body || null)
+const isLocked = useScrollLock(document)
 
-// Watcher
+//Watcher
 
 // Computed
 
@@ -148,9 +168,26 @@ const setHeaderGap = () => {
   )
 }
 
+const setHeaderOffset = () => {
+  if (!layoutElement.value || !headerElement.value) {
+    return
+  }
+  getElement(layoutElement).style.setProperty(
+    '--layout-header-offset',
+    `${top.value}px`
+  )
+}
+
 const togglePostcodeModal = (status = null) => {
   isPostcodeModalOpen.value =
     status !== null ? !!status : !isPostcodeModalOpen.value
+}
+
+const updateMobileMenuStatus = (status) => {
+  isMobileMenuOpen.value = status
+  setHeaderOffset()
+
+  isLocked.value = status
 }
 
 // Provide

@@ -1,13 +1,18 @@
 <template>
   <Datepicker
-    v-model="date"
-    class="o-date-picker"
+    :model-value="date"
+    :class="CSS_NAME"
     :enable-time-picker="false"
-    inline
     auto-apply
-    disable-year-select
-    :locale="locale"
-    :format="format"
+    prevent-min-max-navigation
+    :disabled-week-days="DISABLE_SUNDAY"
+    :min-date="minDate"
+    :max-date="maxDate"
+    :year-range="yearsToShow"
+    :disabled-dates="holidays"
+    :locale="$i18n.locale"
+    :format="getFormattedDate"
+    @update:model-value="updateDate"
   />
 </template>
 
@@ -15,59 +20,72 @@
 // Imports
 /* https://vue3datepicker.com/ */
 import Datepicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
+
 // Constants
-//const CSS_NAME = 'o-highlight-text'
+const CSS_NAME = 'o-date-picker'
+const DISABLE_SUNDAY = [0]
+
 // Define (Props, Emits, Page Meta)
-//const props = defineProps({
-//   text: {
-//     type: String,
-//     default: null,
-//   },
-//   color: {
-//     type: String,
-//     default: null,
-//     validator(value) {
-//       return [
-//         'green',
-//         'red',
-//         'brown',
-//         'orange',
-//         'yellow',
-//         'light',
-//         'dark',
-//         'white',
-//         'black',
-//       ].includes(value)
-//     },
-//   },
-//})
+const emit = defineEmits(['update:date'])
+defineProps({
+  date: {
+    type: Date,
+    default() {
+      return getToday()
+    },
+  },
+})
 
 // Component life-cycle hooks
 
 // Data
-const date = ref(new Date())
-const locale = ref(navigator.language)
-const format = (date) => {
-  const day = date.getDate()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
+const disabledDays = inject('holiday', () => [])
+// La spedizione parte dall'indomani
+const minDate = ref(getToday())
+// La spedizione può essere richiesta max entro un mese
+const maxDate = ref(new Date(new Date().setMonth(new Date().getMonth() + 1)))
 
-  return `${day}/${month}/${year}`
-}
 // Watcher
 
 // Computed
+const holidays = computed(() => {
+  const year = new Date().getFullYear()
 
-//Methods
+  return [...disabledDays, ...getEaster([year, year + 1])]
+})
+
+const yearsToShow = computed(() => {
+  return [minDate.value.getFullYear(), maxDate.value.getFullYear()]
+})
+
+// Methods
+const updateDate = (date) => {
+  emit('update:date', date)
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '@vuepic/vue-datepicker/dist/main.css';
+
 $prefix: 'date-picker';
-.dp__active_date {
-  background: get-var(color-green) !important;
-}
+
 @include object($prefix) {
-  display: block;
+  .dp__cell_offset {
+    &:not(.dp__cell_disabled) {
+      color: inherit;
+    }
+
+    &.dp__active_date {
+      color: var(--dp-primary-text-color);
+    }
+  }
+
+  .dp__today {
+    border: #{get-var(color-green)};
+  }
+
+  .dp__active_date {
+    background: #{get-var(color-green)};
+  }
 }
 </style>

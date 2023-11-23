@@ -12,10 +12,14 @@ export function useSender(emit = null) {
     sending.value = true
     sent.value = false
 
-    const response = await callback()
+    const response = await callback().catch((err) => {
+      console.debug(err)
+
+      return false
+    })
 
     sending.value = false
-    sent.value = true
+    sent.value = response !== false
 
     if (emit) {
       emit('api:end')
