@@ -252,6 +252,10 @@ $prefix: 'product-card';
     padding-top: rem(30px);
 
     svg {
+      @include until(large) {
+        padding: 0 rem(15px);
+      }
+      width: 100%;
       margin: 0 auto;
       max-width: get-var(width, rem(300px), $prefix: $prefix);
 

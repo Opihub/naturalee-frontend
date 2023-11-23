@@ -54,6 +54,41 @@ pipelines:
                 DEBUG: 'true'
                 DELETE_FLAG: 'true'
 
+  custom:
+    regenerate:
+      - step:
+          name: Assemble .env file
+          deployment: demo-compile
+          script:
+            - chmod +x ./env.sh
+            - bash ./env.sh
+          artifacts:
+            - .env
+      - step:
+          image: node:16
+          name: Create development build
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run generate
+          artifacts:
+            - .output/public/**
+      - step:
+          name: Deploy to Demo
+          deployment: demo
+          script:
+            - pipe: atlassian/ftp-deploy:0.4.0
+              variables:
+                USER: $FTP_USERNAME
+                PASSWORD: $FTP_PASSWORD
+                SERVER: $FTP_HOST
+                REMOTE_PATH: $FTP_PATH
+                LOCAL_PATH: .output/public
+                EXTRA_ARGS: '--exclude .htaccess --exclude backend/'
+                DEBUG: 'true'
+                DELETE_FLAG: 'true'
+
 definitions:
   caches:
     node: node_modules

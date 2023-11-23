@@ -76,6 +76,8 @@
 </template>
 
 <script setup>
+// Imports
+import { useAccountStore } from '@/stores/account'
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   isBilling: {
@@ -95,7 +97,7 @@ const emit = defineEmits(['update:address', 'update:invoice', 'completed'])
 
 // Composables
 const { sending, send } = useSender()
-
+const user = useAccountStore()
 // Data
 const data = ref({
   address: props.address,
@@ -112,6 +114,11 @@ const {
   validateInvoice,
 } = useFeedback()
 
+const { isLoggedIn } = storeToRefs(user)
+
+const { t } = useI18n({
+  useScope: 'local',
+})
 // Watcher
 // Methods
 const updateAddress = async () => {
@@ -141,21 +148,34 @@ const updateAddress = async () => {
     return
   }
 
-  const response = await send(
-    async () =>
-      await useApi(
-        `/shop/addresses/${props.isBilling ? 'billing' : 'shipping'}/update`,
-        {
-          method: 'POST',
-          body: formData,
-        },
-        {
-          cache: false,
-        }
-      )
-  )
+  if (isLoggedIn.value) {
+    const response = await send(
+      async () =>
+        await useApi(
+          `/shop/addresses/${props.isBilling ? 'billing' : 'shipping'}/update`,
+          {
+            method: 'POST',
+            body: formData,
+          },
+          {
+            cache: false,
+          }
+        )
+    )
 
-  if (response.value.success) {
+    if (response.value.success) {
+      setSuccess()
+
+      emit('update:address', formData.address)
+
+      if (props.isBilling) {
+        emit('update:invoice', formData.invoice)
+      }
+
+      emit('completed')
+    }
+    feedback.message = response.value.message
+  } else {
     setSuccess()
 
     emit('update:address', formData.address)
@@ -165,8 +185,10 @@ const updateAddress = async () => {
     }
 
     emit('completed')
-  }
 
-  feedback.message = response.value.message
+    feedback.message = t('addresses.updated', {
+      type: props.isBilling ? t('orders.billing') : t('orders.shipping'),
+    })
+  }
 }
 </script>

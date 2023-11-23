@@ -112,8 +112,8 @@ defineProps({
   },
   readonly: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 // Component life-cycle hooks
@@ -238,7 +238,7 @@ $prefix: 'cart-table';
       position: absolute;
       left: get-var(x-offset, $prefix: $prefix);
       right: get-var(x-offset, $prefix: $prefix);
-      bottom: 0;
+      bottom: get-var(after-bottom, 0, $prefix: $prefix);
       height: 1px;
       background-color: get-var(color-light);
     }

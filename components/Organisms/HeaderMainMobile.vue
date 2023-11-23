@@ -90,6 +90,7 @@ const { isLoggedIn } = storeToRefs(accountStore)
 <style lang="scss" scoped>
 $prefix: 'header-mobile';
 @include component($prefix) {
+  overflow-x: auto;
   @include set-local-vars(
     $prefix: 'overlay',
     $map: (
@@ -98,7 +99,7 @@ $prefix: 'header-mobile';
     )
   );
 
-  @include from(tablet) {
+  @include from(desktop) {
     display: none;
   }
 
@@ -109,6 +110,7 @@ $prefix: 'header-mobile';
       padding: 0,
       align-items: stretch,
       direction: column,
+      wrap: no-wrap,
     )
   );
 
