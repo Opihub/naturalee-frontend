@@ -43,7 +43,7 @@ export default defineI18nConfig(() => ({
           'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
         related: 'Potrebbero interessarti anche',
         categoriesFeatured: 'Scegli tra la nostra fresca selezione:',
-        homepageFeatured: 'Frutta e Verdura Fresca',
+        homepageFeatured: 'Offerte Speciali: Scelti per Te',
       },
       company: {
         pIva: 'PI {piva}',

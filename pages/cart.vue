@@ -94,11 +94,11 @@
                   <PriceHolder :class="gridCellRightClassName" :price="total" />
                 </div>
 
-                <div :class="[className, rowClassName]">
+                <!-- <div :class="[className, rowClassName]">
                   Raggiungi <PriceHolder :price="20" /> di spesa per andare alla
-                  cassa!
-                  <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
-                </div>
+                  cassa! -->
+                <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
+                <!-- </div> -->
               </template>
 
               <template #after="{ footerClassName }">

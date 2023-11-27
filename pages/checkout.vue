@@ -128,7 +128,12 @@
               >
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
-                    <div v-for="slot in timeSlots" :key="slot.id">
+                    <BaseDatePicker v-model:date="date" />
+                    <div
+                      v-for="slot in timeSlots"
+                      :key="slot.id"
+                      class="u-mt-tiny"
+                    >
                       <ToggleField
                         v-model="timeSlot"
                         class="u-mb-tiny"
@@ -144,8 +149,6 @@
                         </span>
                       </ToggleField>
                     </div>
-
-                    <BaseDatePicker v-model:date="date" />
                   </div>
                 </template>
               </OrderResume>
@@ -567,6 +570,15 @@ const closeBillingModal = () => {
 
   @include component('box') {
     height: 100%;
+  }
+
+  @include component('toggle-field') {
+    @include set-local-vars(
+      $prefix: 'toggle-field',
+      $map: (
+        label-padding-y: rem(10px),
+      )
+    );
   }
 
   @include scope('different-billing') {

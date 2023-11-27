@@ -70,6 +70,9 @@ const updateDate = (date) => {
 $prefix: 'date-picker';
 
 @include object($prefix) {
+  & .dp__pointer {
+    font-size: rem(30px);
+  }
   .dp__cell_offset {
     &:not(.dp__cell_disabled) {
       color: inherit;
