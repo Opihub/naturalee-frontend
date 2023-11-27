@@ -78,7 +78,11 @@
         </ol>
       </div>
 
-      <NuxtImg ref="truck" src="van-naturalee.png" :class="CSS_NAME_IMAGE" />
+      <NuxtImg
+        ref="truck"
+        src="home/van-naturalee.png"
+        :class="CSS_NAME_IMAGE"
+      />
     </SiteContainer>
   </BackgroundHolder>
 </template>
