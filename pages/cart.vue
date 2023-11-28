@@ -94,19 +94,17 @@
                   <PriceHolder :class="gridCellRightClassName" :price="total" />
                 </div>
 
-                <!-- <div :class="[className, rowClassName]">
-                  Raggiungi <PriceHolder :price="20" /> di spesa per andare alla
-                  cassa! -->
-                <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
-                <!-- </div> -->
+                <div
+                  v-if="!hasMinimumOrderCost"
+                  :class="[className, rowClassName]"
+                >
+                  Ordine Minimo <PriceHolder :price="20" /> di spesa per andare
+                  alla cassa!
+                </div>
               </template>
 
               <template #after="{ footerClassName }">
                 <div :class="footerClassName">
-                  <div v-if="!hasMinimumOrderCost" class="u-mb-tiny">
-                    Raggiungi <PriceHolder :price="20" /> di spesa per andare
-                    alla cassa!
-                  </div>
                   <BaseButton
                     :disabled="sending || !hasMinimumOrderCost"
                     type="submit"
