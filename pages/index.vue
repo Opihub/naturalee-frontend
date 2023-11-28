@@ -7,11 +7,18 @@
       content-center
     >
       <template #back>
-        <BaseVideo :src="HomeVideo" background />
+        <BaseVideo
+          id="player"
+          src="cvqG0JMwcnE"
+          provider="youtube"
+          :aspect-ratio="[16, 9]"
+          poster="/home/home_poster.svg"
+          background
+        />
       </template>
 
       <template #default="{ className }">
-        <SiteContainer :max-width="912" :class="className">
+        <SiteContainer :max-width="797" :class="className">
           <SearchForm :placeholder="t('hero.searchPlaceholder')">
             <template #before>
               <BaseHeading class="u-mb-half" tag="h4" :text="t('hero.title')" />
@@ -38,8 +45,11 @@
       color="yellow"
     >
       <SiteContainer>
-        <p class="u-mb-tiny u-mb-none@tablet">
-          {{ t('deliverySection.title') }}
+        <p
+          class="u-mb-tiny u-mb-none@tablet u-mr-none u-mr-medium@tablet u-mr-none@large"
+        >
+          {{ t('deliverySection.title') }} <br />
+          {{ t('deliverySection.title_2') }}
         </p>
         <BaseButton color="white" @click="togglePostcodeModal">{{
           t('deliverySection.cta')
@@ -153,6 +163,13 @@ const { t } = useI18n({
       )
     );
 
+    @include set-local-vars(
+      $prefix: 'background-back',
+      $map: (
+        height: 100%,
+      )
+    );
+
     text-align: center;
     color: get-var(color-white);
 
@@ -180,9 +197,11 @@ const { t } = useI18n({
 
     @include object('heading') {
       @include typography(24px, 30px);
+      //width: 85%;
     }
     @include object('video') {
       width: 100%;
+      object-fit: cover;
     }
   }
 
@@ -243,6 +262,7 @@ const { t } = useI18n({
   }
 
   @include component('fifth-section') {
+    overflow: hidden;
     @include set-local-vars(
       $prefix: 'custom',
       $map: (
@@ -257,19 +277,20 @@ const { t } = useI18n({
 <i18n lang="json" locale="it">
 {
   "hero": {
-    "title": "Esplora una spesa Fresca e Naturalee. Ordina subito!",
+    "title": "Vivi tutto il Gusto Autentico di una spesa Fresca e Naturalee. Dalle nostre Terre direttamente a casa tua. Ordina Subito!",
     "paragraph": "Non sai da dove iniziare? {featured}",
     "featured": "Ti consigliamo noi!",
     "searchPlaceholder": "Inizia la tua spesa"
   },
   "deliverySection": {
     "title": "Il servizio è attivo su Milano città e hinterland",
+    "title_2": "Consegnamo la spesa direttamente a casa tua con consegna rapida a domicilio.",
     "cta": "Verifica se il tuo indirizzo è coperto dal servizio"
   },
   "firstSection": {
-    "supTitle": "Freschezza e qualità dalle nostre terre",
-    "title": "Una storia che abbraccia passato e futuro",
-    "paragraph": "Naturalee ha solide radici sia nel mercato ortofrutticolo milanese che nelle fertili terre del Lazio. Grazie alla sua rete di fornitori e alla sua efficienza operativa, è in grado di fornire prodotti freschi e di qualità direttamente alle vostre porte.",
+    "supTitle": "Direttamente dalle nostre coltivazioni alla tua tavola",
+    "title": "Autentica freschezza e qualità che raccontano la storia della nostra terra.",
+    "paragraph": "Benvenuti in Naturalee, dove il sapore e la bontà si manifestano attraverso prodotti freschi e genuini. Coltiviamo non solo frutta e verdura, ma anche una passione per la qualità e l'autenticità che rievocano i sapori di un tempo",
     "cta": "Chi siamo"
   },
   "fifthSection": {

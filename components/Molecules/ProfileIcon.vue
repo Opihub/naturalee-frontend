@@ -50,7 +50,7 @@ $prefix: 'profile-icon';
   justify-content: center;
   flex-direction: row;
 
-  @include until(tablet) {
+  @include until(desktop) {
     @include element('label') {
       display: none;
     }

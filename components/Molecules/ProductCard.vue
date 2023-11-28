@@ -182,6 +182,14 @@ $prefix: 'product-card';
     @include set-local-vars(
       $prefix: 'row',
       $map: (
+        columns: 3,
+      )
+    );
+  }
+  @include from(full) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
         columns: 4,
       )
     );
@@ -244,6 +252,10 @@ $prefix: 'product-card';
     padding-top: rem(30px);
 
     svg {
+      @include until(large) {
+        padding: 0 rem(15px);
+      }
+      width: 100%;
       margin: 0 auto;
       max-width: get-var(width, rem(300px), $prefix: $prefix);
 
@@ -391,7 +403,7 @@ $prefix: 'product-card';
         $prefix: 'button',
         $map: (
           justify-content: center,
-          padding: rem(12px) rem(80px),
+          padding: rem(12px) rem(40px),
           fill: get-var(color-yellow),
         )
       );
@@ -418,7 +430,7 @@ $prefix: 'product-card';
         @include set-local-vars(
           $prefix: 'button',
           $map: (
-            padding: rem(12px) rem(30px),
+            padding: rem(12px) rem(10px),
           )
         );
       }

@@ -12,7 +12,6 @@
         $t('orders.shipping')
       }}</span>
       <!-- <ShippingMethods :class="`${CSS_NAME}__shipping`" /> -->
-
       <PriceHolder
         v-if="$route.name === 'checkout'"
         :class="[`${CSS_NAME}__shipping`, 'is-data']"

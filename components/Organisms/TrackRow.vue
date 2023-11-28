@@ -14,7 +14,7 @@
     >
       <div :class="CSS_NAME_STEPS">
         <TrackDesktop
-          v-show="!isMobile"
+          v-show="isFull"
           ref="track"
           :class="[
             `${CSS_NAME_STEPS}__track`,
@@ -78,7 +78,11 @@
         </ol>
       </div>
 
-      <NuxtImg ref="truck" src="van-naturalee.png" :class="CSS_NAME_IMAGE" />
+      <NuxtImg
+        ref="truck"
+        src="home/van-naturalee.png"
+        :class="CSS_NAME_IMAGE"
+      />
     </SiteContainer>
   </BackgroundHolder>
 </template>
@@ -111,6 +115,8 @@ const track = ref(null)
 const trackMobile = ref(null)
 const isMobile = ref(false)
 const stage = ref(false)
+const isFull = ref(false)
+const isIntermediate = ref(false)
 
 const firstPoint = ref(null)
 const secondPoint = ref(null)
@@ -130,6 +136,7 @@ onMounted(() => {
 
   const mobilePath = trackMobile.value?.$el.querySelector('path')
   const mobilePathLength = mobilePath.getTotalLength()
+
   gsap.set(mobilePath, {
     strokeDasharray: mobilePathLength,
     strokeDashoffset: mobilePathLength,
@@ -148,6 +155,11 @@ onUnmounted(() => {
 
 const handleResize = () => {
   isMobile.value = window.innerWidth < 768
+  isFull.value = window.innerWidth > 1599.98
+  isIntermediate.value = !isMobile.value && !isFull.value
+  if (isMobile.value || isIntermediate.value || isFull.value) {
+    animate()
+  }
 }
 
 const trackPath = computed(() => {
@@ -185,7 +197,7 @@ const animate = () => {
     .to(
       truck.value.$el,
       {
-        x: 0,
+        x: isIntermediate.value ? '15%' : 0,
         duration: 1,
         ease: 'power2.out',
       },
@@ -237,7 +249,17 @@ $prefix: 'track-row';
     )
   );
 
-  @include from(tablet) {
+  @include between(tablet, full) {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        point-step: rem(70px),
+        point-offset: rem(50px),
+      )
+    );
+  }
+
+  @include from(full) {
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
@@ -293,6 +315,12 @@ $prefix: 'track-row';
 
   @include element('image') {
     position: relative;
+    @include between(tablet, full) {
+      width: 50%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom;
+    }
     right: rem(-108px);
     position: absolute;
     bottom: 0;
@@ -330,7 +358,7 @@ $prefix: 'track-row';
       @include set-local-vars(
         $prefix: $prefix,
         $map: (
-          track-offset: rem(180px),
+          track-offset: rem(0px),
         )
       );
     }
@@ -412,6 +440,12 @@ $prefix: 'track-row';
         counter-increment: track;
         display: flex;
         align-items: center;
+        @include between(tablet, full) {
+          align-items: start;
+          & span {
+            margin-top: 0.8em;
+          }
+        }
         justify-content: flex-start;
         gap: rem(20px);
         color: get-var(color-white);
@@ -436,24 +470,39 @@ $prefix: 'track-row';
           flex: 0 0 auto;
         }
 
-        &:nth-child(even) {
-          top: auto;
-          bottom: 0;
-        }
-
-        b, strong {
+        b,
+        strong {
           font-size: get-var(strong-font-size, $prefix: $prefix-point);
           display: block;
         }
 
-        @include from(tablet) {
+        &:nth-child(even) {
+          top: auto;
+          bottom: 0;
+        }
+        @include between(tablet, full) {
+          position: absolute;
+          left: 0;
+          top: calc(
+            get-var(point-step, $prefix: $prefix) *
+              get-var(point-number, 0, $prefix: $prefix)
+          );
+          &:nth-child(even) {
+            position: absolute;
+            top: calc(
+              get-var(point-step, $prefix: $prefix) *
+                (get-var(point-number, 0, $prefix: $prefix) - 1)
+            );
+            left: calc(get-var(point-step, $prefix: $prefix) * 3.3);
+          }
+        }
+        @include from(full) {
           position: absolute;
           left: calc(
             get-var(point-step, $prefix: $prefix) *
               get-var(point-number, 0, $prefix: $prefix)
           );
         }
-
         @include modifier('first') {
         }
 

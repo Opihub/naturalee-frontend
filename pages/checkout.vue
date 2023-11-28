@@ -57,12 +57,25 @@
                     <InlineButton
                       color="green"
                       underline
-                      :text="$t('edit')"
+                      :text="
+                        $t(isAddressFilled(shippingAddress) ? 'edit' : 'create')
+                      "
                       @click="toggleShippingModal(true)"
                     />
                   </template>
 
-                  <ShopAddress :address="shippingAddress" />
+                  <ShopAddress
+                    v-if="isAddressFilled(shippingAddress)"
+                    :address="shippingAddress"
+                  />
+                  <BaseParagraph
+                    v-else
+                    :text="
+                      $t('addresses.checkouNotSet', {
+                        type: $t('orders.shipping'),
+                      })
+                    "
+                  />
                 </BaseBox>
               </div>
 
@@ -76,14 +89,25 @@
                     <InlineButton
                       color="green"
                       underline
-                      :text="$t('edit')"
+                      :text="
+                        $t(isAddressFilled(billingAddress) ? 'edit' : 'create')
+                      "
                       @click="toggleBillingModal(true)"
                     />
                   </template>
 
                   <ShopAddress
+                    v-if="isAddressFilled(billingAddress)"
                     :address="billingAddress"
                     :invoice="billingData"
+                  />
+                  <BaseParagraph
+                    v-else
+                    :text="
+                      $t('addresses.checkouNotSet', {
+                        type: $t('orders.billing'),
+                      })
+                    "
                   />
                 </BaseBox>
               </div>
@@ -104,7 +128,12 @@
               >
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
-                    <div v-for="slot in timeSlots" :key="slot.id">
+                    <BaseDatePicker v-model:date="date" />
+                    <div
+                      v-for="slot in timeSlots"
+                      :key="slot.id"
+                      class="u-mt-tiny"
+                    >
                       <ToggleField
                         v-model="timeSlot"
                         class="u-mb-tiny"
@@ -120,8 +149,6 @@
                         </span>
                       </ToggleField>
                     </div>
-
-                    <BaseDatePicker v-model:date="date" />
                   </div>
                 </template>
               </OrderResume>
@@ -468,6 +495,18 @@ const currentTimeSlot = computed(() => {
   return timeSlots.value.find((slot) => slot.id === timeSlot.value)
 })
 
+const isAddressFilled = computed(() => (address) => {
+  return (
+    address.firstName &&
+    address.lastName &&
+    address.country &&
+    address.address &&
+    address.province &&
+    address.city &&
+    address.postcode
+  )
+})
+
 // Methods
 const toggleShippingModal = (status = null) => {
   isShippingModalOpen.value =
@@ -518,11 +557,28 @@ const closeBillingModal = () => {
       border-bottom: 2px,
     )
   );
+  @include until(tablet) {
+    @include set-local-vars(
+      $prefix: 'cart-table',
+      $map: (
+        after-bottom: -20px,
+      )
+    );
+  }
 
   @include typography(18px, 22px);
 
   @include component('box') {
     height: 100%;
+  }
+
+  @include component('toggle-field') {
+    @include set-local-vars(
+      $prefix: 'toggle-field',
+      $map: (
+        label-padding-y: rem(10px),
+      )
+    );
   }
 
   @include scope('different-billing') {

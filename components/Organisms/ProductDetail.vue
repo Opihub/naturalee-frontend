@@ -21,7 +21,7 @@
       <ul
         :class="{
           [`${CSS_NAME}__variations`]: true,
-          'is-single': variations.length >= 1,
+          'is-single': variations.length <= 1,
         }"
         class="u-mb-half"
       >

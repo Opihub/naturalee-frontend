@@ -90,7 +90,7 @@ const providers = useState('videoProviders', () => [])
 // Computed
 const className = computed(() => {
   const className = [CSS_NAME]
-
+  className.push(`is-${props.provider}`)
   if (!player.value) {
     className.push('is-loading')
   }
@@ -159,11 +159,13 @@ onMounted(() => {
   }
 
   player.value = new Vlitejs(playerElement.value, config)
-  if (props.aspectRatio) {
+  if (props.aspectRatio && !props.background) {
     player.value.outerContainer.style = style.value
     player.value.outerContainer.classList.add('v-border-radius')
   }
-
+  if (props.background) {
+    player.value.outerContainer.classList.add('is-background')
+  }
   if (props.provider !== 'html5') {
     player.value.outerContainer.classList.add('is-iframe')
     player.value.outerContainer.style = `--video-ratio: ${formatAspectRatio(
@@ -176,26 +178,40 @@ onMounted(() => {
 <style lang="scss">
 @import 'vlitejs/vlite.css';
 
-$video-radius: rem(50px);
-
 $prefix: 'video';
 @include object($prefix) {
   @include is('loading') {
     width: 100%;
-    aspect-ratio: get-var(video-ratio, "16 / 9");
+    height: 100%;
+    aspect-ratio: get-var(video-ratio, '16 / 9');
     background-color: get-var(color-black);
-    border-radius: #{$video-radius};
+    border-radius: rem(50px);
+    @include customMedia(600px, true) {
+      border-radius: rem(30px);
+    }
+  }
+  @include is('html5') {
+    border-radius: 0;
   }
 }
 
 .v-vlite.v-#{$prefix} {
   aspect-ratio: get-var(video-ratio);
+  height: 100%;
 
   &.is-iframe {
     width: 100%;
     height: auto;
     position: relative;
-
+    &.is-background {
+      height: 100%;
+      @include until(desktop) {
+        width: unset;
+      }
+      @include from(desktop) {
+        height: unset;
+      }
+    }
     iframe {
       height: 200%;
       position: absolute;
@@ -210,7 +226,10 @@ $prefix: 'video';
   }
 
   &.v-border-radius {
-    border-radius: #{$video-radius};
+    border-radius: rem(50px);
+    @include customMedia(600px, true) {
+      border-radius: rem(30px);
+    }
   }
 
   .v-bigPlay {
@@ -224,6 +243,10 @@ $prefix: 'video';
     svg {
       width: rem(215px);
       height: rem(215px);
+      @include until(tablet) {
+        width: rem(115px);
+        height: rem(115px);
+      }
       margin: 0 auto rem(18px);
       stroke: none;
       background: get-var(color-green);

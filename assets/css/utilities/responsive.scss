@@ -21,6 +21,17 @@
   }
 }
 
+@mixin customMedia($size, $reverse: '') {
+  $query: 'min-width: #{$size}';
+  @if ($reverse) {
+    $query: 'max-width: #{$size - $responsive-offset}';
+  }
+
+  @media (#{$query}) {
+    @content;
+  }
+}
+
 @mixin media($size, $reverse: false) {
   @if (map.has-key($responsive, $size)) {
     $size: map.get($responsive, $size);

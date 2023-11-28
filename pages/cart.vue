@@ -84,25 +84,28 @@
                   </template>
                 </div>
 
-                <div class="u-pt-half u-pb-half" :class="[gridClassName, rowClassName]">
+                <div
+                  class="u-pt-half u-pb-half"
+                  :class="[gridClassName, rowClassName]"
+                >
                   <b :class="[gridCellLeftClassName, totalClassName]">{{
                     $t('common.total')
                   }}</b>
-                  <PriceHolder
-                    :price="total"
-                  />
+                  <PriceHolder :class="gridCellRightClassName" :price="total" />
                 </div>
 
-                <div :class="[className, rowClassName]">
-                  Raggiungi <PriceHolder :price="20" /> di spesa per andare alla cassa!
-                  <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
-                </div>
+                <!-- <div :class="[className, rowClassName]">
+                  Raggiungi <PriceHolder :price="20" /> di spesa per andare alla
+                  cassa! -->
+                <!-- Devi spendere almeno <PriceHolder :price="20" /> per poter effettuare l'ordine! -->
+                <!-- </div> -->
               </template>
 
-              <template #after="{ footerClassName, }">
+              <template #after="{ footerClassName }">
                 <div :class="footerClassName">
                   <div v-if="!hasMinimumOrderCost" class="u-mb-tiny">
-                    Raggiungi <PriceHolder :price="20" /> di spesa per andare alla cassa!
+                    Raggiungi <PriceHolder :price="20" /> di spesa per andare
+                    alla cassa!
                   </div>
                   <BaseButton
                     :disabled="sending || !hasMinimumOrderCost"
@@ -177,7 +180,9 @@ const deleteFromBasket = async (product) => {
     return
   }
 
-  basket.value = basket.value.filter((item) => item.variationId !== product.variationId)
+  basket.value = basket.value.filter(
+    (item) => item.variationId !== product.variationId
+  )
 }
 
 const clearBasket = async () => {

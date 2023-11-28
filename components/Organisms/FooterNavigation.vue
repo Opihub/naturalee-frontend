@@ -3,10 +3,18 @@
     <div :class="`${CSS_NAME}__links`">
       <SiteLogo :alt="true" />
 
-      <InlineMenu v-if="socialsMenu && socialsMenu.length" :menu="socialsMenu" svg-size="18px" />
+      <InlineMenu
+        v-if="socialsMenu && socialsMenu.length"
+        :menu="socialsMenu"
+        svg-size="18px"
+      />
     </div>
 
-    <InlineMenu v-if="menu && menu.length" :menu="menu" :class="`${CSS_NAME}__menu`">
+    <InlineMenu
+      v-if="menu && menu.length"
+      :menu="menu"
+      :class="`${CSS_NAME}__menu`"
+    >
       <template #after="{ itemClassName, itemLinkClassName }">
         <li :class="itemClassName">
           <InlineButton
@@ -19,7 +27,10 @@
       </template>
     </InlineMenu>
 
-    <NuxtImg :class="`${CSS_NAME}__payment`" src="/pagamenti-sicuri.png" />
+    <NuxtImg
+      :class="`${CSS_NAME}__payment`"
+      src="footer/pagamenti-sicuri.png"
+    />
   </SiteContainer>
 </template>
 

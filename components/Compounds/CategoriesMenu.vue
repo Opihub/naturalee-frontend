@@ -23,6 +23,24 @@ defineProps({
 
 <style lang="scss">
 $prefix: 'categories-menu';
+@include between(desktop, large) {
+  @include component('menu') {
+    @include set-local-vars(
+      $prefix: 'menu-row',
+      $map: (
+        gap: rem(10px),
+      )
+    );
+    @include modifier('large') {
+      @include set-local-vars(
+        $prefix: 'menu',
+        $map: (
+          gap: rem(5px),
+        )
+      );
+    }
+  }
+}
 @include component($prefix) {
   text-transform: uppercase;
   justify-content: center;

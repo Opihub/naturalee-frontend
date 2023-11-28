@@ -43,7 +43,7 @@ export default defineI18nConfig(() => ({
           'Non disponibile | Pochi pezzi disponibili | Prodotto disponibile',
         related: 'Potrebbero interessarti anche',
         categoriesFeatured: 'Scegli tra la nostra fresca selezione:',
-        homepageFeatured: 'Frutta e Verdura Fresca',
+        homepageFeatured: 'Offerte Speciali: Scelti per Te',
       },
       company: {
         pIva: 'PI {piva}',
@@ -147,6 +147,7 @@ export default defineI18nConfig(() => ({
         notValid: 'Coupon non valido!',
       },
       wishlist: {
+        add: 'Salva nei preferiti!',
         added: '{name} aggiunto ai preferiti',
         removed: '{name} rimosso dai preferiti',
         missingProduct: 'Prodotto non trovato nei preferiti',
@@ -208,6 +209,7 @@ export default defineI18nConfig(() => ({
         billing: 'Indirizzo di fatturazione',
         shipping: 'Indirizzo di spedizione',
         notSet: 'Indirizzo non impostato',
+        checkouNotSet: 'Inserisci un indirizzo di {type} per completare l\'ordine',
         delivery: 'Indirizzo di consegna',
         deliveryRequired: "L'indirizzo di consegna è obbligatorio",
         differentBilling: 'Fatturare ad un indirizzo differente?',
@@ -222,6 +224,7 @@ export default defineI18nConfig(() => ({
         address2: 'Appartamento, suite, unità, piano, ecc. (opzionale)',
         addressPlaceholder: 'Via/Piazza e Numero Civico',
         timeSlot: 'Scegli la fascia oraria preferita e il giorno di consegna:',
+        updated: 'Indirizzo di {type} aggiornato',
 
         company: 'Azienda',
         cf: 'CF',

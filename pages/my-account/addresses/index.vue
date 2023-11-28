@@ -85,9 +85,18 @@ const isAddressFilled = computed(() => (address) => {
     $prefix: 'row',
     $map: (
       gap: rem(30px),
-      columns: 2,
+      columns: 1,
     )
   );
+
+  @include from(desktop) {
+    @include set-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 2,
+      )
+    );
+  }
 
   @include set-vars(
     $prefix: 'box',
@@ -106,7 +115,12 @@ const isAddressFilled = computed(() => (address) => {
   );
 
   @include object('heading') {
-    width: 50%;
+    @include customMedia(376px, true) {
+      width: 50%;
+    }
+    @include from(desktop) {
+      width: 50%;
+    }
     margin-right: rem(35px);
 
     @include set-vars(
