@@ -98,8 +98,7 @@
                   v-if="!hasMinimumOrderCost"
                   :class="[className, rowClassName]"
                 >
-                  Ordine Minimo <PriceHolder :price="20" /> di spesa per andare
-                  alla cassa!
+                  Ordine Minimo <PriceHolder :price="20" />
                 </div>
               </template>
 
