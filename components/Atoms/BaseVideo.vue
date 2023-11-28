@@ -159,11 +159,13 @@ onMounted(() => {
   }
 
   player.value = new Vlitejs(playerElement.value, config)
-  if (props.aspectRatio) {
+  if (props.aspectRatio && !props.background) {
     player.value.outerContainer.style = style.value
     player.value.outerContainer.classList.add('v-border-radius')
   }
-
+  if (props.background) {
+    player.value.outerContainer.classList.add('is-background')
+  }
   if (props.provider !== 'html5') {
     player.value.outerContainer.classList.add('is-iframe')
     player.value.outerContainer.style = `--video-ratio: ${formatAspectRatio(
@@ -201,7 +203,15 @@ $prefix: 'video';
     width: 100%;
     height: auto;
     position: relative;
-
+    &.is-background {
+      height: 100%;
+      @include until(desktop) {
+        width: unset;
+      }
+      @include from(desktop) {
+        height: unset;
+      }
+    }
     iframe {
       height: 200%;
       position: absolute;

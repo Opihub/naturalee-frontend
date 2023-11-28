@@ -7,7 +7,14 @@
       content-center
     >
       <template #back>
-        <BaseVideo :src="HomeVideo" background />
+        <BaseVideo
+          id="player"
+          src="cvqG0JMwcnE"
+          provider="youtube"
+          :aspect-ratio="[16, 9]"
+          poster="/home/home_poster.svg"
+          background
+        />
       </template>
 
       <template #default="{ className }">

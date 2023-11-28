@@ -2,7 +2,7 @@
   <section class="s-dashboard">
     <NuxtImg
       class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
-      src="account/banner-account.png"
+      src="/account/banner-account.png"
     />
 
     <SiteContainer :max-width="740" padless>
