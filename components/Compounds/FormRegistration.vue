@@ -16,6 +16,7 @@
       required
       >{{ $t('form.mailField') }}</InputField
     >
+
     <InputField
       v-model="formData.password"
       class="u-mb-tiny"
@@ -24,7 +25,7 @@
       >{{ $t('form.password.field') }}</InputField
     >
 
-    <ToggleField v-model="formData.acceptance" required>
+    <ToggleField v-model="formData.acceptance" required class="u-mb-tiny">
       {{ $t('form.consentTo') }}
       <BaseLink
         :to="{ name: 'privacy-policy' }"
@@ -32,6 +33,17 @@
         underline
         target="_blank"
         >{{ $t('form.acceptance') }}</BaseLink
+      >
+    </ToggleField>
+
+    <ToggleField v-model="formData.acceptance">
+      {{ $t('form.registerToNewsletter') }}
+      <BaseLink
+        :to="{ name: 'privacy-policy' }"
+        color="dark"
+        underline
+        target="_blank"
+        >{{ $t('form.acceptNewsletter') }}</BaseLink
       >
     </ToggleField>
 
