@@ -85,7 +85,8 @@ export default defineI18nConfig(() => ({
         loginSubtitle: "Effettua l'accesso",
         signUp: 'Registrati',
         signUpTitle: 'Nuovo cliente?',
-        signUpSubtitle: 'Crea un account',
+        signUpSubtitle:
+          'Registrati per ordinare e poter ricevere sconti e promozioni',
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',
