@@ -18,7 +18,6 @@
             newAccount,
             password,
             email,
-            phone,
           }"
           :billing-data="billingData"
           :payment-method="paymentMethod"
