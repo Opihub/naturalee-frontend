@@ -93,6 +93,30 @@ export const useCartStore = defineStore('cart', () => {
 
   async function load() {
     if (!isLoggedIn.value) {
+      const body = cart.value.map((product) => {
+        return {
+          id: product.id,
+          variationId: product.variationId,
+          quantity: product.quantity,
+        }
+      })
+
+      const response = await useApi(
+        'shop/cart/sync',
+        {
+          method: 'POST',
+          body,
+        },
+        {
+          cache: false,
+        }
+      ).catch((error) => {
+        console.error(
+          'Errore durante il caricamento di "shop/cart/sync"',
+          error
+        )
+      })
+      cart.value = response.value.data
       return cart
     }
 
