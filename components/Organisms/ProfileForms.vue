@@ -1,6 +1,46 @@
 <template>
   <div class="o-row c-profile-forms">
     <BackgroundHolder
+      ref="registrationElement"
+      class="o-row__column u-pt-huge u-pb-huge c-registration-block"
+      content-center
+    >
+      <ClientOnly>
+        <FloatingIcon
+          :style="{ transform: `rotate(${svgs.banana.rotate}deg)` }"
+          :svg-size="svgs.banana.sizes"
+          :coordinates="svgs.banana.coordinates"
+          :z-index="0"
+        >
+          <BananaSVG />
+        </FloatingIcon>
+        <FloatingIcon
+          :style="{ transform: `rotate(${svgs.mango.rotate}deg)` }"
+          :svg-size="svgs.mango.sizes"
+          :coordinates="svgs.mango.coordinates"
+          :z-index="0"
+        >
+          <MangoSVG />
+        </FloatingIcon>
+        <FloatingIcon
+          :style="{ transform: `rotate(${svgs.mora.rotate}deg)` }"
+          :svg-size="svgs.mora.sizes"
+          :coordinates="svgs.mora.coordinates"
+          :z-index="0"
+        >
+          <MoraSVG />
+        </FloatingIcon>
+      </ClientOnly>
+
+      <FormRegistration
+        ref="registrationFormElement"
+        :disabled="sending"
+        @api:start="sending = true"
+        @api:end="sending = false"
+      />
+    </BackgroundHolder>
+
+    <BackgroundHolder
       ref="loginElement"
       class="o-row__column u-pt-huge u-pb-huge c-login-block"
       content-center
@@ -70,46 +110,6 @@
           </template>
         </FormPasswordRecovery>
       </Transition>
-    </BackgroundHolder>
-
-    <BackgroundHolder
-      ref="registrationElement"
-      class="o-row__column u-pt-huge u-pb-huge c-registration-block"
-      content-center
-    >
-      <ClientOnly>
-        <FloatingIcon
-          :style="{ transform: `rotate(${svgs.banana.rotate}deg)` }"
-          :svg-size="svgs.banana.sizes"
-          :coordinates="svgs.banana.coordinates"
-          :z-index="0"
-        >
-          <BananaSVG />
-        </FloatingIcon>
-        <FloatingIcon
-          :style="{ transform: `rotate(${svgs.mango.rotate}deg)` }"
-          :svg-size="svgs.mango.sizes"
-          :coordinates="svgs.mango.coordinates"
-          :z-index="0"
-        >
-          <MangoSVG />
-        </FloatingIcon>
-        <FloatingIcon
-          :style="{ transform: `rotate(${svgs.mora.rotate}deg)` }"
-          :svg-size="svgs.mora.sizes"
-          :coordinates="svgs.mora.coordinates"
-          :z-index="0"
-        >
-          <MoraSVG />
-        </FloatingIcon>
-      </ClientOnly>
-
-      <FormRegistration
-        ref="registrationFormElement"
-        :disabled="sending"
-        @api:start="sending = true"
-        @api:end="sending = false"
-      />
     </BackgroundHolder>
   </div>
 </template>
