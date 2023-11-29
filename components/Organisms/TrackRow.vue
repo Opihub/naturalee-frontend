@@ -122,7 +122,11 @@ const firstPoint = ref(null)
 const secondPoint = ref(null)
 const thirdPoint = ref(null)
 const fourthPoint = ref(null)
+const isPageStart = ref(false)
 
+onBeforeMount(() => {
+  isPageStart.value = true
+})
 onMounted(() => {
   handleResize()
   window.addEventListener('resize', handleResize)
@@ -157,8 +161,11 @@ const handleResize = () => {
   isMobile.value = window.innerWidth < 768
   isFull.value = window.innerWidth > 1599.98
   isIntermediate.value = !isMobile.value && !isFull.value
+
   if (isMobile.value || isIntermediate.value || isFull.value) {
-    animate()
+    if (!isPageStart.value) {
+      animate()
+    }
   }
 }
 
@@ -172,6 +179,9 @@ const trackPath = computed(() => {
 })
 
 const animate = () => {
+  if (isPageStart.value) {
+    isPageStart.value = !isPageStart.value
+  }
   const timeline = gsap.timeline()
 
   const pointConfig = {
