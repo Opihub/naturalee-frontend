@@ -140,7 +140,9 @@ defineI18nRoute({
 })
 
 // Component life-cycle hooks
-
+onMounted(() => {
+  basket.value = remoteBasket.value
+})
 // Composables
 const { page } = await usePage('cart')
 const products = await useApi('shop/homepage/products')
@@ -150,7 +152,7 @@ const { sending, send } = useSender()
 // Data
 const { isEmpty } = storeToRefs(cart)
 const remoteBasket = await cart.load()
-const basket = ref(remoteBasket.value)
+const basket = ref([])
 
 // Computed
 const hasFreeShipping = computed(() => {

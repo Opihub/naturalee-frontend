@@ -117,19 +117,19 @@ export const useCartStore = defineStore('cart', () => {
           error
         )
       })
-      if (response) {
-        cart.value = response.value.data.products
-        if ('invalid' in response.value.data) {
-          notify({
-            message: response.value.data.invalid.message.join(' - '),
-            status: 'warning',
-          })
-        }
-        // if (response.value.data.invalid.) {
-
-        // }
-        return cart
+      if (!response.value.success) {
+        throw new Error(response)
       }
+
+      cart.value = response.value.data.products
+      if ('invalid' in response.value.data) {
+        notify({
+          message: response.value.data.invalid.message.join(' - '),
+          status: 'warning',
+        })
+      }
+
+      return cart
     }
 
     const response = await useApi('shop/cart/products', null, {

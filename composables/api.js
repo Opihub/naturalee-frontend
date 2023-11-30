@@ -1,9 +1,4 @@
-import {
-  useFetch,
-  ref,
-  storeToRefs,
-  useRuntimeConfig,
-} from '#imports'
+import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
@@ -62,8 +57,10 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     cached = useSessionStorage(apiUrl, null, {
       serializer: StorageSerializers.object,
     })
+  } else {
+    innerOptions.key = Math.floor(Math.random() * 1000000001)
+    console.log(innerOptions)
   }
-
   if (cached.value && cached.value.success) {
     return cached
   }
