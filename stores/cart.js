@@ -98,6 +98,7 @@ export const useCartStore = defineStore('cart', () => {
           id: product.id,
           variationId: product.variationId,
           quantity: product.quantity,
+          title: product.title,
         }
       })
 
@@ -116,8 +117,19 @@ export const useCartStore = defineStore('cart', () => {
           error
         )
       })
-      cart.value = response.value.data
-      return cart
+      if (response) {
+        cart.value = response.value.data.products
+        if ('invalid' in response.value.data) {
+          notify({
+            message: response.value.data.invalid.message.join(' - '),
+            status: 'warning',
+          })
+        }
+        // if (response.value.data.invalid.) {
+
+        // }
+        return cart
+      }
     }
 
     const response = await useApi('shop/cart/products', null, {
