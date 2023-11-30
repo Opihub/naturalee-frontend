@@ -59,7 +59,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     })
   } else {
     innerOptions.key = Math.floor(Math.random() * 1000000001)
-    console.log(innerOptions)
   }
   if (cached.value && cached.value.success) {
     return cached

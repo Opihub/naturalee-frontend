@@ -201,15 +201,15 @@ const saveCart = async () => {
 
   const response = await send(async () => await cart.save(basket))
 
-  console.debug(response.value)
-  if (!response.value.success) {
-    notify({
-      status: 'danger',
-      message: response.value.data,
-    })
+  //console.debug(response.value)
+  // if (!response.value.success && response) {
+  //   notify({
+  //     status: 'danger',
+  //     message: response.value.data,
+  //   })
 
-    return
-  }
+  //   return
+  // }
 
   await navigateTo({
     name: 'checkout',
