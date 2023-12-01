@@ -183,10 +183,6 @@ export const useCartStore = defineStore('cart', () => {
     })
 
     if (!response.value.success) {
-      notify({
-        status: 'danger',
-        message: response.value.data,
-      })
       throw new Error(response)
     }
 
