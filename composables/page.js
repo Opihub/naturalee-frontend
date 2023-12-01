@@ -22,9 +22,9 @@ export const usePage = async (
 
   page.value = response.value.data
 
-  if (page.value && loadSeo && 'seo' in page.value) {
-    usePageSeo(page.value.seo)
-  }
+  // if (page.value && loadSeo && 'seo' in page.value) {
+  //   usePageSeo(page.value.seo)
+  // }
 
   return {
     page,

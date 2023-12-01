@@ -194,9 +194,25 @@ export default defineNuxtConfig({
       },
     ],
   },
-  nitro: {
-    prerender: {
-      failOnError: false, 
-    },
-  },
+  logLevel: 'verbose',
+  // nitro: {
+  //   prerender: {
+  //     ignore: [
+  //       '/wishlist',
+  //       '/azienda',
+  //       '/cookie-policy',
+  //       '/contatti',
+  //       '/cart',
+  //       '/privacy-policy/',
+  //       '/privacy-policy',
+  //       '/login',
+  //       '/faq',
+  //       '/featured',
+  //       '/terms-and-conditions',
+  //       '/termini-e-condizioni/',
+  //       '/password-recovery',
+  //       '/',
+  //     ],
+  //   },
+  // },
 })

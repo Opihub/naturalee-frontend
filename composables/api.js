@@ -57,14 +57,15 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     cached = useSessionStorage(apiUrl, null, {
       serializer: StorageSerializers.object,
     })
-  } else {
-    options.key = Math.floor(Math.random() * 1000000001).toString()
-  }
+  } /* else {
+    
+  } */
   if (cached.value && cached.value.success) {
     return cached
   }
 
   const fetchOptions = {
+    //options.key = Math.floor(Math.random() * 1000000001).toString()
     ...options,
     headers: {
       Authorization:
