@@ -58,7 +58,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       serializer: StorageSerializers.object,
     })
   } else {
-    options.key = Math.floor(Math.random() * 1000000001)
+    options.key = Math.floor(Math.random() * 1000000001).toString()
   }
   if (cached.value && cached.value.success) {
     return cached
