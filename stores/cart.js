@@ -157,13 +157,14 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart() {
+  function clearCart(notify = true) {
     cart.value = []
-
-    notify({
-      message: t('cart.cleared'),
-      status: 'warning',
-    })
+    if (!notify) {
+      notify({
+        message: t('cart.cleared'),
+        status: 'warning',
+      })
+    }
 
     return true
   }
