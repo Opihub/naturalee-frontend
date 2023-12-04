@@ -62,7 +62,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   if (cached.value && cached.value.success) {
     return cached
   }
-  options.key = options.key || Math.floor(Math.random() * 1000000001).toString()
+  //options.key = options.key || Math.floor(Math.random() * 1000000001).toString()
 
   const fetchOptions = {
     ...options,
