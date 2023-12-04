@@ -91,11 +91,46 @@ export const useCartStore = defineStore('cart', () => {
     return cart.value.find((product) => product.variationId === id)
   }
 
-  async function load() {
+  async function load(login = false) {
     if (!isLoggedIn.value) {
+      const body = cart.value.map((product) => {
+        return {
+          id: product.id,
+          variationId: product.variationId,
+          quantity: product.quantity,
+          title: product.title,
+        }
+      })
+
+      const response = await useApi(
+        'shop/cart/sync',
+        {
+          method: 'POST',
+          body,
+        },
+        {
+          cache: false,
+        }
+      ).catch((error) => {
+        console.error(
+          'Errore durante il caricamento di "shop/cart/sync"',
+          error
+        )
+      })
+      if (!response.value.success) {
+        throw new Error(response)
+      }
+
+      cart.value = response.value.data.products
+      if ('invalid' in response.value.data) {
+        notify({
+          message: response.value.data.invalid.message.join(' - '),
+          status: 'warning',
+        })
+      }
+
       return cart
     }
-
     const response = await useApi('shop/cart/products', null, {
       cache: false,
     }).catch((error) => {
@@ -107,6 +142,10 @@ export const useCartStore = defineStore('cart', () => {
 
     if (!response.value.success) {
       throw new Error(response)
+    }
+    if (cart.value && login) {
+      console.log(cart.value)
+      console.log(response.value.data)
     }
 
     cart.value = response.value.data

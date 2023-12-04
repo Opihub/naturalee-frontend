@@ -1,9 +1,4 @@
-import {
-  useFetch,
-  ref,
-  storeToRefs,
-  useRuntimeConfig,
-} from '#imports'
+import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
@@ -67,6 +62,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   if (cached.value && cached.value.success) {
     return cached
   }
+  options.key = options.key || Math.floor(Math.random() * 1000000001).toString()
 
   const fetchOptions = {
     ...options,

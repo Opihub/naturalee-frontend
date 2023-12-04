@@ -140,7 +140,9 @@ defineI18nRoute({
 })
 
 // Component life-cycle hooks
-
+onMounted(() => {
+  basket.value = remoteBasket.value
+})
 // Composables
 const { page } = await usePage('cart')
 const products = await useApi('shop/homepage/products')
@@ -150,7 +152,7 @@ const { sending, send } = useSender()
 // Data
 const { isEmpty } = storeToRefs(cart)
 const remoteBasket = await cart.load()
-const basket = ref(remoteBasket.value)
+const basket = ref([])
 
 // Computed
 const hasFreeShipping = computed(() => {
@@ -197,15 +199,13 @@ const saveCart = async () => {
     return
   }
 
-  const response = await send(async () => await cart.save(basket))
-
-  console.debug(response.value)
-  if (!response.value.success) {
+  try {
+    await send(async () => await cart.save(basket))
+  } catch (error) {
     notify({
       status: 'danger',
-      message: response.value.data,
+      message: error,
     })
-
     return
   }
 

@@ -85,7 +85,8 @@ export default defineI18nConfig(() => ({
         loginSubtitle: "Effettua l'accesso",
         signUp: 'Registrati',
         signUpTitle: 'Nuovo cliente?',
-        signUpSubtitle: 'Crea un account',
+        signUpSubtitle:
+          'Registrati per ordinare e poter ricevere sconti e promozioni',
         logout: 'Esci',
         remember: 'Ricordami',
         submit: 'Invia',
@@ -99,6 +100,8 @@ export default defineI18nConfig(() => ({
           "Ci dispiace, ma non abbiamo trovato alcun utente con l'indirizzo email {userParam}",
         consentTo: 'Acconsento al',
         acceptance: 'trattamento dei miei dati personali',
+        registerToNewsletter: 'Desidero essere aggiornato sulle promozioni',
+        acceptNewsletter: 'Privacy policy',
         validEmail: 'Inserisci un indirizzo e-mail valido',
         Notify: 'Notificami',
         errorMessage1: 'Oh, no!',
@@ -175,7 +178,8 @@ export default defineI18nConfig(() => ({
         payment: 'Il tuo scontrino',
         notesPlaceholder:
           "Note sull'ordine, ad esempio richieste particolare per la consegna...",
-        register: "Non hai ancora un account? \nSpunta qui per registrarti durante l'acquisto!"
+        register:
+          "Non hai ancora un account? \nSpunta qui per registrarti durante l'acquisto!",
       },
       orders: {
         your: 'Il tuo ordine',
@@ -209,7 +213,8 @@ export default defineI18nConfig(() => ({
         billing: 'Indirizzo di fatturazione',
         shipping: 'Indirizzo di spedizione',
         notSet: 'Indirizzo non impostato',
-        checkouNotSet: 'Inserisci un indirizzo di {type} per completare l\'ordine',
+        checkouNotSet:
+          "Inserisci un indirizzo di {type} per completare l'ordine",
         delivery: 'Indirizzo di consegna',
         deliveryRequired: "L'indirizzo di consegna è obbligatorio",
         differentBilling: 'Fatturare ad un indirizzo differente?',
