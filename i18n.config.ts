@@ -261,6 +261,9 @@ export default defineI18nConfig(() => ({
           paragraph:
             'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
         },
+        login: {
+          createAccount: 'Registrati per poter continuare con l\'ordine!'
+        }
       },
     },
   },
