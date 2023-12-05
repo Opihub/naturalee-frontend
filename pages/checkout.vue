@@ -388,6 +388,15 @@ provide('holiday', [
 const cart = useCartStore()
 const basket = await cart.load()
 
+if (!basket.length) {
+  await navigateTo({
+    name: 'cart',
+    query: {
+      redirectBecause: 'noProducts',
+    },
+  })
+}
+
 if (cart.subTotal < 20) {
   await navigateTo({
     name: 'cart',
