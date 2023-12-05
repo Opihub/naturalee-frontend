@@ -102,14 +102,18 @@ export const useCartStore = defineStore('cart', () => {
         }
       })
 
+      if (body.length <= 0) {
+        return cart
+      }
       const response = await useApi(
-        'shop/cart/sync',
+        `shop/cart/sync`,
         {
           method: 'POST',
           body,
         },
         {
           cache: false,
+          lazy: true,
         }
       ).catch((error) => {
         console.error(

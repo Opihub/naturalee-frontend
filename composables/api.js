@@ -31,7 +31,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const apiKeys = useSessionStorage('apiKeys', [], {
     serializer: StorageSerializers.object,
   })
-
   innerOptions = {
     version: 1,
     cache: true,
@@ -63,7 +62,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   if (cached.value && cached.value.success) {
     return cached
   }
-
   const fetchOptions = {
     ...options,
     headers: {
@@ -73,7 +71,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     },
     pick: null,
   }
-
+  //console.log(fetchOptions)
   if (!innerOptions.local && config?.public?.endpoint) {
     fetchOptions.baseURL = config.public.endpoint
   }
