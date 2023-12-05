@@ -129,7 +129,10 @@
           </template>
 
           <template #action="{ columnClassName, columnFullClassName }">
-            <div :class="[columnClassName, columnFullClassName]">
+            <div
+              :class="[columnClassName, columnFullClassName]"
+              class="s-checkout-delivery"
+            >
               <OrderResume
                 :heading="$t('orders.deliveryInfos')"
                 container-class="u-mb-large"
@@ -503,29 +506,15 @@ const closeBillingModal = () => {
     height: 100%;
   }
 
-  @include component('toggle-field') {
-    @include set-local-vars(
-      $prefix: 'toggle-field',
-      $map: (
-        label-padding-y: rem(10px),
-      )
-    );
-  }
-
-  @include scope('different-billing') {
-    @include set-local-vars(
-      $prefix: 'heading',
-      $map: (
-        text-color: get-var(color-black),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'toggle-field',
-      $map: (
-        offset-top: rem(4px),
-      )
-    );
+  @include scope('checkout-delivery') {
+    @include component('toggle-field') {
+      @include set-local-vars(
+        $prefix: 'toggle-field',
+        $map: (
+          label-padding-y: rem(10px),
+        )
+      );
+    }
   }
 }
 </style>
