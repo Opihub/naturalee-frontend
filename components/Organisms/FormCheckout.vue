@@ -101,7 +101,7 @@ const submitOrder = async () => {
 
   resetFeedback()
 
-  const { timeSlot, date, note, email, phone, } =
+  const { timeSlot, date, note, email, } =
     props.shippingData
   const { invoice } = props.billingData
 
@@ -117,10 +117,6 @@ const submitOrder = async () => {
 
   if (!email) {
     feedback.errors.push('È obbligatorio indicare una mail')
-  }
-
-  if (!phone) {
-    feedback.errors.push('È obbligatorio indicare un numero di telefono valido')
   }
 
   if (!props.shippingMethod?.value) {
@@ -142,7 +138,6 @@ const submitOrder = async () => {
     timeSlot,
     note,
     email,
-    phone,
     invoice,
     products: props.cart,
     shippingMethod: props.shippingMethod.id,
