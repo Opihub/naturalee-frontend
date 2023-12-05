@@ -135,6 +135,7 @@ const submitOrder = async () => {
 
   const formData = {
     shipping: { ...props.shippingAddress },
+    date,
     timeSlot,
     note,
     email,
