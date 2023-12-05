@@ -98,7 +98,7 @@ const login = async () => {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
-    cart.load()
+    cart.load(true)
     wishlist.load()
   } else {
     message.message = response.value.message
@@ -107,7 +107,7 @@ const login = async () => {
   notify(message)
 
   await navigateTo({
-    name: 'dashboard'
+    name: 'dashboard',
   })
 }
 </script>
