@@ -226,8 +226,10 @@
                       <b>{{ getFormattedDate(date) }}</b
                       >,
                       <span>
-                        <time>{{ currentTimeSlot.from }}</time> -
-                        <time>{{ currentTimeSlot.to }}</time>
+                        <b
+                          ><time>{{ currentTimeSlot.from }}</time> -
+                          <time>{{ currentTimeSlot.to }}</time></b
+                        >
                       </span></span
                     >
 

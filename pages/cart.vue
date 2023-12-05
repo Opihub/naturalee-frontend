@@ -123,7 +123,7 @@
 <script setup>
 // Imports
 import { useCartStore } from '@/stores/cart'
-
+import { useAccountStore } from '@/stores/account'
 // Constants
 
 // Define (Props, Emits, Page Meta)
@@ -152,6 +152,7 @@ const { page } = await usePage('cart')
 const products = await useApi('shop/homepage/products')
 const cart = useCartStore()
 const { sending, send } = useSender()
+const user = useAccountStore()
 
 // Data
 const { isEmpty } = storeToRefs(cart)
@@ -170,6 +171,7 @@ const shippingMethod = computed(() => {
 const { subTotal, granTotal: total } = useTotal(basket, {
   shipping: shippingMethod,
 })
+const { isLoggedIn } = storeToRefs(user)
 
 // Watcher
 
@@ -212,6 +214,16 @@ const saveCart = async () => {
     return
   }
 
+  if (!isLoggedIn.value) {
+    await navigateTo({
+      name: 'login',
+      query: {
+        createAccount: true,
+      },
+    })
+
+    return
+  }
   await navigateTo({
     name: 'checkout',
   })
