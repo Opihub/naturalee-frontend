@@ -101,7 +101,7 @@ const submitOrder = async () => {
 
   resetFeedback()
 
-  const { timeSlot, date, note, email, phone, password, newAccount } =
+  const { timeSlot, date, note, email, phone, } =
     props.shippingData
   const { invoice } = props.billingData
 
@@ -147,17 +147,6 @@ const submitOrder = async () => {
     products: props.cart,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
-  }
-
-  if (newAccount) {
-    if (!password) {
-      feedback.errors.push(
-        'È obbligatorio inserire una password se si vuole creare un account'
-      )
-    } else {
-      formData.newAccount = true
-      formData.password = password
-    }
   }
 
   if (props.isBilling && !validateInvoice(formData.invoice)) {

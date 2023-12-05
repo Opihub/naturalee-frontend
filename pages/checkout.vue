@@ -15,8 +15,6 @@
             note,
             date,
             timeSlot: currentTimeSlot,
-            newAccount,
-            password,
             email,
             phone,
           }"
@@ -76,6 +74,16 @@
                       })
                     "
                   />
+
+                  <InputField
+                    v-model="phone"
+                    type="tel"
+                    name="phone"
+                    class="u-mt-large"
+                    required
+                  >
+                    {{ $t('form.phone') }}
+                  </InputField>
                 </BaseBox>
               </div>
 
@@ -129,6 +137,7 @@
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
                     <BaseDatePicker v-model:date="date" />
+
                     <div
                       v-for="slot in timeSlots"
                       :key="slot.id"
@@ -149,53 +158,6 @@
                         </span>
                       </ToggleField>
                     </div>
-                  </div>
-                </template>
-              </OrderResume>
-
-              <OrderResume
-                :heading="$t('common.account')"
-                container-class="u-mb-large"
-              >
-                <template #default="{ className, rowClassName }">
-                  <div :class="[className, rowClassName]">
-                    <ToggleField
-                      v-if="!isLoggedIn"
-                      v-model="newAccount"
-                      class="u-mb-tiny u-white-pre-line"
-                      >{{ $t('checkout.register') }}</ToggleField
-                    >
-
-                    <InputField
-                      v-model="email"
-                      class="u-mb-tiny"
-                      type="email"
-                      name="email"
-                      required
-                      :readonly="isLoggedIn"
-                    >
-                      {{ $t('form.mailField') }}
-                    </InputField>
-
-                    <InputField
-                      v-model="phone"
-                      :class="{ 'u-mb-tiny': newAccount && !isLoggedIn }"
-                      type="tel"
-                      name="phone"
-                      required
-                    >
-                      {{ $t('form.phone') }}
-                    </InputField>
-
-                    <InputField
-                      v-if="newAccount && !isLoggedIn"
-                      v-model="password"
-                      type="password"
-                      name="password"
-                      required
-                    >
-                      {{ $t('form.password.field') }}
-                    </InputField>
                   </div>
                 </template>
               </OrderResume>
@@ -417,86 +379,45 @@ const {
   shippingMethod,
   hasFreeShipping,
 } = storeToRefs(cart)
-const { isLoggedIn } = storeToRefs(user)
 
 const isShippingModalOpen = ref(false)
 const isBillingModalOpen = ref(false)
 
 const useDifferentAddress = ref(false)
 
-const shippingAddress = ref({
-  firstName: null,
-  lastName: null,
-  country: null,
-  address: null,
-  address2: null,
-  province: null,
-  city: null,
-  postcode: null,
-})
+const shippingAddress = await useApi(
+  'shop/addresses/shipping',
+  {
+    method: 'GET',
+  },
+  {
+    cache: false,
+    dataOnly: true,
+  }
+)
 
-const billingAddress = ref({
-  firstName: null,
-  lastName: null,
-  country: null,
-  address: null,
-  address2: null,
-  province: null,
-  city: null,
-  postcode: null,
-})
+const userBillingAddress = await useApi(
+  'shop/addresses/billing',
+  {
+    method: 'GET',
+  },
+  {
+    cache: false,
+    dataOnly: true,
+  }
+)
+
+const { address, invoice } = useBillingAddress(userBillingAddress)
+const billingAddress = ref({ ...address.value })
+const billingData = ref({ ...invoice.value })
 
 const account = await user.load()
-
-const newAccount = ref(false)
 
 const note = ref('')
 const date = ref(getToday())
 const email = ref(account.value?.email || null)
 const phone = ref(account.value?.phone || null)
-const password = ref(null)
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
-
-const billingData = ref({
-  invoice: false,
-  company: null,
-  cfCompany: null,
-  vat: null,
-  sdi: null,
-  pec: null,
-  cfPrivate: null,
-})
-
-if (isLoggedIn.value) {
-  const userBillingAddress = await useApi(
-    'shop/addresses/billing',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  const { address, invoice } = useBillingAddress(userBillingAddress)
-
-  billingAddress.value = address.value
-  billingData.value = invoice.value
-
-  const userShippingAddress = await useApi(
-    'shop/addresses/shipping',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  shippingAddress.value = { ...userShippingAddress.value }
-}
 
 // Watcher
 
