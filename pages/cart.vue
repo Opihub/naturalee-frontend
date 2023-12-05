@@ -218,12 +218,13 @@ const saveCart = async () => {
     await navigateTo({
       name: 'login',
       query: {
-        createAccount: true,
+        redirectBecause: 'needAccount',
       },
     })
 
     return
   }
+
   await navigateTo({
     name: 'checkout',
   })
