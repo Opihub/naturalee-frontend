@@ -45,6 +45,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/my-account/**': { ssr: false },
+    '/checkout': { ssr: false },
     ...(process.env?.SKIP_SITEMAP
       ? {
           '/frutta/**': { ssr: false },
