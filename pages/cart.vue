@@ -142,8 +142,8 @@ defineI18nRoute({
 // Component life-cycle hooks
 onMounted(() => {
   nextTick(async () => {
-    basket.value = await cart.load()
-    basket.value = basket.value.value
+    const syncProduct = await cart.load()
+    basket.value = syncProduct.value
   })
 })
 
