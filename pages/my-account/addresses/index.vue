@@ -19,7 +19,15 @@
           />
         </template>
 
-        <ShopAddress v-if="isAddressFilled(address)" :address="address" />
+        <template v-if="isAddressFilled(address)">
+          <ShopAddress :address="address" />
+          <BaseMessage
+            v-if="!isAddressComplete(address)"
+            status="warning"
+            class="u-mt-tiny"
+            :message="$t('addresses.incomplete')"
+          />
+        </template>
         <BaseParagraph v-else :text="$t('addresses.notSet')" />
       </BaseBox>
     </div>
@@ -62,17 +70,6 @@ const response = await useApi(
 // Watcher
 
 // Computed
-const isAddressFilled = computed(() => (address) => {
-  return (
-    address.firstName &&
-    address.lastName &&
-    address.country &&
-    address.address &&
-    address.province &&
-    address.city &&
-    address.postcode
-  )
-})
 
 // Methods
 </script>

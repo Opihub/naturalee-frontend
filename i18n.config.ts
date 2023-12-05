@@ -239,6 +239,8 @@ export default defineI18nConfig(() => ({
         sdi: 'SDI',
         sdiFull: 'SDI',
         pec: 'PEC',
+
+        incomplete: "Attenzione, l'indirizzo non è completo",
       },
       invoice: {
         requestInvoice: 'Desideri ricevere la fattura?',
