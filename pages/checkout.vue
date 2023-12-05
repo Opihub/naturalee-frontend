@@ -37,11 +37,20 @@
               v-if="!hasFreeShipping"
               status="warning"
               :class="[columnClassName, columnFullClassName]"
-              >Ti mancano <PriceHolder :price="50 - subTotal" /> per avere la
-              spedizione gratuita!
-              <BaseLink :to="{ name: 'featured' }" underline color="dark"
-                >Vuoi aggiungere altri prodotti al carrello?</BaseLink
-              >
+            >
+              <i18n-t keypath="freeShipping" class="u-mt-tiny">
+                <template #price>
+                  <PriceHolder :price="50 - subTotal" />
+                </template>
+                <template #backToCart>
+                  <BaseLink
+                    :to="{ name: 'featured' }"
+                    underline
+                    color="dark"
+                    :text="t('addMoreProducts')"
+                  />
+                </template>
+              </i18n-t>
             </BaseMessage>
 
             <div :class="rowClassName">
@@ -363,6 +372,10 @@ if (cart.subTotal < 20) {
   })
 }
 
+const { t } = useI18n({
+  useScope: 'local',
+})
+
 const user = useAccountStore()
 const timeSlots = await useApi(
   'time-slots',
@@ -518,3 +531,10 @@ const closeBillingModal = () => {
   }
 }
 </style>
+
+<i18n lang="json" locale="it">
+{
+  "freeShipping": "Ti mancano {price} per avere la spedizione gratuita!",
+  "addMoreProducts": "Vuoi aggiungere altri prodotti al carrello?"
+}
+</i18n>
