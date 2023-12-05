@@ -84,7 +84,7 @@
         as="link"
         :class="`${CSS_NAME}__submit`"
         color="green"
-        :to="toCheckout"
+        :to="{ name: 'checkout' }"
         >{{ $t('cart.proceed') }}</BaseButton
       >
       <BaseLink
@@ -100,7 +100,7 @@
 
 <script setup>
 // Imports
-import { useAccountStore } from '@/stores/account'
+
 // Constants
 const CSS_NAME = 'c-mini-cart'
 const CSS_NAME_LIST = `${CSS_NAME}__list`
@@ -127,19 +127,11 @@ defineProps({
 })
 
 // Composables
-const user = useAccountStore()
+
 // Data
-const { isLoggedIn } = storeToRefs(user)
-const toCheckout = ref({})
 
 // Component life-cycle hooks
 
-onMounted(() => {
-  // isLoggedIn.value ? 'checkout' : 'login'
-  toCheckout.value = isLoggedIn.value
-    ? { name: 'checkout' }
-    : { name: 'login', query: { createAccount: true } }
-})
 // Watcher
 
 // Computed
