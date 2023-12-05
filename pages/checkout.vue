@@ -387,6 +387,17 @@ provide('holiday', [
 
 // Composables
 const cart = useCartStore()
+const basket = await cart.load()
+
+if (cart.subTotal < 20) {
+  await navigateTo({
+    name: 'cart',
+    query: {
+      orderMinimumMissing: true,
+    },
+  })
+}
+
 const user = useAccountStore()
 const timeSlots = await useApi(
   'time-slots',
@@ -411,7 +422,6 @@ const { isLoggedIn } = storeToRefs(user)
 const isShippingModalOpen = ref(false)
 const isBillingModalOpen = ref(false)
 
-const basket = await cart.load()
 const useDifferentAddress = ref(false)
 
 const shippingAddress = ref({
