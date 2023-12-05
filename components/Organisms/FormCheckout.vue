@@ -78,6 +78,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  useDifferentAddress: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 // Composables
@@ -145,11 +149,17 @@ const submitOrder = async () => {
     paymentMethod: props.paymentMethod.id,
   }
 
-  if (props.isBilling && !validateInvoice(formData.invoice)) {
-    return
-  }
+  // Valido i campi della fatturazione indifferentemente da quelli dell'indirizzo
+  validateInvoice(formData.invoice)
 
-  validateInvoice(props.billingData)
+  // Se devo usare un
+  if (props.useDifferentAddress) {
+    validateAddress(props.billingAddress, ' per la fatturazione')
+
+    formData.billing = { ...props.billingAddress }
+  } else {
+    formData.billing = { ...props.shippingAddress }
+  }
 
   if (invoice === 'private') {
     formData.cf = props.billingData.cfPrivate
@@ -160,12 +170,6 @@ const submitOrder = async () => {
     formData.sdi = props.billingData.sdi
     formData.company = props.billingData.company
   }
-
-  // if (useDifferentAddress.value) {
-  formData.billing = { ...props.billingAddress }
-
-  validateAddress(props.billingAddress, ' per la fatturazione')
-  // }
 
   if (hasErrors.value) {
     window.scrollTo(0, 0)
@@ -185,20 +189,22 @@ const submitOrder = async () => {
         }
       )
   )
-  console.debug({ ...response.value })
 
   if (response.value.success) {
     const { clearCart } = useCart
     await clearCart(false)
+
     await navigateTo({
       path: '/order-confirmed',
       query: {
         orderId: response.value.data.id,
       },
     })
-  } else {
-    errors.value = await response.value?.errors
+
+    return
   }
+
+  feedback.errors.value = response.value.errors
 }
 </script>
 

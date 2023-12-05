@@ -9,6 +9,7 @@
 
       <template v-else>
         <FormCheckout
+          :use-different-address="useDifferentAddress"
           :shipping-address="shippingAddress"
           :billing-address="billingAddress"
           :shipping-data="{
@@ -115,10 +116,7 @@
                   >
 
                   <template
-                    v-if="
-                      useDifferentAddress &&
-                      billingData.invoice !== false
-                    "
+                    v-if="useDifferentAddress && billingData.invoice !== false"
                   >
                     <template v-if="isAddressFilled(billingAddress)">
                       <BaseParagraph>
