@@ -355,7 +355,7 @@ if (cart.subTotal < 20) {
   await navigateTo({
     name: 'cart',
     query: {
-      orderMinimumMissing: true,
+      redirectBecause: 'orderMinimumMissing',
     },
   })
 }
