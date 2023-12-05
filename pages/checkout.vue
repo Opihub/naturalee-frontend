@@ -154,6 +154,7 @@
               </OrderResume>
 
               <OrderResume
+                v-if="!isLoggedIn"
                 :heading="$t('common.account')"
                 container-class="u-mb-large"
               >
@@ -165,7 +166,6 @@
                       class="u-mb-tiny u-white-pre-line"
                       >{{ $t('checkout.register') }}</ToggleField
                     >
-
                     <InputField
                       v-model="email"
                       class="u-mb-tiny"
@@ -229,8 +229,10 @@
                       <b>{{ getFormattedDate(date) }}</b
                       >,
                       <span>
-                        <time>{{ currentTimeSlot.from }}</time> -
-                        <time>{{ currentTimeSlot.to }}</time>
+                        <b
+                          ><time>{{ currentTimeSlot.from }}</time> -
+                          <time>{{ currentTimeSlot.to }}</time></b
+                        >
                       </span></span
                     >
 
@@ -594,6 +596,19 @@ const closeBillingModal = () => {
         offset-top: rem(4px),
       )
     );
+  }
+  @include object('button') {
+    @include modifier('yellow') {
+      &:hover {
+        @include set-local-vars(
+          $prefix: 'button',
+          $map: (
+            background-color: get-var(color-green),
+            text-color: get-var(color-white),
+          )
+        );
+      }
+    }
   }
 }
 </style>
