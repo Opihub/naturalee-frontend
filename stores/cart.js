@@ -91,7 +91,7 @@ export const useCartStore = defineStore('cart', () => {
     return cart.value.find((product) => product.variationId === id)
   }
 
-  async function load() {
+  async function load(login = false) {
     if (!isLoggedIn.value) {
       const body = cart.value.map((product) => {
         return {
@@ -135,7 +135,6 @@ export const useCartStore = defineStore('cart', () => {
 
       return cart
     }
-
     const response = await useApi('shop/cart/products', null, {
       cache: false,
     }).catch((error) => {
@@ -147,6 +146,10 @@ export const useCartStore = defineStore('cart', () => {
 
     if (!response.value.success) {
       throw new Error(response)
+    }
+    if (cart.value && login) {
+      console.log(cart.value)
+      console.log(response.value.data)
     }
 
     cart.value = response.value.data
@@ -197,13 +200,14 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart() {
+  function clearCart(notify = true) {
     cart.value = []
-
-    notify({
-      message: t('cart.cleared'),
-      status: 'warning',
-    })
+    if (!notify) {
+      notify({
+        message: t('cart.cleared'),
+        status: 'warning',
+      })
+    }
 
     return true
   }

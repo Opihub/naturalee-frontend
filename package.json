@@ -18,7 +18,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/eslint-config": "^0.1.1",
-    "@nuxt/image": "^1.0.0-rc.1",
+    "@nuxt/image": "^1.1.0",
     "@nuxtjs/google-fonts": "^3.0.1",
     "@nuxtjs/i18n": "^8.0.0-rc.5",
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",

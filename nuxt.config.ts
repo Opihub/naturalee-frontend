@@ -194,9 +194,4 @@ export default defineNuxtConfig({
       },
     ],
   },
-  nitro: {
-    prerender: {
-      failOnError: false, 
-    },
-  },
 })

@@ -18,6 +18,7 @@
             newAccount,
             password,
             email,
+            phone,
           }"
           :billing-data="billingData"
           :payment-method="paymentMethod"
@@ -325,7 +326,6 @@
         <template #header>
           <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
         </template>
-
         <FormUpdateAddress
           v-model:address="billingAddress"
           v-model:invoice="billingData"

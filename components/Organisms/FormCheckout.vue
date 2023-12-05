@@ -4,7 +4,6 @@
     :feedback="feedback"
     class="u-mb-medium"
   />
-
   <FormWrapper
     method="POST"
     class="o-form--checkout"
@@ -46,6 +45,8 @@
 </template>
 
 <script setup>
+//Imports
+import { useCartStore } from '@/stores/cart'
 // Define (Props, Emits, Page Meta)
 const emit = defineEmits(['api:start', 'api:end'])
 const props = defineProps({
@@ -81,7 +82,7 @@ const props = defineProps({
 
 // Composables
 const { sending, send } = useSender(emit)
-
+const useCart = useCartStore()
 // Data
 const {
   feedback,
@@ -202,6 +203,8 @@ const submitOrder = async () => {
   console.debug({ ...response.value })
 
   if (response.value.success) {
+    const { clearCart } = useCart
+    await clearCart(false)
     await navigateTo({
       path: '/order-confirmed',
       query: {
@@ -209,7 +212,7 @@ const submitOrder = async () => {
       },
     })
   } else {
-    errors.value = response.value.errors
+    errors.value = await response.value?.errors
   }
 }
 </script>
