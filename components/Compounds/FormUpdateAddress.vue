@@ -45,7 +45,7 @@
         }"
       />
 
-      <template v-if="isBilling">
+      <template v-if="isBilling && editableInvoice">
         <div :class="[columnClassName, columnFullClassName, 'u-mt-half']">
           <slot name="billingHeading">
             <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
@@ -91,6 +91,10 @@ const props = defineProps({
   invoice: {
     type: Object,
     default: null,
+  },
+  editableInvoice: {
+    type: Boolean,
+    default: false,
   },
 })
 const emit = defineEmits(['update:address', 'update:invoice', 'completed'])
