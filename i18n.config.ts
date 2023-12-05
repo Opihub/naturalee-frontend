@@ -176,6 +176,10 @@ export default defineI18nConfig(() => ({
       },
       checkout: {
         payment: 'Il tuo scontrino',
+        yourShippingAddress: 'Il tuo indirizzo di spedizione è:',
+        yourBillingAddress: 'Il tuo indirizzo di fatturazione è:',
+        useDifferentAddress:
+          'Vuoi usare un indirizzo diverso da quello di spedizione per la fatturazione?',
         notesPlaceholder:
           "Note sull'ordine, ad esempio richieste particolare per la consegna...",
         register:

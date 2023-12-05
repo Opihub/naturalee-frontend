@@ -16,7 +16,6 @@
             date,
             timeSlot: currentTimeSlot,
             email,
-            phone,
           }"
           :billing-data="billingData"
           :payment-method="paymentMethod"
@@ -55,26 +54,26 @@
 
             <div :class="rowClassName">
               <div :class="[columnClassName, columnHalfClassName]">
-                <BaseBox class="u-mb-large">
+                <BaseBox>
                   <template #head>
                     <BaseHeading tag="span" use="custom">{{
-                      $t('orders.shipping')
+                      $t('addresses.shipping')
                     }}</BaseHeading>
+                  </template>
 
-                    <InlineButton
-                      color="green"
-                      underline
-                      :text="
-                        $t(isAddressFilled(shippingAddress) ? 'edit' : 'create')
-                      "
-                      @click="toggleShippingModal(true)"
+                  <template v-if="isAddressFilled(shippingAddress)">
+                    <BaseParagraph>
+                      <strong>{{ $t('checkout.yourShippingAddress') }}</strong>
+                    </BaseParagraph>
+                    <ShopAddress :address="shippingAddress" />
+                    <BaseMessage
+                      v-if="!isAddressComplete(shippingAddress)"
+                      status="warning"
+                      class="u-mt-tiny"
+                      :message="$t('addresses.incomplete')"
                     />
                   </template>
 
-                  <ShopAddress
-                    v-if="isAddressFilled(shippingAddress)"
-                    :address="shippingAddress"
-                  />
                   <BaseParagraph
                     v-else
                     :text="
@@ -84,15 +83,14 @@
                     "
                   />
 
-                  <InputField
-                    v-model="phone"
-                    type="tel"
-                    name="phone"
-                    class="u-mt-large"
-                    required
-                  >
-                    {{ $t('form.phone') }}
-                  </InputField>
+                  <BaseButton
+                    color="green"
+                    class="u-mt-small"
+                    :text="
+                      $t(isAddressFilled(shippingAddress) ? 'edit' : 'create')
+                    "
+                    @click="toggleShippingModal(true)"
+                  />
                 </BaseBox>
               </div>
 
@@ -102,30 +100,57 @@
                     <BaseHeading tag="span" use="custom">{{
                       $t('orders.billing')
                     }}</BaseHeading>
+                  </template>
 
-                    <InlineButton
+                  <FormInvoice
+                    v-model:invoice="billingData"
+                    class="u-mb-medium"
+                  />
+
+                  <ToggleField
+                    v-if="billingData.invoice !== false"
+                    v-model="useDifferentAddress"
+                    class="u-mb-tiny u-white-pre-line"
+                    >{{ $t('checkout.useDifferentAddress') }}</ToggleField
+                  >
+
+                  <template
+                    v-if="
+                      useDifferentAddress &&
+                      billingData.invoice !== false
+                    "
+                  >
+                    <template v-if="isAddressFilled(billingAddress)">
+                      <BaseParagraph>
+                        <strong>{{ $t('checkout.yourBillingAddress') }}</strong>
+                      </BaseParagraph>
+                      <ShopAddress :address="billingAddress" />
+                      <BaseMessage
+                        v-if="!isAddressComplete(billingAddress)"
+                        status="warning"
+                        class="u-mt-tiny"
+                        :message="$t('addresses.incomplete')"
+                      />
+                    </template>
+
+                    <BaseParagraph
+                      v-else
+                      :text="
+                        $t('addresses.checkouNotSet', {
+                          type: $t('orders.billing'),
+                        })
+                      "
+                    />
+
+                    <BaseButton
                       color="green"
-                      underline
+                      class="u-mt-small"
                       :text="
                         $t(isAddressFilled(billingAddress) ? 'edit' : 'create')
                       "
                       @click="toggleBillingModal(true)"
                     />
                   </template>
-
-                  <ShopAddress
-                    v-if="isAddressFilled(billingAddress)"
-                    :address="billingAddress"
-                    :invoice="billingData"
-                  />
-                  <BaseParagraph
-                    v-else
-                    :text="
-                      $t('addresses.checkouNotSet', {
-                        type: $t('orders.billing'),
-                      })
-                    "
-                  />
                 </BaseBox>
               </div>
             </div>
@@ -432,7 +457,13 @@ const account = await user.load()
 const note = ref('')
 const date = ref(getToday())
 const email = ref(account.value?.email || null)
-const phone = ref(account.value?.phone || null)
+
+if (!shippingAddress.value.phone) {
+  shippingAddress.value.phone = account.value?.phone || null
+}
+if (!billingAddress.value.phone) {
+  billingAddress.value.phone = account.value?.phone || null
+}
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
 // Watcher
@@ -440,18 +471,6 @@ const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 // Computed
 const currentTimeSlot = computed(() => {
   return timeSlots.value.find((slot) => slot.id === timeSlot.value)
-})
-
-const isAddressFilled = computed(() => (address) => {
-  return (
-    address.firstName &&
-    address.lastName &&
-    address.country &&
-    address.address &&
-    address.province &&
-    address.city &&
-    address.postcode
-  )
 })
 
 // Methods
