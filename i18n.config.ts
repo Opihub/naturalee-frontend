@@ -227,6 +227,7 @@ export default defineI18nConfig(() => ({
         country: 'Nazione/Regione',
         address: 'Via e Numero',
         address2: 'Appartamento, suite, unità, piano, ecc. (opzionale)',
+        phone: 'Telefono',
         addressPlaceholder: 'Via/Piazza e Numero Civico',
         timeSlot: 'Scegli la fascia oraria preferita e il giorno di consegna:',
         updated: 'Indirizzo di {type} aggiornato',

@@ -116,7 +116,7 @@
         required
         @update:model-value="(value) => updateAddress(value, 'phone')"
       >
-        {{ $t('form.phone') }}</InputField
+        {{ $t('addresses.phone') }}</InputField
       >
 
       <slot
