@@ -93,7 +93,6 @@ const login = async () => {
     message: 'È avvenuto un errore durante il login',
   }
 
-  console.debug(response.value)
   if (response.value.success && response.value.data.token) {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'

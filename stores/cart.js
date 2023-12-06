@@ -93,6 +93,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function load(login = false) {
+    const localCart = toRaw(cart.value)
     if (cart.value && isLoggedIn.value && login) {
       await remoteAddToCartBatch(toRaw(cart.value))
     }
@@ -156,7 +157,19 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     cart.value = response.value.data
-
+    if (response.value.success) {
+      localCart.forEach((element) => {
+        notify({
+          message: t('cart.addedToCart', element.quantity, {
+            named: {
+              name: element.title,
+              count: element.quantity,
+            },
+          }),
+          status: 'success',
+        })
+      })
+    }
     return cart
   }
 
@@ -552,6 +565,7 @@ export const useCartStore = defineStore('cart', () => {
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
     applyCoupon,
+    remoteAddToCartBatch,
   }
 })
 
