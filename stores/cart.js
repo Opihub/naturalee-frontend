@@ -157,7 +157,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     cart.value = response.value.data
-    if (response.value.success) {
+    if (response.value.success && login) {
       localCart.forEach((element) => {
         notify({
           message: t('cart.addedToCart', element.quantity, {
