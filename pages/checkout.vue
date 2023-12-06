@@ -344,7 +344,7 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-
+import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 // Constants
 
 // Define (Props, Emits, Page Meta)
@@ -382,13 +382,17 @@ provide('holiday', [
   new Date(`${new Date().getFullYear() + 1}-12-26`),
 ])
 
+//State
+const localCart = useLocalStorage('cart', [], {
+  serializer: StorageSerializers.object,
+})
 // Component life-cycle hooks
 
 // Composables
+
 const cart = useCartStore()
 const basket = await cart.load()
-
-if (!basket.length) {
+if (!localCart.value.length) {
   await navigateTo({
     name: 'cart',
     query: {
@@ -396,7 +400,6 @@ if (!basket.length) {
     },
   })
 }
-
 if (cart.subTotal < 20) {
   await navigateTo({
     name: 'cart',
