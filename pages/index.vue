@@ -119,7 +119,7 @@
 
 <script setup>
 // Imports
-//import HomeVideo from 'assets/video/homepage.mp4'
+import HomeVideo from 'assets/video/homepage.mp4'
 
 // Constants
 
@@ -202,6 +202,7 @@ const { t } = useI18n({
     @include object('video') {
       width: 100%;
       object-fit: cover;
+      border-radius: 0;
     }
   }
 
