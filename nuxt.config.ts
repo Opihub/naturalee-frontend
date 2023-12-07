@@ -96,7 +96,7 @@ export default defineNuxtConfig({
       )
 
       nitroConfig.prerender.routes = [
-        '/public/account/banner-account.png',
+        '/_ipx/account/banner-account.png',
         ...nitroConfig.prerender.routes,
         ...sitemap.data,
       ]
