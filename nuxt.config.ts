@@ -48,12 +48,12 @@ export default defineNuxtConfig({
     '/checkout': { ssr: false },
     ...(process.env?.SKIP_SITEMAP
       ? {
-          '/frutta/**': { ssr: false },
-          '/verdura/**': { ssr: false },
-          '/dispensa/**': { ssr: false },
-          '/esotico/**': { ssr: false },
-          '/aromi/**': { ssr: false },
-        }
+        '/frutta/**': { ssr: false },
+        '/verdura/**': { ssr: false },
+        '/dispensa/**': { ssr: false },
+        '/esotico/**': { ssr: false },
+        '/aromi/**': { ssr: false },
+      }
       : {}),
   },
   hooks: {
@@ -96,6 +96,7 @@ export default defineNuxtConfig({
       )
 
       nitroConfig.prerender.routes = [
+        '/_ipx/account/banner-account.jpg',
         ...nitroConfig.prerender.routes,
         ...sitemap.data,
       ]
@@ -195,4 +196,9 @@ export default defineNuxtConfig({
       },
     ],
   },
+  nitro: {
+    prerender: {
+
+    }
+  }
 })
