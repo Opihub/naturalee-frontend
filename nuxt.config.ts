@@ -18,10 +18,7 @@ export default defineNuxtConfig({
   app: {
     baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
     rootId: 'app',
-    pageTransition: {
-      name: 'page',
-      mode: 'out-in',
-    },
+    //pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       link: [
         { rel: 'icon', type: 'image/png', href: 'favicon-32x32.png' },
@@ -96,7 +93,6 @@ export default defineNuxtConfig({
       )
 
       nitroConfig.prerender.routes = [
-        '/public/account/banner-account.png',
         ...nitroConfig.prerender.routes,
         ...sitemap.data,
       ]
@@ -164,6 +160,7 @@ export default defineNuxtConfig({
   image: {
     // Options
   },
+
   svgo: {
     defaultImport: 'component',
   },
@@ -196,9 +193,4 @@ export default defineNuxtConfig({
       },
     ],
   },
-  nitro: {
-    prerender: {
-
-    }
-  }
 })

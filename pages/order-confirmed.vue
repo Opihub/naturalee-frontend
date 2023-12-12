@@ -58,35 +58,35 @@ definePageMeta({
   layout: 'green',
   validate: async (route) => {
     return true
-    defineNuxtRouteMiddleware(async () => {
-      const { token, login } = route.query
+    // defineNuxtRouteMiddleware(async () => {
+    //   const { token, login } = route.query
 
-      if (
-        !login ||
-        !token ||
-        token.match(getPasswordRecoveryTokenPattern()).length <= 0
-      ) {
-        return false
-      }
+    //   if (
+    //     !login ||
+    //     !token ||
+    //     token.match(getPasswordRecoveryTokenPattern()).length <= 0
+    //   ) {
+    //     return false
+    //   }
 
-      const response = await useApi(
-        `auth/password-recovery/validate-token`,
-        {
-          method: 'POST',
-          body: {
-            token,
-            login,
-          },
-        },
-        {
-          cache: false,
-        }
-      )
+    //   const response = await useApi(
+    //     `auth/password-recovery/validate-token`,
+    //     {
+    //       method: 'POST',
+    //       body: {
+    //         token,
+    //         login,
+    //       },
+    //     },
+    //     {
+    //       cache: false,
+    //     }
+    //   )
 
-      // TODO: trovare un modo di ritornare gli errori
+    //   // TODO: trovare un modo di ritornare gli errori
 
-      return response.value.success
-    })
+    //   return response.value.success
+    // })
   },
 })
 

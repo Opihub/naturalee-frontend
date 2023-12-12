@@ -4,11 +4,9 @@
   <NuxtLoadingIndicator />
 
   <Transition name="fade">
-    <Loader v-if="isLoading" />
+    <SiteLoader v-if="isLoading" />
   </Transition>
-  <!-- <Transition name="fade">
-    <LoaderClient v-if="isClientLoading" />
-  </Transition> -->
+
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -45,14 +43,10 @@ const config = useRuntimeConfig()
 const notificationsStore = useNotificationsStore()
 const accountStore = useAccountStore()
 
-definePageMeta({
-  pageTransition: {},
-})
 // Data
 const { notifications } = storeToRefs(notificationsStore)
 const nuxtApp = useNuxtApp()
 const isLoading = ref(true)
-const isClientLoading = ref(false)
 
 nuxtApp.hook('page:start', () => {
   isLoading.value = true
@@ -137,22 +131,5 @@ accountStore.$onAction(({ name }) => {
       position: static,
     )
   );
-}
-.layout-enter-active,
-.layout-leave-active {
-  transition: all 1s;
-}
-
-.layout-enter-from,
-.layout-leave-to {
-  // content: '';
-  // display: block;
-  // width: 100%;
-  // height: 100vh;
-  // position: fixed;
-  // top: 50%;
-  // left: 50%;
-  opacity: 0;
-  background-color: red;
 }
 </style>
