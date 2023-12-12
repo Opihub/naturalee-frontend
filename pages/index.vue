@@ -119,7 +119,6 @@
 
 <script setup>
 // Imports
-import HomeVideo from 'assets/video/homepage.mp4'
 
 // Constants
 

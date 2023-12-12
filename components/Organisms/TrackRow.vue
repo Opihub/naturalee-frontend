@@ -344,6 +344,9 @@ $prefix: 'track-row';
     //   transform: scale(0.5);
     // }
 
+    @include until(tablet) {
+      width: -webkit-fill-available;
+    }
     @include from(tablet) {
       margin-left: auto;
     }
@@ -355,6 +358,8 @@ $prefix: 'track-row';
 
     @include from(full) {
       z-index: 1;
+      height: inherit;
+      height: -webkit-fill-available;
     }
   }
 
