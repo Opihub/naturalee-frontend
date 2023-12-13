@@ -204,13 +204,13 @@ $prefix: 'video';
     height: auto;
     position: relative;
     &.is-background {
+      height: 100%;
       @include until(desktop) {
         width: unset;
       }
-      @include until(desktop) {
-        height: unset;
-      }
-      height: 100%;
+      // @include until(desktop) {
+      //   height: unset;
+      // }
       iframe {
         height: 300%;
       }
