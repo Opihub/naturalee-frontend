@@ -36,7 +36,7 @@
       >
     </ToggleField>
 
-    <ToggleField v-model="formData.acceptance">
+    <ToggleField v-model="formData.marketing">
       {{ $t('form.registerToNewsletter') }}
       <BaseLink
         :to="{ name: 'privacy-policy' }"
@@ -79,16 +79,14 @@ const emit = defineEmits(['api:start', 'api:end'])
 const { sending, send } = useSender(emit)
 const store = useAccountStore()
 
-const {
-  feedback,
-  resetFeedback,
-} = useFeedback()
+const { feedback, resetFeedback } = useFeedback()
 
 // Data
 const formData = reactive({
   email: '',
   password: '',
   acceptance: false,
+  marketing: false,
 })
 
 // Watcher
@@ -115,7 +113,7 @@ const register = async () => {
   notify(feedback)
 
   await navigateTo({
-    name: 'dashboard'
+    name: 'dashboard',
   })
 }
 </script>
