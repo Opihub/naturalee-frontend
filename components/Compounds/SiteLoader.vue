@@ -1,6 +1,6 @@
 <template>
   <BaseOverlay :class="CSS_NAME">
-    <div class="lds-ring">
+    <div class="loader">
       <div></div>
       <div></div>
       <div></div>
@@ -38,12 +38,12 @@ $prefix: 'loader';
     $prefix: 'overlay',
     $map: (
       opacity: 1,
-      cursor: wait,
       background-color: get-var(color-green),
+      cursor: wait,
     )
   );
 
-  .lds-ring {
+  .loader {
     display: inline-block;
     position: fixed;
     width: rem(220px);

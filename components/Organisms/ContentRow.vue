@@ -120,11 +120,7 @@ onMounted(() => {
         scrub: true,
       },
     })
-    .to(
-      parallax,
-      { y: parallax.offsetHeight * props.offset, ease: 'none' },
-      0
-    )
+    .to(parallax, { y: parallax.offsetHeight * props.offset, ease: 'none' }, 0)
 })
 
 // Composables
@@ -213,10 +209,19 @@ $prefix: 'content-row';
     }
 
     @include element('image') {
+      object-fit: contain;
       border-radius: get-var(image-radius, 0, $prefix: $prefix);
 
+      @include until(tablet) {
+        width: -webkit-fill-available;
+        max-width: 100%;
+      }
       @include from(tablet) {
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
+      }
+      @include from(large) {
+        height: -webkit-fill-available;
+        max-height: 100%;
       }
     }
   }

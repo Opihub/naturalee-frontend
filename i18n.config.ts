@@ -128,6 +128,7 @@ export default defineI18nConfig(() => ({
           save: 'Salva password',
           update: 'Modifica password',
           generate: 'Genera Password',
+          requirement: 'Minimo 8 caratteri, almeno una minuscola, almeno una maiuscola e almeno un numero o un carattere speciale'
         },
         leaveBlank: 'lascia in bianco per non modificare',
         contactUs: 'Contattaci',
