@@ -38,8 +38,8 @@ $prefix: 'loader';
     $prefix: 'overlay',
     $map: (
       opacity: 1,
-      cursor: wait,
       background-color: get-var(color-green),
+      cursor: wait,
     )
   );
 

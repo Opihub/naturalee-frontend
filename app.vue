@@ -2,7 +2,6 @@
   <SVGDefinitions v-once />
 
   <NuxtLoadingIndicator />
-
   <Transition name="fade">
     <SiteLoader v-if="isLoading" />
   </Transition>
@@ -45,15 +44,24 @@ const accountStore = useAccountStore()
 
 // Data
 const { notifications } = storeToRefs(notificationsStore)
-const nuxtApp = useNuxtApp()
-const isLoading = ref(true)
 
+const nuxtApp = useNuxtApp()
+const isLoading = ref(false)
 nuxtApp.hook('page:start', () => {
   isLoading.value = true
 })
 nuxtApp.hook('page:finish', () => {
   isLoading.value = false
 })
+
+const router = useRouter()
+
+// router.afterEach((to, from, failure) => {
+//   console.log(to.isReady())
+//   if (condition) {
+
+//   }
+// })
 //Watcher
 
 /**
@@ -89,7 +97,7 @@ if (process.client) {
     cacheVersion.value = cache.value
   }
 }
-
+//await new Promise((resolve) => setTimeout(resolve, 3000));
 // Watcher
 
 // Computed

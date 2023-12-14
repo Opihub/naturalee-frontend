@@ -3,6 +3,8 @@ import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { clearJSON } from './server/utils/storageApi'
 import { ofetch } from 'ofetch'
+import { gsap } from 'gsap/gsap-core'
+//import gsap from 'gsap';
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -19,6 +21,34 @@ export default defineNuxtConfig({
     baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
     rootId: 'app',
     //pageTransition: { name: 'page', mode: 'out-in' },
+    pageTransition: {
+      name: 'rotate',
+      // mode: 'out-in',
+      // css: false,
+
+      onBeforeEnter: (el) => {
+      gsap.set(el, {
+        opacity: 0
+      })
+    },
+
+      onEnter: (el, done) => {
+      gsap.to(el, {
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        onComplete: done
+      })
+    },
+
+      onAfterEnter: (el) => {
+      gsap.to(el, {
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.inOut'
+        })
+      }
+    },
     head: {
       link: [
         { rel: 'icon', type: 'image/png', href: 'favicon-32x32.png' },
@@ -52,7 +82,7 @@ export default defineNuxtConfig({
         '/aromi/**': { ssr: false },
       }
       : {}),
-  },
+    },
   hooks: {
     ready: async () => {
       console.info('Avviato pulizia file')
@@ -68,7 +98,7 @@ export default defineNuxtConfig({
       if (nitroConfig.dev) {
         return
       }
-
+      
       if (process.env?.SKIP_SITEMAP) {
         console.info('Sitemap saltata')
         return
@@ -77,21 +107,21 @@ export default defineNuxtConfig({
       if (!nitroConfig?.prerender?.routes) {
         return
       }
-
+      
       console.info('Download della Sitemap in corso')
       const sitemap = await ofetch(
         (process.env.API_ENDPOINT_URL || '/') + '/v1/sitemap/products',
         { parseResponse: JSON.parse }
-      )
-
-      if (!sitemap.success) {
-        console.warn('È avvenuto errore durante il fetch della Sitemap')
+        )
+        
+        if (!sitemap.success) {
+          console.warn('È avvenuto errore durante il fetch della Sitemap')
         throw new Error(sitemap.message)
       }
       console.info(
         `Download della Sitemap completato! Sono stato trovati ${sitemap.data.length} prodotti`
       )
-
+      
       nitroConfig.prerender.routes = [
         ...nitroConfig.prerender.routes,
         ...sitemap.data,
@@ -186,7 +216,7 @@ export default defineNuxtConfig({
         src: join(runtimeDir, 'composables.mjs'),
         filename: 'storybook/custom/composables.mjs',
       },
-
+      
       {
         src: join(runtimeDir, 'components.mjs'),
         filename: 'storybook/custom/components.mjs',
@@ -194,3 +224,5 @@ export default defineNuxtConfig({
     ],
   },
 })
+
+    
