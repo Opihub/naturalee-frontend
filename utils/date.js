@@ -1,6 +1,10 @@
 import { capitalize } from '@/utils/capitalize'
 
 export function getFormattedDate(date, locale = 'it-IT') {
+  if (!(date instanceof Date)) {
+    date = new Date(date)
+  }
+
   const newDate = date.toLocaleDateString(locale, {
     weekday: 'short',
     // year: 'numeric',
