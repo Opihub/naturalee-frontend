@@ -162,6 +162,7 @@ export default defineI18nConfig(() => ({
       common: {
         logout: 'Logout',
         date: 'Data',
+        deliveryDate: 'Data di consegna',
         update: 'Aggiorna',
         actions: 'Azioni',
         total: 'Totale',
