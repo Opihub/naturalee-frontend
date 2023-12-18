@@ -1,10 +1,10 @@
 <template>
   <section class="s-dashboard">
-    <NuxtImg
-      class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
-      :src="bannerBacheca"
-    />
     <SiteContainer :max-width="740" padless>
+      <img
+        class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
+        :src="bannerBacheca"
+      />
       <BaseParagraph class="u-mb-half">
         <i18n-t keypath="welcome">
           <template #username>
@@ -59,7 +59,7 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
-import bannerBacheca from '/account/banner-account.png'
+import bannerBacheca from '@/assets/images/account/banner-account.png'
 // Constants
 
 // Define (Props, Emits, Page Meta)
