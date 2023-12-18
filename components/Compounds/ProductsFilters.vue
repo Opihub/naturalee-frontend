@@ -100,8 +100,8 @@
           @change="$emit('order:change', $event.target.value)"
         >
           <option value="">{{ $t('filters.orderBy') }}</option>
-          <option v-for="(name, key) in orderOptions" :key="key" :value="key">
-            {{ name }}
+          <option v-for="(option, key) in orderOptions" :key="key" :value="key">
+            {{ option.label }}
           </option>
         </select>
       </div>
@@ -146,8 +146,14 @@ defineProps({
       const { t } = useI18n()
 
       return {
-        asc: t('asc'),
-        desc: t('desc'),
+        asc: {
+          label: t('asc'),
+          value: 'price-asc',
+        },
+        desc: {
+          label: t('desc'),
+          value: 'price-desc',
+        },
       }
     },
   },

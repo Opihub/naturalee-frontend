@@ -55,6 +55,19 @@
           <PriceHolder :price="subTotal" />
         </td>
       </tr>
+
+      <tr v-if="date" :class="CSS_NAME_ITEM">
+        <td
+          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
+          :data-title="$t('common.deliveryDate')"
+          colspan="3"
+        >
+          <span class="desktop-label">{{ $t('common.deliveryDate') }}:</span>
+        </td>
+        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
+          {{ date }}
+        </td>
+      </tr>
       <tr
         v-if="timeSlots && Object.keys(timeSlots).length > 0"
         :class="CSS_NAME_ITEM"
@@ -160,6 +173,10 @@ const props = defineProps({
     },
   },
   coupon: {
+    type: String,
+    default: null,
+  },
+  date: {
     type: String,
     default: null,
   },

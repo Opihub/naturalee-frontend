@@ -75,8 +75,14 @@ const props = defineProps({
     default() {
       const { t } = useI18n()
       return {
-        asc: t('asc'),
-        desc: t('desc'),
+        asc: {
+          label: t('asc'),
+          value: 'price-asc',
+        },
+        desc: {
+          label: t('desc'),
+          value: 'price-desc',
+        },
       }
     },
   },
@@ -186,6 +192,10 @@ const clearFilters = () => {
 }
 
 const toggleFilter = (filter) => {
+  if (!Array.isArray(chosenFilters.value)) {
+    chosenFilters.value = chosenFilters.value.split(' ')
+  }
+
   const index = chosenFilters.value.indexOf(filter)
 
   if (index > -1) {
@@ -211,7 +221,6 @@ const changeOrder = (order) => {
 
 const fetchProducts = async () => {
   updateQuery()
-
   if (!props.from) {
     if (!props.use) {
       noProductsMessage.value =

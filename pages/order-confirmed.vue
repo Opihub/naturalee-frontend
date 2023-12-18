@@ -12,12 +12,14 @@
         <BaseHeading tag="h4" class="u-text-center@tablet"
           >Ecco i dettagli del tuo ordine</BaseHeading
         >
+
         <OrderDetails
           class="u-mb-huge u-mt-medium"
           :products="order.products"
           :shipping="order.shipping"
           :payment="order.payment"
           :time-slots="order.timeSlots"
+          :date="getFormattedDate(order.pickedDate)"
         />
         <div class="o-row">
           <div class="o-row__column">
