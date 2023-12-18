@@ -1,10 +1,5 @@
 <template>
   <section class="s-dashboard">
-    <NuxtImg
-      class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
-      src="/account/banner-account.png"
-    />
-
     <SiteContainer :max-width="740" padless>
       <BaseParagraph class="u-mb-half">
         <i18n-t keypath="welcome">
