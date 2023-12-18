@@ -5,10 +5,6 @@
     </Transition>
 
     <SiteContainer>
-      <NuxtImg
-        class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
-        src="/account/banner-account.png"
-      />
       <BaseMessage v-if="isEmpty" :message="$t('cart.empty')" />
 
       <template v-else>
