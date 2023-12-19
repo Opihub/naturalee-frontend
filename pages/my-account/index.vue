@@ -1,15 +1,11 @@
 <template>
   <section class="s-dashboard">
+    <NuxtImg
+      class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
+      src="/account/banner-account.png"
+      provider="clientProvider"
+    />
     <SiteContainer :max-width="740" padless>
-      <!-- <img
-        class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
-        :src="bannerBacheca"
-      /> -->
-      <NuxtImg
-        class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
-        src="/account/banner-account.png"
-        provider="clientProvider"
-      />
       <BaseParagraph class="u-mb-half">
         <i18n-t keypath="welcome">
           <template #username>
