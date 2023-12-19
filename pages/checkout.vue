@@ -383,24 +383,21 @@ provide('holiday', [
 ])
 
 //State
-const localCart = useLocalStorage('cart', [], {
-  serializer: StorageSerializers.object,
-})
+
 // Component life-cycle hooks
 
 // Composables
 
 const cart = useCartStore()
 const basket = await cart.load()
-if (!localCart.value.length) {
+if (basket.value.length <= 0) {
   await navigateTo({
     name: 'cart',
     query: {
       redirectBecause: 'noProducts',
     },
   })
-}
-if (cart.subTotal < 20) {
+} else if (cart.subTotal < 20) {
   await navigateTo({
     name: 'cart',
     query: {
