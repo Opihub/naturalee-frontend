@@ -32,6 +32,13 @@ defineProps({
 <style lang="scss">
 $prefix: 'help-tip';
 @include object($prefix) {
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      angle-height: rem(10px),
+    )
+  );
+
   position: relative;
   margin: 0 0.5em;
   background-color: rgba(0, 0, 0, 0.2);
@@ -45,56 +52,60 @@ $prefix: 'help-tip';
 
   padding: 0;
   cursor: help;
-  &:before {
+
+  &::before {
     content: '';
-    position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, 90%);
+    top: 100%;
+    position: absolute;
+    transform: translateX(-50%);
     z-index: 1;
     width: 0;
     height: 0;
-    border-style: solid;
-    border-width: 0 rem(10px) rem(10px) rem(10px);
-    border-color: transparent transparent transparent transparent;
-    clear: both;
-    transition: border-color 0.5s;
+    border: get-var(angle-height, $prefix: $prefix) solid transparent;
+    border-top-width: 0;
+    border-bottom-color: get-var(color-yellow);
+
+    opacity: 0;
+    visibility: hidden;
+    @include transition(opacity, visibility);
   }
-  &:focus,
-  &:after {
+
+  &::after {
     content: attr(aria-label);
-    width: 100%;
-    min-width: 0;
+    width: rem(200px);
     padding: 0.5em 1em;
-    position: absolute;
-    top: 50%;
     left: 50%;
-    transform: translate(-50%, 20%);
+    top: 100%;
+    position: absolute;
+    transform: translate(-50%, get-var(angle-height, $prefix: $prefix));
+    z-index: 1;
+    border-radius: 0.2em;
+    color: get-var(color-green);
+    background: get-var(color-yellow);
+    text-align: center;
+    font-weight: 700;
+    font-size: rem(14px);
+
+    opacity: 0;
+    visibility: hidden;
+    @include transition(opacity, visibility);
+
     @include customMedia(600px, true) {
       left: unset;
       top: 50%;
       right: 0;
-      transform: translate(77%, 20%);
+      transform: translate(77%, get-var(angle-height, $prefix: $prefix));
     }
-    z-index: 1;
-    border-radius: 0.2em;
-    color: transparent;
-    background: transparent;
-    text-align: center;
-    font-weight: 700;
-    opacity: 0;
-    transition: background 0.5s, opacity 0.5s, color 0.5s, min-width 0.5s;
-    font-size: 0;
   }
-  &:hover:after {
-    background: get-var(color-yellow);
-    opacity: 1;
-    font-size: rem(14px);
-    color: get-var(color-green);
-    min-width: rem(280px);
-  }
-  &:hover:before {
-    border-color: transparent transparent get-var(color-yellow) transparent;
+
+  &:focus,
+  &:hover {
+    &::after,
+    &::before {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }
 </style>
