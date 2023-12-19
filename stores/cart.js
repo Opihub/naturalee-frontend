@@ -73,6 +73,10 @@ export const useCartStore = defineStore('cart', () => {
     }
   })
 
+  const shippingCost = computed(() => {
+    return shippingMethod.value.cost
+  })
+
   const checkout = computed(() => {
     return cart.value.map((item) => ({
       id: item.id,
@@ -550,6 +554,7 @@ export const useCartStore = defineStore('cart', () => {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
     shippingMethod,
+    shippingCost,
     // shippingMethod: skipHydrate(shippingMethod),
     paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
