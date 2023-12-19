@@ -93,12 +93,11 @@ const login = async () => {
     message: 'È avvenuto un errore durante il login',
   }
 
-  console.debug(response.value)
   if (response.value.success && response.value.data.token) {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
-    cart.load()
+    cart.load(true)
     wishlist.load()
   } else {
     message.message = response.value.message
@@ -107,7 +106,7 @@ const login = async () => {
   notify(message)
 
   await navigateTo({
-    name: 'dashboard'
+    name: 'dashboard',
   })
 }
 </script>

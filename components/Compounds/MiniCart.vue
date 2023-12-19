@@ -61,7 +61,7 @@
         }}</span>
         <PriceHolder
           :class="`${CSS_NAME_TOTAL_CALCULATION}__price`"
-          :price="50 - total <= 0 ? 0 : 3"
+          :price="shippingCost"
         />
 
         <span :class="`${CSS_NAME_TOTAL_CALCULATION}__record`">{{
@@ -116,6 +116,10 @@ defineProps({
       return []
     },
   },
+  subTotal: {
+    type: Number,
+    default: 0,
+  },
   shippingCost: {
     type: Number,
     default: 0,
@@ -126,11 +130,11 @@ defineProps({
   },
 })
 
-// Component life-cycle hooks
-
 // Composables
 
 // Data
+
+// Component life-cycle hooks
 
 // Watcher
 

@@ -9,14 +9,13 @@
 
       <template v-else>
         <FormCheckout
+          :use-different-address="useDifferentAddress"
           :shipping-address="shippingAddress"
           :billing-address="billingAddress"
           :shipping-data="{
             note,
             date,
             timeSlot: currentTimeSlot,
-            newAccount,
-            password,
             email,
           }"
           :billing-data="billingData"
@@ -38,35 +37,44 @@
               v-if="!hasFreeShipping"
               status="warning"
               :class="[columnClassName, columnFullClassName]"
-              >Ti mancano <PriceHolder :price="50 - subTotal" /> per avere la
-              spedizione gratuita!
-              <BaseLink :to="{ name: 'featured' }" underline color="dark"
-                >Vuoi aggiungere altri prodotti al carrello?</BaseLink
-              >
+            >
+              <i18n-t keypath="freeShipping" class="u-mt-tiny">
+                <template #price>
+                  <PriceHolder :price="50 - subTotal" />
+                </template>
+                <template #backToCart>
+                  <BaseLink
+                    :to="{ name: 'featured' }"
+                    underline
+                    color="dark"
+                    :text="t('addMoreProducts')"
+                  />
+                </template>
+              </i18n-t>
             </BaseMessage>
 
             <div :class="rowClassName">
               <div :class="[columnClassName, columnHalfClassName]">
-                <BaseBox class="u-mb-large">
+                <BaseBox>
                   <template #head>
                     <BaseHeading tag="span" use="custom">{{
-                      $t('orders.shipping')
+                      $t('addresses.shipping')
                     }}</BaseHeading>
+                  </template>
 
-                    <InlineButton
-                      color="green"
-                      underline
-                      :text="
-                        $t(isAddressFilled(shippingAddress) ? 'edit' : 'create')
-                      "
-                      @click="toggleShippingModal(true)"
+                  <template v-if="isAddressFilled(shippingAddress)">
+                    <BaseParagraph>
+                      <strong>{{ $t('checkout.yourShippingAddress') }}</strong>
+                    </BaseParagraph>
+                    <ShopAddress :address="shippingAddress" />
+                    <BaseMessage
+                      v-if="!isAddressComplete(shippingAddress)"
+                      status="warning"
+                      class="u-mt-tiny"
+                      :message="$t('addresses.incomplete')"
                     />
                   </template>
 
-                  <ShopAddress
-                    v-if="isAddressFilled(shippingAddress)"
-                    :address="shippingAddress"
-                  />
                   <BaseParagraph
                     v-else
                     :text="
@@ -74,6 +82,15 @@
                         type: $t('orders.shipping'),
                       })
                     "
+                  />
+
+                  <BaseButton
+                    color="green"
+                    class="u-mt-small"
+                    :text="
+                      $t(isAddressFilled(shippingAddress) ? 'edit' : 'create')
+                    "
+                    @click="toggleShippingModal(true)"
                   />
                 </BaseBox>
               </div>
@@ -84,30 +101,54 @@
                     <BaseHeading tag="span" use="custom">{{
                       $t('orders.billing')
                     }}</BaseHeading>
+                  </template>
 
-                    <InlineButton
+                  <FormInvoice
+                    v-model:invoice="billingData"
+                    class="u-mb-medium"
+                  />
+
+                  <ToggleField
+                    v-if="billingData.invoice !== false"
+                    v-model="useDifferentAddress"
+                    class="u-mb-tiny u-white-pre-line"
+                    >{{ $t('checkout.useDifferentAddress') }}</ToggleField
+                  >
+
+                  <template
+                    v-if="useDifferentAddress && billingData.invoice !== false"
+                  >
+                    <template v-if="isAddressFilled(billingAddress)">
+                      <BaseParagraph>
+                        <strong>{{ $t('checkout.yourBillingAddress') }}</strong>
+                      </BaseParagraph>
+                      <ShopAddress :address="billingAddress" />
+                      <BaseMessage
+                        v-if="!isAddressComplete(billingAddress)"
+                        status="warning"
+                        class="u-mt-tiny"
+                        :message="$t('addresses.incomplete')"
+                      />
+                    </template>
+
+                    <BaseParagraph
+                      v-else
+                      :text="
+                        $t('addresses.checkouNotSet', {
+                          type: $t('orders.billing'),
+                        })
+                      "
+                    />
+
+                    <BaseButton
                       color="green"
-                      underline
+                      class="u-mt-small"
                       :text="
                         $t(isAddressFilled(billingAddress) ? 'edit' : 'create')
                       "
                       @click="toggleBillingModal(true)"
                     />
                   </template>
-
-                  <ShopAddress
-                    v-if="isAddressFilled(billingAddress)"
-                    :address="billingAddress"
-                    :invoice="billingData"
-                  />
-                  <BaseParagraph
-                    v-else
-                    :text="
-                      $t('addresses.checkouNotSet', {
-                        type: $t('orders.billing'),
-                      })
-                    "
-                  />
                 </BaseBox>
               </div>
             </div>
@@ -120,7 +161,10 @@
           </template>
 
           <template #action="{ columnClassName, columnFullClassName }">
-            <div :class="[columnClassName, columnFullClassName]">
+            <div
+              :class="[columnClassName, columnFullClassName]"
+              class="s-checkout-delivery"
+            >
               <OrderResume
                 :heading="$t('orders.deliveryInfos')"
                 container-class="u-mb-large"
@@ -128,6 +172,7 @@
                 <template #default="{ className, rowClassName }">
                   <div :class="[className, rowClassName]">
                     <BaseDatePicker v-model:date="date" />
+
                     <div
                       v-for="slot in timeSlots"
                       :key="slot.id"
@@ -148,53 +193,6 @@
                         </span>
                       </ToggleField>
                     </div>
-                  </div>
-                </template>
-              </OrderResume>
-
-              <OrderResume
-                :heading="$t('common.account')"
-                container-class="u-mb-large"
-              >
-                <template #default="{ className, rowClassName }">
-                  <div :class="[className, rowClassName]">
-                    <ToggleField
-                      v-if="!isLoggedIn"
-                      v-model="newAccount"
-                      class="u-mb-tiny u-white-pre-line"
-                      >{{ $t('checkout.register') }}</ToggleField
-                    >
-
-                    <InputField
-                      v-model="email"
-                      class="u-mb-tiny"
-                      type="email"
-                      name="email"
-                      required
-                      :readonly="isLoggedIn"
-                    >
-                      {{ $t('form.mailField') }}
-                    </InputField>
-
-                    <InputField
-                      v-model="phone"
-                      :class="{ 'u-mb-tiny': newAccount && !isLoggedIn }"
-                      type="tel"
-                      name="phone"
-                      required
-                    >
-                      {{ $t('form.phone') }}
-                    </InputField>
-
-                    <InputField
-                      v-if="newAccount && !isLoggedIn"
-                      v-model="password"
-                      type="password"
-                      name="password"
-                      required
-                    >
-                      {{ $t('form.password.field') }}
-                    </InputField>
                   </div>
                 </template>
               </OrderResume>
@@ -228,8 +226,10 @@
                       <b>{{ getFormattedDate(date) }}</b
                       >,
                       <span>
-                        <time>{{ currentTimeSlot.from }}</time> -
-                        <time>{{ currentTimeSlot.to }}</time>
+                        <b
+                          ><time>{{ currentTimeSlot.from }}</time> -
+                          <time>{{ currentTimeSlot.to }}</time></b
+                        >
                       </span></span
                     >
 
@@ -325,7 +325,6 @@
         <template #header>
           <BaseHeading tag="h5">{{ $t('orders.billing') }}</BaseHeading>
         </template>
-
         <FormUpdateAddress
           v-model:address="billingAddress"
           v-model:invoice="billingData"
@@ -345,13 +344,14 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-
+import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 // Constants
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'green',
   name: 'checkout',
+  middleware: 'auth',
 })
 
 defineI18nRoute({
@@ -382,10 +382,34 @@ provide('holiday', [
   new Date(`${new Date().getFullYear() + 1}-12-26`),
 ])
 
+//State
+
 // Component life-cycle hooks
 
 // Composables
+
 const cart = useCartStore()
+const basket = await cart.load()
+if (basket.value.length <= 0) {
+  await navigateTo({
+    name: 'cart',
+    query: {
+      redirectBecause: 'noProducts',
+    },
+  })
+} else if (cart.subTotal < 20) {
+  await navigateTo({
+    name: 'cart',
+    query: {
+      redirectBecause: 'orderMinimumMissing',
+    },
+  })
+}
+
+const { t } = useI18n({
+  useScope: 'local',
+})
+
 const user = useAccountStore()
 const timeSlots = await useApi(
   'time-slots',
@@ -405,105 +429,57 @@ const {
   shippingMethod,
   hasFreeShipping,
 } = storeToRefs(cart)
-const { isLoggedIn } = storeToRefs(user)
 
 const isShippingModalOpen = ref(false)
 const isBillingModalOpen = ref(false)
 
-const basket = await cart.load()
 const useDifferentAddress = ref(false)
 
-const shippingAddress = ref({
-  firstName: null,
-  lastName: null,
-  country: null,
-  address: null,
-  address2: null,
-  province: null,
-  city: null,
-  postcode: null,
-})
+const shippingAddress = await useApi(
+  'shop/addresses/shipping',
+  {
+    method: 'GET',
+  },
+  {
+    cache: false,
+    dataOnly: true,
+  }
+)
 
-const billingAddress = ref({
-  firstName: null,
-  lastName: null,
-  country: null,
-  address: null,
-  address2: null,
-  province: null,
-  city: null,
-  postcode: null,
-})
+const userBillingAddress = await useApi(
+  'shop/addresses/billing',
+  {
+    method: 'GET',
+  },
+  {
+    cache: false,
+    dataOnly: true,
+  }
+)
+
+const { address, invoice } = useBillingAddress(userBillingAddress)
+const billingAddress = ref({ ...address.value })
+const billingData = ref({ ...invoice.value })
 
 const account = await user.load()
-
-const newAccount = ref(false)
 
 const note = ref('')
 const date = ref(getToday())
 const email = ref(account.value?.email || null)
-const phone = ref(account.value?.phone || null)
-const password = ref(null)
-const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
-const billingData = ref({
-  invoice: false,
-  company: null,
-  cfCompany: null,
-  vat: null,
-  sdi: null,
-  pec: null,
-  cfPrivate: null,
-})
-
-if (isLoggedIn.value) {
-  const userBillingAddress = await useApi(
-    'shop/addresses/billing',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  const { address, invoice } = useBillingAddress(userBillingAddress)
-
-  billingAddress.value = address.value
-  billingData.value = invoice.value
-
-  const userShippingAddress = await useApi(
-    'shop/addresses/shipping',
-    {
-      method: 'GET',
-    },
-    {
-      cache: false,
-      dataOnly: true,
-    }
-  )
-
-  shippingAddress.value = { ...userShippingAddress.value }
+if (!shippingAddress.value.phone) {
+  shippingAddress.value.phone = account.value?.phone || null
 }
+if (!billingAddress.value.phone) {
+  billingAddress.value.phone = account.value?.phone || null
+}
+const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
 // Watcher
 
 // Computed
 const currentTimeSlot = computed(() => {
   return timeSlots.value.find((slot) => slot.id === timeSlot.value)
-})
-
-const isAddressFilled = computed(() => (address) => {
-  return (
-    address.firstName &&
-    address.lastName &&
-    address.country &&
-    address.address &&
-    address.province &&
-    address.city &&
-    address.postcode
-  )
 })
 
 // Methods
@@ -571,29 +547,22 @@ const closeBillingModal = () => {
     height: 100%;
   }
 
-  @include component('toggle-field') {
-    @include set-local-vars(
-      $prefix: 'toggle-field',
-      $map: (
-        label-padding-y: rem(10px),
-      )
-    );
-  }
-
-  @include scope('different-billing') {
-    @include set-local-vars(
-      $prefix: 'heading',
-      $map: (
-        text-color: get-var(color-black),
-      )
-    );
-
-    @include set-local-vars(
-      $prefix: 'toggle-field',
-      $map: (
-        offset-top: rem(4px),
-      )
-    );
+  @include scope('checkout-delivery') {
+    @include component('toggle-field') {
+      @include set-local-vars(
+        $prefix: 'toggle-field',
+        $map: (
+          label-padding-y: rem(10px),
+        )
+      );
+    }
   }
 }
 </style>
+
+<i18n lang="json" locale="it">
+{
+  "freeShipping": "Ti mancano {price} per avere la spedizione gratuita!",
+  "addMoreProducts": "Vuoi aggiungere altri prodotti al carrello?"
+}
+</i18n>

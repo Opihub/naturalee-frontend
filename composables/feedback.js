@@ -31,7 +31,8 @@ export function useFeedback() {
       !address.address ||
       !address.province ||
       !address.city ||
-      !address.postcode
+      !address.postcode ||
+      !address.phone
     ) {
       feedback.message = 'Compila tutti i campi obbligatori'
 
@@ -61,6 +62,10 @@ export function useFeedback() {
 
       if (!address.postcode) {
         feedback.errors.push(`Il CAP è un campo obbligatorio${after}`)
+      }
+
+      if (!address.phone) {
+        feedback.errors.push(`Il telefono è un campo obbligatorio${after}`)
       }
 
       return false

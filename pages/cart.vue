@@ -123,7 +123,7 @@
 <script setup>
 // Imports
 import { useCartStore } from '@/stores/cart'
-
+import { useAccountStore } from '@/stores/account'
 // Constants
 
 // Define (Props, Emits, Page Meta)
@@ -140,17 +140,23 @@ defineI18nRoute({
 })
 
 // Component life-cycle hooks
+onMounted(() => {
+  nextTick(async () => {
+    const syncProduct = await cart.load()
+    basket.value = syncProduct.value
+  })
+})
 
 // Composables
 const { page } = await usePage('cart')
 const products = await useApi('shop/homepage/products')
 const cart = useCartStore()
 const { sending, send } = useSender()
+const user = useAccountStore()
 
 // Data
 const { isEmpty } = storeToRefs(cart)
-const remoteBasket = await cart.load()
-const basket = ref(remoteBasket.value)
+const basket = ref([])
 
 // Computed
 const hasFreeShipping = computed(() => {
@@ -165,6 +171,7 @@ const shippingMethod = computed(() => {
 const { subTotal, granTotal: total } = useTotal(basket, {
   shipping: shippingMethod,
 })
+const { isLoggedIn } = storeToRefs(user)
 
 // Watcher
 
@@ -197,13 +204,22 @@ const saveCart = async () => {
     return
   }
 
-  const response = await send(async () => await cart.save(basket))
-
-  console.debug(response.value)
-  if (!response.value.success) {
+  try {
+    await send(async () => await cart.save(basket))
+  } catch (error) {
     notify({
       status: 'danger',
-      message: response.value.data,
+      message: error,
+    })
+    return
+  }
+
+  if (!isLoggedIn.value) {
+    await navigateTo({
+      name: 'login',
+      query: {
+        redirectBecause: 'needAccount',
+      },
     })
 
     return

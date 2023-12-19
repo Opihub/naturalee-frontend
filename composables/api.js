@@ -1,9 +1,4 @@
-import {
-  useFetch,
-  ref,
-  storeToRefs,
-  useRuntimeConfig,
-} from '#imports'
+import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
 import { useSessionStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
@@ -36,7 +31,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const apiKeys = useSessionStorage('apiKeys', [], {
     serializer: StorageSerializers.object,
   })
-
   innerOptions = {
     version: 1,
     cache: true,
@@ -62,12 +56,12 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     cached = useSessionStorage(apiUrl, null, {
       serializer: StorageSerializers.object,
     })
+  } else {
+    options.key = 'task:' + String(Math.floor(Math.random() * 100))
   }
-
   if (cached.value && cached.value.success) {
     return cached
   }
-
   const fetchOptions = {
     ...options,
     headers: {
@@ -77,7 +71,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     },
     pick: null,
   }
-
+  //console.log(fetchOptions)
   if (!innerOptions.local && config?.public?.endpoint) {
     fetchOptions.baseURL = config.public.endpoint
   }

@@ -50,9 +50,12 @@
           }}</BaseButton>
         </div>
 
-        <BaseMessage v-if="showMessage" class="u-mt-half" :status="feedback.status">{{
-          feedback.message
-        }}</BaseMessage>
+        <BaseMessage
+          v-if="showMessage"
+          class="u-mt-half"
+          :status="feedback.status"
+          >{{ feedback.message }}</BaseMessage
+        >
       </form>
     </SiteContainer>
   </main>
@@ -68,35 +71,36 @@ definePageMeta({
   layout: 'standard',
   name: 'password-recovery',
   validate: async (route) => {
-    // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
+    defineNuxtRouteMiddleware(async () => {
+      const { token, login } = route.query
 
-    const { token, login } = route.query
-
-    if (
-      !login ||
-      !token ||
-      token.match(getPasswordRecoveryTokenPattern()).length <= 0
-    ) {
-      return false
-    }
-
-    const response = await useApi(
-      `auth/password-recovery/validate-token`,
-      {
-        method: 'POST',
-        body: {
-          token,
-          login,
-        },
-      },
-      {
-        cache: false,
+      if (
+        !login ||
+        !token ||
+        token.match(getPasswordRecoveryTokenPattern()).length <= 0
+      ) {
+        return false
       }
-    )
 
-    // TODO: trovare un modo di ritornare gli errori
+      const response = await useApi(
+        `auth/password-recovery/validate-token`,
+        {
+          method: 'POST',
+          body: {
+            token,
+            login,
+          },
+        },
+        {
+          cache: false,
+        }
+      )
 
-    return response.value.success
+      // TODO: trovare un modo di ritornare gli errori
+
+      return response.value.success
+    })
+    // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
   },
 })
 
@@ -198,14 +202,16 @@ const updatePassword = async () => {
   })
 
   if (response.value.success) {
-    await notify({
-      status: 'success',
-      message:
-        'Password resettata con successo!',
-    }, 5000)
+    await notify(
+      {
+        status: 'success',
+        message: 'Password resettata con successo!',
+      },
+      5000
+    )
 
     await navigateTo({
-      path: '/login',
+      name: 'login',
     })
   } else {
     showMessage.value = true

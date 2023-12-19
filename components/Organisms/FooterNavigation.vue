@@ -184,6 +184,7 @@ $prefix: 'footer-navigation';
   }
 
   @include element('payment') {
+    height: 69px;
     justify-self: end;
     grid-column: 3 / 4;
     margin: 0 auto;

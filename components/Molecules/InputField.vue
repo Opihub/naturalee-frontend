@@ -7,6 +7,11 @@
     >
       <slot />
       <sup v-if="'required' in attrs && attrs.required !== false">*</sup>
+      <BaseHelpTip
+        v-if="type === 'password'"
+        :label="$t('form.password.requirement')"
+        >?</BaseHelpTip
+      >
     </BaseLabel>
     <span
       v-if="error"

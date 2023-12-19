@@ -3,8 +3,8 @@
     <NuxtImg
       class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
       src="/account/banner-account.png"
+      provider="clientProvider"
     />
-
     <SiteContainer :max-width="740" padless>
       <BaseParagraph class="u-mb-half">
         <i18n-t keypath="welcome">
@@ -60,7 +60,7 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
-
+import bannerBacheca from '@/assets/images/account/banner-account.png'
 // Constants
 
 // Define (Props, Emits, Page Meta)

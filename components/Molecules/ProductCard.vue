@@ -215,7 +215,7 @@ $prefix: 'product-card';
   text-align: left;
   background-color: get-var(color-white);
   border-radius: rem(20px);
-  padding: 0;
+  padding: get-var(padding, 0, $prefix: $prefix);
   position: relative;
   overflow: hidden;
   @include set-vars(

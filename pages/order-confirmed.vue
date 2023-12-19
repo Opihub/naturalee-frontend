@@ -12,12 +12,14 @@
         <BaseHeading tag="h4" class="u-text-center@tablet"
           >Ecco i dettagli del tuo ordine</BaseHeading
         >
+
         <OrderDetails
           class="u-mb-huge u-mt-medium"
           :products="order.products"
           :shipping="order.shipping"
           :payment="order.payment"
           :time-slots="order.timeSlots"
+          :date="getFormattedDate(order.pickedDate)"
         />
         <div class="o-row">
           <div class="o-row__column">
@@ -58,6 +60,35 @@ definePageMeta({
   layout: 'green',
   validate: async (route) => {
     return true
+    // defineNuxtRouteMiddleware(async () => {
+    //   const { token, login } = route.query
+
+    //   if (
+    //     !login ||
+    //     !token ||
+    //     token.match(getPasswordRecoveryTokenPattern()).length <= 0
+    //   ) {
+    //     return false
+    //   }
+
+    //   const response = await useApi(
+    //     `auth/password-recovery/validate-token`,
+    //     {
+    //       method: 'POST',
+    //       body: {
+    //         token,
+    //         login,
+    //       },
+    //     },
+    //     {
+    //       cache: false,
+    //     }
+    //   )
+
+    //   // TODO: trovare un modo di ritornare gli errori
+
+    //   return response.value.success
+    // })
   },
 })
 
@@ -67,6 +98,7 @@ definePageMeta({
 
 // Data
 const route = useRoute()
+console.log(route)
 const order = await useApi(
   `shop/orders/${route.query.orderId}`,
   {},
@@ -75,6 +107,7 @@ const order = await useApi(
     cache: false,
   }
 )
+console.log(order)
 
 // Watcher
 

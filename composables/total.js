@@ -14,6 +14,8 @@ export const useTotal = (products, config) => {
     if (shipping && 'value' in shipping) {
       if (shipping.value?.price) {
         total += shipping.value.price
+      } else if (shipping.value?.cost) {
+        total += shipping.value.cost
       } else if (!isNaN(shipping.value)) {
         total += shipping.value
       }
@@ -24,6 +26,8 @@ export const useTotal = (products, config) => {
     if (payment && 'value' in payment) {
       if (payment.value?.price) {
         total += payment.value.price
+      } else if (payment.value?.cost) {
+        total += payment.value.cost
       } else if (!isNaN(payment.value)) {
         total += payment.value
       }

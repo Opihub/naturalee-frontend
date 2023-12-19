@@ -11,21 +11,59 @@
       <fieldset
         :class="[rowClassName, columnFullClassName, `${CSS_NAME}__invoice`]"
       >
+        <span>{{ $t('invoice.iAm') }}</span>
+
         <ToggleField
-          v-for="single in invoices"
-          :key="single.value"
-          :value="single.value"
-          name="invoice"
+          v-model="is"
+          :value="IS_PRIVATE"
+          name="invoice-is"
           inline
           radio
-          :model-value="invoice.invoice"
-          @update:model-value="(value) => updateInvoice(value, 'invoice')"
+          @update:model-value="(value) => updateInvoice(value, 'invoice-is')"
         >
-          {{ single.name }}
+          {{ $t('invoice.private') }}
+        </ToggleField>
+        <ToggleField
+          v-model="is"
+          :value="IS_COMPANY"
+          name="invoice-is"
+          inline
+          radio
+          @update:model-value="(value) => updateInvoice(value, 'invoice-is')"
+        >
+          {{ $t('invoice.company') }}
         </ToggleField>
       </fieldset>
 
-      <template v-if="invoice.invoice === 'company'">
+      <fieldset
+        v-if="is === IS_PRIVATE"
+        :class="[rowClassName, columnFullClassName, `${CSS_NAME}__invoice`]"
+      >
+        <span>{{ $t('invoice.iWant') }}</span>
+
+        <ToggleField
+          v-model="want"
+          :value="WANT_RECEIPT"
+          name="invoice-want"
+          inline
+          radio
+          @update:model-value="(value) => updateInvoice(value, 'invoice-want')"
+        >
+          {{ $t('invoice.receipt') }}
+        </ToggleField>
+        <ToggleField
+          v-model="want"
+          :value="WANT_INVOICE"
+          name="invoice-want"
+          inline
+          radio
+          @update:model-value="(value) => updateInvoice(value, 'invoice-want')"
+        >
+          {{ $t('invoice.invoice') }}
+        </ToggleField>
+      </fieldset>
+
+      <template v-if="is === IS_COMPANY">
         <InputField
           :model-value="invoice.company"
           :class="[columnClassName, columnFullClassName]"
@@ -79,7 +117,7 @@
         >
       </template>
       <InputField
-        v-else-if="invoice.invoice === 'private'"
+        v-else-if="is === IS_PRIVATE && want === WANT_INVOICE"
         :model-value="invoice.cfPrivate"
         :class="[columnClassName, columnFullClassName]"
         name="cf"
@@ -95,10 +133,13 @@
 
 <script setup>
 // Imports
-import { useI18n } from 'vue-i18n'
 
 // Constants
 const CSS_NAME = 'c-form-invoice'
+const IS_PRIVATE = 'private'
+const IS_COMPANY = 'company'
+const WANT_RECEIPT = 'receipt'
+const WANT_INVOICE = 'invoice'
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
@@ -112,28 +153,53 @@ const emit = defineEmits(['update:invoice'])
 // Component life-cycle hooks
 
 // Composables
-const { t } = useI18n()
 
 // Data
-const invoices = ref([
-  {
-    name: t('common.no'),
-    value: false,
-  },
-  {
-    name: t('invoice.isPrivate'),
-    value: 'private',
-  },
-  {
-    name: t('invoice.isCompany'),
-    value: 'company',
-  },
-])
+const is = ref(IS_PRIVATE)
+const want = ref(WANT_RECEIPT)
+switch (props.invoice.invoice) {
+  case IS_COMPANY:
+    is.value = IS_COMPANY
+    // want.value = WANT_INVOICE
+    break
+  case IS_PRIVATE:
+    is.value = IS_PRIVATE
+    want.value = WANT_INVOICE
+    break
+}
 
 // Watcher
 
 // Computed
 const updateInvoice = (value, field) => {
+  if (field === 'invoice-is') {
+    field = 'invoice'
+    switch (value) {
+      // Se sono un'azienda la fatturazione è obbligatoria
+      case IS_COMPANY:
+        value = IS_COMPANY
+        break
+
+      // Se sono un privato, controllo se ho richiesto la ricevuta o la fattura
+      case IS_PRIVATE:
+        value = want.value === WANT_INVOICE ? IS_PRIVATE : false
+        break
+    }
+  } else if (field === 'invoice-want') {
+    field = 'invoice'
+    switch (value) {
+      // Se voglio la ricevuta, allora mando 'false'
+      case WANT_RECEIPT:
+        value = false
+        break
+
+      // Se voglio la fattura, allora mando 'private'
+      case WANT_INVOICE:
+        value = IS_PRIVATE
+        break
+    }
+  }
+
   const newInvoice = { ...props.invoice }
 
   if (newInvoice[field] === value) {

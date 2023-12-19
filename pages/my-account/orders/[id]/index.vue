@@ -14,8 +14,9 @@
       :products="order.products"
       :shipping="order.shipping"
       :payment="order.payment"
+      :time-slots="order.timeSlots"
+      :date="getFormattedDate(order.pickedDate)"
     />
-
     <div class="o-row">
       <div class="o-row__column">
         <BaseHeading tag="h5" class="u-mb-small">{{

@@ -46,7 +46,7 @@
     >
       <SiteContainer>
         <p
-          class="u-mb-tiny u-mb-none@tablet u-mr-none u-mr-medium@tablet u-mr-none@large"
+          class="u-mb-tiny u-mb-none@tablet u-mr-none u-mr-medium@tablet u-mr-none@large u-text-left@desktop"
         >
           {{ t('deliverySection.title') }} <br />
           {{ t('deliverySection.title_2') }}
@@ -119,7 +119,6 @@
 
 <script setup>
 // Imports
-import HomeVideo from 'assets/video/homepage.mp4'
 
 // Constants
 
@@ -202,6 +201,7 @@ const { t } = useI18n({
     @include object('video') {
       width: 100%;
       object-fit: cover;
+      border-radius: 0;
     }
   }
 
