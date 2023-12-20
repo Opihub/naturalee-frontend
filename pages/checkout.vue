@@ -382,14 +382,13 @@ provide('holiday', [
   new Date(`${new Date().getFullYear() + 1}-12-26`),
 ])
 
-//State
-
 // Component life-cycle hooks
 
 // Composables
-
+await usePage('checkout')
 const cart = useCartStore()
 const basket = await cart.load()
+
 if (basket.value.length <= 0) {
   await navigateTo({
     name: 'cart',
