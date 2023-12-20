@@ -13,14 +13,19 @@
         :model-value="modelValue?.id"
         @update:model-value="(value) => updatePaymentMethod(value)"
       >
-        {{ paymentMethod.title }}
-        <PriceHolder
-          v-if="paymentMethod.price > 0"
-          :price="paymentMethod.price"
-        >
-          <template #before>(</template>
-          <template #after>)</template>
-        </PriceHolder>
+        <span class="u-d-block">
+          {{ paymentMethod.title }}
+          <PriceHolder
+            v-if="paymentMethod.price > 0"
+            :price="paymentMethod.price"
+          >
+            <template #before>(</template>
+            <template #after>)</template>
+          </PriceHolder>
+        </span>
+        <small v-if="paymentMethod.description" class="u-d-block">{{
+          paymentMethod.description
+        }}</small>
       </ToggleField>
     </div>
 
