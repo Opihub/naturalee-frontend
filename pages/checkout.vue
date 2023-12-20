@@ -344,7 +344,7 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-import { useLocalStorage, StorageSerializers } from '@vueuse/core'
+
 // Constants
 
 // Define (Props, Emits, Page Meta)
