@@ -23,12 +23,6 @@
         color="dark"
         >{{ product.title }}</BaseLink
       >
-      <BaseHeading
-        tag="span"
-        :class="`${CSS_NAME}__provenance`"
-        class="u-mb-small"
-        >{{ product.provenance }}</BaseHeading
-      >
 
       <div :class="`${CSS_NAME}__descriptor`">
         <ProductDescriptor
@@ -106,7 +100,7 @@ const props = defineProps({
       return (
         'id' in value &&
         'title' in value &&
-        'provenance' in value &&
+        // 'provenance' in value &&
         'link' in value
       )
     },
