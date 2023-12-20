@@ -32,23 +32,3 @@ const CSS_NAME = 'c-loader'
 
 // Methods
 </script>
-
-<style lang="scss" scoped>
-$prefix: 'loader';
-@include component($prefix) {
-  @include set-local-vars(
-    $prefix: 'overlay',
-    $map: (
-      opacity: 0.6,
-      cursor: wait,
-    )
-  );
-
-  @include element('spinner') {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-</style>

@@ -1,6 +1,8 @@
 <template>
   <LayoutWrapper color="green" class="s-error">
-    <slot />
+    <main id="page">
+      <slot />
+    </main>
   </LayoutWrapper>
 </template>
 

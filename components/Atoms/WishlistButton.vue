@@ -23,7 +23,7 @@ const props = defineProps({
       return (
         'id' in value &&
         'title' in value &&
-        'provenance' in value &&
+        // 'provenance' in value &&
         'link' in value
       )
     },

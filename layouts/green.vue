@@ -2,7 +2,9 @@
   <LayoutWrapper color="green">
     <FooterNavigation class="u-pt-large u-pb-huge" />
 
-    <slot />
+    <main id="page">
+      <slot />
+    </main>
 
     <SiteFooter class="u-mt-auto">
       <FooterCopyrights
