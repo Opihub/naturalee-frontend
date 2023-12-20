@@ -2,9 +2,9 @@
   <SVGDefinitions v-once />
 
   <NuxtLoadingIndicator />
-  <Transition name="fade">
+  <!-- <Transition name="fade">
     <SiteLoader v-if="isLoading" />
-  </Transition>
+  </Transition> -->
 
   <NuxtLayout>
     <NuxtPage />

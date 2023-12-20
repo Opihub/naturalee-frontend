@@ -1,5 +1,5 @@
 <template>
-  <main class="s-azienda">
+  <section class="s-azienda">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
     <div class="s-overflow">
       <SiteContainer
@@ -107,7 +107,7 @@
         </BaseParagraph>
       </template>
     </ContentRow>
-  </main>
+  </section>
 </template>
 
 <script setup>
