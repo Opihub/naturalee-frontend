@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <section>
     <HeaderBottomBar color="light" />
 
     <SiteTeaser
@@ -17,7 +17,7 @@
         sortable
       />
     </Suspense>
-  </main>
+  </section>
 </template>
 
 <script setup>

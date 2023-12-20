@@ -1,7 +1,7 @@
 <template>
-  <main class="s-wip">
+  <section class="s-wip">
     <WorkInProgress />
-  </main>
+  </section>
 </template>
 
 <script setup>

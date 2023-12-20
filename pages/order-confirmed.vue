@@ -1,5 +1,5 @@
 <template>
-  <main class="s-checkout">
+  <section class="s-checkout">
     <SiteContainer
       v-if="order && Object.keys(order).length > 0"
       :max-width="1060"
@@ -47,7 +47,7 @@
         >
       </SiteContainer>
     </SiteContainer>
-  </main>
+  </section>
 </template>
 
 <script setup>

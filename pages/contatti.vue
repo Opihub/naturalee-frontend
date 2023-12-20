@@ -1,5 +1,5 @@
 <template>
-  <main class="s-contacts">
+  <section class="s-contacts">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
     <div class="o-row row-contacts">
       <SiteContainer>
@@ -64,7 +64,7 @@
         </SiteContainer>
       </SiteContainer>
     </div>
-  </main>
+  </section>
 </template>
 
 <script setup>

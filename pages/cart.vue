@@ -1,5 +1,5 @@
 <template>
-  <main class="s-cart">
+  <section class="s-cart">
     <Transition name="fade">
       <LoadingOverlay v-if="sending" />
     </Transition>
@@ -117,7 +117,7 @@
         </template>
       </FormWrapper>
     </SiteContainer>
-  </main>
+  </section>
 </template>
 
 <script setup>
