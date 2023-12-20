@@ -12,6 +12,7 @@
       v-model:address="address"
       v-model:invoice="invoice"
       :is-billing="isBilling"
+      :editable-invoice="isBilling"
     />
   </section>
 </template>

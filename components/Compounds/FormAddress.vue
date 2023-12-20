@@ -108,6 +108,17 @@
         {{ $t('addresses.postcode') }}</InputField
       >
 
+      <InputField
+        :model-value="address.phone"
+        :class="[columnClassName, columnFullClassName]"
+        type="tel"
+        name="phone"
+        required
+        @update:model-value="(value) => updateAddress(value, 'phone')"
+      >
+        {{ $t('addresses.phone') }}</InputField
+      >
+
       <slot
         name="after"
         v-bind="{

@@ -128,6 +128,7 @@ export default defineI18nConfig(() => ({
           save: 'Salva password',
           update: 'Modifica password',
           generate: 'Genera Password',
+          requirement: 'Minimo 8 caratteri, almeno una minuscola, almeno una maiuscola e almeno un numero o un carattere speciale'
         },
         leaveBlank: 'lascia in bianco per non modificare',
         contactUs: 'Contattaci',
@@ -161,6 +162,7 @@ export default defineI18nConfig(() => ({
       common: {
         logout: 'Logout',
         date: 'Data',
+        deliveryDate: 'Data di consegna',
         update: 'Aggiorna',
         actions: 'Azioni',
         total: 'Totale',
@@ -176,6 +178,10 @@ export default defineI18nConfig(() => ({
       },
       checkout: {
         payment: 'Il tuo scontrino',
+        yourShippingAddress: 'Il tuo indirizzo di spedizione è:',
+        yourBillingAddress: 'Il tuo indirizzo di fatturazione è:',
+        useDifferentAddress:
+          'Vuoi usare un indirizzo diverso da quello di spedizione per la fatturazione?',
         notesPlaceholder:
           "Note sull'ordine, ad esempio richieste particolare per la consegna...",
         register:
@@ -227,6 +233,7 @@ export default defineI18nConfig(() => ({
         country: 'Nazione/Regione',
         address: 'Via e Numero',
         address2: 'Appartamento, suite, unità, piano, ecc. (opzionale)',
+        phone: 'Telefono',
         addressPlaceholder: 'Via/Piazza e Numero Civico',
         timeSlot: 'Scegli la fascia oraria preferita e il giorno di consegna:',
         updated: 'Indirizzo di {type} aggiornato',
@@ -239,16 +246,20 @@ export default defineI18nConfig(() => ({
         sdi: 'SDI',
         sdiFull: 'SDI',
         pec: 'PEC',
+
+        incomplete: "Attenzione, l'indirizzo non è completo",
       },
       invoice: {
         requestInvoice: 'Desideri ricevere la fattura?',
         answerRequestInvoice: 'Fattura richiesta? {answer}',
-        private: 'privato',
-        isPrivate: '@:common.yes, sono un @:invoice.private',
-        hasPrivate: '@:common.yes, come @:invoice.private',
-        company: 'azienda',
-        isCompany: "@:common.yes, sono un'@:invoice.company",
-        hasCompany: '@:common.yes, come @:invoice.company',
+        iAm: 'Sono un',
+        iWant: 'Desidero ricevere',
+        private: 'Privato',
+        company: 'Azienda',
+        isPrivate: 'Sono un privato',
+        isCompany: "Sono un'azienda",
+        receipt: 'Ricevuta',
+        invoice: 'Fattura',
       },
       notifications: {
         logout: 'Logout avvenuto con successo',
@@ -261,6 +272,9 @@ export default defineI18nConfig(() => ({
           paragraph:
             'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
         },
+        login: {
+          createAccount: 'Registrati per poter continuare con l\'ordine!'
+        }
       },
     },
   },

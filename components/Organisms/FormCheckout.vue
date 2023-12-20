@@ -4,7 +4,6 @@
     :feedback="feedback"
     class="u-mb-medium"
   />
-
   <FormWrapper
     method="POST"
     class="o-form--checkout"
@@ -46,6 +45,8 @@
 </template>
 
 <script setup>
+//Imports
+import { useCartStore } from '@/stores/cart'
 // Define (Props, Emits, Page Meta)
 const emit = defineEmits(['api:start', 'api:end'])
 const props = defineProps({
@@ -77,11 +78,15 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  useDifferentAddress: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 // Composables
 const { sending, send } = useSender(emit)
-
+const useCart = useCartStore()
 // Data
 const {
   feedback,
@@ -100,7 +105,7 @@ const submitOrder = async () => {
 
   resetFeedback()
 
-  const { timeSlot, date, note, email, phone, password, newAccount } =
+  const { timeSlot, date, note, email, } =
     props.shippingData
   const { invoice } = props.billingData
 
@@ -116,10 +121,6 @@ const submitOrder = async () => {
 
   if (!email) {
     feedback.errors.push('È obbligatorio indicare una mail')
-  }
-
-  if (!phone) {
-    feedback.errors.push('È obbligatorio indicare un numero di telefono valido')
   }
 
   if (!props.shippingMethod?.value) {
@@ -138,32 +139,27 @@ const submitOrder = async () => {
 
   const formData = {
     shipping: { ...props.shippingAddress },
+    date,
     timeSlot,
     note,
     email,
-    phone,
     invoice,
     products: props.cart,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
   }
 
-  if (newAccount) {
-    if (!password) {
-      feedback.errors.push(
-        'È obbligatorio inserire una password se si vuole creare un account'
-      )
-    } else {
-      formData.newAccount = true
-      formData.password = password
-    }
-  }
+  // Valido i campi della fatturazione indifferentemente da quelli dell'indirizzo
+  validateInvoice(formData.invoice)
 
-  if (props.isBilling && !validateInvoice(formData.invoice)) {
-    return
-  }
+  // Se devo usare un
+  if (props.useDifferentAddress) {
+    validateAddress(props.billingAddress, ' per la fatturazione')
 
-  validateInvoice(props.billingData)
+    formData.billing = { ...props.billingAddress }
+  } else {
+    formData.billing = { ...props.shippingAddress }
+  }
 
   if (invoice === 'private') {
     formData.cf = props.billingData.cfPrivate
@@ -174,12 +170,6 @@ const submitOrder = async () => {
     formData.sdi = props.billingData.sdi
     formData.company = props.billingData.company
   }
-
-  // if (useDifferentAddress.value) {
-  formData.billing = { ...props.billingAddress }
-
-  validateAddress(props.billingAddress, ' per la fatturazione')
-  // }
 
   if (hasErrors.value) {
     window.scrollTo(0, 0)
@@ -199,18 +189,22 @@ const submitOrder = async () => {
         }
       )
   )
-  console.debug({ ...response.value })
 
   if (response.value.success) {
+    const { clearCart } = useCart
+    await clearCart(false)
+
     await navigateTo({
       path: '/order-confirmed',
       query: {
         orderId: response.value.data.id,
       },
     })
-  } else {
-    errors.value = response.value.errors
+
+    return
   }
+
+  feedback.errors.value = response.value.errors
 }
 </script>
 

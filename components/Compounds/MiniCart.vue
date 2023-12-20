@@ -126,11 +126,11 @@ defineProps({
   },
 })
 
-// Component life-cycle hooks
-
 // Composables
 
 // Data
+
+// Component life-cycle hooks
 
 // Watcher
 

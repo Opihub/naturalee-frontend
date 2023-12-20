@@ -10,6 +10,7 @@ export function useBillingAddress(data) {
     province: data.value.province,
     city: data.value.city,
     postcode: data.value.postcode,
+    phone: data.value.phone,
   })
 
   const invoice = ref({

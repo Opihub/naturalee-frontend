@@ -211,7 +211,7 @@ const updatePassword = async () => {
     )
 
     await navigateTo({
-      path: '/login',
+      name: 'login',
     })
   } else {
     showMessage.value = true

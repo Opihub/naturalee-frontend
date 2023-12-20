@@ -75,8 +75,14 @@ const props = defineProps({
     default() {
       const { t } = useI18n()
       return {
-        asc: t('asc'),
-        desc: t('desc'),
+        asc: {
+          label: t('asc'),
+          value: 'price-asc',
+        },
+        desc: {
+          label: t('desc'),
+          value: 'price-desc',
+        },
       }
     },
   },
@@ -186,6 +192,10 @@ const clearFilters = () => {
 }
 
 const toggleFilter = (filter) => {
+  if (!Array.isArray(chosenFilters.value)) {
+    chosenFilters.value = chosenFilters.value.split(' ')
+  }
+
   const index = chosenFilters.value.indexOf(filter)
 
   if (index > -1) {
@@ -211,7 +221,6 @@ const changeOrder = (order) => {
 
 const fetchProducts = async () => {
   updateQuery()
-
   if (!props.from) {
     if (!props.use) {
       noProductsMessage.value =
@@ -384,12 +393,41 @@ $prefix: 'products-grid';
   }
 
   @include modifier('list') {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 1,
-      )
-    );
+    @include component('product-card') {
+      @include from(tablet) {
+        @include set-local-vars(
+          $prefix: 'product-card',
+          $map: (
+            padding: rem(15px) 0,
+          )
+        );
+      }
+      @include set-local-vars(
+        $prefix: 'row',
+        $map: (
+          columns: 1,
+        )
+      );
+      @include element('thumbnail') {
+        @include from(tablet) {
+          padding: 0;
+        }
+        @include from(large) {
+          padding: rem(10px);
+        }
+      }
+      @include element('buy') {
+        @include until(desktop) {
+          padding-bottom: rem(30px);
+          @include set-local-vars(
+            $prefix: 'counter',
+            $map: (
+              margin: 0,
+            )
+          );
+        }
+      }
+    }
   }
 }
 </style>

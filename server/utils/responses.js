@@ -8,6 +8,7 @@ export function createResponse(input, error = false) {
       code: input?.data?.code || 'generic_error',
       message: input.statusMessage || 'Generic Error',
       data: input?.data?.data || false,
+      errors: [],
     }
   }
 
@@ -17,6 +18,7 @@ export function createResponse(input, error = false) {
     code: input.code || 'default_code',
     message: input.message || 'Generic Message',
     data: typeof input.data !== 'undefined' ? input.data : {},
+    errors: input?.errors || [],
   }
 }
 
@@ -41,7 +43,7 @@ export function createPaginatedResponse(input) {
   const count = parseInt(input.paginate?.count || 0)
   const limit = parseInt(input.paginate?.limit || 12)
 
-  if ((limit * page) + 1 < count) {
+  if (limit * page + 1 < count) {
     next = page + 1
   }
 

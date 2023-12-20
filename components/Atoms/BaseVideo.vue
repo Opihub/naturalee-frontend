@@ -208,8 +208,11 @@ $prefix: 'video';
       @include until(desktop) {
         width: unset;
       }
-      @include from(desktop) {
-        height: unset;
+      // @include until(desktop) {
+      //   height: unset;
+      // }
+      iframe {
+        height: 300%;
       }
     }
     iframe {
@@ -221,6 +224,10 @@ $prefix: 'video';
 
       .ytp-large-play-button {
         display: none !important;
+      }
+      .html5-video-container video {
+        width: 100% !important;
+        left: 0 !important;
       }
     }
   }

@@ -4,6 +4,7 @@ import {
   skipHydrate,
   computed,
   storeToRefs,
+  toRaw,
 } from '#imports'
 import {
   useLocalStorage,
@@ -92,6 +93,10 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function load(login = false) {
+    const localCart = toRaw(cart.value)
+    if (cart.value && isLoggedIn.value && login) {
+      await remoteAddToCartBatch(toRaw(cart.value))
+    }
     if (!isLoggedIn.value) {
       const body = cart.value.map((product) => {
         return {
@@ -102,14 +107,18 @@ export const useCartStore = defineStore('cart', () => {
         }
       })
 
+      if (body.length <= 0) {
+        return cart
+      }
       const response = await useApi(
-        'shop/cart/sync',
+        `shop/cart/sync`,
         {
           method: 'POST',
           body,
         },
         {
           cache: false,
+          //lazy: true,
         }
       ).catch((error) => {
         console.error(
@@ -122,15 +131,18 @@ export const useCartStore = defineStore('cart', () => {
       }
 
       cart.value = response.value.data.products
-      if ('invalid' in response.value.data) {
+      console.log(cart.value)
+      if ('invalid' in response.value.data && !isLoggedIn) {
         notify({
           message: response.value.data.invalid.message.join(' - '),
           status: 'warning',
         })
       }
-
-      return cart
+      if (!isLoggedIn.value) {
+        return cart
+      }
     }
+
     const response = await useApi('shop/cart/products', null, {
       cache: false,
     }).catch((error) => {
@@ -143,13 +155,21 @@ export const useCartStore = defineStore('cart', () => {
     if (!response.value.success) {
       throw new Error(response)
     }
-    if (cart.value && login) {
-      console.log(cart.value)
-      console.log(response.value.data)
-    }
 
     cart.value = response.value.data
-
+    if (response.value.success && login) {
+      localCart.forEach((element) => {
+        notify({
+          message: t('cart.addedToCart', element.quantity, {
+            named: {
+              name: element.title,
+              count: element.quantity,
+            },
+          }),
+          status: 'success',
+        })
+      })
+    }
     return cart
   }
 
@@ -196,13 +216,14 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart() {
+  function clearCart(notify = true) {
     cart.value = []
-
-    notify({
-      message: t('cart.cleared'),
-      status: 'warning',
-    })
+    if (!notify) {
+      notify({
+        message: t('cart.cleared'),
+        status: 'warning',
+      })
+    }
 
     return true
   }
@@ -506,6 +527,25 @@ export const useCartStore = defineStore('cart', () => {
     return false
   }
 
+  async function remoteAddToCartBatch(products = []) {
+    const response = await useApi(
+      'shop/cart/add/batch',
+      {
+        method: 'POST',
+        body: products,
+      },
+      {
+        cache: false,
+      }
+    ).catch((error) => {
+      console.error(
+        'Errore durante il caricamento di "shop/cart/add/batch"',
+        error
+      )
+    })
+    return response.value
+  }
+
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
@@ -525,6 +565,7 @@ export const useCartStore = defineStore('cart', () => {
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
     applyCoupon,
+    remoteAddToCartBatch,
   }
 })
 
