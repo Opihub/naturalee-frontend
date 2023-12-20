@@ -62,32 +62,57 @@ $prefix: 'loader';
         width: rem(200px);
         height: rem(200px);
         margin: rem(8px);
-        border: rem(8px) solid get-var(color-yellow);
+        border: rem(8px) solid transparent;
         border-radius: 50%;
-        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        border-color: get-var(color-yellow) transparent transparent transparent;
+        animation: lds-ring-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) get-var(delay, 0s, $prefix: $prefix) infinite, lds-ring-color 2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-top-color: get-var(color-yellow);
 
         &:nth-child(1) {
-          animation-delay: -0.45s;
+          @include set-local-vars($prefix: $prefix, $map: (
+            delay: -0.45s,
+          ));
         }
 
         &:nth-child(2) {
-          animation-delay: -0.3s;
+          @include set-local-vars($prefix: $prefix, $map: (
+            delay: -0.3s,
+          ));
         }
 
         &:nth-child(3) {
-          animation-delay: -0.15s;
+          @include set-local-vars($prefix: $prefix, $map: (
+            delay: -0.15s,
+          ));
         }
       }
     }
   }
 
-  @keyframes lds-ring {
+  @keyframes lds-ring-spin {
     0% {
       transform: rotate(0deg);
     }
+
     100% {
       transform: rotate(360deg);
+    }
+  }
+
+  @keyframes lds-ring-color {
+    0% {
+      border-top-color: get-var(color-yellow);
+    }
+
+    33% {
+      border-top-color: get-var(color-orange);
+    }
+
+    66% {
+      border-top-color: get-var(color-green);
+    }
+
+    100% {
+      border-top-color: get-var(color-yellow);
     }
   }
 }
