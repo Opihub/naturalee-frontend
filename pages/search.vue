@@ -1,5 +1,5 @@
 <template>
-  <main class="s-search">
+  <section class="s-search">
     <HeaderBottomBar v-model:search="search" :breadcrumb="breadcrumbs" />
 
     <SiteContainer class="u-pt-large u-pb-large">
@@ -14,7 +14,7 @@
         paginate
       />
     </Suspense>
-  </main>
+  </section>
 </template>
 
 <script setup>
@@ -85,7 +85,7 @@ const breadcrumbs = computed(() => {
 
 // Component life-cycle hooks
 usePageSeo({
-  title: seoTitle
+  title: seoTitle,
 })
 </script>
 

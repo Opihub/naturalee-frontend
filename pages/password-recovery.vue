@@ -1,5 +1,5 @@
 <template>
-  <main class="s-password-reset">
+  <section class="s-password-reset">
     <SiteContainer
       class="u-pt-huge u-pb-huge"
       :max-width="580"
@@ -58,7 +58,7 @@
         >
       </form>
     </SiteContainer>
-  </main>
+  </section>
 </template>
 
 <script setup>

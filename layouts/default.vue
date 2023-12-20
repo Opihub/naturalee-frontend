@@ -1,20 +1,25 @@
 <template>
   <CompleteLayout override-last-element>
     <slot />
+    <template #after>
+      <BackgroundHolder
+        class="u-pt-huge u-mt-auto"
+        color="white"
+        :class="{ 'u-pb-medium': marquee && marquee.data.length }"
+      >
+        <CategoryCards
+          v-if="categories && categories.data"
+          :title="$t('products.categoriesFeatured')"
+          :categories="categories.data"
+          class="u-mb-medium"
+        />
 
-    <BackgroundHolder class="u-pt-huge u-mt-auto" color="white" :class="{'u-pb-medium': marquee && marquee.data.length}">
-      <CategoryCards
-        v-if="categories && categories.data"
-        :title="$t('products.categoriesFeatured')"
-        :categories="categories.data"
-        class="u-mb-medium"
-      />
-
-      <MarqueeSlider
-        v-if="marquee && marquee.data.length"
-        :marquee="marquee.data"
-      />
-    </BackgroundHolder>
+        <MarqueeSlider
+          v-if="marquee && marquee.data.length"
+          :marquee="marquee.data"
+        />
+      </BackgroundHolder>
+    </template>
   </CompleteLayout>
 </template>
 

@@ -2,6 +2,9 @@
   <SVGDefinitions v-once />
 
   <NuxtLoadingIndicator />
+  <!-- <Transition name="fade">
+    <SiteLoader v-if="isLoading" />
+  </Transition> -->
 
   <NuxtLayout>
     <NuxtPage />
@@ -92,7 +95,9 @@ accountStore.$onAction(({ name }) => {
   notify({
     status: 'warning',
     notification: t(
-      name === 'forceLogout' ? 'notifications.forcedLogout' : 'notifications.logout'
+      name === 'forceLogout'
+        ? 'notifications.forcedLogout'
+        : 'notifications.logout'
     ),
   })
 })

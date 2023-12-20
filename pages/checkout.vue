@@ -1,5 +1,5 @@
 <template>
-  <main class="s-checkout">
+  <section class="s-checkout">
     <Transition name="fade">
       <LoadingOverlay v-if="sending" />
     </Transition>
@@ -338,7 +338,7 @@
         </FormUpdateAddress>
       </ModalContainer>
     </Transition>
-  </main>
+  </section>
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-  <main class="s-homepage">
+  <section class="s-homepage">
     <BackgroundHolder
       class="c-first-section"
       tag="section"
@@ -114,7 +114,7 @@
         <b>{{ t('fifthSection.fourthPoint.bottom') }}</b>
       </template>
     </TrackRow>
-  </main>
+  </section>
 </template>
 
 <script setup>
