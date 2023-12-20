@@ -1,5 +1,5 @@
 <template>
-  <main class="s-faq">
+  <section class="s-faq">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
     <BackgroundHolder color="white" class="u-pt-huge u-pb-large">
@@ -31,7 +31,7 @@
         </SiteAccordion>
       </SiteContainer>
     </BackgroundHolder>
-  </main>
+  </section>
 </template>
 
 <script setup>

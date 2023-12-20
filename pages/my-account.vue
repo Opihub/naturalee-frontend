@@ -1,11 +1,11 @@
 <template>
-  <main class="o-page">
+  <section class="o-page">
     <HeaderBottomBar v-if="breadcrumbs" :breadcrumb="breadcrumbs" />
 
     <ProfileDashboard>
       <NuxtPage :page-key="pageKey" />
     </ProfileDashboard>
-  </main>
+  </section>
 </template>
 
 <script setup>

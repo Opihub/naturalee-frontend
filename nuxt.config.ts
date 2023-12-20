@@ -20,35 +20,35 @@ export default defineNuxtConfig({
   app: {
     baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
     rootId: 'app',
-    //pageTransition: { name: 'page', mode: 'out-in' },
-    pageTransition: {
-      name: 'rotate',
-      // mode: 'out-in',
-      // css: false,
+    pageTransition: { name: 'page', mode: 'out-in' },
+    // pageTransition: {
+    //   name: 'rotate',
+    //   // mode: 'out-in',
+    //   // css: false,
 
-      onBeforeEnter: (el) => {
-      gsap.set(el, {
-        opacity: 0
-      })
-    },
+    //   onBeforeEnter: (el) => {
+    //   gsap.set(el, {
+    //     opacity: 0
+    //   })
+    // },
 
-      onEnter: (el, done) => {
-      gsap.to(el, {
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power2.inOut',
-        onComplete: done
-      })
-    },
+    //   onEnter: (el, done) => {
+    //   gsap.to(el, {
+    //     opacity: 1,
+    //     duration: 0.5,
+    //     ease: 'power2.inOut',
+    //     onComplete: done
+    //   })
+    // },
 
-      onAfterEnter: (el) => {
-      gsap.to(el, {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.inOut'
-        })
-      }
-    },
+    //   onAfterEnter: (el) => {
+    //   gsap.to(el, {
+    //       opacity: 0,
+    //       duration: 0.5,
+    //       ease: 'power2.inOut'
+    //     })
+    //   }
+    // },
     head: {
       link: [
         { rel: 'icon', type: 'image/png', href: 'favicon-32x32.png' },

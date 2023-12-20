@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <section>
     <HeaderBottomBar :breadcrumb="page.breadcrumbs" />
 
     <SiteTeaser
@@ -15,7 +15,7 @@
         paginate
       />
     </Suspense>
-  </main>
+  </section>
 </template>
 
 <script setup>

@@ -1,9 +1,9 @@
 <template>
-  <main class="o-page">
+  <section class="o-page">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
     <ProfileForms class="o-page__main" />
-  </main>
+  </section>
 </template>
 
 <script setup>
