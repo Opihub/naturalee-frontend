@@ -1,6 +1,7 @@
 <template>
   <CompleteLayout override-last-element>
     <slot />
+
     <template #after>
       <BackgroundHolder
         class="u-pt-huge u-mt-auto"

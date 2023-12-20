@@ -23,6 +23,7 @@
     </Transition>
 
     <slot name="before" />
+
     <main id="page">
       <slot />
     </main>
