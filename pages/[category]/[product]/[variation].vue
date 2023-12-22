@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <section>
     <HeaderBottomBar :breadcrumb="page.breadcrumbs" />
 
     <SiteContainer class="u-pt-huge u-mb-huge">
@@ -17,7 +17,7 @@
         :title="$t('products.related')"
       />
     </SiteContainer>
-  </main>
+  </section>
 </template>
 
 <script setup>

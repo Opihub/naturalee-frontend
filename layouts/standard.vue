@@ -22,7 +22,13 @@
       />
     </Transition>
 
-    <slot />
+    <slot name="before" />
+
+    <main id="page">
+      <slot />
+    </main>
+
+    <slot name="after" />
 
     <SiteFooter :class="{ 'u-mt-auto': !overrideLastElement }">
       <FooterNavigation

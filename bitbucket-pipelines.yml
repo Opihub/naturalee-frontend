@@ -11,7 +11,7 @@ pipelines:
           artifacts:
             - .env
       - step:
-          image: node:16
+          image: node:18
           name: Create development build
           caches:
             - node
@@ -30,7 +30,7 @@ pipelines:
           artifacts:
             - .env
       - step:
-          image: node:16
+          image: node:18
           name: Create development build
           caches:
             - node
@@ -65,7 +65,7 @@ pipelines:
           artifacts:
             - .env
       - step:
-          image: node:16
+          image: node:18
           name: Create development build
           caches:
             - node

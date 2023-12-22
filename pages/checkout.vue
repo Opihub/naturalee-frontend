@@ -1,5 +1,5 @@
 <template>
-  <main class="s-checkout">
+  <section class="s-checkout">
     <Transition name="fade">
       <LoadingOverlay v-if="sending" />
     </Transition>
@@ -337,14 +337,14 @@
         </FormUpdateAddress>
       </ModalContainer>
     </Transition>
-  </main>
+  </section>
 </template>
 
 <script setup>
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-import { useLocalStorage, StorageSerializers } from '@vueuse/core'
+
 // Constants
 
 // Define (Props, Emits, Page Meta)
@@ -382,25 +382,21 @@ provide('holiday', [
   new Date(`${new Date().getFullYear() + 1}-12-26`),
 ])
 
-//State
-const localCart = useLocalStorage('cart', [], {
-  serializer: StorageSerializers.object,
-})
 // Component life-cycle hooks
 
 // Composables
-
+await usePage('checkout')
 const cart = useCartStore()
 const basket = await cart.load()
-if (!localCart.value.length) {
+
+if (basket.value.length <= 0) {
   await navigateTo({
     name: 'cart',
     query: {
       redirectBecause: 'noProducts',
     },
   })
-}
-if (cart.subTotal < 20) {
+} else if (cart.subTotal < 20) {
   await navigateTo({
     name: 'cart',
     query: {
