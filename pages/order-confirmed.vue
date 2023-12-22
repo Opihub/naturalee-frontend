@@ -107,11 +107,22 @@ const order = await useApi(
     cache: false,
   }
 )
-console.log(order)
 
 // Watcher
 
 // Computed
+const seoTitle = computed(() => {
+  let title = `Grazie! Ordine #${route.query.orderId}`
+
+  if (config.public.title) {
+    title += ` ${config.public.seoSeparator || '|'} ${config.public.title}`
+  }
+
+  return title
+})
+usePageSeo({
+  title: seoTitle,
+})
 
 // Methods
 </script>

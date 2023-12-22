@@ -41,6 +41,10 @@ onMounted(() => {
 const route = useRoute()
 // Data
 const { page } = await usePage('my-account')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const { t } = useI18n({
   useScope: 'local',
 })

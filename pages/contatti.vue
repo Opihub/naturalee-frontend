@@ -86,6 +86,10 @@ defineI18nRoute({
 
 // Data
 const { page } = await usePage('contatti')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const svgs = ref({
   yellowDots: {
     size: {
