@@ -62,6 +62,9 @@ const faqs = await useApi(
   }
 )
 const { page } = await usePage('faq')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
 
 // Watcher
 

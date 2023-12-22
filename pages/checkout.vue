@@ -385,7 +385,11 @@ provide('holiday', [
 // Component life-cycle hooks
 
 // Composables
-await usePage('checkout')
+const { page } = await usePage('checkout')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const cart = useCartStore()
 const basket = await cart.load()
 

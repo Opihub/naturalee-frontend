@@ -40,6 +40,9 @@ const { page } = await usePage(
   route.params.product,
   `shop/categories/${route.params.category}/products`
 )
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
 
 const related = await useApi(
   `shop/categories/${route.params.category}/products/${route.params.product}/related`

@@ -130,7 +130,11 @@ definePageMeta({
 // Component life-cycle hooks
 
 // Data (Reactive, Composables & Inject)
-await usePage()
+const { page } = await usePage()
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const products = await useApi('shop/homepage/products')
 const { togglePostcodeModal } = inject('postcodeModal', () => {})
 const { t } = useI18n({

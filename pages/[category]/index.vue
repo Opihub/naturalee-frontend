@@ -37,6 +37,9 @@ definePageMeta({
 // Data
 const route = useRoute()
 const { page } = await usePage(route.params.category, 'shop/categories')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
 
 // Watcher
 
