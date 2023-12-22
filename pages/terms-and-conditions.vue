@@ -26,7 +26,10 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
-await usePage('termini-e-condizioni')
+const {page} = await usePage('termini-e-condizioni')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
 
 // Watcher
 

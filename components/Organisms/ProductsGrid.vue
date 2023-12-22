@@ -262,8 +262,6 @@ const fetchProducts = async () => {
     return
   }
 
-  isFetching.value = true
-
   try {
     const params = {}
 
@@ -315,7 +313,6 @@ const fetchProducts = async () => {
 
       if (!pagination.next) {
         canFetch.value = false
-        stopLazyLoad()
       }
     } else {
       canFetch.value = false

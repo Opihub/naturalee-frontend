@@ -149,6 +149,10 @@ onMounted(() => {
 
 // Composables
 const { page } = await usePage('cart')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const products = await useApi('shop/homepage/products')
 const cart = useCartStore()
 const { sending, send } = useSender()
