@@ -97,6 +97,7 @@ definePageMeta({
 // Composables
 
 // Data
+const config = useRuntimeConfig()
 const route = useRoute()
 console.log(route)
 const order = await useApi(
