@@ -109,7 +109,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Component life-cycle hooks
 
 // Composables
-
+const config = useRuntimeConfig()
 const route = useRoute()
 const { sending, sent, send } = useSender(emit)
 

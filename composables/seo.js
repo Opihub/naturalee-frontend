@@ -2,22 +2,22 @@ import { useServerSeoMeta, useSeoMeta } from '#imports'
 
 export const usePageSeo = (seo) => {
   useServerSeoMeta({
-    // title: seo?.title,
-    // ogTitle: seo?.ogTitle || seo?.title,
-    // description: seo?.description,
-    // ogDescription: seo?.ogDescription || seo?.description,
-    // ogImage: seo?.ogImage,
-    // twitterCard: seo?.twitterCard,
+    title: seo?.title,
+    ogTitle: seo?.ogTitle || seo?.title,
+    description: seo?.description,
+    ogDescription: seo?.ogDescription || seo?.description,
+    ogImage: seo?.ogImage,
+    twitterCard: seo?.twitterCard,
+    ...seo,
   })
 
-  console.debug(seo)
-
   useSeoMeta({
-    // title: seo?.title,
-    // ogTitle: seo?.ogTitle || seo?.title,
-    // description: seo?.description,
-    // ogDescription: seo?.ogDescription || seo?.description,
-    // ogImage: seo?.ogImage,
-    // twitterCard: seo?.twitterCard,
+    title: seo?.title,
+    ogTitle: seo?.ogTitle || seo?.title,
+    description: seo?.description,
+    ogDescription: seo?.ogDescription || seo?.description,
+    ogImage: seo?.ogImage,
+    twitterCard: seo?.twitterCard,
+    ...seo,
   })
 }
