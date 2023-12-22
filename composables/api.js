@@ -101,7 +101,11 @@ export async function useApi(url, options = {}, innerOptions = {}) {
       responseData = errorData
       console.warn('errore previsto generato dal server:', responseData)
 
-      if (responseData.code === 'jwt_auth_invalid_token') {
+      if (
+        ['jwt_auth_user_not_found', 'jwt_auth_invalid_token'].includes(
+          responseData.code
+        )
+      ) {
         const { logout } = useLogout()
         await logout(true)
 
