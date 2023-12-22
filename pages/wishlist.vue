@@ -45,6 +45,10 @@ const store = useWishlistStore()
 
 // Data
 const { page } = await usePage('wishlist')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const { wishlist } = storeToRefs(store)
 
 // Watcher

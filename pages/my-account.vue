@@ -58,7 +58,10 @@ watch(
     const { page: response } = await usePage(path)
 
     page.value = response.value
-    // breadcrumbs.value = page.value?.breadcrumbs || breadcrumbs.value
+    if (page.value && 'seo' in page.value) {
+      usePageSeo(page.value.seo)
+    }
+
     const newBreadcrumbs = page.value?.breadcrumbs || breadcrumbs.value
     breadcrumbs.value = [...newBreadcrumbs]
 

@@ -39,6 +39,9 @@ defineI18nRoute({
 
 // Data
 const { page } = await usePage('featured')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
 
 // Watcher
 
