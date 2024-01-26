@@ -7,6 +7,10 @@ function getPath() {
 }
 
 export async function saveJSON(url, data) {
+  if (!process.env?.SAVE_API_RESPONSE) {
+    return data
+  }
+
   return fs.promises.writeFile(
     `${getPath()}${slugify(url)}.json`,
     JSON.stringify(data, null, 2),
@@ -15,8 +19,11 @@ export async function saveJSON(url, data) {
 }
 
 export async function loadJSON(url, defaultData = null) {
-  const file = `${getPath()}${slugify(url)}.json`
+  if (!process.env?.SAVE_API_RESPONSE) {
+    return defaultData
+  }
 
+  const file = `${getPath()}${slugify(url)}.json`
 
   const exists = await fs.promises
     .access(file, fs.constants.F_OK)
@@ -33,6 +40,10 @@ export async function loadJSON(url, defaultData = null) {
 }
 
 export async function clearJSON() {
+  if (!process.env?.SAVE_API_RESPONSE) {
+    return
+  }
+
   try {
     const files = await fs.promises.readdir(getPath())
 
