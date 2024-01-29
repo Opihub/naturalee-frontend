@@ -382,6 +382,7 @@ export const useCartStore = defineStore('cart', () => {
   async function applyCoupon(newCoupon) {
     const body = {
       coupon: newCoupon,
+      cart,
     }
 
     const response = await useApi(
