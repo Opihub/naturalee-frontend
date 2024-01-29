@@ -38,8 +38,22 @@ export const useTotal = (products, config) => {
     return total
   })
 
+  const total = computed(() => {
+    let total = granTotal.value
+    const { discount } = config
+
+    if (discount && 'value' in discount) {
+      total -= discount.value
+    } else {
+      total -= discount || 0
+    }
+
+    return total
+  })
+
   return {
     subTotal,
     granTotal,
+    total,
   }
 }
