@@ -379,6 +379,10 @@ export const useCartStore = defineStore('cart', () => {
     return true
   }
 
+  function removeCoupon() {
+    coupon.value = {}
+  }
+
   async function applyCoupon(newCoupon) {
     const body = {
       coupon: newCoupon,
@@ -412,7 +416,7 @@ export const useCartStore = defineStore('cart', () => {
       status: 'danger',
     })
 
-    coupon.value = {}
+    // coupon.value = {}
 
     return false
   }
@@ -572,6 +576,7 @@ export const useCartStore = defineStore('cart', () => {
     deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
+    removeCoupon,
     applyCoupon,
     remoteAddToCartBatch,
   }
