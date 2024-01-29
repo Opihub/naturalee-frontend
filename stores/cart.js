@@ -45,6 +45,10 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   // Getters
+  const hasCoupon = computed(() => {
+    return coupon.value.code
+  })
+
   const count = computed(() => {
     return cart.value?.length || 0
   })
@@ -560,6 +564,7 @@ export const useCartStore = defineStore('cart', () => {
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
+    hasCoupon,
     shippingMethod,
     shippingCost,
     // shippingMethod: skipHydrate(shippingMethod),
