@@ -383,6 +383,37 @@ export const useCartStore = defineStore('cart', () => {
     return true
   }
 
+  function validateCoupon() {
+    if (!hasCoupon.value) {
+      return
+    }
+
+    let error = false
+
+    if (
+      coupon.value.minimum_amount &&
+      subTotal.value < coupon.value.minimum_amount
+    ) {
+      error = t('coupon.notValid')
+    }
+
+    if (
+      coupon.value.maximum_amount &&
+      subTotal.value > coupon.value.maximum_amount
+    ) {
+      error = t('coupon.notValid')
+    }
+
+    if (error) {
+      removeCoupon()
+
+      notify({
+        message: error,
+        status: 'danger',
+      })
+    }
+  }
+
   function removeCoupon() {
     coupon.value = {}
   }
@@ -581,6 +612,7 @@ export const useCartStore = defineStore('cart', () => {
     deleteFromCart: remoteDeleteFromCart,
     clearCart: remoteClearCart,
     addToCart: remoteAddToCart,
+    validateCoupon,
     removeCoupon,
     applyCoupon,
     remoteAddToCartBatch,
