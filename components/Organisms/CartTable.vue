@@ -34,7 +34,17 @@
             :data-title="$t('products.price')"
             align="center"
           >
-            <PriceHolder :price="product.price" />
+            <PriceHolder
+              :price="product.price"
+              :sales-price="product?.discountPrice"
+            >
+              <template v-if="product.discountPrice">
+                <PriceHolder
+                  class="u-block"
+                  :sales-price="product?.discountKgPrice"
+                />
+              </template>
+            </PriceHolder>
           </td>
           <td
             :class="[
