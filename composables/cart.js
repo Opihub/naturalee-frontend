@@ -19,35 +19,60 @@ export function useCart(cart, coupon, paymentMethod = null) {
       case 'percent':
         amount = (subTotal.value / 100) * coupon.value.amount
         break
-      default:
-        console.debug(coupon.value)
-        console.debug(cart.value)
-
-        // eslint-disable-next-line no-case-declarations
-        let count = 0
-        for (const item of cart.value) {
-          // Se il coupon è applicabile ad un numero massimo di prodotti e questo valore è stato raggiunto, allora stoppo il coupon
-          if (
-            coupon.value.limit_usage_to_x_items &&
-            count >= coupon.value.limit_usage_to_x_items
-          ) {
-            break
-          }
-
+      default: {
+        // Estrapolo prima tutti i prodotti che rientrano nello sconto
+        const basket = cart.value.filter((item) => {
           // Salto il prodotto se è già scontato ed il coupon non accetta prodotti scontati
           if (coupon.value.exclude_sale_items && item.discountPrice) {
-            return amount
+            return false
+          }
+
+          // Se il coupon è applicabile a determinati prodotti,
+          // allora mantiene solo questi
+          if (coupon.value.product_ids.length) {
+            return (
+              coupon.value.product_ids.includes(item.id) ||
+              coupon.value.product_ids.includes(item.variationId)
+            )
+          }
+
+          // Se il coupon non è applicabile a determinati prodotti,
+          // allora procede a scartarli
+          if (coupon.value.excluded_product_ids.length) {
+            return (
+              !coupon.value.excluded_product_ids.includes(item.id) &&
+              !coupon.value.excluded_product_ids.includes(item.variationId)
+            )
+          }
+
+          console.debug(item.id, item.variationId, item)
+
+          return true
+        })
+
+        console.debug(
+          basket,
+          [...coupon.value.product_categories],
+          [...coupon.value.product_ids],
+          [...coupon.value.excluded_product_categories],
+          [...coupon.value.excluded_product_ids]
+        )
+
+        let count = 0
+        const maxUsage = coupon.value.limit_usage_to_x_items
+        for (const item of basket) {
+          // Se il coupon è applicabile ad un numero massimo di prodotti
+          // e questo valore è stato raggiunto, allora stoppo il coupon
+          if (maxUsage && count >= maxUsage) {
+            break
           }
 
           let quantity = parseInt(item.quantity)
           const next = count + quantity
           // Se c'è un limite di prodotti, verifico se la quantità del prodotto corrente
           // rientra nel totale. Se no, allora prendo solo la disponibilità residua
-          if (
-            coupon.value.limit_usage_to_x_items &&
-            next > coupon.value.limit_usage_to_x_items
-          ) {
-            quantity -= next - coupon.value.limit_usage_to_x_items
+          if (maxUsage && next > maxUsage) {
+            quantity -= next - maxUsage
           }
 
           amount += coupon.value.amount * quantity
@@ -55,6 +80,7 @@ export function useCart(cart, coupon, paymentMethod = null) {
           count += quantity
         }
         break
+      }
     }
 
     return Math.min(granTotal.value, amount)
