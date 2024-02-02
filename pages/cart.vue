@@ -68,6 +68,18 @@
                     :price="subTotal"
                   />
 
+                  <template v-if="coupon.code && discount">
+                    <span :class="gridCellLeftClassName"
+                      >Codice promozionale: {{ coupon.code }}</span
+                    >
+                    <PriceHolder
+                      :class="gridCellRightClassName"
+                      :price="discount"
+                    >
+                      <template #before>-</template>
+                    </PriceHolder>
+                  </template>
+
                   <span :class="gridCellLeftClassName">{{
                     $t('orders.shipping')
                   }}</span>
@@ -79,7 +91,7 @@
                   <template v-else>
                     <PriceHolder :class="gridCellRightClassName" :price="3" />
                     <span :class="gridCellFullClassName"
-                      >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere
+                      >Aggiungi <PriceHolder :price="costBeforeFreeShipping" /> per avere
                       la spedizione gratuita</span
                     >
                   </template>
@@ -166,18 +178,14 @@ const { isEmpty, coupon, } = storeToRefs(cartStore)
 const basket = ref([])
 
 // Computed
-const hasFreeShipping = computed(() => {
-  return 50 - subTotal.value <= 0
-})
-const hasMinimumOrderCost = computed(() => {
-  return subTotal.value >= 20
-})
-const shippingMethod = computed(() => {
-  return hasFreeShipping.value ? 0 : 3
-})
-const { subTotal, granTotal: total } = useTotal(basket, {
-  shipping: shippingMethod,
-})
+const {
+  hasFreeShipping,
+  hasMinimumOrderCost,
+  subTotal,
+  total,
+  discount,
+  costBeforeFreeShipping
+} = useCart(basket, coupon)
 const { isLoggedIn } = storeToRefs(user)
 
 // Watcher

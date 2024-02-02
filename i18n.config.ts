@@ -67,6 +67,7 @@ export default defineI18nConfig(() => ({
           '{count} {name} aggiunto al carrello | {count} {name} aggiunti al carrello',
         removedFromCart:
           '{name} rimosso dal carrello | Prodotti rimossi dal carrello',
+        updateCart: 'Aggiorna carrello',
         clearCart: 'Svuota carrello',
         productCode: 'Cod. {sku}',
         shippingCost: 'Spese di consegna',
@@ -149,6 +150,10 @@ export default defineI18nConfig(() => ({
         insertHere: 'Fai clic qui per inserire il tuo codice promozionale',
         applied: 'Coupon applicato!',
         notValid: 'Coupon non valido!',
+        actions: {
+          apply: 'Applica',
+          remove: 'Rimuovi',
+        },
       },
       wishlist: {
         add: 'Salva nei preferiti!',
