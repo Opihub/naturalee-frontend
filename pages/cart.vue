@@ -142,8 +142,10 @@ defineI18nRoute({
 // Component life-cycle hooks
 onMounted(() => {
   nextTick(async () => {
-    const syncProduct = await cart.load()
+    const syncProduct = await cartStore.load()
     basket.value = syncProduct.value
+
+    validateCoupon()
   })
 })
 
@@ -154,12 +156,12 @@ if (page.value && 'seo' in page.value) {
 }
 
 const products = await useApi('shop/homepage/products')
-const cart = useCartStore()
+const cartStore = useCartStore()
 const { sending, send } = useSender()
 const user = useAccountStore()
 
 // Data
-const { isEmpty } = storeToRefs(cart)
+const { isEmpty, coupon, } = storeToRefs(cartStore)
 const basket = ref([])
 
 // Computed
@@ -180,7 +182,7 @@ const { isLoggedIn } = storeToRefs(user)
 // Watcher
 
 // Methods
-const { deleteFromCart, clearCart } = cart
+const { deleteFromCart, clearCart, validateCoupon } = cartStore
 const deleteFromBasket = async (product) => {
   const success = await deleteFromCart(product)
 
