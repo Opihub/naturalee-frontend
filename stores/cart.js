@@ -5,14 +5,16 @@ import {
   computed,
   storeToRefs,
   toRaw,
+  useCart,
 } from '#imports'
+
 import {
   useLocalStorage,
   useSessionStorage,
   StorageSerializers,
 } from '@vueuse/core'
+
 import { useApi } from '@/composables/api'
-import { useTotal } from '@/composables/total'
 import { useAccountStore } from '@/stores/account'
 import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
@@ -28,6 +30,7 @@ export const useCartStore = defineStore('cart', () => {
   const cart = useLocalStorage('cart', [], {
     serializer: StorageSerializers.object,
   })
+
   const coupon = useLocalStorage(
     'coupon',
     {},
@@ -36,50 +39,24 @@ export const useCartStore = defineStore('cart', () => {
     }
   )
 
-  // const shippingMethod = useSessionStorage('shippingMethod', null, {
-  //   serializer: StorageSerializers.object,
-  // })
-
   const paymentMethod = useSessionStorage('paymentMethod', null, {
     serializer: StorageSerializers.object,
   })
 
   // Getters
-  const hasCoupon = computed(() => {
-    return coupon.value.code
-  })
-
-  const count = computed(() => {
-    return cart.value?.length || 0
-  })
-
-  const isEmpty = computed(() => {
-    return count.value <= 0
-  })
-
-  const hasFreeShipping = computed(() => {
-    return 50 - subTotal.value <= 0
-  })
-
-  const shippingMethod = computed(() => {
-    if (hasFreeShipping.value) {
-      return {
-        cost: 0,
-        id: 'free_shipping:1',
-        // id: 'free_shipping',
-      }
-    }
-
-    return {
-      cost: 3,
-      id: 'flat_rate:5',
-      // id: 'flat_rate',
-    }
-  })
-
-  const shippingCost = computed(() => {
-    return shippingMethod.value.cost
-  })
+  const {
+    hasCoupon,
+    discount,
+    count,
+    isEmpty,
+    hasFreeShipping,
+    hasMinimumOrderCost,
+    shippingMethod,
+    shippingCost,
+    subTotal,
+    granTotal,
+    total,
+  } = useCart(cart, coupon, paymentMethod)
 
   const checkout = computed(() => {
     return cart.value.map((item) => ({
@@ -88,11 +65,6 @@ export const useCartStore = defineStore('cart', () => {
       quantity: item.quantity,
       title: item.title,
     }))
-  })
-
-  const { subTotal, granTotal: total } = useTotal(cart, {
-    shipping: shippingMethod,
-    payment: paymentMethod,
   })
 
   // Actions
@@ -105,6 +77,7 @@ export const useCartStore = defineStore('cart', () => {
     if (cart.value && isLoggedIn.value && login) {
       await remoteAddToCartBatch(toRaw(cart.value))
     }
+
     if (!isLoggedIn.value) {
       const body = cart.value.map((product) => {
         return {
@@ -596,16 +569,18 @@ export const useCartStore = defineStore('cart', () => {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
     hasCoupon,
+    discount,
     shippingMethod,
     shippingCost,
-    // shippingMethod: skipHydrate(shippingMethod),
     paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
     count,
     total,
+    granTotal,
     subTotal,
     checkout,
     hasFreeShipping,
+    hasMinimumOrderCost,
     load,
     save,
     pickProduct,
