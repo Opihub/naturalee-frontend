@@ -22,13 +22,14 @@
     </BackgroundHolder>
 
     <SiteContainer v-else class="u-pt-huge u-pb-huge">
-      <FormWrapper class="o-form--cart" @submit.prevent="saveCart">
+      <FormWrapper class="o-form--cart" @submit.prevent="goToCheckout">
         <template #default="{ columnClassName }">
           <div :class="[columnClassName, 'o-form__basket']">
             <CartTable
               :products="basket"
               :on-delete="deleteFromBasket"
               :on-clear="clearBasket"
+              :on-save="saveCart"
             />
           </div>
 
@@ -207,17 +208,7 @@ const clearBasket = async () => {
 
 const saveCart = async () => {
   if (sending.value) {
-    return
-  }
-
-  try {
-    await send(async () => await cart.save(basket))
-  } catch (error) {
-    notify({
-      status: 'danger',
-      message: error,
-    })
-    return
+    return false
   }
 
   if (!isLoggedIn.value) {
@@ -228,6 +219,27 @@ const saveCart = async () => {
       },
     })
 
+    return false
+  }
+
+  try {
+    await send(async () => await cartStore.save(basket))
+  } catch (error) {
+    notify({
+      status: 'danger',
+      message: error,
+    })
+
+    return false
+  }
+
+  return true
+}
+
+const goToCheckout = async () => {
+  const success = await saveCart()
+
+  if (!success) {
     return
   }
 
