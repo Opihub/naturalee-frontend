@@ -85,7 +85,8 @@ export function useCart(cart, coupon, paymentMethod = null) {
             quantity -= next - maxUsage
           }
 
-          amount += coupon.value.amount * quantity
+          const price = item.discountPrice || item.price
+          amount += Math.min(price, coupon.value.amount) * quantity
 
           count += quantity
         }
