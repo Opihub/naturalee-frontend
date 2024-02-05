@@ -27,6 +27,8 @@ export function useCart(cart, coupon, paymentMethod = null) {
             return false
           }
 
+          // TODO: verificare le condizioni. Probabilmente un prodotto deve rispettare tutte le condizioni applicati
+
           // Se il coupon è applicabile a determinati prodotti,
           // allora mantiene solo questi
           if (coupon.value.product_ids.length) {
@@ -45,18 +47,26 @@ export function useCart(cart, coupon, paymentMethod = null) {
             )
           }
 
-          console.debug(item.id, item.variationId, item)
+          if (coupon.value.product_categories.length) {
+            const categories = item.categories.map((category) => category.id)
+            const matchedCategories = categories.filter((value) =>
+              coupon.value.product_categories.includes(value)
+            )
+
+            return matchedCategories.length
+          }
+
+          if (coupon.value.excluded_product_categories.length) {
+            const categories = item.categories.map((category) => category.id)
+            const matchedCategories = categories.filter((value) =>
+              coupon.value.excluded_product_categories.includes(value)
+            )
+
+            return matchedCategories.length === 0
+          }
 
           return true
         })
-
-        console.debug(
-          basket,
-          [...coupon.value.product_categories],
-          [...coupon.value.product_ids],
-          [...coupon.value.excluded_product_categories],
-          [...coupon.value.excluded_product_ids]
-        )
 
         let count = 0
         const maxUsage = coupon.value.limit_usage_to_x_items
