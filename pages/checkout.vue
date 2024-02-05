@@ -21,6 +21,7 @@
           :billing-data="billingData"
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
+          :coupon="coupon.code"
           :cart="cart.checkout"
           @api:start="sending = true"
           @api:end="sending = false"

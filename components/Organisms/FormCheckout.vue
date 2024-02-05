@@ -74,6 +74,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  coupon: {
+    type: String,
+    default: null,
+  },
   cart: {
     type: Array,
     required: true,
@@ -144,6 +148,7 @@ const submitOrder = async () => {
     note,
     email,
     invoice,
+    coupon: props.coupon,
     products: props.cart,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
