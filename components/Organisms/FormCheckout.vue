@@ -196,8 +196,9 @@ const submitOrder = async () => {
   )
 
   if (response.value.success) {
-    const { clearCart } = useCart
+    const { clearCart, removeCoupon } = useCart
     await clearCart(false)
+    await removeCoupon()
 
     await navigateTo({
       path: '/order-confirmed',
