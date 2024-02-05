@@ -40,7 +40,7 @@
             >
               <i18n-t keypath="freeShipping" class="u-mt-tiny">
                 <template #price>
-                  <PriceHolder :price="50 - subTotal" />
+                  <PriceHolder :price="costBeforeFreeShipping" />
                 </template>
                 <template #backToCart>
                   <BaseLink
@@ -445,6 +445,7 @@ const {
   hasFreeShipping,
   coupon,
   discount,
+  costBeforeFreeShipping,
 } = storeToRefs(cart)
 
 const isShippingModalOpen = ref(false)
