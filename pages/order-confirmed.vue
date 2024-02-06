@@ -1,10 +1,10 @@
 <template>
   <section class="s-checkout">
-    <SiteContainer
-      v-if="order && Object.keys(order).length > 0"
-      :max-width="1060"
-    >
-      <BaseHeading tag="h4" class="u-mb-large u-text-center@tablet"
+    <SiteContainer v-if="order" :max-width="1060">
+      <BaseHeading
+        tag="h4"
+        class="u-mb-large u-text-center@tablet"
+        style="text-wrap: balance"
         >Grazie. Il tuo ordine n. {{ orderId(order.id) }} è stato ricevuto ed è
         attualmente In lavorazione</BaseHeading
       >
@@ -37,6 +37,7 @@
           </div>
         </div>
       </SiteContainer>
+
       <SiteContainer class="u-text-center">
         <BaseButton
           class="u-mt-large"
@@ -99,15 +100,22 @@ definePageMeta({
 // Data
 const config = useRuntimeConfig()
 const route = useRoute()
-console.log(route)
-const order = await useApi(
-  `shop/orders/${route.query.orderId}`,
-  {},
-  {
-    dataOnly: true,
-    cache: false,
-  }
-)
+
+const order = ref(null)
+onMounted(() => {
+  nextTick(async () => {
+    const response = await useApi(
+      `shop/orders/${route.query.orderId}`,
+      {},
+      {
+        dataOnly: true,
+        cache: false,
+      }
+    )
+
+    order.value = response.value
+  })
+})
 
 // Watcher
 
