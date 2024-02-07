@@ -6,18 +6,18 @@
       <BackgroundHolder
         class="u-pt-huge u-mt-auto"
         color="white"
-        :class="{ 'u-pb-medium': marquee && marquee.data.length }"
+        :class="{ 'u-pb-medium': menu.marquee && menu.marquee.length }"
       >
         <CategoryCards
-          v-if="categories && categories.data"
+          v-if="shopCategories.length"
           :title="$t('products.categoriesFeatured')"
-          :categories="categories.data"
+          :categories="shopCategories"
           class="u-mb-medium"
         />
 
         <MarqueeSlider
-          v-if="marquee && marquee.data.length"
-          :marquee="marquee.data"
+          v-if="layout.marquee && layout.marquee.length"
+          :marquee="layout.marquee"
         />
       </BackgroundHolder>
     </template>
@@ -27,25 +27,17 @@
 <script setup>
 // Imports
 import CompleteLayout from '@/layouts/standard'
+import { useConfigurationStore } from '@/stores/configuration'
 
 // Constants
+const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 
 // Component life-cycle hooks
 
 // Composables
-const categories = await useApi('shop/categories', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "shop/categories"', error)
-  }
-)
-
-const marquee = await useApi('layout/marquee', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "layout/marquee"', error)
-  }
-)
+const { shopCategories, menu, layout } = storeToRefs(configurationStore)
 
 // Data
 

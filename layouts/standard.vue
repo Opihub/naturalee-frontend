@@ -2,23 +2,23 @@
   <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
       ref="topBarElement"
-      :socials-menu="socialsMenu.data"
-      :primary-menu="primaryMenu.data"
-      :banners="topbarBanners.data"
+      :socials-menu="menu.socials"
+      :primary-menu="menu.primary"
+      :banners="menu.topbar"
     />
 
     <HeaderMain
       ref="headerElement"
-      :categories="categoriesMenu.data"
-      :profile-menu="profileMenu.data"
+      :categories="menu.categories"
+      :profile-menu="menu.profile"
       @menu-mobile:toggle="updateMobileMenuStatus"
     />
     <Transition name="fade">
       <HeaderMainMobile
         v-show="isMobileMenuOpen"
-        :socials-menu="socialsMenu.data"
-        :primary-menu="primaryMenu.data"
-        :profile-menu="profileMenu.data"
+        :socials-menu="menu.socials"
+        :primary-menu="menu.primary"
+        :profile-menu="menu.profile"
       />
     </Transition>
 
@@ -32,21 +32,21 @@
 
     <SiteFooter :class="{ 'u-mt-auto': !overrideLastElement }">
       <FooterNavigation
-        :socials-menu="socialsMenu.data"
-        :menu="footerMenu.data"
+        :socials-menu="menu.socials"
+        :menu="menu.footer"
       />
 
       <FooterCopyrights
-        :copyright="copyrights.data"
-        :privacy-menu="privacyMenu.data"
+        :copyright="layout.copyrights"
+        :privacy-menu="menu.privacy"
       />
     </SiteFooter>
 
     <CategoriesMenu
-      v-if="categoriesMenu && categoriesMenu.data"
+      v-if="menu.categories && menu.categories"
       ref="categoriesMenuElement"
       :class="`${CSS_NAME}__categories`"
-      :categories="categoriesMenu.data"
+      :categories="menu.categories"
     />
 
     <Teleport to="body">
@@ -61,8 +61,11 @@
 <script setup>
 // Imports
 import { useElementBounding, useScrollLock } from '@vueuse/core'
+import { useConfigurationStore } from '@/stores/configuration'
+
 // Constants
 const CSS_NAME = 'o-layout'
+const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 defineProps({
@@ -92,49 +95,7 @@ onUnmounted(() => {
 })
 
 // Composables
-const topbarBanners = await useApi('layout/topbar', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "layout/topbar"', error)
-  }
-)
-const copyrights = await useApi('layout/copyright', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "layout/copyright"', error)
-  }
-)
-
-const primaryMenu = await useApi('menu/primary', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "menu/primary"', error)
-  }
-)
-const footerMenu = await useApi('menu/footer', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "menu/footer"', error)
-  }
-)
-const socialsMenu = await useApi('menu/socials', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "menu/socials"', error)
-  }
-)
-const profileMenu = await useApi('menu/profile', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "menu/profile"', error)
-  }
-)
-const privacyMenu = await useApi('menu/privacy', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "menu/privacy"', error)
-  }
-)
-const categoriesMenu = await useApi(
-  'menu/categories',
-  {},
-  { local: true }
-).catch((error) => {
-  console.error('Errore durante il caricamento di "menu/categories"', error)
-})
+const { menu, layout } = storeToRefs(configurationStore)
 
 // Data
 const layoutElement = ref(null)
