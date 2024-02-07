@@ -1,52 +1,55 @@
 <template>
   <section class="s-checkout">
-    <SiteContainer v-if="order" :max-width="1060">
-      <BaseHeading
-        tag="h4"
-        class="u-mb-large u-text-center@tablet"
-        style="text-wrap: balance"
-        >Grazie. Il tuo ordine n. {{ orderId(order.id) }} è stato ricevuto ed è
-        attualmente In lavorazione</BaseHeading
-      >
-      <SiteContainer padless="">
-        <BaseHeading tag="h4" class="u-text-center@tablet"
-          >Ecco i dettagli del tuo ordine</BaseHeading
+    <SiteContainer :max-width="1060">
+      <template v-if="order">
+        <BaseHeading
+          tag="h4"
+          class="u-mb-large u-text-center@tablet"
+          style="text-wrap: balance"
+          >Grazie. Il tuo ordine n. {{ orderId(order.id) }} è stato ricevuto ed
+          è attualmente In lavorazione</BaseHeading
         >
+        <SiteContainer padless="">
+          <BaseHeading tag="h4" class="u-text-center@tablet"
+            >Ecco i dettagli del tuo ordine</BaseHeading
+          >
 
-        <OrderDetails
-          class="u-mb-huge u-mt-medium"
-          :products="order.products"
-          :shipping="order.shipping"
-          :payment="order.payment"
-          :time-slots="order.timeSlots"
-          :date="getFormattedDate(order.pickedDate)"
-        />
-        <div class="o-row">
-          <div class="o-row__column">
-            <BaseHeading tag="h5" class="u-mb-small">{{
-              $t('addresses.shipping')
-            }}</BaseHeading>
-            <ShopAddress :address="order.addresses.shipping" />
+          <OrderDetails class="u-mb-huge u-mt-medium" :order="order" />
+          <div class="o-row">
+            <div class="o-row__column">
+              <BaseHeading tag="h5" class="u-mb-small">{{
+                $t('addresses.shipping')
+              }}</BaseHeading>
+              <ShopAddress :address="order.addresses.shipping" />
+            </div>
+
+            <div class="o-row__column">
+              <BaseHeading tag="h5" class="u-mb-small">{{
+                $t('addresses.billing')
+              }}</BaseHeading>
+              <ShopAddress :address="order.addresses.billing" />
+            </div>
           </div>
+        </SiteContainer>
 
-          <div class="o-row__column">
-            <BaseHeading tag="h5" class="u-mb-small">{{
-              $t('addresses.billing')
-            }}</BaseHeading>
-            <ShopAddress :address="order.addresses.billing" />
-          </div>
-        </div>
-      </SiteContainer>
-
-      <SiteContainer class="u-text-center">
-        <BaseButton
-          class="u-mt-large"
-          as="link"
-          to="/#frutta-verdura"
-          color="yellow"
-          >Continua gli acquisti</BaseButton
+        <SiteContainer class="u-text-center">
+          <BaseButton
+            class="u-mt-large"
+            as="link"
+            to="/#frutta-verdura"
+            color="yellow"
+            >Continua gli acquisti</BaseButton
+          >
+        </SiteContainer>
+      </template>
+      <template v-else>
+        <BaseHeading
+          tag="h4"
+          class="u-mb-large u-text-center@tablet"
+          style="text-wrap: balance"
+          >L'ordine richiesto non è stato trovato</BaseHeading
         >
-      </SiteContainer>
+      </template>
     </SiteContainer>
   </section>
 </template>
