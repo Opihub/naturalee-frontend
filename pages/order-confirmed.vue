@@ -59,38 +59,39 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'green',
-  validate: async (route) => {
-    return true
-    // defineNuxtRouteMiddleware(async () => {
-    //   const { token, login } = route.query
+  middleware: [
+    'auth',
+    async (to) => {
+      if (process.server) {
+        return true
+      }
 
-    //   if (
-    //     !login ||
-    //     !token ||
-    //     token.match(getPasswordRecoveryTokenPattern()).length <= 0
-    //   ) {
-    //     return false
-    //   }
+      const { orderId } = to.query
 
-    //   const response = await useApi(
-    //     `auth/password-recovery/validate-token`,
-    //     {
-    //       method: 'POST',
-    //       body: {
-    //         token,
-    //         login,
-    //       },
-    //     },
-    //     {
-    //       cache: false,
-    //     }
-    //   )
+      if (!orderId || isNaN(orderId)) {
+        return false
+      }
 
-    //   // TODO: trovare un modo di ritornare gli errori
+      const response = await useApi(
+        `shop/orders/${orderId}`,
+        {},
+        {
+          cache: false,
+        }
+      )
 
-    //   return response.value.success
-    // })
-  },
+      if (!response.value.success) {
+        return navigateTo({
+          name: 'orders-list',
+          query: {
+            redirectBecause: 'orderNotFound',
+          },
+        })
+      }
+
+      return true
+    },
+  ],
 })
 
 // Component life-cycle hooks
