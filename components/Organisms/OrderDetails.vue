@@ -4,8 +4,8 @@
       <tr :class="`${CSS_NAME}__head`">
         <th colspan="2">
           {{
-            $t('products.count', products.length, {
-              count: products.length,
+            $t('products.count', order.products.length, {
+              count: order.products.length,
             })
           }}
         </th>
@@ -16,7 +16,11 @@
     </template>
 
     <template #body>
-      <tr v-for="product in products" :key="product.id" :class="CSS_NAME_ITEM">
+      <tr
+        v-for="product in order.products"
+        :key="product.id"
+        :class="CSS_NAME_ITEM"
+      >
         <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
           <ProductImage :src="product.image" :alt="product.title" />
         </td>
@@ -44,89 +48,99 @@
     </template>
     <template #footer>
       <tr :class="CSS_NAME_ITEM">
-        <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
-          :data-title="$t('common.subTotal')"
-          colspan="3"
-        >
-          <span class="desktop-label">{{ $t('common.subTotal') }}:</span>
-        </td>
         <td :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]" colspan="3">
-          <PriceHolder :price="subTotal" />
+          <span>{{ $t('common.deliveryDate') }}:</span>
+        </td>
+        <td
+          :class="CSS_NAME_ITEM_CELL"
+          :data-title="$t('common.deliveryDate')"
+          colspan="2"
+        >
+          <b class="u-d-block u-d-inline@tablet">{{
+            getFormattedDate(order.pickedDate)
+          }}</b
+          ><span class="u-d-none u-d-inline@tablet">, </span
+          >{{ order.timeSlots.from }} -
+          {{ order.timeSlots.to }}
         </td>
       </tr>
 
-      <tr v-if="date" :class="CSS_NAME_ITEM">
-        <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
-          :data-title="$t('common.deliveryDate')"
-          colspan="3"
-        >
-          <span class="desktop-label">{{ $t('common.deliveryDate') }}:</span>
-        </td>
-        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
-          {{ date }}
-        </td>
-      </tr>
-      <tr
-        v-if="timeSlots && Object.keys(timeSlots).length > 0"
-        :class="CSS_NAME_ITEM"
-      >
-        <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
-          :data-title="$t('common.timeSlot')"
-          colspan="3"
-        >
-          <span class="desktop-label">{{ $t('common.timeSlot') }}:</span>
-        </td>
-        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
-          {{ timeSlots.title }} {{ timeSlots.from }} - {{ timeSlots.to }}
-        </td>
-      </tr>
-      <tr v-if="coupon" :class="CSS_NAME_ITEM">
-        <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
-          :data-title="$t('coupon.name')"
-          colspan="3"
-        >
-          <span class="desktop-label">{{ $t('coupon.name') }}:</span>
-        </td>
-        <td :class="CSS_NAME_ITEM_CELL" colspan="3">{{ coupon }}</td>
-      </tr>
       <tr :class="CSS_NAME_ITEM">
+        <td :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]" colspan="3">
+          <span>{{ $t('common.subTotal') }}:</span>
+        </td>
         <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
+          :class="CSS_NAME_ITEM_CELL"
+          :data-title="$t('common.subTotal')"
+          colspan="2"
+        >
+          <PriceHolder :price="order.subTotal" />
+        </td>
+      </tr>
+
+      <tr v-if="order.discount" :class="CSS_NAME_ITEM">
+        <td :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]" colspan="3">
+          <span>{{ $t('common.discount') }}:</span>
+        </td>
+        <td
+          :class="CSS_NAME_ITEM_CELL"
+          :data-title="$t('common.discount')"
+          colspan="2"
+        >
+          <PriceHolder :price="order.discount">
+            <template #before>-</template>
+          </PriceHolder>
+        </td>
+      </tr>
+
+      <tr :class="CSS_NAME_ITEM">
+        <td :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]" colspan="3">
+          <span>{{ $t('orders.shipping') }}:</span>
+        </td>
+        <td
+          :class="CSS_NAME_ITEM_CELL"
           :data-title="$t('orders.shipping')"
-          colspan="3"
+          colspan="2"
         >
-          <span class="desktop-label">{{ $t('orders.shipping') }}:</span>
-        </td>
-        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
-          {{ shipping.title }}
+          <template v-if="order.shipping.cost">
+            <PriceHolder :price="order.shipping.cost" />
+          </template>
+          <template v-else>
+            {{ order.shipping.title }}
+          </template>
         </td>
       </tr>
+
       <tr :class="CSS_NAME_ITEM">
+        <td :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]" colspan="3">
+          <span>{{ $t('orders.payment') }}:</span>
+        </td>
         <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
+          :class="CSS_NAME_ITEM_CELL"
           :data-title="$t('orders.payment')"
-          colspan="3"
+          colspan="2"
         >
-          <span class="desktop-label">{{ $t('orders.payment') }}:</span>
-        </td>
-        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
-          {{ payment.title }}
+          {{ order.payment.title }}
         </td>
       </tr>
+
       <tr :class="CSS_NAME_ITEM">
-        <td
-          :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]"
-          :data-title="$t('common.total')"
-          colspan="3"
-        >
-          <span class="desktop-label">{{ $t('common.total') }}:</span>
+        <td :class="[CSS_NAME_ITEM_CELL, CSS_NAME_ITEM_CELL_FOOT]" colspan="3">
+          <span>{{ $t('common.total') }}:</span>
         </td>
-        <td :class="CSS_NAME_ITEM_CELL" colspan="3">
-          <PriceHolder :price="granTotal" />
+        <td
+          :class="CSS_NAME_ITEM_CELL"
+          :data-title="$t('common.total')"
+          colspan="2"
+        >
+          <PriceHolder :price="order.total" />
+        </td>
+      </tr>
+
+      <tr v-if="order.notes" :class="CSS_NAME_ITEM">
+        <td :class="[CSS_NAME_ITEM_CELL, 'is-full']" colspan="5">
+          <b class="u-d-block">{{ $t('orders.notes') }}:</b>
+          {{ order.notes }}
         </td>
       </tr>
     </template>
@@ -143,42 +157,29 @@ const CSS_NAME_ITEM_CELL = `${CSS_NAME_ITEM}__cell`
 const CSS_NAME_ITEM_CELL_FOOT = 'cell_tfoot'
 
 // Define (Props, Emits, Page Meta)
-const props = defineProps({
-  products: {
-    type: Array,
-    default() {
-      return []
-    },
-  },
-  subTotal: {
-    type: Number,
-    default: null,
-  },
-  shipping: {
+defineProps({
+  order: {
     type: Object,
-    default() {
-      return {}
+    required: true,
+    validator(value) {
+      return (
+        'id' in value &&
+        'date' in value &&
+        'status' in value &&
+        'total' in value &&
+        'discount' in value &&
+        'subTotal' in value &&
+        'addresses' in value &&
+        'coupon' in value &&
+        'products' in value &&
+        Array.isArray(value.products) &&
+        'shipping' in value &&
+        'payment' in value &&
+        'fees' in value &&
+        'pickedDate' in value &&
+        'timeSlots' in value
+      )
     },
-  },
-  payment: {
-    type: Object,
-    default() {
-      return {}
-    },
-  },
-  timeSlots: {
-    type: Object,
-    default() {
-      return {}
-    },
-  },
-  coupon: {
-    type: String,
-    default: null,
-  },
-  date: {
-    type: String,
-    default: null,
   },
 })
 
@@ -191,13 +192,6 @@ const props = defineProps({
 // Watcher
 
 // Computed
-const { subTotal } = props.subTotal
-  ? ref(props.subTotal)
-  : useTotal(props.products)
-
-const granTotal = computed(() => {
-  return subTotal.value + props.shipping.cost || 0
-})
 
 // Methods
 </script>
@@ -262,6 +256,11 @@ $prefix: 'order-details';
 
   @include element('item') {
     position: relative;
+    padding-top: rem(20px);
+
+    @include from(tablet) {
+      padding-top: 0;
+    }
 
     &::after {
       content: '';
@@ -275,30 +274,49 @@ $prefix: 'order-details';
     }
 
     @include element('cell') {
-      border-bottom: 1px solid transparent;
-      padding-left: 50%;
       @include typography(16px, 22px);
+      border-bottom: 1px solid transparent;
+      // padding-left: 50%;
+      padding-top: 0;
       vertical-align: middle;
 
       &::before {
-        left: rem(20px);
+        @include set-local-vars(
+          $prefix: 'table',
+          $map: (
+            offset-left: rem(20px),
+            offset-right: rem(20px),
+          )
+        );
+
         font-weight: get-var(weight-bold);
         @include typography(16px, 22px);
         text-transform: uppercase;
       }
-      &.cell_tfoot::before {
-        @include until(tablet) {
-          padding-top: rem(20px);
-        }
-      }
+
       @include until(tablet) {
-        & > .desktop-label {
-          display: none;
-        }
         text-align: start;
         padding-right: rem(20px);
         padding-bottom: rem(20px);
+
+        @include is('full') {
+          padding-left: rem(20px);
+        }
+
+        &.cell_tfoot {
+          display: none;
+        }
+
+        @include modifier('image') {
+          padding-left: rem(20px);
+
+          @include object('product-image') {
+            width: 200px;
+            margin: 0 auto;
+          }
+        }
       }
+
       @include from(tablet) {
         padding: get-var(cell-padding, $prefix: $prefix);
         &:first-child {
@@ -308,15 +326,15 @@ $prefix: 'order-details';
         &:last-child {
           padding-right: get-var(x-offset, $prefix: $prefix);
         }
-      }
 
-      @include modifier('image') {
-        width: calc(
-          #{rem(65px)} + #{get-var(x-offset, $prefix: $prefix)} + #{get-var(
-              cell-padding,
-              $prefix: $prefix
-            )}
-        );
+        @include modifier('image') {
+          width: calc(
+            #{rem(65px)} + #{get-var(x-offset, $prefix: $prefix)} + #{get-var(
+                cell-padding,
+                $prefix: $prefix
+              )}
+          );
+        }
       }
 
       @include modifier('emphasis') {

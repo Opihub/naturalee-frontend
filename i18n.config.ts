@@ -180,6 +180,7 @@ export default defineI18nConfig(() => ({
         timeSlot: 'Fascia oraria',
         followUs: 'Seguici su',
         account: 'Account',
+        discount: 'Sconto',
       },
       checkout: {
         payment: 'Il tuo scontrino',
