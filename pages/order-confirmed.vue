@@ -97,6 +97,7 @@ definePageMeta({
 // Composables
 
 // Data
+const config = useRuntimeConfig()
 const route = useRoute()
 console.log(route)
 const order = await useApi(
@@ -107,11 +108,22 @@ const order = await useApi(
     cache: false,
   }
 )
-console.log(order)
 
 // Watcher
 
 // Computed
+const seoTitle = computed(() => {
+  let title = `Grazie! Ordine #${route.query.orderId}`
+
+  if (config.public.title) {
+    title += ` ${config.public.seoSeparator || '|'} ${config.public.title}`
+  }
+
+  return title
+})
+usePageSeo({
+  title: seoTitle,
+})
 
 // Methods
 </script>

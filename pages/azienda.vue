@@ -136,6 +136,10 @@ const { t } = useI18n({
   useScope: 'local',
 })
 const { page } = await usePage('azienda')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
+
 const ratio = [16, 9]
 const cards = ref([
   {

@@ -344,7 +344,7 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
-import { useLocalStorage, StorageSerializers } from '@vueuse/core'
+
 // Constants
 
 // Define (Props, Emits, Page Meta)
@@ -382,14 +382,17 @@ provide('holiday', [
   new Date(`${new Date().getFullYear() + 1}-12-26`),
 ])
 
-//State
-
 // Component life-cycle hooks
 
 // Composables
+const { page } = await usePage('checkout')
+if (page.value && 'seo' in page.value) {
+  usePageSeo(page.value.seo)
+}
 
 const cart = useCartStore()
 const basket = await cart.load()
+
 if (basket.value.length <= 0) {
   await navigateTo({
     name: 'cart',

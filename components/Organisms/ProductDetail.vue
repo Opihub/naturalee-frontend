@@ -8,13 +8,6 @@
 
     <hgroup :class="`${CSS_NAME}__heading`">
       <BaseHeading use="h4" :text="product.title" />
-      <BaseHeading
-        v-if="product.provenance"
-        :class="[`${CSS_NAME}__provenance`, 'u-mt-mini']"
-        use="h6"
-        tag="h2"
-        :text="product.provenance"
-      />
     </hgroup>
 
     <div :class="`${CSS_NAME}__body`">
@@ -52,13 +45,6 @@
         :class="`${CSS_NAME}__description`"
         :content="product.description"
       />
-      <div
-        v-if="product?.brand && product?.brand.length > 0"
-        :class="`${CSS_NAME}__brand`"
-        class="u-mt-half"
-      >
-        <span>{{ $t('products.brand', { brand: product.brand }) }}</span>
-      </div>
 
       <TagsList
         v-if="product?.categories && product.categories.length > 0"
@@ -251,14 +237,14 @@ $prefix: 'product-detail';
     )
   );
 
-  @include element('provenance') {
-    @include set-local-vars(
-      $prefix: 'heading',
-      $map: (
-        font-weight: get-var(weight-regular),
-      )
-    );
-  }
+  // @include element('provenance') {
+  //   @include set-local-vars(
+  //     $prefix: 'heading',
+  //     $map: (
+  //       font-weight: get-var(weight-regular),
+  //     )
+  //   );
+  // }
 
   @include set-local-vars(
     $prefix: 'column',

@@ -109,6 +109,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Component life-cycle hooks
 
 // Composables
+const config = useRuntimeConfig()
 const route = useRoute()
 const { sending, sent, send } = useSender(emit)
 
@@ -129,6 +130,18 @@ const showMessage = ref(false)
 // Watcher
 
 // Computed
+const seoTitle = computed(() => {
+  let title = 'Recupero password'
+
+  if (config.public.title) {
+    title += ` ${config.public.seoSeparator || '|'} ${config.public.title}`
+  }
+
+  return title
+})
+usePageSeo({
+  title: seoTitle,
+})
 
 // Methods
 const randomizePassword = () => {
