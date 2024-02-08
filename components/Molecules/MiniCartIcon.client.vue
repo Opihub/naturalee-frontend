@@ -12,8 +12,10 @@
 </template>
 
 <script setup>
+// Constants
 const CSS_NAME = 'c-mini-cart-icon'
 
+// Define (Props, Emits, Page Meta)
 defineProps({
   count: {
     type: String,

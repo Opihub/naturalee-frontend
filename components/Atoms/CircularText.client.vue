@@ -18,10 +18,7 @@
 </template>
 
 <script setup>
-// Imports
-
 // Constants
-
 const CSS_NAME = 'o-circular-text'
 const INNER_ANGLE = 360 / 15
 
@@ -32,14 +29,6 @@ defineProps({
     default: null,
   },
 })
-
-// Component life-cycle hooks
-
-// Data
-
-// Watcher
-
-// Computed
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <button type="button" :class="className">
+  <button type="button" :class="CSS_NAME">
     <Suspense>
       <ShareIcon :class="`${CSS_NAME}__icon`" />
     </Suspense>
@@ -12,26 +12,6 @@ import ShareIcon from 'assets/svg/share.svg'
 
 // Constants
 const CSS_NAME = 'o-share-button'
-
-// Define (Props, Emits, Page Meta)
-const props = defineProps({})
-
-// Component life-cycle hooks
-
-// Composables
-
-// Data
-
-// Watcher
-
-// Computed
-const className = computed(() => {
-  const className = [CSS_NAME]
-
-  return className
-})
-
-// Methods
 </script>
 
 <style lang="scss">

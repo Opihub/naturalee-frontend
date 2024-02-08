@@ -1,5 +1,5 @@
 <template>
-  <BaseButton :class="className">
+  <BaseButton :class="`${CSS_NAME}--drawed`">
     <ButtonSVG :class="`${CSS_NAME}__background`" />
 
     <div :class="innerClassName">
@@ -32,12 +32,6 @@ const props = defineProps({
 // Watcher
 
 // Computed
-const className = computed(() => {
-  const className = [`${CSS_NAME}--drawed`]
-
-  return className
-})
-
 const innerClassName = computed(() => {
   const className = assembleClassName(props.innerClass)
 
