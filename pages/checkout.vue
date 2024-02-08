@@ -21,6 +21,7 @@
           :billing-data="billingData"
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
+          :coupon="coupon.code"
           :cart="cart.checkout"
           @api:start="sending = true"
           @api:end="sending = false"
@@ -40,7 +41,7 @@
             >
               <i18n-t keypath="freeShipping" class="u-mt-tiny">
                 <template #price>
-                  <PriceHolder :price="50 - subTotal" />
+                  <PriceHolder :price="costBeforeFreeShipping" />
                 </template>
                 <template #backToCart>
                   <BaseLink
@@ -208,6 +209,16 @@
                     gridCellRightClassName,
                   }"
                 >
+                  <div :class="[className, rowClassName]">
+                    <span>{{ $t('coupon.formTitle') }}</span>
+
+                    <FormCoupon
+                      tag="div"
+                      class="u-mt-mini"
+                      :placeholder="$t('coupon.formPlaceholder')"
+                    />
+                  </div>
+
                   <div
                     class="u-pt-half u-pb-half"
                     :class="[gridClassName, rowClassName]"
@@ -219,6 +230,18 @@
                       :class="gridCellRightClassName"
                       :price="subTotal"
                     />
+
+                    <template v-if="coupon.code && discount">
+                      <span :class="gridCellLeftClassName"
+                        >Codice promozionale: {{ coupon.code }}</span
+                      >
+                      <PriceHolder
+                        :class="gridCellRightClassName"
+                        :price="discount"
+                      >
+                        <template #before>-</template>
+                      </PriceHolder>
+                    </template>
 
                     <span :class="gridCellLeftClassName">
                       {{ $t('orders.delivery') }}<br />
@@ -255,16 +278,6 @@
                     <PriceHolder
                       :class="[gridCellRightClassName, totalClassName]"
                       :price="total"
-                    />
-                  </div>
-
-                  <div :class="[className, rowClassName]">
-                    <span>{{ $t('coupon.formTitle') }}</span>
-
-                    <FormCoupon
-                      tag="div"
-                      class="u-mt-mini"
-                      :placeholder="$t('coupon.formPlaceholder')"
                     />
                   </div>
 
@@ -431,6 +444,9 @@ const {
   paymentMethod,
   shippingMethod,
   hasFreeShipping,
+  coupon,
+  discount,
+  costBeforeFreeShipping,
 } = storeToRefs(cart)
 
 const isShippingModalOpen = ref(false)

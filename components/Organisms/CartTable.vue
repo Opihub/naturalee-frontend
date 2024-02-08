@@ -34,7 +34,17 @@
             :data-title="$t('products.price')"
             align="center"
           >
-            <PriceHolder :price="product.price" />
+            <PriceHolder
+              :price="product.price"
+              :sales-price="product?.discountPrice"
+            >
+              <template v-if="product.discountPrice">
+                <PriceHolder
+                  class="u-block"
+                  :sales-price="product?.discountKgPrice"
+                />
+              </template>
+            </PriceHolder>
           </td>
           <td
             :class="[
@@ -70,13 +80,23 @@
       <tr :class="`${CSS_NAME}__footer`">
         <td colspan="7">
           <button
-            :class="`${CSS_NAME}__empty`"
+            :class="`${CSS_NAME}__empty u-mr-small`"
             type="button"
             color="green"
             :disabled="products.length <= 0"
             @click="onClear"
           >
             {{ $t('cart.clearCart') }}
+          </button>
+
+          <button
+            :class="`${CSS_NAME}__empty`"
+            type="button"
+            color="green"
+            :disabled="products.length <= 0"
+            @click="onSave"
+          >
+            {{ $t('cart.updateCart') }}
           </button>
         </td>
       </tr>
@@ -105,6 +125,12 @@ defineProps({
     },
   },
   onClear: {
+    type: Function,
+    default() {
+      return () => {}
+    },
+  },
+  onSave: {
     type: Function,
     default() {
       return () => {}
