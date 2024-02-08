@@ -37,12 +37,14 @@
 </template>
 
 <script setup>
+// Constants
 const CSS_NAME = 'o-price'
 const CSS_NAME_VALUE = `${CSS_NAME}__value`
 const CSS_NAME_VALUE_GREEN = `${CSS_NAME_VALUE}--green`
 const CSS_NAME_CURRENCY = `${CSS_NAME}__currency`
 
-const props = defineProps({
+// Define (Props, Emits, Page Meta)
+defineProps({
   price: {
     type: Number,
     required: true,
@@ -73,7 +75,7 @@ const props = defineProps({
   },
 })
 
-//Methods
+// Methods
 const formattedPrice = (value) => {
   return new Intl.NumberFormat('it-IT', {
     style: 'currency',

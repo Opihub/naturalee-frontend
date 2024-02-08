@@ -30,6 +30,7 @@
 // Imports
 import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
+import { useConfigurationStore } from '@/stores/configuration'
 import { StorageSerializers, useSessionStorage } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
@@ -42,19 +43,17 @@ const { t } = useI18n()
 const config = useRuntimeConfig()
 const notificationsStore = useNotificationsStore()
 const accountStore = useAccountStore()
+const configurationStore = useConfigurationStore()
 
 // Data
 const { notifications } = storeToRefs(notificationsStore)
 
 const nuxtApp = useNuxtApp()
 const isLoading = ref(true)
-// nuxtApp.hook('page:start', () => {
-//   isLoading.value = true
-// })
+
 nuxtApp.hook('page:finish', () => {
   isLoading.value = false
 })
-
 
 /**
  * Carica la versione remota delle API
@@ -90,6 +89,8 @@ if (process.client) {
   }
 }
 
+await configurationStore.load()
+
 // Watcher
 
 // Computed
@@ -98,7 +99,6 @@ if (process.client) {
 
 // Component life-cycle hooks
 accountStore.$onAction(({ name }) => {
-  console.debug(name)
   if (name !== 'logout' && name !== 'forceLogout') {
     return
   }

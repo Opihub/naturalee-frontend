@@ -4,7 +4,6 @@ const cssGlobals = [
   '@/assets/css/utilities/responsive.scss',
   '@/assets/css/utilities/bemit.scss',
   '@/assets/css/utilities/unit.scss',
-  '@/assets/css/utilities/keyframes.scss',
   '@/assets/css/utilities/transition.scss',
   '@/assets/css/utilities/text.scss',
   '@/assets/css/utilities/variables.scss',

@@ -90,7 +90,7 @@
 <script setup>
 import TrackDesktop from 'assets/svg/track-desktop.svg'
 import TrackMobile from 'assets/svg/track-mobile.svg'
-import gsap from 'gsap'
+import gsap from 'gsap/gsap-core'
 import { useIntersectionObserver } from '@vueuse/core'
 
 const CSS_NAME = 'c-track-row'

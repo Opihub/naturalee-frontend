@@ -15,8 +15,6 @@
 </template>
 
 <script setup>
-// Imports
-
 // Constants
 const CSS_NAME = 'c-tags'
 
@@ -43,18 +41,6 @@ defineProps({
     required: true,
   },
 })
-
-// Component life-cycle hooks
-
-// Composables
-
-// Data
-
-// Watcher
-
-// Computed
-
-// Methods
 </script>
 
 <style lang="scss">

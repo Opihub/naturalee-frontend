@@ -16,8 +16,10 @@
 </template>
 
 <script setup>
+// Constants
 const CSS_NAME = 'c-profile-icon'
 
+// Define (Props, Emits, Page Meta)
 defineProps({
   isLoggedIn: {
     type: Boolean,
