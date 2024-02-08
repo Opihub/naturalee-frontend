@@ -8,17 +8,17 @@
         :categories="categories"
       />
 
-      <ul :class="CSS_NAME_ACTIONS">
-        <li
-          :class="`${CSS_NAME_ACTIONS}__single`"
-          @mouseleave="isMiniCartMenuOpen = false"
-        >
-          <MiniCartIcon
-            :class="`${CSS_NAME_ACTIONS}__icon`"
-            :count="count.toString()"
-            @mouseover="isMiniCartMenuOpen = true"
-          />
-          <ClientOnly>
+      <ClientOnly>
+        <ul :class="CSS_NAME_ACTIONS">
+          <li
+            :class="`${CSS_NAME_ACTIONS}__single`"
+            @mouseleave="isMiniCartMenuOpen = false"
+          >
+            <MiniCartIcon
+              :class="`${CSS_NAME_ACTIONS}__icon`"
+              :count="count.toString()"
+              @mouseover="isMiniCartMenuOpen = true"
+            />
             <Transition name="fade">
               <MiniCart
                 v-show="isMiniCartMenuOpen"
@@ -29,24 +29,22 @@
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
-          </ClientOnly>
-        </li>
-        <li
-          :class="[
-            `${CSS_NAME_ACTIONS}__single`,
-            `${CSS_NAME_ACTIONS}__single--profile`,
-          ]"
-          @mouseleave="isProfileMenuOpen = false"
-        >
-          <ProfileIcon
-            :is-logged-in="isLoggedIn"
-            :class="{
-              [`${CSS_NAME_ACTIONS}__icon`]: true,
-              'is-active': isProfileMenuOpen,
-            }"
-            @mouseover="isProfileMenuOpen = true"
-          />
-          <ClientOnly>
+          </li>
+          <li
+            :class="[
+              `${CSS_NAME_ACTIONS}__single`,
+              `${CSS_NAME_ACTIONS}__single--profile`,
+            ]"
+            @mouseleave="isProfileMenuOpen = false"
+          >
+            <ProfileIcon
+              :is-logged-in="isLoggedIn"
+              :class="{
+                [`${CSS_NAME_ACTIONS}__icon`]: true,
+                'is-active': isProfileMenuOpen,
+              }"
+              @mouseover="isProfileMenuOpen = true"
+            />
             <Transition name="fade">
               <ProfileMenu
                 v-if="isLoggedIn"
@@ -56,23 +54,23 @@
                 :class="`${CSS_NAME_ACTIONS}__popup`"
               />
             </Transition>
-          </ClientOnly>
-        </li>
-        <li
-          :class="[
-            `${CSS_NAME_ACTIONS}__single`,
-            `${CSS_NAME_ACTIONS}__single--menu`,
-          ]"
-        >
-          <HamburgerMenu
-            :class="{
-              [`${CSS_NAME_ACTIONS}__icon`]: true,
-              'is-active': isMobileMenuOpen,
-            }"
-            @click="openMenuMobile"
-          />
-        </li>
-      </ul>
+          </li>
+          <li
+            :class="[
+              `${CSS_NAME_ACTIONS}__single`,
+              `${CSS_NAME_ACTIONS}__single--menu`,
+            ]"
+          >
+            <HamburgerMenu
+              :class="{
+                [`${CSS_NAME_ACTIONS}__icon`]: true,
+                'is-active': isMobileMenuOpen,
+              }"
+              @click="openMenuMobile"
+            />
+          </li>
+        </ul>
+      </ClientOnly>
     </SiteContainer>
   </header>
 </template>
