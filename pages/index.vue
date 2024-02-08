@@ -77,7 +77,7 @@
       tag="section"
     >
       <ProductCards
-        :products="products.data"
+        :products="products.homepage"
         :title="$t('products.homepageFeatured')"
       />
     </BackgroundHolder>
@@ -119,8 +119,10 @@
 
 <script setup>
 // Imports
+import { useConfigurationStore } from '@/stores/configuration'
 
 // Constants
+const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
@@ -135,7 +137,7 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const products = await useApi('shop/homepage/products')
+const { products } = storeToRefs(configurationStore)
 const { togglePostcodeModal } = inject('postcodeModal', () => {})
 const { t } = useI18n({
   useScope: 'local',

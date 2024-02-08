@@ -20,7 +20,6 @@ export const useConfigurationStore = defineStore('configuration', () => {
     const response = await useApi('config', {}, { dataOnly: true })
 
     configuration.value = response.value
-    console.debug(configuration.value)
   }
 
   const shopCategories = computed(() => {
@@ -35,9 +34,14 @@ export const useConfigurationStore = defineStore('configuration', () => {
     return configuration.value.layout || {}
   })
 
+  const products = computed(() => {
+    return configuration.value.products || {}
+  })
+
   return {
     configuration: skipHydrate(configuration),
     shopCategories,
+    products,
     layout,
     menu,
     load,

@@ -16,7 +16,7 @@
       </SiteContainer>
 
       <ProductCards
-        :products="products.data"
+        :products="products.homepage"
         title="Guarda tra i nostri prodotti consigliati"
       />
     </BackgroundHolder>
@@ -70,7 +70,6 @@
                   <span :class="gridCellLeftClassName">{{
                     $t('orders.shipping')
                   }}</span>
-                  <!-- <ShippingMethods :class="gridCellRightClassName" /> -->
 
                   <strong v-if="hasFreeShipping" :class="gridCellRightClassName"
                     >Gratuita</strong
@@ -124,7 +123,12 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
+import { useConfigurationStore } from '@/stores/configuration'
+
 // Constants
+const cart = useCartStore()
+const user = useAccountStore()
+const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
@@ -153,10 +157,8 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const products = await useApi('shop/homepage/products')
-const cart = useCartStore()
+const { products } = storeToRefs(configurationStore)
 const { sending, send } = useSender()
-const user = useAccountStore()
 
 // Data
 const { isEmpty } = storeToRefs(cart)
