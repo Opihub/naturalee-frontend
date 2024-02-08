@@ -8,12 +8,26 @@
         color="white"
         :class="{ 'u-pb-medium': menu.marquee && menu.marquee.length }"
       >
-        <CategoryCards
-          v-if="shopCategories.length"
-          :title="$t('products.categoriesFeatured')"
-          :categories="shopCategories"
-          class="u-mb-medium"
-        />
+        <SiteContainer v-if="shopCategories.length" class="u-mb-medium s-category-cards">
+          <BaseHeading
+            class="u-mb-medium u-text-center u-text-left@tablet"
+            tag="h5"
+            >{{ $t('products.categoriesFeatured') }}</BaseHeading
+          >
+
+          <div class="o-row">
+            <CategoryCard
+              v-for="category in shopCategories"
+              :key="category.id"
+              class="o-row__column"
+              :image="category.image"
+              :to="category.link"
+              :position="category.position"
+            >
+              {{ category.title }}
+            </CategoryCard>
+          </div>
+        </SiteContainer>
 
         <MarqueeSlider
           v-if="layout.marquee && layout.marquee.length"
@@ -32,18 +46,37 @@ import { useConfigurationStore } from '@/stores/configuration'
 // Constants
 const configurationStore = useConfigurationStore()
 
-// Define (Props, Emits, Page Meta)
-
-// Component life-cycle hooks
-
 // Composables
 const { shopCategories, menu, layout } = storeToRefs(configurationStore)
-
-// Data
-
-// Watcher
-
-// Computed
-
-// Methods
 </script>
+
+<style lang="scss">
+@include scope('category-cards') {
+  @include object('row') {
+    flex-direction: column;
+
+    @include from(tablet) {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 3,
+      )
+    );
+  }
+
+  @include from(desktop) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 5,
+      )
+    );
+  }
+}
+</style>
