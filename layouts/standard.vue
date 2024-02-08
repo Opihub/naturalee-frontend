@@ -13,14 +13,17 @@
       :profile-menu="menu.profile"
       @menu-mobile:toggle="updateMobileMenuStatus"
     />
-    <Transition name="fade">
-      <HeaderMainMobile
-        v-show="isMobileMenuOpen"
-        :socials-menu="menu.socials"
-        :primary-menu="menu.primary"
-        :profile-menu="menu.profile"
-      />
-    </Transition>
+
+    <ClientOnly>
+      <Transition name="fade">
+        <HeaderMainMobile
+          v-show="isMobileMenuOpen"
+          :socials-menu="menu.socials"
+          :primary-menu="menu.primary"
+          :profile-menu="menu.profile"
+        />
+      </Transition>
+    </ClientOnly>
 
     <slot name="before" />
 
@@ -31,10 +34,7 @@
     <slot name="after" />
 
     <SiteFooter :class="{ 'u-mt-auto': !overrideLastElement }">
-      <FooterNavigation
-        :socials-menu="menu.socials"
-        :menu="menu.footer"
-      />
+      <FooterNavigation :socials-menu="menu.socials" :menu="menu.footer" />
 
       <FooterCopyrights
         :copyright="layout.copyrights"
@@ -42,12 +42,14 @@
       />
     </SiteFooter>
 
-    <CategoriesMenu
-      v-if="menu.categories && menu.categories"
-      ref="categoriesMenuElement"
-      :class="`${CSS_NAME}__categories`"
-      :categories="menu.categories"
-    />
+    <ClientOnly>
+      <CategoriesMenu
+        v-if="menu.categories && menu.categories"
+        ref="categoriesMenuElement"
+        :class="`${CSS_NAME}__categories`"
+        :categories="menu.categories"
+      />
+    </ClientOnly>
 
     <Teleport to="body">
       <PostcodeModal
