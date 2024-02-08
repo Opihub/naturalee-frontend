@@ -5,7 +5,6 @@
 @import '@/assets/css/utilities/responsive';
 @import '@/assets/css/utilities/bemit';
 @import '@/assets/css/utilities/unit';
-@import '@/assets/css/utilities/keyframes';
 @import '@/assets/css/utilities/transition';
 @import '@/assets/css/utilities/text';
 @import '@/assets/css/utilities/variables';
@@ -18,3 +17,17 @@
 @import '@/assets/css/globals/transitions';
 @import '@/assets/css/globals/layout';
 @import '@/assets/css/globals/utilities';
+
+@include layout('row', 'column');
+
+@include object('page') {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  @include element('main') {
+    flex: 1 1 auto;
+  }
+}
