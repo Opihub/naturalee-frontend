@@ -1,51 +1,55 @@
 <template>
   <section class="s-checkout">
-    <SiteContainer
-      v-if="order && Object.keys(order).length > 0"
-      :max-width="1060"
-    >
-      <BaseHeading tag="h4" class="u-mb-large u-text-center@tablet"
-        >Grazie. Il tuo ordine n. {{ orderId(order.id) }} è stato ricevuto ed è
-        attualmente In lavorazione</BaseHeading
-      >
-      <SiteContainer padless="">
-        <BaseHeading tag="h4" class="u-text-center@tablet"
-          >Ecco i dettagli del tuo ordine</BaseHeading
+    <SiteContainer :max-width="1060">
+      <template v-if="order">
+        <BaseHeading
+          tag="h4"
+          class="u-mb-large u-text-center@tablet"
+          style="text-wrap: balance"
+          >Grazie. Il tuo ordine n. {{ orderId(order.id) }} è stato ricevuto ed
+          è attualmente In lavorazione</BaseHeading
         >
+        <SiteContainer padless="">
+          <BaseHeading tag="h4" class="u-text-center@tablet"
+            >Ecco i dettagli del tuo ordine</BaseHeading
+          >
 
-        <OrderDetails
-          class="u-mb-huge u-mt-medium"
-          :products="order.products"
-          :shipping="order.shipping"
-          :payment="order.payment"
-          :time-slots="order.timeSlots"
-          :date="getFormattedDate(order.pickedDate)"
-        />
-        <div class="o-row">
-          <div class="o-row__column">
-            <BaseHeading tag="h5" class="u-mb-small">{{
-              $t('addresses.shipping')
-            }}</BaseHeading>
-            <ShopAddress :address="order.addresses.shipping" />
-          </div>
+          <OrderDetails class="u-mb-huge u-mt-medium" :order="order" />
+          <div class="o-row">
+            <div class="o-row__column">
+              <BaseHeading tag="h5" class="u-mb-small">{{
+                $t('addresses.shipping')
+              }}</BaseHeading>
+              <ShopAddress :address="order.addresses.shipping" />
+            </div>
 
-          <div class="o-row__column">
-            <BaseHeading tag="h5" class="u-mb-small">{{
-              $t('addresses.billing')
-            }}</BaseHeading>
-            <ShopAddress :address="order.addresses.billing" />
+            <div class="o-row__column">
+              <BaseHeading tag="h5" class="u-mb-small">{{
+                $t('addresses.billing')
+              }}</BaseHeading>
+              <ShopAddress :address="order.addresses.billing" />
+            </div>
           </div>
-        </div>
-      </SiteContainer>
-      <SiteContainer class="u-text-center">
-        <BaseButton
-          class="u-mt-large"
-          as="link"
-          to="/#frutta-verdura"
-          color="yellow"
-          >Continua gli acquisti</BaseButton
+        </SiteContainer>
+
+        <SiteContainer class="u-text-center">
+          <BaseButton
+            class="u-mt-large"
+            as="link"
+            to="/#frutta-verdura"
+            color="yellow"
+            >Continua gli acquisti</BaseButton
+          >
+        </SiteContainer>
+      </template>
+      <template v-else>
+        <BaseHeading
+          tag="h4"
+          class="u-mb-large u-text-center@tablet"
+          style="text-wrap: balance"
+          >L'ordine richiesto non è stato trovato</BaseHeading
         >
-      </SiteContainer>
+      </template>
     </SiteContainer>
   </section>
 </template>
@@ -58,38 +62,39 @@
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   layout: 'green',
-  validate: async (route) => {
-    return true
-    // defineNuxtRouteMiddleware(async () => {
-    //   const { token, login } = route.query
+  middleware: [
+    'auth',
+    async (to) => {
+      if (process.server) {
+        return true
+      }
 
-    //   if (
-    //     !login ||
-    //     !token ||
-    //     token.match(getPasswordRecoveryTokenPattern()).length <= 0
-    //   ) {
-    //     return false
-    //   }
+      const { orderId } = to.query
 
-    //   const response = await useApi(
-    //     `auth/password-recovery/validate-token`,
-    //     {
-    //       method: 'POST',
-    //       body: {
-    //         token,
-    //         login,
-    //       },
-    //     },
-    //     {
-    //       cache: false,
-    //     }
-    //   )
+      if (!orderId || isNaN(orderId)) {
+        return false
+      }
 
-    //   // TODO: trovare un modo di ritornare gli errori
+      const response = await useApi(
+        `shop/orders/${orderId}`,
+        {},
+        {
+          cache: false,
+        }
+      )
 
-    //   return response.value.success
-    // })
-  },
+      if (!response.value.success) {
+        return navigateTo({
+          name: 'orders-list',
+          query: {
+            redirectBecause: 'orderNotFound',
+          },
+        })
+      }
+
+      return true
+    },
+  ],
 })
 
 // Component life-cycle hooks
@@ -99,15 +104,22 @@ definePageMeta({
 // Data
 const config = useRuntimeConfig()
 const route = useRoute()
-console.log(route)
-const order = await useApi(
-  `shop/orders/${route.query.orderId}`,
-  {},
-  {
-    dataOnly: true,
-    cache: false,
-  }
-)
+
+const order = ref(null)
+onMounted(() => {
+  nextTick(async () => {
+    const response = await useApi(
+      `shop/orders/${route.query.orderId}`,
+      {},
+      {
+        dataOnly: true,
+        cache: false,
+      }
+    )
+
+    order.value = response.value
+  })
+})
 
 // Watcher
 

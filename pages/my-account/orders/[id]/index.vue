@@ -1,37 +1,48 @@
 <template>
   <section class="s-order-details">
-    <BaseParagraph class="u-mb-tiny">{{
-      $t('orders.createdAt', {
-        id: orderId(order.id),
-        date,
-        status: $t(`orders.status.${order.status}`),
-      })
-    }}</BaseParagraph>
-    <BaseHeading>{{ $t('orders.details') }}</BaseHeading>
+    <template v-if="order === null">
+      <BaseHeading tag="h1" use="h3" class="u-mb-large" color="black"
+        >Stiamo cercando il tuo ordine&hellip;</BaseHeading
+      ></template
+    >
+    <template v-else-if="order.success">
+      <BaseParagraph class="u-mb-tiny">{{
+        $t('orders.createdAt', {
+          id: orderId(order.data.id),
+          date: getFormattedDate(order.data.date),
+          status: $t(`orders.status.${order.data.status}`),
+        })
+      }}</BaseParagraph>
+      <BaseHeading tag="h1" use="h3" color="black">{{
+        $t('orders.details')
+      }}</BaseHeading>
 
-    <OrderDetails
-      class="u-mb-huge u-mt-medium"
-      :products="order.products"
-      :shipping="order.shipping"
-      :payment="order.payment"
-      :time-slots="order.timeSlots"
-      :date="getFormattedDate(order.pickedDate)"
-    />
-    <div class="o-row">
-      <div class="o-row__column">
-        <BaseHeading tag="h5" class="u-mb-small">{{
-          $t('addresses.shipping')
-        }}</BaseHeading>
-        <ShopAddress :address="order.addresses.shipping" />
-      </div>
+      <OrderDetails class="u-mb-huge u-mt-medium" :order="order.data" />
 
-      <div class="o-row__column">
-        <BaseHeading tag="h5" class="u-mb-small">{{
-          $t('addresses.billing')
-        }}</BaseHeading>
-        <ShopAddress :address="order.addresses.billing" />
+      <div class="o-row">
+        <div class="o-row__column">
+          <BaseHeading tag="h5" class="u-mb-small">{{
+            $t('addresses.shipping')
+          }}</BaseHeading>
+          <ShopAddress :address="order.data.addresses.shipping" />
+        </div>
+
+        <div class="o-row__column">
+          <BaseHeading tag="h5" class="u-mb-small">{{
+            $t('addresses.billing')
+          }}</BaseHeading>
+          <ShopAddress :address="order.data.addresses.billing" />
+        </div>
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <BaseHeading tag="h1" use="h3" class="u-mb-large" color="black"
+        >L'ordine #{{ route.params.id }} non è stato trovato</BaseHeading
+      >
+      <BaseButton as="link" :to="{ name: 'orders-list' }"
+        >Torna agli ordini</BaseButton
+      >
+    </template>
   </section>
 </template>
 
@@ -58,27 +69,25 @@ defineI18nRoute({
 
 // Composables
 const route = useRoute()
-const order = await useApi(
-  `shop/orders/${route.params.id}`,
-  {},
-  {
-    dataOnly: true,
-    cache: false,
-  }
-)
+const order = ref(null)
+
+onMounted(async () => {
+  const response = await useApi(
+    `shop/orders/${route.params.id}`,
+    {},
+    {
+      cache: false,
+    }
+  )
+
+  order.value = response.value
+})
 
 // Data
 
 // Watcher
 
 // Computed
-const date = computed(() => {
-  const date = new Date(order.value.date)
-
-  return `${date.toLocaleString('default', {
-    month: 'long',
-  })} ${date.getDate()}, ${date.getFullYear()}`
-})
 
 // Methods
 </script>

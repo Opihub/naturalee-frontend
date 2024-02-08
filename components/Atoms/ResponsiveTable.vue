@@ -53,6 +53,7 @@ $prefix: 'table';
     table,
     thead,
     tbody,
+    tfoot,
     th,
     td,
     tr {
@@ -67,23 +68,24 @@ $prefix: 'table';
     }
 
     /* Inserisce il comportamento come una riga */
-    td {
+    td:not(.is-full) {
       position: relative;
-      padding-left: 50%;
+      padding-left: get-var(padding-left, 50%, $prefix: $prefix);
+      padding-right: get-var(padding-right, 0, $prefix: $prefix);
       white-space: normal;
     }
 
     /* Inserisce il comportamento come un'intestazione di tabella */
-    td::before {
+    td[data-title]::before {
       position: absolute;
 
       top: 0;
-      left: 6px;
-      width: 45%;
-    }
+      left: 0;
+      width: calc(100% - get-var(padding-left, 50%, $prefix: $prefix));
+      padding-left: get-var(offset-left, 0, $prefix: $prefix);
+      padding-right: get-var(offset-right, 0, $prefix: $prefix);
 
-    /* Aggiunge l'etichetta ai dati della tabella */
-    td::before {
+      /* Aggiunge l'etichetta ai dati della tabella */
       content: attr(data-title);
     }
   }

@@ -20,7 +20,7 @@
       rounded
       borderless
       required
-      :disabled="sending"
+      :disabled="sending || hasCoupon"
     />
 
     <BaseButton
@@ -29,7 +29,9 @@
       type="submit"
       color="yellow"
       :disabled="!coupon || sending"
-      >Applica</BaseButton
+      >{{
+        $t(hasCoupon ? 'coupon.actions.remove' : 'coupon.actions.apply')
+      }}</BaseButton
     >
   </component>
 </template>
@@ -58,7 +60,7 @@ const props = defineProps({
 })
 
 // Pinia Store
-const cart = useCartStore()
+const cartStore = useCartStore()
 
 // Component life-cycle hooks
 
@@ -66,7 +68,8 @@ const cart = useCartStore()
 const { sending, send } = useSender()
 
 // Data
-const coupon = ref('')
+const { coupon: usedCoupon, hasCoupon } = storeToRefs(cartStore)
+const coupon = ref(usedCoupon.value?.code || '')
 
 // Watcher
 
@@ -77,7 +80,13 @@ const isForm = computed(() => {
 
 // Methods
 const applyCoupon = async () => {
-  if (!coupon) {
+  if (!coupon.value) {
+    return
+  }
+
+  if (hasCoupon.value) {
+    cartStore.removeCoupon()
+    coupon.value = ''
     return
   }
 
@@ -85,9 +94,7 @@ const applyCoupon = async () => {
     return
   }
 
-  const response = await send(async () => await cart.applyCoupon(coupon.value))
-
-  console.debug(response)
+  await send(async () => await cartStore.applyCoupon(coupon.value))
 }
 </script>
 

@@ -74,6 +74,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  coupon: {
+    type: String,
+    default: null,
+  },
   cart: {
     type: Array,
     required: true,
@@ -144,6 +148,7 @@ const submitOrder = async () => {
     note,
     email,
     invoice,
+    coupon: props.coupon,
     products: props.cart,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
@@ -191,8 +196,9 @@ const submitOrder = async () => {
   )
 
   if (response.value.success) {
-    const { clearCart } = useCart
+    const { clearCart, removeCoupon } = useCart
     await clearCart(false)
+    await removeCoupon()
 
     await navigateTo({
       path: '/order-confirmed',

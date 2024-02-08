@@ -50,7 +50,7 @@
 
 <script setup>
 // Imports
-import { gsap } from 'gsap'
+import { gsap } from 'gsap/gsap-core'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Constants

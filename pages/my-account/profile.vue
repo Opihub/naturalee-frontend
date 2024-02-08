@@ -1,12 +1,7 @@
 <template>
   <section>
-    <BaseHeading
-      tag="h1"
-      use="h3"
-      class="u-mb-large"
-      color="black"
-    >
-    Modifica il tuo profilo
+    <BaseHeading tag="h1" use="h3" class="u-mb-large" color="black">
+      Modifica il tuo profilo
     </BaseHeading>
 
     <FormUpdateUserDetails :user-data="account" />
@@ -39,6 +34,7 @@ const user = useAccountStore()
 
 // Data
 const account = await user.load()
+
 // Watcher
 
 // Computed

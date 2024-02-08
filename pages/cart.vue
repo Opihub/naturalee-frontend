@@ -16,19 +16,20 @@
       </SiteContainer>
 
       <ProductCards
-        :products="products.data"
+        :products="products.homepage"
         title="Guarda tra i nostri prodotti consigliati"
       />
     </BackgroundHolder>
 
     <SiteContainer v-else class="u-pt-huge u-pb-huge">
-      <FormWrapper class="o-form--cart" @submit.prevent="saveCart">
+      <FormWrapper class="o-form--cart" @submit.prevent="goToCheckout">
         <template #default="{ columnClassName }">
           <div :class="[columnClassName, 'o-form__basket']">
             <CartTable
               :products="basket"
               :on-delete="deleteFromBasket"
               :on-clear="clearBasket"
+              :on-save="saveCart"
             />
           </div>
 
@@ -67,10 +68,21 @@
                     :price="subTotal"
                   />
 
+                  <template v-if="coupon.code && discount">
+                    <span :class="gridCellLeftClassName"
+                      >Codice promozionale: {{ coupon.code }}</span
+                    >
+                    <PriceHolder
+                      :class="gridCellRightClassName"
+                      :price="discount"
+                    >
+                      <template #before>-</template>
+                    </PriceHolder>
+                  </template>
+
                   <span :class="gridCellLeftClassName">{{
                     $t('orders.shipping')
                   }}</span>
-                  <!-- <ShippingMethods :class="gridCellRightClassName" /> -->
 
                   <strong v-if="hasFreeShipping" :class="gridCellRightClassName"
                     >Gratuita</strong
@@ -78,7 +90,7 @@
                   <template v-else>
                     <PriceHolder :class="gridCellRightClassName" :price="3" />
                     <span :class="gridCellFullClassName"
-                      >Aggiungi <PriceHolder :price="50 - subTotal" /> per avere
+                      >Aggiungi <PriceHolder :price="costBeforeFreeShipping" /> per avere
                       la spedizione gratuita</span
                     >
                   </template>
@@ -124,7 +136,12 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
+import { useConfigurationStore } from '@/stores/configuration'
+
 // Constants
+const userStore = useAccountStore()
+const cartStore = useCartStore()
+const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
@@ -142,8 +159,10 @@ defineI18nRoute({
 // Component life-cycle hooks
 onMounted(() => {
   nextTick(async () => {
-    const syncProduct = await cart.load()
+    const syncProduct = await cartStore.load()
     basket.value = syncProduct.value
+
+    validateCoupon()
   })
 })
 
@@ -153,34 +172,28 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const products = await useApi('shop/homepage/products')
-const cart = useCartStore()
+const { products } = storeToRefs(configurationStore)
 const { sending, send } = useSender()
-const user = useAccountStore()
 
 // Data
-const { isEmpty } = storeToRefs(cart)
+const { isEmpty, coupon, } = storeToRefs(cartStore)
 const basket = ref([])
 
 // Computed
-const hasFreeShipping = computed(() => {
-  return 50 - subTotal.value <= 0
-})
-const hasMinimumOrderCost = computed(() => {
-  return subTotal.value >= 20
-})
-const shippingMethod = computed(() => {
-  return hasFreeShipping.value ? 0 : 3
-})
-const { subTotal, granTotal: total } = useTotal(basket, {
-  shipping: shippingMethod,
-})
-const { isLoggedIn } = storeToRefs(user)
+const {
+  hasFreeShipping,
+  hasMinimumOrderCost,
+  subTotal,
+  total,
+  discount,
+  costBeforeFreeShipping
+} = useCart(basket, coupon)
+const { isLoggedIn } = storeToRefs(userStore)
 
 // Watcher
 
 // Methods
-const { deleteFromCart, clearCart } = cart
+const { deleteFromCart, clearCart, validateCoupon } = cartStore
 const deleteFromBasket = async (product) => {
   const success = await deleteFromCart(product)
 
@@ -205,17 +218,7 @@ const clearBasket = async () => {
 
 const saveCart = async () => {
   if (sending.value) {
-    return
-  }
-
-  try {
-    await send(async () => await cart.save(basket))
-  } catch (error) {
-    notify({
-      status: 'danger',
-      message: error,
-    })
-    return
+    return false
   }
 
   if (!isLoggedIn.value) {
@@ -226,6 +229,27 @@ const saveCart = async () => {
       },
     })
 
+    return false
+  }
+
+  try {
+    await send(async () => await cartStore.save(basket))
+  } catch (error) {
+    notify({
+      status: 'danger',
+      message: error,
+    })
+
+    return false
+  }
+
+  return true
+}
+
+const goToCheckout = async () => {
+  const success = await saveCart()
+
+  if (!success) {
     return
   }
 
