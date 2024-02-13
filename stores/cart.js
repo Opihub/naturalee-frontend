@@ -413,7 +413,7 @@ export const useCartStore = defineStore('cart', () => {
 
     if (response.value.success) {
       notify({
-        message: t('coupon.applied'),
+        message: response.value.message,
         status: 'success',
       })
 
@@ -423,7 +423,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     notify({
-      message: t('coupon.notValid'),
+      message: response.value.message,
       status: 'danger',
     })
 
