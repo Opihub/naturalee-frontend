@@ -31,7 +31,7 @@ export const useCartStore = defineStore('cart', () => {
     serializer: StorageSerializers.object,
   })
 
-  const coupon = useLocalStorage(
+  const coupon = useSessionStorage(
     'coupon',
     {},
     {
