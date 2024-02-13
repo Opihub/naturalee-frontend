@@ -18,9 +18,11 @@
 </template>
 
 <script setup>
+// Imports
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll'
 
+// Constants
 const CSS_NAME = 'c-marquee'
 
 const SPLIDE_OPTIONS = {
@@ -39,6 +41,7 @@ const SPLIDE_OPTIONS = {
   mediaQuery: 'min',
 }
 
+// Define (Props, Emits, Page Meta)
 defineProps({
   marquee: {
     type: Array,

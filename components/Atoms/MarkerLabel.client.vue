@@ -8,10 +8,13 @@
 </template>
 
 <script setup>
+// Imports
 import MarkerPlaceholder from 'assets/svg/marker-placeholder.svg'
 
+// Constants
 const CSS_NAME = 'o-marker'
 
+// Define (Props, Emits, Page Meta)
 const props = defineProps({
   marker: {
     type: Object,
@@ -22,6 +25,7 @@ const props = defineProps({
   },
 })
 
+// Computed
 const style = computed(() => {
   const style = {}
 

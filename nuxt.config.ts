@@ -43,7 +43,8 @@ export default defineNuxtConfig({
   routeRules: {
     '/my-account/**': { ssr: false },
     '/checkout': { ssr: false },
-    ...(process.env?.SKIP_SITEMAP
+    // Skippo le categorie se sono in SSR e se ho chiesto di saltare la lettura della sitemap
+    ...(!process.env.SSR && process.env?.SKIP_SITEMAP
       ? {
           '/frutta/**': { ssr: false },
           '/verdura/**': { ssr: false },
@@ -69,7 +70,8 @@ export default defineNuxtConfig({
         return
       }
 
-      if (process.env?.SKIP_SITEMAP) {
+      // Skippo la sitemap se richiesto o se sono in SSR
+      if (process.env.SSR || process.env?.SKIP_SITEMAP) {
         console.info('Sitemap saltata')
         return
       }
