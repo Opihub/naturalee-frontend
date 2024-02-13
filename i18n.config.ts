@@ -151,6 +151,7 @@ export default defineI18nConfig(() => ({
         insertHere: 'Fai clic qui per inserire il tuo codice promozionale',
         applied: 'Coupon applicato con successo!',
         notValid: 'Coupon non valido!',
+        expired: 'Il coupon richiesto non è più valido',
         missingMinimumAmount: "Deve raggiungere la quota minima di %d € per usare il coupon",
         reachMaximumAmount: "Hai superato la spesa massima di %d € per usare il coupon",
 
@@ -283,8 +284,8 @@ export default defineI18nConfig(() => ({
             'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
         },
         login: {
-          createAccount: 'Registrati per poter continuare con l\'ordine!'
-        }
+          createAccount: "Registrati per poter continuare con l'ordine!",
+        },
       },
     },
   },

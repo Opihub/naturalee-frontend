@@ -366,6 +366,23 @@ export const useCartStore = defineStore('cart', () => {
 
     let error = false
 
+    if (coupon.value.expiration) {
+      const now = new Date().toLocaleString('it-IT', {
+        timeZone: coupon.value.expiration.timezone,
+      })
+
+      const expiration = new Date(coupon.value.expiration.date).toLocaleString(
+        'it-IT',
+        {
+          timeZone: 'Europe/Rome',
+        }
+      )
+
+      if (now > expiration) {
+        error = t('coupon.expired')
+      }
+    }
+
     if (
       coupon.value.minimum_amount &&
       subTotal.value < coupon.value.minimum_amount
