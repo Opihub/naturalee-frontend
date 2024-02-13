@@ -46,6 +46,7 @@ export const useCartStore = defineStore('cart', () => {
   // Getters
   const {
     hasCoupon,
+    validProducts,
     discount,
     count,
     isEmpty,
@@ -381,20 +382,27 @@ export const useCartStore = defineStore('cart', () => {
       if (now > expiration) {
         error = t('coupon.expired')
       }
-    }
-
-    if (
+    } else if (
       coupon.value.minimum_amount &&
       subTotal.value < coupon.value.minimum_amount
     ) {
       error = t('coupon.missingMinimumAmount')
-    }
-
-    if (
+    } else if (
       coupon.value.maximum_amount &&
       subTotal.value > coupon.value.maximum_amount
     ) {
       error = t('coupon.reachMaximumAmount')
+    } else if (validProducts.value.length === 0) {
+      // Se non c'è alcun prodotto valido per il coupon,
+      // a prescindere dalla tipologia di sconto, invalido il coupon
+      error = t('coupon.invalidCoupon')
+    } else if (
+      ['fixed_cart', 'percent'].includes(coupon.value.discount_type) &&
+      validProducts.value.length !== cart.value.length
+    ) {
+      // Se il coupon si applica al carrello, ed il numero di prodotti validi
+      // non combacia con quello attuale, allora invalido il coupon
+      error = t('coupon.invalidCoupon')
     }
 
     if (error) {

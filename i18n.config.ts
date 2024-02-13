@@ -154,6 +154,7 @@ export default defineI18nConfig(() => ({
         expired: 'Il coupon richiesto non è più valido',
         missingMinimumAmount: "Deve raggiungere la quota minima di %d € per usare il coupon",
         reachMaximumAmount: "Hai superato la spesa massima di %d € per usare il coupon",
+        invalidCoupon: "Il coupon inserito non è valido per la spesa corrente",
 
         actions: {
           apply: 'Applica',

@@ -6,8 +6,64 @@ export function useCart(cart, coupon, paymentMethod = null) {
     return coupon.value.code
   })
 
+  const validProducts = computed(() => {
+    return cart.value.filter((item) => {
+      // Salto il prodotto se è già scontato ed il coupon non accetta prodotti scontati
+      if (coupon.value.exclude_sale_items && item.discountPrice) {
+        return false
+      }
+
+      // TODO: verificare le condizioni. Probabilmente un prodotto deve rispettare tutte le condizioni applicati
+
+      // Se il coupon è applicabile a determinati prodotti,
+      // allora mantiene solo questi
+      if (coupon.value.product_ids.length) {
+        return (
+          coupon.value.product_ids.includes(item.id) ||
+          coupon.value.product_ids.includes(item.variationId)
+        )
+      }
+
+      // Se il coupon non è applicabile a determinati prodotti,
+      // allora procede a scartarli
+      if (coupon.value.excluded_product_ids.length) {
+        return (
+          !coupon.value.excluded_product_ids.includes(item.id) &&
+          !coupon.value.excluded_product_ids.includes(item.variationId)
+        )
+      }
+
+      if (coupon.value.product_categories.length) {
+        const categories = item.categories.map((category) => category.id)
+        const matchedCategories = categories.filter((value) =>
+          coupon.value.product_categories.includes(value)
+        )
+
+        return matchedCategories.length
+      }
+
+      if (coupon.value.excluded_product_categories.length) {
+        const categories = item.categories.map((category) => category.id)
+        const matchedCategories = categories.filter((value) =>
+          coupon.value.excluded_product_categories.includes(value)
+        )
+
+        return matchedCategories.length === 0
+      }
+
+      return true
+    })
+  })
+
   const discount = computed(() => {
     if (!hasCoupon.value) {
+      return 0
+    }
+
+    // Estrapolo prima tutti i prodotti che rientrano nello sconto
+    const basket = validProducts.value
+
+    if (!basket.length) {
       return 0
     }
 
@@ -20,56 +76,9 @@ export function useCart(cart, coupon, paymentMethod = null) {
         amount = (subTotal.value / 100) * coupon.value.amount
         break
       default: {
-        // Estrapolo prima tutti i prodotti che rientrano nello sconto
-        const basket = cart.value.filter((item) => {
-          // Salto il prodotto se è già scontato ed il coupon non accetta prodotti scontati
-          if (coupon.value.exclude_sale_items && item.discountPrice) {
-            return false
-          }
-
-          // TODO: verificare le condizioni. Probabilmente un prodotto deve rispettare tutte le condizioni applicati
-
-          // Se il coupon è applicabile a determinati prodotti,
-          // allora mantiene solo questi
-          if (coupon.value.product_ids.length) {
-            return (
-              coupon.value.product_ids.includes(item.id) ||
-              coupon.value.product_ids.includes(item.variationId)
-            )
-          }
-
-          // Se il coupon non è applicabile a determinati prodotti,
-          // allora procede a scartarli
-          if (coupon.value.excluded_product_ids.length) {
-            return (
-              !coupon.value.excluded_product_ids.includes(item.id) &&
-              !coupon.value.excluded_product_ids.includes(item.variationId)
-            )
-          }
-
-          if (coupon.value.product_categories.length) {
-            const categories = item.categories.map((category) => category.id)
-            const matchedCategories = categories.filter((value) =>
-              coupon.value.product_categories.includes(value)
-            )
-
-            return matchedCategories.length
-          }
-
-          if (coupon.value.excluded_product_categories.length) {
-            const categories = item.categories.map((category) => category.id)
-            const matchedCategories = categories.filter((value) =>
-              coupon.value.excluded_product_categories.includes(value)
-            )
-
-            return matchedCategories.length === 0
-          }
-
-          return true
-        })
-
         let count = 0
         const maxUsage = coupon.value.limit_usage_to_x_items
+
         for (const item of basket) {
           // Se il coupon è applicabile ad un numero massimo di prodotti
           // e questo valore è stato raggiunto, allora stoppo il coupon
@@ -149,6 +158,7 @@ export function useCart(cart, coupon, paymentMethod = null) {
 
   return {
     hasCoupon,
+    validProducts,
     discount,
     count,
     isEmpty,
