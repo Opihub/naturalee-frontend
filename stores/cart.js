@@ -370,14 +370,14 @@ export const useCartStore = defineStore('cart', () => {
       coupon.value.minimum_amount &&
       subTotal.value < coupon.value.minimum_amount
     ) {
-      error = t('coupon.notValid')
+      error = t('coupon.missingMinimumAmount')
     }
 
     if (
       coupon.value.maximum_amount &&
       subTotal.value > coupon.value.maximum_amount
     ) {
-      error = t('coupon.notValid')
+      error = t('coupon.reachMaximumAmount')
     }
 
     if (error) {

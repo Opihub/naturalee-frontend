@@ -129,7 +129,8 @@ export default defineI18nConfig(() => ({
           save: 'Salva password',
           update: 'Modifica password',
           generate: 'Genera Password',
-          requirement: 'Minimo 8 caratteri, almeno una minuscola, almeno una maiuscola e almeno un numero o un carattere speciale'
+          requirement:
+            'Minimo 8 caratteri, almeno una minuscola, almeno una maiuscola e almeno un numero o un carattere speciale',
         },
         leaveBlank: 'lascia in bianco per non modificare',
         contactUs: 'Contattaci',
@@ -148,8 +149,11 @@ export default defineI18nConfig(() => ({
         formPlaceholder: 'Codice promozionale',
         asking: 'Hai un codice promozionale?',
         insertHere: 'Fai clic qui per inserire il tuo codice promozionale',
-        applied: 'Coupon applicato!',
+        applied: 'Coupon applicato con successo!',
         notValid: 'Coupon non valido!',
+        missingMinimumAmount: "Deve raggiungere la quota minima di %d € per usare il coupon",
+        reachMaximumAmount: "Hai superato la spesa massima di %d € per usare il coupon",
+
         actions: {
           apply: 'Applica',
           remove: 'Rimuovi',
