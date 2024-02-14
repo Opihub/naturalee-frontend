@@ -94,7 +94,7 @@ const props = defineProps({
 
 // Composables
 const { sending, send } = useSender(emit)
-const useCart = useCartStore()
+const cartStore = useCartStore()
 
 // Data
 const {
@@ -114,8 +114,7 @@ const submitOrder = async () => {
 
   resetFeedback()
 
-  const { timeSlot, date, note, email, } =
-    props.shippingData
+  const { timeSlot, date, note, email } = props.shippingData
   const { invoice } = props.billingData
 
   if (!date) {
@@ -160,7 +159,7 @@ const submitOrder = async () => {
   }
 
   // Valido i campi della fatturazione indifferentemente da quelli dell'indirizzo
-  validateInvoice(formData.invoice)
+  validateInvoice(invoice)
 
   // Se devo usare un
   if (props.useDifferentAddress) {
@@ -201,7 +200,7 @@ const submitOrder = async () => {
   )
 
   if (response.value.success) {
-    const { clearCart, removeCoupon } = useCart
+    const { clearCart, removeCoupon } = cartStore
     await clearCart(false)
     await removeCoupon()
 
