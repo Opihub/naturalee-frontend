@@ -71,7 +71,9 @@ const updatePaymentMethod = (methodId) => {
     (paymentMethod) => paymentMethod.id === methodId
   )
 
-  emit('update:modelValue', method)
+  if (props.modelValue?.id !== methodId) {
+    emit('update:modelValue', method)
+  }
 }
 
 // Component life-cycle hooks
