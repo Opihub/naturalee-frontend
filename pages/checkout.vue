@@ -12,12 +12,7 @@
           :use-different-address="useDifferentAddress"
           :shipping-address="shippingAddress"
           :billing-address="billingAddress"
-          :shipping-data="{
-            note,
-            date,
-            timeSlot: currentTimeSlot,
-            email,
-          }"
+          :shipping-data="shippingData"
           :billing-data="billingData"
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
@@ -497,6 +492,12 @@ const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 // Watcher
 
 // Computed
+const shippingData = computed(() => ({
+  note,
+  date,
+  timeSlot: currentTimeSlot,
+  email,
+}))
 const currentTimeSlot = computed(() => {
   return timeSlots.value.find((slot) => slot.id === timeSlot.value)
 })
