@@ -290,7 +290,10 @@
 
                 <template #after="{ footerClassName }">
                   <div :class="footerClassName">
-                    <PaymentMethods v-model="paymentMethod">
+                    <PaymentMethods
+                      :model-value="paymentMethod"
+                      @update:model-value="setPaymentMethod"
+                    >
                       <BaseButton
                         type="submit"
                         color="yellow"
@@ -503,6 +506,8 @@ const currentTimeSlot = computed(() => {
 })
 
 // Methods
+const { setPaymentMethod } = cartStore
+
 const toggleShippingModal = (status = null) => {
   isShippingModalOpen.value =
     status !== null ? !!status : !isShippingModalOpen.value

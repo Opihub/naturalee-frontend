@@ -593,6 +593,12 @@ export const useCartStore = defineStore('cart', () => {
     return response.value
   }
 
+  function setPaymentMethod(method) {
+    paymentMethod.value = method
+
+    return paymentMethod.value
+  }
+
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
@@ -610,6 +616,7 @@ export const useCartStore = defineStore('cart', () => {
     hasFreeShipping,
     hasMinimumOrderCost,
     costBeforeFreeShipping,
+    setPaymentMethod,
     load,
     save,
     pickProduct,
