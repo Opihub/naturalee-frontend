@@ -201,7 +201,7 @@ const submitOrder = async () => {
     await removeCoupon()
 
     await navigateTo({
-      path: '/order-confirmed',
+      name: 'order-confirmed',
       query: {
         orderId: response.value.data.id,
       },
