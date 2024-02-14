@@ -74,6 +74,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  stripeCard: {
+    type: Object,
+    default: null,
+  },
   coupon: {
     type: String,
     default: null,
@@ -91,6 +95,7 @@ const props = defineProps({
 // Composables
 const { sending, send } = useSender(emit)
 const useCart = useCartStore()
+
 // Data
 const {
   feedback,
