@@ -151,9 +151,7 @@ defineProps({
 // Watcher
 
 // Computed
-const calculatedPrice = computed(() => (product) => {
-  return (product.discountPrice || product.price) * product.quantity
-})
+const { calculatedPrice } = usePrice()
 
 // Methods
 </script>
