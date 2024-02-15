@@ -90,6 +90,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  canSubmit: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 // Composables
@@ -114,6 +118,10 @@ const sending = ref(false)
 
 // Methods
 const submitOrder = async () => {
+  if (!props.canSubmit) {
+    return
+  }
+
   if (sending.value) {
     return
   }

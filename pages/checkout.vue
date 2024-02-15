@@ -19,6 +19,7 @@
           :coupon="coupon.code"
           :cart="cartStore.checkout"
           :stripe-card="card"
+          :can-submit="paymentMethod.id !== 'stripe' || isStripeComplete"
           @api:start="sending = true"
           @api:end="sending = false"
         >
