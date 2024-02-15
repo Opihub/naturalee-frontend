@@ -367,7 +367,7 @@ export const useCartStore = defineStore('cart', () => {
 
   function validateCoupon() {
     if (!hasCoupon.value) {
-      return
+      return false
     }
 
     let error = false
@@ -417,7 +417,11 @@ export const useCartStore = defineStore('cart', () => {
         message: error,
         status: 'danger',
       })
+
+      return false
     }
+
+    return coupon.value
   }
 
   function removeCoupon() {
@@ -427,7 +431,7 @@ export const useCartStore = defineStore('cart', () => {
   async function applyCoupon(newCoupon) {
     const body = {
       coupon: newCoupon,
-      cart,
+      cart: cart.value,
     }
 
     const response = await useApi(
