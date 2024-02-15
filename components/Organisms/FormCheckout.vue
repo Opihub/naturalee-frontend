@@ -265,7 +265,7 @@ const submitOrder = async () => {
         response.paymentIntent?.status !== 'succeeded'
       ) {
         throw new Error(
-          'È avvenuto un errore durante il pagamento. Si prega di riprovare',
+          'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
           {
             cause: response.error,
           }
