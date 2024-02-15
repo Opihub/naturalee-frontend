@@ -93,7 +93,6 @@ const props = defineProps({
 })
 
 // Composables
-const { sending, send } = useSender(emit)
 const cartStore = useCartStore()
 
 // Data
@@ -106,11 +105,20 @@ const {
   validateInvoice,
 } = useFeedback()
 
+const { stripePaymentIntent } = storeToRefs(cartStore)
+const { requestPaymentIntent, clearCart, removeCoupon } = cartStore
+
+const stripe = inject('stripe')
+
+const sending = ref(false)
+
 // Methods
 const submitOrder = async () => {
   if (sending.value) {
     return
   }
+
+  sending.value = true
 
   resetFeedback()
 
@@ -181,40 +189,105 @@ const submitOrder = async () => {
   }
 
   if (hasErrors.value) {
+    sending.value = false
     window.scrollTo(0, 0)
     return
   }
 
-  const response = await send(
-    async () =>
-      await useApi(
-        'shop/checkout/save',
+  try {
+    emit('api:start')
+
+    // Se è Stripe, genero il paymentIntent
+    if (props.paymentMethod.id === 'stripe') {
+      const paymentIntentData = { ...formData }
+      delete paymentIntentData.products
+      delete paymentIntentData.email
+
+      const response = await requestPaymentIntent(email, paymentIntentData)
+
+      if (!response) {
+        throw new Error(
+          'È avvenuto un errore durante il pagamento. Si prega di riprovare'
+        )
+      }
+
+      formData.paymentIntentId = response.value.intentId
+    }
+
+    // Registro l'ordine
+    const response = await useApi(
+      'shop/checkout/save',
+      {
+        method: 'POST',
+        body: formData,
+      },
+      {
+        cache: false,
+      }
+    )
+
+    // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni
+    if (!response.value.success) {
+      throw new Error(
+        "È avvenuto un errore durante l'inserimento dell'ordine. Si prega di riprovare",
         {
-          method: 'POST',
-          body: formData,
-        },
-        {
-          cache: false,
+          cause: response.value.errors,
         }
       )
-  )
+    }
 
-  if (response.value.success) {
-    const { clearCart, removeCoupon } = cartStore
-    await clearCart(false)
-    await removeCoupon()
+    const orderId = response.value.data.id
+
+    // Se si paga tramite Stripe, allora aspetto la creazione dell'ordine
+    // prima di mandare il pagamento a Stripe
+    if (props.paymentMethod.id === 'stripe') {
+      const response = await stripe.value.confirmCardPayment(
+        stripePaymentIntent.value.clientSecret,
+        {
+          payment_method: {
+            card: props.stripeCard,
+          },
+          receipt_email: email.value,
+        }
+      )
+
+      // Se il pagamento via Stripe fallisce, allora
+      if (
+        !('status' in response.paymentIntent) ||
+        response.paymentIntent?.status !== 'succeeded'
+      ) {
+        throw new Error(
+          'È avvenuto un errore durante il pagamento. Si prega di riprovare',
+          {
+            cause: response.error,
+          }
+        )
+      }
+    }
+
+    // Una volta che l'ordine è ok, pulisco il carrello e rimuovo i coupon,
+    // quindi procedo alla pagina di conferma ordine
+    await clearCart()
+
+    removeCoupon()
+
+    stripePaymentIntent.value = null
 
     await navigateTo({
       name: 'order-confirmed',
       query: {
-        orderId: response.value.data.id,
+        orderId: orderId,
       },
     })
+  } catch (error) {
+    console.log(error)
+    console.log(error.cause)
 
-    return
+    feedback.errors.push(error.message)
+  } finally {
+    sending.value = false
+    emit('api:end')
   }
-
-  feedback.errors.value = response.value.errors
 }
 </script>
 

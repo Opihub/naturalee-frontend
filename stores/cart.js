@@ -203,9 +203,10 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart(notify = true) {
+  function clearCart(pushNotification = true) {
     cart.value = []
-    if (!notify) {
+
+    if (!pushNotification) {
       notify({
         message: t('cart.cleared'),
         status: 'warning',
@@ -604,34 +605,31 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function requestPaymentIntent(email, data = {}) {
-    try {
-      // Create a PaymentIntent with the order amount and currency
-      // const response = await useApi('/api/stripe/paymentIntent', {
-      const response = await useApi(
-        'shop/checkout/payment-intent',
-        {
-          method: 'POST',
-          body: {
-            data: { email, ...data },
-            cart,
-            intent: stripePaymentIntent.value?.intentId,
-          },
+    // Create a PaymentIntent with the order amount and currency
+    const response = await useApi(
+      'shop/checkout/payment-intent',
+      {
+        method: 'POST',
+        body: {
+          data: { email, ...data },
+          cart: cart.value,
+          intent: stripePaymentIntent.value?.intentId,
         },
-        {
-          cache: false,
-        }
-      )
-
-      if (response.value.success) {
-        stripePaymentIntent.value = response.value.data
+      },
+      {
+        cache: false,
       }
+    )
 
-      return response.value.success
-    } catch (e) {
-      console.error(e)
+    if (!response.value.success) {
+      throw new Error(response.value.message, {
+        cause: response.value.errors,
+      })
     }
 
-    return false
+    stripePaymentIntent.value = response.value.data
+
+    return stripePaymentIntent
   }
 
   return {
