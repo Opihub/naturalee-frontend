@@ -166,10 +166,8 @@ const submitOrder = async () => {
     date,
     timeSlot,
     note,
-    email,
     invoice,
     coupon: props.coupon,
-    products: props.cart,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
   }
@@ -208,8 +206,6 @@ const submitOrder = async () => {
     // Se è Stripe, genero il paymentIntent
     if (props.paymentMethod.id === 'stripe') {
       const paymentIntentData = { ...formData }
-      delete paymentIntentData.products
-      delete paymentIntentData.email
 
       const response = await requestPaymentIntent(email, paymentIntentData)
 
@@ -221,6 +217,9 @@ const submitOrder = async () => {
 
       formData.paymentIntentId = response.value.intentId
     }
+
+    formData.products = props.cart
+    formData.email = email
 
     // Registro l'ordine
     const response = await useApi(
