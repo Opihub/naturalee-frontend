@@ -63,7 +63,7 @@
             :data-title="$t('common.subTotal')"
             align="center"
           >
-            <PriceHolder :price="product.price * product.quantity" />
+            <PriceHolder :price="calculatedPrice(product)" />
           </td>
           <td v-if="!readonly" :class="CSS_NAME_ITEM_CELL" align="center">
             <CrossButton @click="onDelete(product)" />
@@ -151,6 +151,9 @@ defineProps({
 // Watcher
 
 // Computed
+const calculatedPrice = computed(() => (product) => {
+  return (product.discountPrice || product.price) * product.quantity
+})
 
 // Methods
 </script>
