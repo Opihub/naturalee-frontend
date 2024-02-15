@@ -113,7 +113,7 @@ const { stripePaymentIntent } = storeToRefs(cartStore)
 const { requestPaymentIntent, clearCart, removeCoupon } = cartStore
 
 const stripe = inject('stripe')
-
+const orderId = ref(null)
 const sending = ref(false)
 
 // Methods
@@ -220,6 +220,7 @@ const submitOrder = async () => {
 
     formData.products = props.cart
     formData.email = email
+    formData.orderId = orderId.value
 
     // Registro l'ordine
     const response = await useApi(
@@ -243,7 +244,7 @@ const submitOrder = async () => {
       )
     }
 
-    const orderId = response.value.data.id
+    orderId.value = response.value.data.id
 
     // Se si paga tramite Stripe, allora aspetto la creazione dell'ordine
     // prima di mandare il pagamento a Stripe
@@ -280,12 +281,16 @@ const submitOrder = async () => {
 
     stripePaymentIntent.value = null
 
-    await navigateTo({
+    const bool = await navigateTo({
       name: 'order-confirmed',
       query: {
-        orderId: orderId,
+        orderId: orderId.value,
       },
     })
+
+    if (bool) {
+      console.log(bool)
+    }
   } catch (error) {
     console.log(error)
     console.log(error.cause)
