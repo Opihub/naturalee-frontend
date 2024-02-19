@@ -19,7 +19,7 @@
           :coupon="coupon.code"
           :cart="cartStore.checkout"
           :stripe-card="card"
-          :can-submit="paymentMethod.id !== 'stripe' || isStripeComplete"
+          :can-submit="canSubmit"
           @api:start="sending = true"
           @api:end="sending = false"
         >
@@ -538,6 +538,13 @@ const elements = computed(() => stripe.value?.elements())
 
 const currentTimeSlot = computed(() => {
   return timeSlots.value.find((slot) => slot.id === timeSlot.value)
+})
+
+const canSubmit = computed(() => {
+  return (
+    (paymentMethod.value?.id && paymentMethod.value.id !== 'stripe') ||
+    isStripeComplete.value
+  )
 })
 
 // Watcher
