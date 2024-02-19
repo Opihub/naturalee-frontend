@@ -55,11 +55,6 @@ pipelines:
                 DELETE_FLAG: 'true'
     dev:
       - step:
-          name: Install dependencies
-          script:
-            - apt-get -qq install wget
-            - apt-get -qq install git-ftp
-      - step:
           name: Assemble .env file
           deployment: prod-compile
           script:
@@ -78,6 +73,7 @@ pipelines:
           artifacts:
             - .output/**
       - step:
+          image: wagnerstephan/bitbucket-git-ftp:latest
           name: Deploy to Production
           deployment: prod
           script:
