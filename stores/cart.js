@@ -31,7 +31,7 @@ export const useCartStore = defineStore('cart', () => {
     serializer: StorageSerializers.object,
   })
 
-  const coupon = useLocalStorage(
+  const coupon = useSessionStorage(
     'coupon',
     {},
     {
@@ -43,9 +43,14 @@ export const useCartStore = defineStore('cart', () => {
     serializer: StorageSerializers.object,
   })
 
+  const stripePaymentIntent = useSessionStorage('paymentIntent', null, {
+    serializer: StorageSerializers.object,
+  })
+
   // Getters
   const {
     hasCoupon,
+    validProducts,
     discount,
     count,
     isEmpty,
@@ -198,9 +203,10 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart(notify = true) {
+  function clearCart(pushNotification = true) {
     cart.value = []
-    if (!notify) {
+
+    if (!pushNotification) {
       notify({
         message: t('cart.cleared'),
         status: 'warning',
@@ -361,23 +367,47 @@ export const useCartStore = defineStore('cart', () => {
 
   function validateCoupon() {
     if (!hasCoupon.value) {
-      return
+      return false
     }
 
     let error = false
 
-    if (
+    if (coupon.value.expiration) {
+      const now = new Date().toLocaleString('it-IT', {
+        timeZone: coupon.value.expiration.timezone,
+      })
+
+      const expiration = new Date(coupon.value.expiration.date).toLocaleString(
+        'it-IT',
+        {
+          timeZone: 'Europe/Rome',
+        }
+      )
+
+      if (now > expiration) {
+        error = t('coupon.expired')
+      }
+    } else if (
       coupon.value.minimum_amount &&
       subTotal.value < coupon.value.minimum_amount
     ) {
-      error = t('coupon.notValid')
-    }
-
-    if (
+      error = t('coupon.missingMinimumAmount')
+    } else if (
       coupon.value.maximum_amount &&
       subTotal.value > coupon.value.maximum_amount
     ) {
-      error = t('coupon.notValid')
+      error = t('coupon.reachMaximumAmount')
+    } else if (validProducts.value.length === 0) {
+      // Se non c'è alcun prodotto valido per il coupon,
+      // a prescindere dalla tipologia di sconto, invalido il coupon
+      error = t('coupon.invalidCoupon')
+    } else if (
+      ['fixed_cart', 'percent'].includes(coupon.value.discount_type) &&
+      validProducts.value.length !== cart.value.length
+    ) {
+      // Se il coupon si applica al carrello, ed il numero di prodotti validi
+      // non combacia con quello attuale, allora invalido il coupon
+      error = t('coupon.invalidCoupon')
     }
 
     if (error) {
@@ -387,7 +417,11 @@ export const useCartStore = defineStore('cart', () => {
         message: error,
         status: 'danger',
       })
+
+      return false
     }
+
+    return coupon.value
   }
 
   function removeCoupon() {
@@ -397,7 +431,7 @@ export const useCartStore = defineStore('cart', () => {
   async function applyCoupon(newCoupon) {
     const body = {
       coupon: newCoupon,
-      cart,
+      cart: cart.value,
     }
 
     const response = await useApi(
@@ -413,7 +447,7 @@ export const useCartStore = defineStore('cart', () => {
 
     if (response.value.success) {
       notify({
-        message: t('coupon.applied'),
+        message: response.value.message,
         status: 'success',
       })
 
@@ -423,7 +457,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     notify({
-      message: t('coupon.notValid'),
+      message: response.value.message,
       status: 'danger',
     })
 
@@ -568,6 +602,40 @@ export const useCartStore = defineStore('cart', () => {
     return response.value
   }
 
+  function setPaymentMethod(method) {
+    paymentMethod.value = method
+
+    return paymentMethod.value
+  }
+
+  async function requestPaymentIntent(email, data = {}) {
+    // Create a PaymentIntent with the order amount and currency
+    const response = await useApi(
+      'shop/checkout/payment-intent',
+      {
+        method: 'POST',
+        body: {
+          data: { email, ...data },
+          cart: cart.value,
+          intent: stripePaymentIntent.value?.intentId,
+        },
+      },
+      {
+        cache: false,
+      }
+    )
+
+    if (!response.value.success) {
+      throw new Error(response.value.message, {
+        cause: response.value.errors,
+      })
+    }
+
+    stripePaymentIntent.value = response.value.data
+
+    return stripePaymentIntent
+  }
+
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
@@ -575,6 +643,7 @@ export const useCartStore = defineStore('cart', () => {
     discount,
     shippingMethod,
     shippingCost,
+    stripePaymentIntent: skipHydrate(stripePaymentIntent),
     paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
     count,
@@ -585,6 +654,7 @@ export const useCartStore = defineStore('cart', () => {
     hasFreeShipping,
     hasMinimumOrderCost,
     costBeforeFreeShipping,
+    setPaymentMethod,
     load,
     save,
     pickProduct,
@@ -595,6 +665,7 @@ export const useCartStore = defineStore('cart', () => {
     removeCoupon,
     applyCoupon,
     remoteAddToCartBatch,
+    requestPaymentIntent,
   }
 })
 

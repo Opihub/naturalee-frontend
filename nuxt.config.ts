@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',
       seoSeparator: '-',
+      stripeKey: process.env.STRIPE_PUBLIC_KEY,
     },
   },
   app: {

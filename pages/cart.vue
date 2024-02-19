@@ -90,7 +90,8 @@
                   <template v-else>
                     <PriceHolder :class="gridCellRightClassName" :price="3" />
                     <span :class="gridCellFullClassName"
-                      >Aggiungi <PriceHolder :price="costBeforeFreeShipping" /> per avere
+                      >Aggiungi
+                      <PriceHolder :price="costBeforeFreeShipping" /> per avere
                       la spedizione gratuita</span
                     >
                   </template>
@@ -173,10 +174,10 @@ if (page.value && 'seo' in page.value) {
 }
 
 const { products } = storeToRefs(configurationStore)
-const { sending, send } = useSender()
+const sending = ref(false)
 
 // Data
-const { isEmpty, coupon, } = storeToRefs(cartStore)
+const { isEmpty, coupon } = storeToRefs(cartStore)
 const basket = ref([])
 
 // Computed
@@ -186,7 +187,7 @@ const {
   subTotal,
   total,
   discount,
-  costBeforeFreeShipping
+  costBeforeFreeShipping,
 } = useCart(basket, coupon)
 const { isLoggedIn } = storeToRefs(userStore)
 
@@ -216,7 +217,7 @@ const clearBasket = async () => {
   basket.value = []
 }
 
-const saveCart = async () => {
+const saveCart = async (direct = true) => {
   if (sending.value) {
     return false
   }
@@ -232,22 +233,28 @@ const saveCart = async () => {
     return false
   }
 
+  sending.value = true
+  let success = false
   try {
-    await send(async () => await cartStore.save(basket))
+    await cartStore.save(basket)
+
+    success = true
   } catch (error) {
+    success = false
+
     notify({
       status: 'danger',
       message: error,
     })
-
-    return false
+  } finally {
+    sending.value = !direct
   }
 
-  return true
+  return success
 }
 
 const goToCheckout = async () => {
-  const success = await saveCart()
+  const success = await saveCart(false)
 
   if (!success) {
     return
