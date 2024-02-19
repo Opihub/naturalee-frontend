@@ -43,6 +43,10 @@ export const useCartStore = defineStore('cart', () => {
     serializer: StorageSerializers.object,
   })
 
+  const stripePaymentIntent = useSessionStorage('paymentIntent', null, {
+    serializer: StorageSerializers.object,
+  })
+
   // Getters
   const {
     hasCoupon,
@@ -199,9 +203,10 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart(notify = true) {
+  function clearCart(pushNotification = true) {
     cart.value = []
-    if (!notify) {
+
+    if (!pushNotification) {
       notify({
         message: t('cart.cleared'),
         status: 'warning',
@@ -362,7 +367,7 @@ export const useCartStore = defineStore('cart', () => {
 
   function validateCoupon() {
     if (!hasCoupon.value) {
-      return
+      return false
     }
 
     let error = false
@@ -412,7 +417,11 @@ export const useCartStore = defineStore('cart', () => {
         message: error,
         status: 'danger',
       })
+
+      return false
     }
+
+    return coupon.value
   }
 
   function removeCoupon() {
@@ -422,7 +431,7 @@ export const useCartStore = defineStore('cart', () => {
   async function applyCoupon(newCoupon) {
     const body = {
       coupon: newCoupon,
-      cart,
+      cart: cart.value,
     }
 
     const response = await useApi(
@@ -593,6 +602,40 @@ export const useCartStore = defineStore('cart', () => {
     return response.value
   }
 
+  function setPaymentMethod(method) {
+    paymentMethod.value = method
+
+    return paymentMethod.value
+  }
+
+  async function requestPaymentIntent(email, data = {}) {
+    // Create a PaymentIntent with the order amount and currency
+    const response = await useApi(
+      'shop/checkout/payment-intent',
+      {
+        method: 'POST',
+        body: {
+          data: { email, ...data },
+          cart: cart.value,
+          intent: stripePaymentIntent.value?.intentId,
+        },
+      },
+      {
+        cache: false,
+      }
+    )
+
+    if (!response.value.success) {
+      throw new Error(response.value.message, {
+        cause: response.value.errors,
+      })
+    }
+
+    stripePaymentIntent.value = response.value.data
+
+    return stripePaymentIntent
+  }
+
   return {
     coupon: skipHydrate(coupon),
     cart: skipHydrate(cart),
@@ -600,6 +643,7 @@ export const useCartStore = defineStore('cart', () => {
     discount,
     shippingMethod,
     shippingCost,
+    stripePaymentIntent: skipHydrate(stripePaymentIntent),
     paymentMethod: skipHydrate(paymentMethod),
     isEmpty,
     count,
@@ -610,6 +654,7 @@ export const useCartStore = defineStore('cart', () => {
     hasFreeShipping,
     hasMinimumOrderCost,
     costBeforeFreeShipping,
+    setPaymentMethod,
     load,
     save,
     pickProduct,
@@ -620,6 +665,7 @@ export const useCartStore = defineStore('cart', () => {
     removeCoupon,
     applyCoupon,
     remoteAddToCartBatch,
+    requestPaymentIntent,
   }
 })
 

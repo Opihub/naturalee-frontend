@@ -61,6 +61,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  name: 'order-confirmed',
   layout: 'green',
   middleware: [
     'auth',
