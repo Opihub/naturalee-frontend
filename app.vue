@@ -28,6 +28,7 @@
 
 <script setup>
 // Imports
+import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
 import { useConfigurationStore } from '@/stores/configuration'
@@ -41,6 +42,7 @@ import { useI18n } from 'vue-i18n'
 // Composables
 const { t } = useI18n()
 const config = useRuntimeConfig()
+const cartStore = useCartStore()
 const notificationsStore = useNotificationsStore()
 const accountStore = useAccountStore()
 const configurationStore = useConfigurationStore()
@@ -110,6 +112,52 @@ accountStore.$onAction(({ name }) => {
         ? 'notifications.forcedLogout'
         : 'notifications.logout'
     ),
+  })
+})
+
+cartStore.$onAction(({ name, args, after, onError }) => {
+  after((result) => {
+    let notification = false
+
+    switch (name) {
+      case 'clearCart':
+        notification = {
+          message: t('cart.cleared'),
+          status: 'warning',
+        }
+        break;
+      default:
+        break;
+    }
+    console.debug(result, name)
+    console.info(args)
+
+    if (notification) {
+      notify(notification)
+    }
+  })
+
+  onError((error) => {
+    console.warn(
+      `Failed "${name}"\nError: ${error}.`
+    )
+
+    const notification = error.message
+    const status = 'danger'
+
+    switch (name) {
+      default:
+        break;
+    }
+    console.debug(error.message, name)
+    console.info(args)
+
+    if (notification) {
+      notify({
+        message: notification,
+        status
+      })
+    }
   })
 })
 </script>

@@ -208,9 +208,13 @@ const deleteFromBasket = async (product) => {
 }
 
 const clearBasket = async () => {
-  const success = await clearCart()
+  try {
+    const feedback = await clearCart()
 
-  if (!success) {
+    if (!feedback.success) {
+      return
+    }
+  } catch (error) {
     return
   }
 
