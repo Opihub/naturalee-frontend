@@ -132,7 +132,7 @@ export const useAccountStore = defineStore('account', () => {
     token.value = null
     rememberMe.value = null
 
-    await cart.clearCart()
+    await cart.clearCart(true)
   }
 
   async function forceLogout() {

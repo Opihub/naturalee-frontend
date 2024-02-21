@@ -275,7 +275,7 @@ const submitOrder = async () => {
 
     // Una volta che l'ordine è ok, pulisco il carrello e rimuovo i coupon,
     // quindi procedo alla pagina di conferma ordine
-    await clearCart()
+    await clearCart(true)
 
     removeCoupon()
 
