@@ -34,7 +34,17 @@
             :data-title="$t('products.price')"
             align="center"
           >
-            <PriceHolder :price="product.price" />
+            <PriceHolder
+              :price="product.price"
+              :sales-price="product?.discountPrice"
+            >
+              <template v-if="product.discountPrice">
+                <PriceHolder
+                  class="u-block"
+                  :sales-price="product?.discountKgPrice"
+                />
+              </template>
+            </PriceHolder>
           </td>
           <td
             :class="[
@@ -53,7 +63,7 @@
             :data-title="$t('common.subTotal')"
             align="center"
           >
-            <PriceHolder :price="product.price * product.quantity" />
+            <PriceHolder :price="calculatedPrice(product)" />
           </td>
           <td v-if="!readonly" :class="CSS_NAME_ITEM_CELL" align="center">
             <CrossButton @click="onDelete(product)" />
@@ -70,13 +80,23 @@
       <tr :class="`${CSS_NAME}__footer`">
         <td colspan="7">
           <button
-            :class="`${CSS_NAME}__empty`"
+            :class="`${CSS_NAME}__empty u-mr-small`"
             type="button"
             color="green"
             :disabled="products.length <= 0"
             @click="onClear"
           >
             {{ $t('cart.clearCart') }}
+          </button>
+
+          <button
+            :class="`${CSS_NAME}__empty`"
+            type="button"
+            color="green"
+            :disabled="products.length <= 0"
+            @click="onSave"
+          >
+            {{ $t('cart.updateCart') }}
           </button>
         </td>
       </tr>
@@ -110,6 +130,12 @@ defineProps({
       return () => {}
     },
   },
+  onSave: {
+    type: Function,
+    default() {
+      return () => {}
+    },
+  },
   readonly: {
     type: Boolean,
     default: false,
@@ -125,6 +151,7 @@ defineProps({
 // Watcher
 
 // Computed
+const { calculatedPrice } = usePrice()
 
 // Methods
 </script>

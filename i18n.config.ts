@@ -67,6 +67,7 @@ export default defineI18nConfig(() => ({
           '{count} {name} aggiunto al carrello | {count} {name} aggiunti al carrello',
         removedFromCart:
           '{name} rimosso dal carrello | Prodotti rimossi dal carrello',
+        updateCart: 'Aggiorna carrello',
         clearCart: 'Svuota carrello',
         productCode: 'Cod. {sku}',
         shippingCost: 'Spese di consegna',
@@ -128,7 +129,8 @@ export default defineI18nConfig(() => ({
           save: 'Salva password',
           update: 'Modifica password',
           generate: 'Genera Password',
-          requirement: 'Minimo 8 caratteri, almeno una minuscola, almeno una maiuscola e almeno un numero o un carattere speciale'
+          requirement:
+            'Minimo 8 caratteri, almeno una minuscola, almeno una maiuscola e almeno un numero o un carattere speciale',
         },
         leaveBlank: 'lascia in bianco per non modificare',
         contactUs: 'Contattaci',
@@ -147,8 +149,17 @@ export default defineI18nConfig(() => ({
         formPlaceholder: 'Codice promozionale',
         asking: 'Hai un codice promozionale?',
         insertHere: 'Fai clic qui per inserire il tuo codice promozionale',
-        applied: 'Coupon applicato!',
+        applied: 'Coupon applicato con successo!',
         notValid: 'Coupon non valido!',
+        expired: 'Il coupon richiesto non è più valido',
+        missingMinimumAmount: "Deve raggiungere la quota minima di %d € per usare il coupon",
+        reachMaximumAmount: "Hai superato la spesa massima di %d € per usare il coupon",
+        invalidCoupon: "Il coupon inserito non è valido per la spesa corrente",
+
+        actions: {
+          apply: 'Applica',
+          remove: 'Rimuovi',
+        },
       },
       wishlist: {
         add: 'Salva nei preferiti!',
@@ -175,6 +186,7 @@ export default defineI18nConfig(() => ({
         timeSlot: 'Fascia oraria',
         followUs: 'Seguici su',
         account: 'Account',
+        discount: 'Sconto',
       },
       checkout: {
         payment: 'Il tuo scontrino',
@@ -273,8 +285,8 @@ export default defineI18nConfig(() => ({
             'Qui troverete risposte alle domande più comuni riguardanti il processo di acquisto, il pagamento, la spedizione e altro ancora. Se non trovate la risposta alla vostra domanda, non esitate a {contatti}.',
         },
         login: {
-          createAccount: 'Registrati per poter continuare con l\'ordine!'
-        }
+          createAccount: "Registrati per poter continuare con l'ordine!",
+        },
       },
     },
   },

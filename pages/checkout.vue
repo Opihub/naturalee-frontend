@@ -12,16 +12,14 @@
           :use-different-address="useDifferentAddress"
           :shipping-address="shippingAddress"
           :billing-address="billingAddress"
-          :shipping-data="{
-            note,
-            date,
-            timeSlot: currentTimeSlot,
-            email,
-          }"
+          :shipping-data="shippingData"
           :billing-data="billingData"
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
-          :cart="cart.checkout"
+          :coupon="coupon.code"
+          :cart="cartStore.checkout"
+          :stripe-card="card"
+          :can-submit="canSubmit"
           @api:start="sending = true"
           @api:end="sending = false"
         >
@@ -40,7 +38,7 @@
             >
               <i18n-t keypath="freeShipping" class="u-mt-tiny">
                 <template #price>
-                  <PriceHolder :price="50 - subTotal" />
+                  <PriceHolder :price="costBeforeFreeShipping" />
                 </template>
                 <template #backToCart>
                   <BaseLink
@@ -208,6 +206,16 @@
                     gridCellRightClassName,
                   }"
                 >
+                  <div :class="[className, rowClassName]">
+                    <span>{{ $t('coupon.formTitle') }}</span>
+
+                    <FormCoupon
+                      tag="div"
+                      class="u-mt-mini"
+                      :placeholder="$t('coupon.formPlaceholder')"
+                    />
+                  </div>
+
                   <div
                     class="u-pt-half u-pb-half"
                     :class="[gridClassName, rowClassName]"
@@ -219,6 +227,18 @@
                       :class="gridCellRightClassName"
                       :price="subTotal"
                     />
+
+                    <template v-if="coupon.code && discount">
+                      <span :class="gridCellLeftClassName"
+                        >Codice promozionale: {{ coupon.code }}</span
+                      >
+                      <PriceHolder
+                        :class="gridCellRightClassName"
+                        :price="discount"
+                      >
+                        <template #before>-</template>
+                      </PriceHolder>
+                    </template>
 
                     <span :class="gridCellLeftClassName">
                       {{ $t('orders.delivery') }}<br />
@@ -259,16 +279,6 @@
                   </div>
 
                   <div :class="[className, rowClassName]">
-                    <span>{{ $t('coupon.formTitle') }}</span>
-
-                    <FormCoupon
-                      tag="div"
-                      class="u-mt-mini"
-                      :placeholder="$t('coupon.formPlaceholder')"
-                    />
-                  </div>
-
-                  <div :class="[className, rowClassName]">
                     <InputField
                       v-model="note"
                       type="textarea"
@@ -282,11 +292,23 @@
 
                 <template #after="{ footerClassName }">
                   <div :class="footerClassName">
-                    <PaymentMethods v-model="paymentMethod">
+                    <PaymentMethods
+                      :model-value="paymentMethod"
+                      @update:model-value="setPaymentMethod"
+                    >
+                      <div
+                        v-show="paymentMethod.id === 'stripe'"
+                        id="card-element"
+                        class="u-mb-half"
+                      ></div>
+
                       <BaseButton
                         type="submit"
-                        color="yellow"
-                        :disabled="sending"
+                        color="green"
+                        :disabled="
+                          sending ||
+                          (paymentMethod.id === 'stripe' && !isStripeComplete)
+                        "
                         >Paga ora</BaseButton
                       >
                     </PaymentMethods>
@@ -346,6 +368,20 @@ import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 
 // Constants
+const STRIPE_OPTIONS = {
+  hidePostalCode: true,
+  style: {
+    base: {
+      padding: '16px',
+      fontFamily: 'Mulish, Open Sans, Segoe UI, sans-serif',
+      fontSize: '16px',
+      color: '#3d4852',
+      '::placeholder': {
+        color: '#8795a1',
+      },
+    },
+  },
+}
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
@@ -383,6 +419,9 @@ provide('holiday', [
 ])
 
 // Component life-cycle hooks
+onUnmounted(() => {
+  unsubscribe()
+})
 
 // Composables
 const { page } = await usePage('checkout')
@@ -390,8 +429,9 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const cart = useCartStore()
-const basket = await cart.load()
+const config = useRuntimeConfig()
+const cartStore = useCartStore()
+const basket = await cartStore.load()
 
 if (basket.value.length <= 0) {
   await navigateTo({
@@ -400,7 +440,7 @@ if (basket.value.length <= 0) {
       redirectBecause: 'noProducts',
     },
   })
-} else if (cart.subTotal < 20) {
+} else if (cartStore.subTotal < 20) {
   await navigateTo({
     name: 'cart',
     query: {
@@ -431,12 +471,21 @@ const {
   paymentMethod,
   shippingMethod,
   hasFreeShipping,
-} = storeToRefs(cart)
+  coupon,
+  discount,
+  costBeforeFreeShipping,
+} = storeToRefs(cartStore)
 
 const isShippingModalOpen = ref(false)
 const isBillingModalOpen = ref(false)
 
 const useDifferentAddress = ref(false)
+
+const stripe = ref(null)
+const card = ref(null)
+const isStripeComplete = ref(false)
+
+provide('stripe', stripe)
 
 const shippingAddress = await useApi(
   'shop/addresses/shipping',
@@ -478,14 +527,60 @@ if (!billingAddress.value.phone) {
 }
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
-// Watcher
-
 // Computed
+const shippingData = computed(() => ({
+  note,
+  date,
+  timeSlot: currentTimeSlot,
+  email,
+}))
+const elements = computed(() => stripe.value?.elements())
+
 const currentTimeSlot = computed(() => {
   return timeSlots.value.find((slot) => slot.id === timeSlot.value)
 })
 
+const canSubmit = computed(() => {
+  return (
+    (paymentMethod.value?.id && paymentMethod.value.id !== 'stripe') ||
+    isStripeComplete.value
+  )
+})
+
+// Watcher
+const unsubscribe = cartStore.$onAction(
+  ({
+    name, // name of the action
+    after, // hook after the action returns or resolves
+  }) => {
+    if (name !== 'setPaymentMethod') {
+      return
+    }
+
+    after((result) => {
+      if (result.id !== 'stripe') {
+        return
+      }
+
+      const data = {
+        shippingAddress: shippingAddress.value,
+        shippingData: shippingData.value,
+        billingAddress: useDifferentAddress.value
+          ? billingAddress.value
+          : shippingAddress.value,
+        billingData: billingData.value,
+        shippingMethod: shippingMethod.value,
+        coupon: coupon.value,
+      }
+
+      requestPaymentIntent(email, data)
+    })
+  }
+)
+
 // Methods
+const { setPaymentMethod, requestPaymentIntent } = cartStore
+
 const toggleShippingModal = (status = null) => {
   isShippingModalOpen.value =
     status !== null ? !!status : !isShippingModalOpen.value
@@ -513,6 +608,28 @@ const closeBillingModal = () => {
 
   toggleBillingModal(false)
 }
+
+function setupStripe() {
+  stripe.value = Stripe(config.public.stripeKey)
+
+  if (!card.value && elements.value) {
+    card.value = elements.value.create('card', STRIPE_OPTIONS)
+    card.value.mount('#card-element')
+
+    card.value.on('change', function (event) {
+      isStripeComplete.value = event.complete
+    })
+  }
+}
+
+useHead({
+  script: [
+    {
+      src: 'https://js.stripe.com/v3/',
+      onload: setupStripe,
+    },
+  ],
+})
 </script>
 
 <style lang="scss" scoped>

@@ -74,6 +74,14 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  stripeCard: {
+    type: Object,
+    default: null,
+  },
+  coupon: {
+    type: String,
+    default: null,
+  },
   cart: {
     type: Array,
     required: true,
@@ -82,11 +90,15 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  canSubmit: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 // Composables
-const { sending, send } = useSender(emit)
-const useCart = useCartStore()
+const cartStore = useCartStore()
+
 // Data
 const {
   feedback,
@@ -97,16 +109,28 @@ const {
   validateInvoice,
 } = useFeedback()
 
+const { stripePaymentIntent } = storeToRefs(cartStore)
+const { requestPaymentIntent, clearCart, removeCoupon } = cartStore
+
+const stripe = inject('stripe')
+const orderId = ref(null)
+const sending = ref(false)
+
 // Methods
 const submitOrder = async () => {
+  if (!props.canSubmit) {
+    return
+  }
+
   if (sending.value) {
     return
   }
 
+  sending.value = true
+
   resetFeedback()
 
-  const { timeSlot, date, note, email, } =
-    props.shippingData
+  const { timeSlot, date, note, email } = props.shippingData
   const { invoice } = props.billingData
 
   if (!date) {
@@ -142,15 +166,14 @@ const submitOrder = async () => {
     date,
     timeSlot,
     note,
-    email,
     invoice,
-    products: props.cart,
+    coupon: props.coupon,
     shippingMethod: props.shippingMethod.id,
     paymentMethod: props.paymentMethod.id,
   }
 
   // Valido i campi della fatturazione indifferentemente da quelli dell'indirizzo
-  validateInvoice(formData.invoice)
+  validateInvoice(invoice)
 
   // Se devo usare un
   if (props.useDifferentAddress) {
@@ -172,39 +195,111 @@ const submitOrder = async () => {
   }
 
   if (hasErrors.value) {
+    sending.value = false
     window.scrollTo(0, 0)
     return
   }
 
-  const response = await send(
-    async () =>
-      await useApi(
-        'shop/checkout/save',
+  try {
+    emit('api:start')
+
+    // Se è Stripe, genero il paymentIntent
+    if (props.paymentMethod.id === 'stripe') {
+      const paymentIntentData = { ...formData }
+
+      const response = await requestPaymentIntent(email, paymentIntentData)
+
+      if (!response) {
+        throw new Error(
+          'È avvenuto un errore durante il pagamento. Si prega di riprovare'
+        )
+      }
+
+      formData.paymentIntentId = response.value.intentId
+    }
+
+    formData.products = props.cart
+    formData.email = email
+    formData.orderId = orderId.value
+
+    // Registro l'ordine
+    const response = await useApi(
+      'shop/checkout/save',
+      {
+        method: 'POST',
+        body: formData,
+      },
+      {
+        cache: false,
+      }
+    )
+
+    // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni
+    if (!response.value.success) {
+      throw new Error(
+        "È avvenuto un errore durante l'inserimento dell'ordine. Si prega di riprovare",
         {
-          method: 'POST',
-          body: formData,
-        },
-        {
-          cache: false,
+          cause: response.value.errors,
         }
       )
-  )
+    }
 
-  if (response.value.success) {
-    const { clearCart } = useCart
-    await clearCart(false)
+    orderId.value = response.value.data.id
 
-    await navigateTo({
-      path: '/order-confirmed',
+    // Se si paga tramite Stripe, allora aspetto la creazione dell'ordine
+    // prima di mandare il pagamento a Stripe
+    if (props.paymentMethod.id === 'stripe') {
+      const response = await stripe.value.confirmCardPayment(
+        stripePaymentIntent.value.clientSecret,
+        {
+          payment_method: {
+            card: props.stripeCard,
+          },
+          receipt_email: email.value,
+        }
+      )
+
+      // Se il pagamento via Stripe fallisce, allora
+      if (
+        !('status' in response.paymentIntent) ||
+        response.paymentIntent?.status !== 'succeeded'
+      ) {
+        throw new Error(
+          'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
+          {
+            cause: response.error,
+          }
+        )
+      }
+    }
+
+    // Una volta che l'ordine è ok, pulisco il carrello e rimuovo i coupon,
+    // quindi procedo alla pagina di conferma ordine
+    await clearCart()
+
+    removeCoupon()
+
+    stripePaymentIntent.value = null
+
+    const bool = await navigateTo({
+      name: 'order-confirmed',
       query: {
-        orderId: response.value.data.id,
+        orderId: orderId.value,
       },
     })
 
-    return
-  }
+    if (bool) {
+      console.log(bool)
+    }
+  } catch (error) {
+    console.log(error)
+    console.log(error.cause)
 
-  feedback.errors.value = response.value.errors
+    feedback.errors.push(error.message)
+  } finally {
+    sending.value = false
+    emit('api:end')
+  }
 }
 </script>
 

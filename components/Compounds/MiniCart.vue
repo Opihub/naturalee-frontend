@@ -49,7 +49,7 @@
 
         <PriceHolder
           :class="`${CSS_NAME_LIST_PRODUCT}__price`"
-          :price="product.price * product.quantity"
+          :price="calculatedPrice(product)"
         />
       </li>
     </ul>
@@ -139,6 +139,7 @@ defineProps({
 // Watcher
 
 // Computed
+const { calculatedPrice } = usePrice()
 
 // Methods
 </script>

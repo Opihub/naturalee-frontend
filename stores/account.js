@@ -1,19 +1,25 @@
+import { defineStore, acceptHMRUpdate, skipHydrate, computed } from '#imports'
 import {
-  defineStore,
-  acceptHMRUpdate,
-  skipHydrate,
-  computed,
-} from '#imports'
-import { useLocalStorage, StorageSerializers } from '@vueuse/core'
+  useLocalStorage,
+  useSessionStorage,
+  StorageSerializers,
+} from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useCartStore } from '@/stores/cart'
 import { getPasswordPattern } from '@/utils/pattern'
 
 export const useAccountStore = defineStore('account', () => {
-  const account = useLocalStorage('account', null, {
+  const rememberMe = useLocalStorage(
+    'rememberMe',
+    { account: null, token: null },
+    {
+      serializer: StorageSerializers.object,
+    }
+  )
+  const account = useSessionStorage('account', rememberMe.value.account, {
     serializer: StorageSerializers.object,
   })
-  const token = useLocalStorage('token', null)
+  const token = useSessionStorage('token', rememberMe.value.token)
 
   const isLoggedIn = computed(() => {
     return !!token.value
@@ -74,7 +80,7 @@ export const useAccountStore = defineStore('account', () => {
     )
 
     if (response.value.success) {
-      await login(response.value.data)
+      await login(response.value.data, true)
     } else {
       console.warn(response)
     }
@@ -94,7 +100,7 @@ export const useAccountStore = defineStore('account', () => {
       }
     )
     if (response.value.success) {
-      await login(response.value.data)
+      await login(response.value.data, formData.remember)
     } else {
       console.warn(response)
     }
@@ -102,13 +108,18 @@ export const useAccountStore = defineStore('account', () => {
     return response
   }
 
-  async function login(profile) {
+  async function login(profile, memorize = false) {
     // TODO: prova a cambiare con try catch
     const user = { ...profile }
 
     if (user.token) {
       token.value = user.token
       delete user.token
+    }
+
+    if (memorize) {
+      rememberMe.value.token = token.value
+      rememberMe.value.account = user
     }
 
     account.value = user
@@ -119,6 +130,7 @@ export const useAccountStore = defineStore('account', () => {
 
     account.value = null
     token.value = null
+    rememberMe.value = null
 
     await cart.clearCart()
   }
