@@ -6,22 +6,15 @@
 
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
-    <BackgroundHolder v-if="isEmpty" class="u-pt-huge u-pb-huge" tag="section">
-      <SiteContainer class="u-mb-medium">
-        <BaseHeading
-          text="Non hai ancora nessun prodotto nel carrello"
-          tag="h4"
-          color="black"
-        />
-      </SiteContainer>
-
-      <ProductCards
-        :products="products.homepage"
-        title="Guarda tra i nostri prodotti consigliati"
+    <SiteContainer v-if="isEmpty" class="u-pt-huge">
+      <BaseHeading
+        text="Non hai ancora nessun prodotto nel carrello"
+        tag="h4"
+        color="black"
       />
-    </BackgroundHolder>
+    </SiteContainer>
 
-    <SiteContainer v-else class="u-pt-huge u-pb-huge">
+    <SiteContainer v-else class="u-pt-huge">
       <FormWrapper class="o-form--cart" @submit.prevent="goToCheckout">
         <template #default="{ columnClassName }">
           <div :class="[columnClassName, 'o-form__basket']">
@@ -130,6 +123,13 @@
         </template>
       </FormWrapper>
     </SiteContainer>
+
+    <BackgroundHolder class="u-pt-huge u-pb-huge" tag="section">
+      <ProductCards
+        :products="products.homepage"
+        title="Guarda tra i nostri prodotti consigliati"
+      />
+    </BackgroundHolder>
   </section>
 </template>
 
