@@ -116,48 +116,69 @@ accountStore.$onAction(({ name }) => {
 })
 
 cartStore.$onAction(({ name, args, after, onError }) => {
+  // Controlla se l'indice dell'argomento richiesto esiste e se è true
+  // Se sì, allora non devo mostrare la notifica
+  const isSilent = (index, args) => {
+    return index !== false && args.length >= index + 1 && args[index]
+  }
+
   after((result) => {
     let notification = false
+    let silentArgument = false
 
     switch (name) {
       case 'clearCart':
+        silentArgument = 0
+
         notification = {
           message: t('cart.cleared'),
           status: 'warning',
         }
-        break;
+        break
       default:
-        break;
+        break
     }
-    console.debug(result, name)
+    console.debug(name)
+    console.debug(result)
     console.info(args)
 
-    if (notification) {
-      notify(notification)
+    if (!notification) {
+      return
     }
+
+    if (isSilent(silentArgument, args)) {
+      return
+    }
+
+    notify(notification)
   })
 
   onError((error) => {
-    console.warn(
-      `Failed "${name}"\nError: ${error}.`
-    )
+    console.warn(`Failed "${name}"\nError: ${error}.`)
 
     const notification = error.message
     const status = 'danger'
+    const silentArgument = false
 
     switch (name) {
       default:
-        break;
+        break
     }
     console.debug(error.message, name)
     console.info(args)
 
-    if (notification) {
-      notify({
-        message: notification,
-        status
-      })
+    if (!notification) {
+      return
     }
+
+    if (isSilent(silentArgument, args)) {
+      return
+    }
+
+    notify({
+      message: notification,
+      status,
+    })
   })
 })
 </script>
