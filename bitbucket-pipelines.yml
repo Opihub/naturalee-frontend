@@ -86,7 +86,7 @@ pipelines:
                 REMOTE_PATH: $FTP_PATH
                 LOCAL_PATH: .output
                 # EXTRA_ARGS: '--exclude httpdocs/ --exclude httpdocs/'
-                SET_ARGS: "ftp:ssl-allow true"
+                SET_ARGS: "ftp:ssl-allow true; mirror:parallel-transfer-count 10"
                 DEBUG: 'true'
                 DELETE_FLAG: 'true'
 
