@@ -8,8 +8,8 @@
 
     <SiteFooter class="u-mt-auto">
       <FooterCopyrights
-        :copyright="copyrights.data"
-        :privacy-menu="privacyMenu.data"
+        :copyright="layout.copyright"
+        :privacy-menu="menu.privacy"
       />
     </SiteFooter>
   </LayoutWrapper>
@@ -17,25 +17,17 @@
 
 <script setup>
 // Imports
+import { useConfigurationStore } from '@/stores/configuration'
 
 // Constants
+const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 
 // Component life-cycle hooks
 
 // Composables
-const copyrights = await useApi('layout/copyright', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "layout/copyright"', error)
-  }
-)
-
-const privacyMenu = await useApi('menu/privacy', {}, { local: true }).catch(
-  (error) => {
-    console.error('Errore durante il caricamento di "menu/privacy"', error)
-  }
-)
+const { menu, layout } = storeToRefs(configurationStore)
 
 // Data
 
