@@ -4,7 +4,7 @@
       ref="topBarElement"
       :socials-menu="menu.socials"
       :primary-menu="menu.primary"
-      :banners="menu.topbar"
+      :banners="layout.topbar"
     />
 
     <HeaderMain
@@ -37,7 +37,7 @@
       <FooterNavigation :socials-menu="menu.socials" :menu="menu.footer" />
 
       <FooterCopyrights
-        :copyright="layout.copyrights"
+        :copyright="layout.copyright"
         :privacy-menu="menu.privacy"
       />
     </SiteFooter>
