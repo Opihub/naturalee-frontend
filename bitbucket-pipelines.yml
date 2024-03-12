@@ -73,11 +73,11 @@ pipelines:
           artifacts:
             - .output/**
       - step:
-          image: wagnerstephan/bitbucket-git-ftp:latest
+          # image: wagnerstephan/bitbucket-git-ftp:latest
           name: Deploy to Production
           deployment: prod
           script:
-            - git ftp push --auto-init -v --user $FTP_USERNAME --passwd $FTP_PASSWORD $FTP_PROTOCOL://$FTP_HOST$FTP_PATH
+            # - git ftp push --auto-init -v --user $FTP_USERNAME --passwd $FTP_PASSWORD $FTP_PROTOCOL://$FTP_HOST$FTP_PATH
             - pipe: atlassian/ftp-deploy:0.4.0
               variables:
                 USER: $FTP_USERNAME
