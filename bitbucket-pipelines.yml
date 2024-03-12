@@ -85,7 +85,7 @@ pipelines:
                 SERVER: $FTP_HOST
                 REMOTE_PATH: $FTP_PATH/build
                 LOCAL_PATH: .output
-                EXTRA_ARGS: 'mv $FTP_PATH/.output $FTP_PATH/old/; mv $FTP_PATH/build/.output $FTP_PATH; mrm -r $FTP_PATH/old/'
+                EXTRA_ARGS: 'mv $FTP_PATH/test $FTP_PATH/old && mv $FTP_PATH/build/output $FTP_PATH/ && mrm -r $FTP_PATH/old/'
                 SET_ARGS: "ftp:ssl-allow true; mirror:parallel-transfer-count 10"
                 DEBUG: 'true'
                 DELETE_FLAG: 'true'
