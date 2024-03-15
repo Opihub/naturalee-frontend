@@ -146,6 +146,7 @@ const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/carrello',
   name: 'cart',
   layout: 'standard',
 })
@@ -168,7 +169,7 @@ onMounted(() => {
 })
 
 // Composables
-const { page } = await usePage('cart')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

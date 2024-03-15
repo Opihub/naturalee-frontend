@@ -60,11 +60,12 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
-import bannerBacheca from '@/assets/images/account/banner-account.png'
+
 // Constants
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account/dashboard',
   alias: 'dashboard',
   name: 'dashboard',
   key: 'dashboard',

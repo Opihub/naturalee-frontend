@@ -18,6 +18,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account/ordini/:id/riordina',
   name: 'order-products',
   key: 'order-products',
 })

@@ -61,7 +61,7 @@ const faqs = await useApi(
     dataOnly: true,
   }
 )
-const { page } = await usePage('faq')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

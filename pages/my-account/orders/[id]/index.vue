@@ -53,7 +53,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  alias: '/my-account/orders/:id/view',
+  path: '/il-mio-account/ordini/:id/visualizza',
   name: 'order-view',
   key: 'order-view',
 })

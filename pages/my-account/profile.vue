@@ -16,6 +16,7 @@ import { useAccountStore } from '@/stores/account'
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account/profilo',
   name: 'profile',
   key: 'profile',
 })

@@ -11,6 +11,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account/ordini',
   name: 'orders-list',
   key: 'orders-list',
 })

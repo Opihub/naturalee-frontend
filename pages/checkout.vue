@@ -424,7 +424,7 @@ onUnmounted(() => {
 })
 
 // Composables
-const { page } = await usePage('checkout')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
