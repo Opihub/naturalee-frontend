@@ -1,25 +1,32 @@
-import { defineStore, acceptHMRUpdate, skipHydrate, computed } from '#imports'
 import {
-  useLocalStorage,
-  useSessionStorage,
-  StorageSerializers,
-} from '@vueuse/core'
+  defineStore,
+  acceptHMRUpdate,
+  skipHydrate,
+  computed,
+  useCookie,
+} from '#imports'
+import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useCartStore } from '@/stores/cart'
 import { getPasswordPattern } from '@/utils/pattern'
 
 export const useAccountStore = defineStore('account', () => {
-  const rememberMe = useLocalStorage(
-    'rememberMe',
-    { account: null, token: null },
+  // Tiene memorizzato il token alla chiusura del browser
+  const rememberMe = useLocalStorage('rememberMe', false)
+
+  const account = useLocalStorage(
+    'account',
+    {},
     {
       serializer: StorageSerializers.object,
     }
   )
-  const account = useSessionStorage('account', rememberMe.value.account, {
-    serializer: StorageSerializers.object,
+
+  // Il token salvato come cookie è usufruibile anche lato server
+  // Di default, viene caricato il token salvato nel localStorage
+  const token = useCookie('jwt', {
+    default: () => rememberMe.value,
   })
-  const token = useSessionStorage('token', rememberMe.value.token)
 
   const isLoggedIn = computed(() => {
     return !!token.value
@@ -118,8 +125,7 @@ export const useAccountStore = defineStore('account', () => {
     }
 
     if (memorize) {
-      rememberMe.value.token = token.value
-      rememberMe.value.account = user
+      rememberMe.value = token.value
     }
 
     account.value = user
@@ -130,12 +136,20 @@ export const useAccountStore = defineStore('account', () => {
 
     account.value = null
     token.value = null
-    rememberMe.value = null
+    rememberMe.value = false
 
     await cart.clearCart(true)
   }
 
   async function forceLogout() {
+    await logout()
+  }
+
+  async function validateAccount() {
+    if (rememberMe.value) {
+      return
+    }
+
     await logout()
   }
 
@@ -149,7 +163,7 @@ export const useAccountStore = defineStore('account', () => {
       return {
         value: {
           success: false,
-          message: 'La passowrd corrente è errata',
+          message: 'La password corrente è errata',
         },
       }
     }
@@ -212,6 +226,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   return {
+    rememberMe: skipHydrate(rememberMe),
     token: skipHydrate(token),
     account: skipHydrate(account),
     username,
@@ -223,6 +238,7 @@ export const useAccountStore = defineStore('account', () => {
     logout,
     forceLogout,
     updateUser,
+    validateAccount,
   }
 })
 

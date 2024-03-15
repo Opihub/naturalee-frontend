@@ -61,6 +61,17 @@ nuxtApp.hook('page:finish', () => {
  * Carica la versione remota delle API
  */
 if (process.client) {
+  const alreadyLanded = useCookie('alreadyLanded', {
+    default: () => false
+  })
+
+  // Se l'utente atterra sul sito dopo aver chiuso tutte le sessioni senza il remember me,
+  // allora pulisco i dati appena torna sul sito
+  if (!alreadyLanded.value) {
+    accountStore.validateAccount()
+    alreadyLanded.value = true
+  }
+
   const { data: cache } = await useFetch('/v1/auth/x-cache', {
     baseURL: config?.public?.endpoint,
   })
