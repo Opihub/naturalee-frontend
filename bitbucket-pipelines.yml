@@ -83,7 +83,8 @@ pipelines:
                 USER: $FTP_USERNAME
                 PASSWORD: $FTP_PASSWORD
                 SERVER: $FTP_HOST
-                REMOTE_PATH: '${FTP_PATH}build; mv ${FTP_PATH}.output ${FTP_PATH}old && mv ${FTP_PATH}build ${FTP_PATH}.output && mrm -r ${FTP_PATH}old/'
+                REMOTE_PATH: '${FTP_PATH}build/${BITBUCKET_BUILD_NUMBER}'
+                # REMOTE_PATH: '${FTP_PATH}build; mv ${FTP_PATH}.output ${FTP_PATH}old && mv ${FTP_PATH}build ${FTP_PATH}.output && mrm -r ${FTP_PATH}old/'
                 LOCAL_PATH: .output
                 # EXTRA_ARGS: 'mv $FTP_PATH/test $FTP_PATH/old && mv $FTP_PATH/build/output $FTP_PATH/ && mrm -r $FTP_PATH/old/'
                 SET_ARGS: "ftp:ssl-allow true  mirror:parallel-transfer-count 10"
