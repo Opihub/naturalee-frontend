@@ -3,5 +3,14 @@ import { useRoute } from '#imports'
 export const useSlug = () => {
   const route = useRoute()
 
-  return (route.params?.slug || ['home']).filter((slug) => slug).join('/')
+  let slug = 'home'
+  if (route.params?.slug) {
+    slug = route.params?.slug.filter((slug) => slug).join('/')
+  } else if (route.path !== '/') {
+    slug = route.path
+  }
+
+  console.debug(slug)
+
+  return slug
 }
