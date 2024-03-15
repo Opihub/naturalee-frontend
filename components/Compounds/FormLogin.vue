@@ -64,7 +64,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Component life-cycle hooks
 
 // Composables
-const { sending, send } = useSender(emit)
+const { sending } = useSender(emit)
 const store = useAccountStore()
 const cart = useCartStore()
 const wishlist = useWishlistStore()
@@ -86,7 +86,9 @@ const login = async () => {
     return
   }
 
-  const response = await send(async () => await store.signUp(formData))
+  sending.value = true
+
+  const response = await store.signUp(formData)
 
   const message = {
     status: 'danger',
@@ -97,8 +99,8 @@ const login = async () => {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
-    cart.load(true)
-    wishlist.load()
+    await cart.load(true)
+    await wishlist.load()
   } else {
     message.message = response.value.message
   }
@@ -108,6 +110,8 @@ const login = async () => {
   await navigateTo({
     name: 'dashboard',
   })
+
+  sending.value = false
 }
 </script>
 
