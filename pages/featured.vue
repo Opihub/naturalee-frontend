@@ -25,12 +25,13 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/prodotti-consigliati',
   name: 'featured',
 })
 
 defineI18nRoute({
   paths: {
-    it: '/featured',
+    it: '/prodotti-consigliati',
   },
   locales: ['it'],
 })
@@ -38,7 +39,7 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
-const { page } = await usePage('featured')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

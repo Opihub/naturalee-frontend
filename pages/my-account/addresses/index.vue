@@ -41,6 +41,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account/indirizzi',
   name: 'addresses-list',
   key: 'addresses-list',
 })

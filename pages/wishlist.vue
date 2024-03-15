@@ -44,7 +44,7 @@ defineI18nRoute({
 const store = useWishlistStore()
 
 // Data
-const { page } = await usePage('wishlist')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

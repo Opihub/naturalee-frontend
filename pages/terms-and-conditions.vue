@@ -11,9 +11,9 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/termini-e-condizioni',
   layout: 'standard',
   name: 'terms-and-conditions',
-  alias: ['/termini-e-condizioni', '/condizioni-di-vendita'],
 })
 
 defineI18nRoute({
@@ -26,7 +26,7 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
-const {page} = await usePage('termini-e-condizioni')
+const {page} = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

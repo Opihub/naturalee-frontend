@@ -31,7 +31,7 @@ export const useCartStore = defineStore('cart', () => {
     serializer: StorageSerializers.object,
   })
 
-  const coupon = useSessionStorage(
+  const coupon = useLocalStorage(
     'coupon',
     {},
     {
@@ -39,7 +39,7 @@ export const useCartStore = defineStore('cart', () => {
     }
   )
 
-  const paymentMethod = useSessionStorage('paymentMethod', null, {
+  const paymentMethod = useLocalStorage('paymentMethod', null, {
     serializer: StorageSerializers.object,
   })
 
@@ -203,15 +203,8 @@ export const useCartStore = defineStore('cart', () => {
     return response
   }
 
-  function clearCart(pushNotification = true) {
+  function clearCart() {
     cart.value = []
-
-    if (!pushNotification) {
-      notify({
-        message: t('cart.cleared'),
-        status: 'warning',
-      })
-    }
 
     return true
   }
@@ -471,31 +464,21 @@ export const useCartStore = defineStore('cart', () => {
       return clearCart()
     }
 
-    try {
-      const response = await useApi(
-        'shop/cart/clear',
-        {
-          method: 'DELETE',
-        },
-        {
-          cache: false,
-        }
-      )
-
-      if (response.value.success) {
-        return clearCart()
-      } else {
-        console.error(response.value)
-        throw new Error(response.value.message)
+    const response = await useApi(
+      'shop/cart/clear',
+      {
+        method: 'DELETE',
+      },
+      {
+        cache: false,
       }
-    } catch (error) {
-      notify({
-        message: error.message,
-        status: 'danger',
-      })
+    )
+
+    if (!response.value.success) {
+      throw new Error(response.value.message)
     }
 
-    return false
+    return clearCart()
   }
 
   async function remoteAddToCart(product, quantity = 1) {

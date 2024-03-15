@@ -6,22 +6,15 @@
 
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
-    <BackgroundHolder v-if="isEmpty" class="u-pt-huge u-pb-huge" tag="section">
-      <SiteContainer class="u-mb-medium">
-        <BaseHeading
-          text="Non hai ancora nessun prodotto nel carrello"
-          tag="h4"
-          color="black"
-        />
-      </SiteContainer>
-
-      <ProductCards
-        :products="products.homepage"
-        title="Guarda tra i nostri prodotti consigliati"
+    <SiteContainer v-if="isEmpty" class="u-pt-huge">
+      <BaseHeading
+        text="Non hai ancora nessun prodotto nel carrello"
+        tag="h4"
+        color="black"
       />
-    </BackgroundHolder>
+    </SiteContainer>
 
-    <SiteContainer v-else class="u-pt-huge u-pb-huge">
+    <SiteContainer v-else class="u-pt-huge">
       <FormWrapper class="o-form--cart" @submit.prevent="goToCheckout">
         <template #default="{ columnClassName }">
           <div :class="[columnClassName, 'o-form__basket']">
@@ -130,6 +123,13 @@
         </template>
       </FormWrapper>
     </SiteContainer>
+
+    <BackgroundHolder class="u-pt-huge u-pb-huge" tag="section">
+      <ProductCards
+        :products="products.homepage"
+        title="Guarda tra i nostri prodotti consigliati"
+      />
+    </BackgroundHolder>
   </section>
 </template>
 
@@ -146,6 +146,7 @@ const configurationStore = useConfigurationStore()
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/carrello',
   name: 'cart',
   layout: 'standard',
 })
@@ -168,7 +169,7 @@ onMounted(() => {
 })
 
 // Composables
-const { page } = await usePage('cart')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
@@ -208,9 +209,13 @@ const deleteFromBasket = async (product) => {
 }
 
 const clearBasket = async () => {
-  const success = await clearCart()
+  try {
+    const feedback = await clearCart()
 
-  if (!success) {
+    if (!feedback.success) {
+      return
+    }
+  } catch (error) {
     return
   }
 

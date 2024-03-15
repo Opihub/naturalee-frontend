@@ -74,6 +74,7 @@ import yellowDots from '@/assets/svg/decorations/yellow-dots.svg'
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/contatti',
   name: 'contacts',
 })
 
@@ -85,7 +86,7 @@ defineI18nRoute({
 })
 
 // Data
-const { page } = await usePage('contatti')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

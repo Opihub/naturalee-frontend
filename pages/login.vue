@@ -40,7 +40,7 @@ onMounted(() => {
 // Composables
 const route = useRoute()
 // Data
-const { page } = await usePage('my-account')
+const { page } = await usePage('il-mio-account')
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

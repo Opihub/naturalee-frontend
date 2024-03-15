@@ -28,10 +28,11 @@
 
 <script setup>
 // Imports
+import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
 import { useConfigurationStore } from '@/stores/configuration'
-import { StorageSerializers, useSessionStorage } from '@vueuse/core'
+import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
 // Constants
@@ -41,6 +42,7 @@ import { useI18n } from 'vue-i18n'
 // Composables
 const { t } = useI18n()
 const config = useRuntimeConfig()
+const cartStore = useCartStore()
 const notificationsStore = useNotificationsStore()
 const accountStore = useAccountStore()
 const configurationStore = useConfigurationStore()
@@ -59,6 +61,17 @@ nuxtApp.hook('page:finish', () => {
  * Carica la versione remota delle API
  */
 if (process.client) {
+  const alreadyLanded = useCookie('alreadyLanded', {
+    default: () => false
+  })
+
+  // Se l'utente atterra sul sito dopo aver chiuso tutte le sessioni senza il remember me,
+  // allora pulisco i dati appena torna sul sito
+  if (!alreadyLanded.value) {
+    accountStore.validateAccount()
+    alreadyLanded.value = true
+  }
+
   const { data: cache } = await useFetch('/v1/auth/x-cache', {
     baseURL: config?.public?.endpoint,
   })
@@ -66,13 +79,13 @@ if (process.client) {
   /**
    * Carica la lista di tutte le API salvate
    */
-  const apiKeys = useSessionStorage('apiKeys', [], {
+  const apiKeys = useLocalStorage('apiKeys', [], {
     serializer: StorageSerializers.object,
   })
   /**
    * Carica la versione locale delle API
    */
-  const cacheVersion = useSessionStorage('cacheVersion', null)
+  const cacheVersion = useLocalStorage('cacheVersion', null)
 
   /**
    * Confronta le due versioni delle API
@@ -81,10 +94,10 @@ if (process.client) {
    */
   if (cache.value !== cacheVersion.value) {
     apiKeys.value.forEach((key) => {
-      window.sessionStorage.removeItem(key)
+      window.localStorage.removeItem(key)
     })
 
-    window.sessionStorage.removeItem('apiKeys')
+    window.localStorage.removeItem('apiKeys')
     cacheVersion.value = cache.value
   }
 }
@@ -110,6 +123,73 @@ accountStore.$onAction(({ name }) => {
         ? 'notifications.forcedLogout'
         : 'notifications.logout'
     ),
+  })
+})
+
+cartStore.$onAction(({ name, args, after, onError }) => {
+  // Controlla se l'indice dell'argomento richiesto esiste e se è true
+  // Se sì, allora non devo mostrare la notifica
+  const isSilent = (index, args) => {
+    return index !== false && args.length >= index + 1 && args[index]
+  }
+
+  after((result) => {
+    let notification = false
+    let silentArgument = false
+
+    switch (name) {
+      case 'clearCart':
+        silentArgument = 0
+
+        notification = {
+          message: t('cart.cleared'),
+          status: 'warning',
+        }
+        break
+      default:
+        break
+    }
+    console.debug(name)
+    console.debug(result)
+    console.info(args)
+
+    if (!notification) {
+      return
+    }
+
+    if (isSilent(silentArgument, args)) {
+      return
+    }
+
+    notify(notification)
+  })
+
+  onError((error) => {
+    console.warn(`Failed "${name}"\nError: ${error}.`)
+
+    const notification = error.message
+    const status = 'danger'
+    const silentArgument = false
+
+    switch (name) {
+      default:
+        break
+    }
+    console.debug(error.message, name)
+    console.info(args)
+
+    if (!notification) {
+      return
+    }
+
+    if (isSilent(silentArgument, args)) {
+      return
+    }
+
+    notify({
+      message: notification,
+      status,
+    })
   })
 })
 </script>

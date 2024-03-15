@@ -1,6 +1,9 @@
 <template>
   <section>
-    <OrdersTable :orders="orders" />
+      <BaseHeading v-if="!orders" tag="h1" use="h3" class="u-mb-large" color="black"
+        >Caricamento ordini in corso&hellip;</BaseHeading
+      >
+    <OrdersTable v-else :orders="orders" />
   </section>
 </template>
 
@@ -11,6 +14,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account/ordini',
   name: 'orders-list',
   key: 'orders-list',
 })
@@ -33,6 +37,7 @@ onMounted(async () => {
   )
 
   if (!response.value.success) {
+    orders.value = []
     return
   }
 
@@ -43,7 +48,7 @@ onMounted(async () => {
 // Composables
 
 // Data
-const orders = ref([])
+const orders = ref(null)
 
 // Watcher
 

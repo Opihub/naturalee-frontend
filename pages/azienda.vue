@@ -119,6 +119,7 @@ import FragolaPera from '@/assets/svg/decorations/fragola-pera.svg'
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/azienda',
   name: 'company',
 })
 
@@ -135,7 +136,7 @@ defineI18nRoute({
 const { t } = useI18n({
   useScope: 'local',
 })
-const { page } = await usePage('azienda')
+const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }

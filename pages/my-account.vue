@@ -15,6 +15,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
+  path: '/il-mio-account',
   layout: 'standard',
   name: 'my-account',
   middleware: 'auth',
