@@ -32,7 +32,7 @@ import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
 import { useConfigurationStore } from '@/stores/configuration'
-import { StorageSerializers, useSessionStorage } from '@vueuse/core'
+import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
 // Constants
@@ -79,13 +79,13 @@ if (process.client) {
   /**
    * Carica la lista di tutte le API salvate
    */
-  const apiKeys = useSessionStorage('apiKeys', [], {
+  const apiKeys = useLocalStorage('apiKeys', [], {
     serializer: StorageSerializers.object,
   })
   /**
    * Carica la versione locale delle API
    */
-  const cacheVersion = useSessionStorage('cacheVersion', null)
+  const cacheVersion = useLocalStorage('cacheVersion', null)
 
   /**
    * Confronta le due versioni delle API
@@ -94,10 +94,10 @@ if (process.client) {
    */
   if (cache.value !== cacheVersion.value) {
     apiKeys.value.forEach((key) => {
-      window.sessionStorage.removeItem(key)
+      window.localStorage.removeItem(key)
     })
 
-    window.sessionStorage.removeItem('apiKeys')
+    window.localStorage.removeItem('apiKeys')
     cacheVersion.value = cache.value
   }
 }

@@ -1,6 +1,6 @@
 import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
-import { useSessionStorage, StorageSerializers } from '@vueuse/core'
+import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
 import { useLogout } from '@/composables/logout'
 
@@ -28,7 +28,7 @@ function getApiUrl(url, options = {}) {
 export async function useApi(url, options = {}, innerOptions = {}) {
   const config = useRuntimeConfig()
 
-  const apiKeys = useSessionStorage('apiKeys', [], {
+  const apiKeys = useLocalStorage('apiKeys', [], {
     serializer: StorageSerializers.object,
   })
   innerOptions = {
@@ -53,7 +53,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   let cached = ref(null)
   if (innerOptions.cache) {
     apiKeys.value.push(apiUrl)
-    cached = useSessionStorage(apiUrl, null, {
+    cached = useLocalStorage(apiUrl, null, {
       serializer: StorageSerializers.object,
     })
   } else {

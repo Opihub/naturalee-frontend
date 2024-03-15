@@ -5,10 +5,10 @@ import {
   computed,
   useApi,
 } from '#imports'
-import { useSessionStorage, StorageSerializers } from '@vueuse/core'
+import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 
 export const useConfigurationStore = defineStore('configuration', () => {
-  const configuration = useSessionStorage(
+  const configuration = useLocalStorage(
     'configuration',
     {},
     {
