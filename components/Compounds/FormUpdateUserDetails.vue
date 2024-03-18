@@ -36,8 +36,7 @@
       <InputField
         v-model="formData.phone"
         :class="[columnClassName, columnFullClassName]"
-        type="text"
-        required
+        type="tel"
       >
         {{ $t('form.phone') }}</InputField
       >
