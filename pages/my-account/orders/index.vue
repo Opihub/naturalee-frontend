@@ -1,9 +1,14 @@
 <template>
   <section>
-      <BaseHeading v-if="!orders" tag="h1" use="h3" class="u-mb-large" color="black"
-        >Caricamento ordini in corso&hellip;</BaseHeading
-      >
-    <OrdersTable v-else :orders="orders" />
+    <BaseHeading
+      v-if="!orders"
+      tag="h1"
+      use="h3"
+      class="u-mb-large"
+      color="black"
+      >Caricamento ordini in corso&hellip;</BaseHeading
+    >
+    <OrdersTable v-else :orders="orders.records" />
   </section>
 </template>
 
@@ -27,28 +32,11 @@ defineI18nRoute({
 })
 
 // Component life-cycle hooks
-onMounted(async () => {
-  const response = await useApi(
-    'shop/orders',
-    {},
-    {
-      cache: false,
-    }
-  )
-
-  if (!response.value.success) {
-    orders.value = []
-    return
-  }
-
-  // TODO pagination
-  orders.value = response.value.data.records
-})
 
 // Composables
 
 // Data
-const orders = ref(null)
+const orders = await useApi('shop/orders', {}, { dataOnly: true })
 
 // Watcher
 
