@@ -49,7 +49,7 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const { wishlist } = storeToRefs(store)
+const wishlist = await store.load()
 
 // Watcher
 
