@@ -62,9 +62,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     if (existingProduct) {
       notify({
         message: t('wishlist.added', {
-          named: {
-            name: title,
-          },
+          name: title,
         }),
         status: 'success',
       })
@@ -76,9 +74,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     notify({
       message: t('wishlist.added', {
-        named: {
-          name: title,
-        },
+        name: title,
       }),
       status: 'success',
     })
@@ -102,9 +98,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     notify({
       message: t('wishlist.removed', {
-        named: {
-          name: product.title,
-        },
+        name: product.title,
       }),
       status: 'warning',
     })
