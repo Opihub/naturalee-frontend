@@ -59,9 +59,6 @@ watch(
     const { page: response } = await usePage(path)
 
     page.value = response.value
-    if (page.value && 'seo' in page.value) {
-      usePageSeo(page.value.seo)
-    }
 
     const newBreadcrumbs = page.value?.breadcrumbs || breadcrumbs.value
     breadcrumbs.value = [...newBreadcrumbs]
@@ -91,6 +88,16 @@ watch(
             route.params.addresses == 'billing' ? 'Fatturazione' : 'Spedizione',
         })
       }
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  page,
+  () => {
+    if (page.value && 'seo' in page.value) {
+      usePageSeo(page.value.seo)
     }
   },
   { immediate: true }

@@ -42,8 +42,8 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    '/il-mio-account/**': { ssr: false },
-    '/my-account/**': { ssr: false },
+    // '/il-mio-account/**': { ssr: false },
+    // '/my-account/**': { ssr: false },
     '/checkout': { ssr: false },
     // Skippo le categorie se sono in SSR e se ho chiesto di saltare la lettura della sitemap
     ...(!process.env.SSR && process.env?.SKIP_SITEMAP
