@@ -7,10 +7,6 @@ import {
 import { useAccountStore } from '@/stores/account'
 
 export default defineNuxtRouteMiddleware((to) => {
-  if (process.server) {
-    return true
-  }
-
   const router = useRouter()
 
   const store = useAccountStore()
