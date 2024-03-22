@@ -21,7 +21,7 @@ const props = defineProps({
     required: true,
     validator(value) {
       return (
-        'id' in value &&
+        'variationId' in value &&
         'title' in value &&
         // 'provenance' in value &&
         'link' in value
@@ -43,7 +43,7 @@ const wishlist = useWishlistStore()
 const className = computed(() => {
   const className = [CSS_NAME]
 
-  if (wishlist.has(props.product.id)) {
+  if (wishlist.has(props.product.variationId)) {
     className.push('is-active')
   }
 

@@ -32,8 +32,8 @@ export const useWishlistStore = defineStore('wishlist', () => {
     return count.value <= 0
   })
 
-  const pick = computed(() => (id) => {
-    return wishlist.value.find((product) => product.id === id)
+  const pick = computed(() => (variationId) => {
+    return wishlist.value.find((product) => product.variationId === variationId)
   })
 
   // Actions
@@ -50,12 +50,14 @@ export const useWishlistStore = defineStore('wishlist', () => {
     if (response.value.success) {
       wishlist.value = response.value.data
     }
+
+    return wishlist
   }
 
   function addToWishlist(product) {
-    const { id, title } = product
+    const { variationId, title } = product
 
-    const existingProduct = pick.value(id)
+    const existingProduct = pick.value(variationId)
 
     if (existingProduct) {
       notify({
@@ -85,7 +87,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   function removeFromWishlist(product) {
-    const existingProduct = pick.value(product.id)
+    const existingProduct = pick.value(product.variationId)
 
     if (!existingProduct) {
       notify({
@@ -122,7 +124,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   async function updateWishlist(product) {
-    if (pick.value(product.id)) {
+    if (pick.value(product.variationId)) {
       return await remoteRemoveFromWishlist(product)
     }
 
