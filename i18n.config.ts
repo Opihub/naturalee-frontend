@@ -108,6 +108,8 @@ export default defineI18nConfig(() => ({
         errorMessage1: 'Oh, no!',
         errorMessage2:
           'È avvenuto un errore durante il salvataggio… Riprova ad inviare il form',
+        sendError:
+          "È avvenuto un errore durante l'invio della richiesta. Riprova ad inviare il form",
         errorMessage3: 'Oh, no!',
         returnToLogin: 'Oppure torna al login',
         saveChanges: 'Salva le modifiche',

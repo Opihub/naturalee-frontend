@@ -29,12 +29,15 @@
       >{{ $t('form.password.recovery') }}</BaseButton
     >
     <BaseMessage v-if="sent" class="u-mt-half">
-      <template v-if="success">
+      <template v-if="success === 'password_recovery'">
         {{
           $t('form.password.recoverySent', {
             userParam: user,
           })
         }}
+      </template>
+      <template v-else-if="success === 'errors_sending_emails'">
+        {{ $t('form.sendError') }}
       </template>
       <template v-else>
         {{
@@ -100,10 +103,6 @@ const passwordRecovery = async () => {
   })
 
   console.debug(response.value)
-  success.value = response.value.success
-
-  if (response.value.success) {
-    // TODO: cambiare layout
-  }
+  success.value = response.value.code
 }
 </script>
