@@ -1,6 +1,5 @@
 import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
 import { createResponse } from '@/server/utils/responses'
-import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useAccountStore } from '@/stores/account'
 import { useLogout } from '@/composables/logout'
 
@@ -10,10 +9,6 @@ function getApiUrl(url, options = {}) {
 
   if (options?.version) {
     paths.unshift(`v${options.version}`)
-  }
-
-  if (options?.local) {
-    paths.unshift('api')
   }
 
   path += paths.join('/').replaceAll(/\/+/g, '/')
@@ -28,13 +23,8 @@ function getApiUrl(url, options = {}) {
 export async function useApi(url, options = {}, innerOptions = {}) {
   const config = useRuntimeConfig()
 
-  const apiKeys = useLocalStorage('apiKeys', [], {
-    serializer: StorageSerializers.object,
-  })
   innerOptions = {
     version: 1,
-    cache: true,
-    local: false,
     dataOnly: false,
     ...innerOptions,
   }
@@ -44,23 +34,7 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const auth = useAccountStore()
   const { token, isLoggedIn } = storeToRefs(auth)
 
-  const apiUrl = getApiUrl(url, {
-    params: options.params,
-    version: innerOptions.version,
-    local: innerOptions.local,
-  })
-
   let cached = ref(null)
-  if (innerOptions.cache) {
-    apiKeys.value.push(apiUrl)
-    cached = useLocalStorage(apiUrl, null, {
-      serializer: StorageSerializers.object,
-    })
-  }
-
-  if (cached.value && cached.value.success) {
-    return cached
-  }
 
   const fetchOptions = {
     ...options,
@@ -79,7 +53,6 @@ export async function useApi(url, options = {}, innerOptions = {}) {
   const { data, error } = await useFetch(
     getApiUrl(url, {
       version: innerOptions.version,
-      local: innerOptions.local,
     }),
     fetchOptions
   )

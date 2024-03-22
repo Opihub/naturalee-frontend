@@ -38,9 +38,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
   // Actions
   async function load() {
-    const response = await useApi('shop/wishlist/products', null, {
-      cache: false,
-    }).catch((error) => {
+    const response = await useApi('shop/wishlist/products').catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/wishlist/products"',
         error
@@ -131,19 +129,13 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi(
-        'shop/wishlist/add',
-        {
-          method: 'POST',
-          body: {
-            id: product.id,
-            variationId: product.variationId,
-          },
+      const response = await useApi('shop/wishlist/add', {
+        method: 'POST',
+        body: {
+          id: product.id,
+          variationId: product.variationId,
         },
-        {
-          cache: false,
-        }
-      )
+      })
 
       if (response.value.success) {
         return addToWishlist(product)
@@ -167,19 +159,13 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi(
-        'shop/wishlist/remove',
-        {
-          method: 'DELETE',
-          body: {
-            id: product.id,
-            variationId: product.variationId,
-          },
+      const response = await useApi('shop/wishlist/remove', {
+        method: 'DELETE',
+        body: {
+          id: product.id,
+          variationId: product.variationId,
         },
-        {
-          cache: false,
-        }
-      )
+      })
 
       if (response.value.success) {
         return removeFromWishlist(product)
@@ -203,15 +189,9 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi(
-        'shop/wishlist/clear',
-        {
-          method: 'DELETE',
-        },
-        {
-          cache: false,
-        }
-      )
+      const response = await useApi('shop/wishlist/clear', {
+        method: 'DELETE',
+      })
 
       if (response.value.success) {
         // se si chiama il server, la quantità restituita sovrascriverà quella attuale,

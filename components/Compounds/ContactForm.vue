@@ -97,16 +97,10 @@ const submitForm = async () => {
 
   const response = await send(
     async () =>
-      await useApi(
-        `form/contacts`,
-        {
-          method: 'POST',
-          body: formData,
-        },
-        {
-          cache: false,
-        }
-      )
+      await useApi(`form/contacts`, {
+        method: 'POST',
+        body: formData,
+      })
   )
   if (sent) {
     feedback.status =

@@ -285,16 +285,10 @@ const fetchProducts = async () => {
       params['filters[]'] = chosenFilters.value
     }
 
-    const response = await useApi(
-      props.from,
-      {
-        method: 'GET',
-        params,
-      },
-      {
-        cache: props.cached,
-      }
-    )
+    const response = await useApi(props.from, {
+      method: 'GET',
+      params,
+    })
 
     if (response.value.success) {
       if (!props.paginate) {

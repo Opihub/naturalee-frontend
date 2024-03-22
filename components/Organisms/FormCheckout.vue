@@ -223,16 +223,10 @@ const submitOrder = async () => {
     formData.orderId = orderId.value
 
     // Registro l'ordine
-    const response = await useApi(
-      'shop/checkout/save',
-      {
-        method: 'POST',
-        body: formData,
-      },
-      {
-        cache: false,
-      }
-    )
+    const response = await useApi('shop/checkout/save', {
+      method: 'POST',
+      body: formData,
+    })
 
     // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni
     if (!response.value.success) {

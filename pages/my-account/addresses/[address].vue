@@ -46,7 +46,6 @@ const response = await useApi(
     method: 'GET',
   },
   {
-    cache: false,
     dataOnly: true,
   }
 )

@@ -58,15 +58,9 @@ defineI18nRoute({
 // Composables
 
 // Data
-const response = await useApi(
-  `shop/addresses`,
-  {
-    method: 'GET',
-  },
-  {
-    cache: false,
-  }
-)
+const response = await useApi(`shop/addresses`, {
+  method: 'GET',
+})
 
 // Watcher
 

@@ -90,16 +90,10 @@ const passwordRecovery = async () => {
   user.value = formData.username
 
   const response = await send(async () => {
-    return await useApi(
-      `auth/password-recovery/request`,
-      {
-        method: 'POST',
-        body: formData,
-      },
-      {
-        cache: false,
-      }
-    )
+    return await useApi(`auth/password-recovery/request`, {
+      method: 'POST',
+      body: formData,
+    })
   })
 
   console.debug(response.value)

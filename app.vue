@@ -62,7 +62,7 @@ nuxtApp.hook('page:finish', () => {
  */
 if (process.client) {
   const alreadyLanded = useCookie('alreadyLanded', {
-    default: () => false
+    default: () => false,
   })
 
   // Se l'utente atterra sul sito dopo aver chiuso tutte le sessioni senza il remember me,
@@ -70,35 +70,6 @@ if (process.client) {
   if (!alreadyLanded.value) {
     accountStore.validateAccount()
     alreadyLanded.value = true
-  }
-
-  const { data: cache } = await useFetch('/v1/auth/x-cache', {
-    baseURL: config?.public?.endpoint,
-  })
-
-  /**
-   * Carica la lista di tutte le API salvate
-   */
-  const apiKeys = useLocalStorage('apiKeys', [], {
-    serializer: StorageSerializers.object,
-  })
-  /**
-   * Carica la versione locale delle API
-   */
-  const cacheVersion = useLocalStorage('cacheVersion', null)
-
-  /**
-   * Confronta le due versioni delle API
-   * se differenti, cancella tutte le API registrate, pulisce la lista
-   * ed aggiorna la versione corrente delle API
-   */
-  if (cache.value !== cacheVersion.value) {
-    apiKeys.value.forEach((key) => {
-      window.localStorage.removeItem(key)
-    })
-
-    window.localStorage.removeItem('apiKeys')
-    cacheVersion.value = cache.value
   }
 }
 

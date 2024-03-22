@@ -493,7 +493,6 @@ const shippingAddress = await useApi(
     method: 'GET',
   },
   {
-    cache: false,
     dataOnly: true,
   }
 )
@@ -504,7 +503,6 @@ const userBillingAddress = await useApi(
     method: 'GET',
   },
   {
-    cache: false,
     dataOnly: true,
   }
 )

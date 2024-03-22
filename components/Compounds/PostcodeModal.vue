@@ -176,16 +176,10 @@ const registerEmail = async () => {
 
   sending.value = true
 
-  const response = await useApi(
-    `postcodes/update/${feedback.value}`,
-    {
-      method: 'POST',
-      body: formData,
-    },
-    {
-      cache: false,
-    }
-  )
+  const response = await useApi(`postcodes/update/${feedback.value}`, {
+    method: 'POST',
+    body: formData,
+  })
 
   savedEmail.value = response.value.success
   sending.value = false
