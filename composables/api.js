@@ -56,12 +56,12 @@ export async function useApi(url, options = {}, innerOptions = {}) {
     cached = useLocalStorage(apiUrl, null, {
       serializer: StorageSerializers.object,
     })
-  } else {
-    options.key = 'task:' + String(Math.floor(Math.random() * 100))
   }
+
   if (cached.value && cached.value.success) {
     return cached
   }
+
   const fetchOptions = {
     ...options,
     headers: {
