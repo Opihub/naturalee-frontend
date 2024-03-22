@@ -71,35 +71,33 @@ definePageMeta({
   layout: 'standard',
   name: 'password-recovery',
   validate: async (route) => {
-    defineNuxtRouteMiddleware(async () => {
-      const { token, login } = route.query
+    const { token, login } = route.query
 
-      if (
-        !login ||
-        !token ||
-        token.match(getPasswordRecoveryTokenPattern()).length <= 0
-      ) {
-        return false
-      }
+    if (!login || !token) {
+      return false
+    }
 
-      const response = await useApi(
-        `auth/password-recovery/validate-token`,
-        {
-          method: 'POST',
-          body: {
-            token,
-            login,
-          },
+    const isTokenValid = token.match(getPasswordRecoveryTokenPattern())
+
+    if (!isTokenValid || isTokenValid.length <= 0) {
+      return false
+    }
+
+    const response = await useApi(
+      `auth/password-recovery/validate-token`,
+      {
+        method: 'POST',
+        body: {
+          token,
+          login,
         },
-        {
-          cache: false,
-        }
-      )
+      },
+      {
+        cache: false,
+      }
+    )
 
-      // TODO: trovare un modo di ritornare gli errori
-
-      return response.value.success
-    })
+    return response.value.success
     // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
   },
 })
