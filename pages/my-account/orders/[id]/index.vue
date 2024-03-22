@@ -69,19 +69,7 @@ defineI18nRoute({
 
 // Composables
 const route = useRoute()
-const order = ref(null)
-
-onMounted(async () => {
-  const response = await useApi(
-    `shop/orders/${route.params.id}`,
-    {},
-    {
-      cache: false,
-    }
-  )
-
-  order.value = response.value
-})
+const order = await useApi(`shop/orders/${route.params.id}`)
 
 // Data
 
