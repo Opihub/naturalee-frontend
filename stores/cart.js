@@ -153,6 +153,10 @@ export const useCartStore = defineStore('cart', () => {
 
   async function save(basket = []) {
     if (!isLoggedIn.value) {
+      for (const product of basket.value) {
+        updateCartQuantity(product, product.quantity, false)
+      }
+
       return true
     }
 
@@ -182,7 +186,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     for (const product of response.value.data) {
-      updateCartQuantity(product, product.quantity, null)
+      updateCartQuantity(product, product.quantity, false)
     }
 
     return response
@@ -275,7 +279,7 @@ export const useCartStore = defineStore('cart', () => {
       cart.value[index].quantity = quantity
 
       // TODO: sistemare questo schifo
-      if (server !== null) {
+      if (server) {
         notify({
           message: !server
             ? t('cart.quantityUpdated')

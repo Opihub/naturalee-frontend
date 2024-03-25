@@ -227,17 +227,6 @@ const saveCart = async (direct = true) => {
     return false
   }
 
-  if (!isLoggedIn.value) {
-    await navigateTo({
-      name: 'login',
-      query: {
-        redirectBecause: 'needAccount',
-      },
-    })
-
-    return false
-  }
-
   sending.value = true
   let success = false
   try {
@@ -259,6 +248,17 @@ const saveCart = async (direct = true) => {
 }
 
 const goToCheckout = async () => {
+  if (!isLoggedIn.value) {
+    await navigateTo({
+      name: 'login',
+      query: {
+        redirectBecause: 'needAccount',
+      },
+    })
+
+    return false
+  }
+
   const success = await saveCart(false)
 
   if (!success) {

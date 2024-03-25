@@ -117,6 +117,14 @@ cartStore.$onAction(({ name, args, after, onError }) => {
           status: 'warning',
         }
         break
+      case 'save':
+        silentArgument = 1
+
+        notification = {
+          message: t('cart.updated'),
+          status: 'success',
+        }
+        break
       default:
         break
     }
