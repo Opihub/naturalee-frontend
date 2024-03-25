@@ -122,6 +122,7 @@ export default defineNuxtConfig({
         ],
       },
     ],
+    ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
   ],
   googleFonts: {
     download: true,
