@@ -233,7 +233,7 @@ export const useCartStore = defineStore('cart', () => {
         status: 'success',
       })
 
-      return true
+      return quantity
     }
 
     cart.value.push({
@@ -263,7 +263,7 @@ export const useCartStore = defineStore('cart', () => {
       status: 'success',
     })
 
-    return true
+    return quantity
   }
 
   function updateCartQuantity(product, quantity, server = false) {
@@ -292,7 +292,7 @@ export const useCartStore = defineStore('cart', () => {
         })
       }
 
-      return true
+      return diff
     }
 
     return addToCart(product, quantity)
