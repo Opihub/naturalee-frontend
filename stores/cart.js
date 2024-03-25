@@ -111,7 +111,6 @@ export const useCartStore = defineStore('cart', () => {
       }
 
       cart.value = response.value.data.products
-      console.log(cart.value)
       if ('invalid' in response.value.data && !isLoggedIn) {
         notify({
           message: response.value.data.invalid.message.join(' - '),
