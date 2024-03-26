@@ -64,6 +64,7 @@
     "vlitejs": "^6.0.0",
     "vue-icomoon": "^0.6.1",
     "vue-markdown-render": "^2.1.0",
+    "vue-recaptcha-v3": "^2.0.1",
     "vue3-lottie": "^3.1.0"
   },
   "overrides": {
