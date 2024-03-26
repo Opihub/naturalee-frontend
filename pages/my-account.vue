@@ -21,6 +21,11 @@ definePageMeta({
   middleware: 'auth',
 })
 
+defineRouteRules({
+  index: false,
+  robots: false,
+})
+
 // Component life-cycle hooks
 
 // Composables
@@ -107,8 +112,6 @@ watch(
 
 // Methods
 const pageKey = (route) => {
-  console.debug(route.name)
-
   if (route.name === 'my-account') {
     return 'dashboard'
   }
