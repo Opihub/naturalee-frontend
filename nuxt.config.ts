@@ -45,65 +45,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // '/il-mio-account/**': { ssr: false },
-    // '/my-account/**': { ssr: false },
     '/checkout': { ssr: false },
-    // Skippo le categorie se sono in SSR e se ho chiesto di saltare la lettura della sitemap
-    ...(!process.env.SSR && process.env?.SKIP_SITEMAP
-      ? {
-          '/frutta/**': { ssr: false },
-          '/verdura/**': { ssr: false },
-          '/dispensa/**': { ssr: false },
-          '/esotico/**': { ssr: false },
-          '/aromi/**': { ssr: false },
-        }
-      : {}),
-  },
-  hooks: {
-    ready: async () => {
-      console.info('Avviato pulizia file')
-      await clearJSON()
-      console.info('Puliti tutti i file')
-    },
-    close: async () => {
-      console.info('Avviato pulizia file')
-      await clearJSON()
-      console.info('Puliti tutti i file')
-    },
-    async 'nitro:config'(nitroConfig) {
-      if (nitroConfig.dev) {
-        return
-      }
-
-      // Skippo la sitemap se richiesto o se sono in SSR
-      if (process.env.SSR || process.env?.SKIP_SITEMAP) {
-        console.info('Sitemap saltata')
-        return
-      }
-
-      if (!nitroConfig?.prerender?.routes) {
-        return
-      }
-
-      console.info('Download della Sitemap in corso')
-      const sitemap = await ofetch(
-        (process.env.API_ENDPOINT_URL || '/') + '/v1/sitemap/products',
-        { parseResponse: JSON.parse }
-      )
-
-      if (!sitemap.success) {
-        console.warn('È avvenuto errore durante il fetch della Sitemap')
-        throw new Error(sitemap.message)
-      }
-      console.info(
-        `Download della Sitemap completato! Sono stato trovati ${sitemap.data.length} prodotti`
-      )
-
-      nitroConfig.prerender.routes = [
-        ...nitroConfig.prerender.routes,
-        ...sitemap.data,
-      ]
-    },
   },
   modules: [
     '@nuxtjs/i18n',
@@ -123,6 +65,7 @@ export default defineNuxtConfig({
       },
     ],
     ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
+    '@nuxtjs/sitemap',
   ],
   googleFonts: {
     download: true,
@@ -160,6 +103,8 @@ export default defineNuxtConfig({
     },
   ],
   i18n: {
+    locales: [{ code: 'it', iso: 'it-IT' }],
+    defaultLocale: 'it',
     compilation: {
       jit: process.env?.COMPILATED_TRANSLATION ? false : true,
     },
@@ -178,6 +123,34 @@ export default defineNuxtConfig({
     },
   },
 
+  sitemap: {
+    sitemaps: {
+      pages: {
+        includeAppSources: true,
+        exclude: [
+          '/frutta/**',
+          '/verdura/**',
+          '/aromi/**',
+          '/esotico/**',
+          '/dispensa/**',
+        ],
+      },
+      shop: {
+        includeAppSources: false,
+        urls() {
+          // resolved when the sitemap is shown
+          return ['/frutta/', '/verdura/', '/aromi/', '/esotico/', '/dispensa/']
+        },
+        sources: ['/api/__sitemap__/shop'],
+        defaults: { priority: 0.7 },
+      },
+    },
+  },
+
+  site: {
+    trailingSlash: true,
+    url: 'http://localhost:3000',
+  },
   svgo: {
     defaultImport: 'component',
   },
