@@ -30,6 +30,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  experimental: {
+    inlineRouteRules: true
+  },
   css: [
     '@splidejs/vue-splide/css/core',
     'assets/css/main.scss',
