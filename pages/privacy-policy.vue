@@ -22,6 +22,11 @@ defineI18nRoute({
   locales: ['it'],
 })
 
+defineRouteRules({
+  index: false,
+  robots: false,
+})
+
 // Component life-cycle hooks
 
 // Data
