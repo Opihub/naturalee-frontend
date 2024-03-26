@@ -29,7 +29,7 @@ definePageMeta({
 
 defineI18nRoute({
   paths: {
-    it: '/cerca',
+    it: '/ricerca',
   },
   locales: ['it'],
 })
