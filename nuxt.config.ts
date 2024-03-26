@@ -1,8 +1,6 @@
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
-import { clearJSON } from './server/utils/storageApi'
-import { ofetch } from 'ofetch'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -152,7 +150,6 @@ export default defineNuxtConfig({
 
   site: {
     trailingSlash: true,
-    url: 'http://localhost:3000',
   },
   svgo: {
     defaultImport: 'component',
