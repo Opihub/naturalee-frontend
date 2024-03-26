@@ -4,7 +4,7 @@
     <div class="o-row row-contacts">
       <SiteContainer>
         <SiteContainer class="o-row__container o-row__container--left" padless>
-          <BaseHeading id="company-info" class="u-mb-small" tag="h3">{{
+          <BaseHeading id="company-info" class="u-mb-small" tag="h1" use="h3">{{
             $t('form.contactUs')
           }}</BaseHeading>
 
