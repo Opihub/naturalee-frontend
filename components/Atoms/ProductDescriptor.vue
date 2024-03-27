@@ -50,6 +50,9 @@ const iconName = computed(() => {
     case 'ciotola-monoporzione':
       iconName = 'ciotola'
       break
+    default:
+      iconName = 'pezzo'
+      break
   }
 
   return iconName
