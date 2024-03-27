@@ -105,11 +105,15 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
-const timeout = useTimeoutFn(() => {
-  resetParams()
+const timeout = useTimeoutFn(
+  () => {
+    resetParams()
 
-  fetchProducts()
-}, 300)
+    lazyFetchProducts()
+  },
+  300,
+  { immediate: false }
+)
 
 const route = useRoute()
 const router = useRouter()
@@ -134,7 +138,7 @@ const orderby = ref(route.query.sort || null)
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
-    fetchProducts()
+    lazyFetchProducts()
   }
 })
 
@@ -188,7 +192,7 @@ const clearFilters = () => {
 
   chosenFilters.value = []
 
-  fetchProducts()
+  lazyFetchProducts()
 }
 
 const toggleFilter = (filter) => {
@@ -208,7 +212,7 @@ const toggleFilter = (filter) => {
 
   resetParams()
 
-  fetchProducts()
+  lazyFetchProducts()
 }
 
 const changeOrder = (order) => {
@@ -216,10 +220,39 @@ const changeOrder = (order) => {
 
   resetParams()
 
-  fetchProducts()
+  lazyFetchProducts()
 }
 
 const fetchProducts = async () => {
+  const params = {}
+
+  if (props.paginate) {
+    params.limit = DEFAULT_LIMIT
+
+    if (page.value > 0) {
+      params.page = page.value
+    }
+  }
+
+  if (props.search) {
+    params.search = props.search
+  }
+
+  if (orderby.value) {
+    params.orderby = orderby.value
+  }
+
+  if (chosenFilters.value.length > 0) {
+    params['filters[]'] = chosenFilters.value
+  }
+
+  return await useApi(props.from, {
+    method: 'GET',
+    params,
+  })
+}
+
+const lazyFetchProducts = async () => {
   updateQuery()
   if (!props.from) {
     if (!props.use) {
@@ -263,32 +296,7 @@ const fetchProducts = async () => {
   }
 
   try {
-    const params = {}
-
-    if (props.paginate) {
-      params.limit = DEFAULT_LIMIT
-
-      if (page.value > 0) {
-        params.page = page.value
-      }
-    }
-
-    if (props.search) {
-      params.search = props.search
-    }
-
-    if (orderby.value) {
-      params.orderby = orderby.value
-    }
-
-    if (chosenFilters.value.length > 0) {
-      params['filters[]'] = chosenFilters.value
-    }
-
-    const response = await useApi(props.from, {
-      method: 'GET',
-      params,
-    })
+    const response = await fetchProducts()
 
     if (response.value.success) {
       if (!props.paginate) {
@@ -344,7 +352,7 @@ const updateQuery = () => {
 }
 
 // On created
-await fetchProducts()
+await lazyFetchProducts()
 </script>
 
 <style lang="scss">
