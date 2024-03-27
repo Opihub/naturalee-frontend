@@ -17,7 +17,9 @@ export const useConfigurationStore = defineStore('configuration', () => {
   )
 
   const load = async () => {
-    const response = await useApi('config', {}, { dataOnly: true })
+    const response = await useApi('config', {
+      key: 'config'
+    }, { dataOnly: true })
 
     configuration.value = response.value
   }

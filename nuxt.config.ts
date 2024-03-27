@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       endpoint: process.env.API_ENDPOINT_URL || '/',
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
+      recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
     },
   },
   app: {

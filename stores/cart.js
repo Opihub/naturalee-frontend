@@ -117,9 +117,8 @@ export const useCartStore = defineStore('cart', () => {
           status: 'warning',
         })
       }
-      if (!isLoggedIn.value) {
-        return cart
-      }
+
+      return cart
     }
 
     const response = await useApi('shop/cart/products').catch((error) => {
@@ -147,6 +146,7 @@ export const useCartStore = defineStore('cart', () => {
         })
       })
     }
+
     return cart
   }
 
@@ -540,6 +540,7 @@ export const useCartStore = defineStore('cart', () => {
         error
       )
     })
+
     return response.value
   }
 

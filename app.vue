@@ -32,7 +32,6 @@ import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
 import { useConfigurationStore } from '@/stores/configuration'
-import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
 // Constants
@@ -41,7 +40,6 @@ import { useI18n } from 'vue-i18n'
 
 // Composables
 const { t } = useI18n()
-const config = useRuntimeConfig()
 const cartStore = useCartStore()
 const notificationsStore = useNotificationsStore()
 const accountStore = useAccountStore()

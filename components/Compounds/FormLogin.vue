@@ -76,6 +76,8 @@ const formData = reactive({
   remember: false,
 })
 
+const { recaptcha } = useCaptcha()
+
 // Watcher
 
 // Computed
@@ -88,7 +90,9 @@ const login = async () => {
 
   sending.value = true
 
-  const response = await store.signUp(formData)
+  const token = await recaptcha()
+
+  const response = await store.signUp({ ...formData, recaptcha_token: token })
 
   const message = {
     status: 'danger',

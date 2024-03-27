@@ -1,36 +1,29 @@
 <template>
-  <SiteContainer>
-    <BaseHeading
-      v-if="title"
-      class="u-mb-medium u-text-center u-text-left@tablet"
-      tag="h5"
-      >{{ title }}</BaseHeading
-    >
+  <Splide
+    :class="CSS_NAME"
+    :options="options"
+    :has-track="false"
+    :aria-label="title"
+  >
+    <SplideTrack>
+      <SplideSlide
+        v-for="product in products"
+        :key="product.id"
+        :class="`${CSS_NAME}__slide`"
+      >
+        <ProductCard :class="`${CSS_NAME}__item`" :product="product" />
+      </SplideSlide>
+    </SplideTrack>
 
-    <slot />
-
-    <Splide
-      :class="CSS_NAME"
-      :options="options"
-      :has-track="false"
-      :aria-label="title"
-    >
-      <SplideTrack>
-        <SplideSlide v-for="product in products" :key="product.id" :class="`${CSS_NAME}__slide`">
-          <ProductCard :class="`${CSS_NAME}__item`" :product="product" />
-        </SplideSlide>
-      </SplideTrack>
-
-      <div class="splide__arrows">
-        <button class="splide__arrow splide__arrow--prev">
-          <ArrowSVG />
-        </button>
-        <button class="splide__arrow splide__arrow--next">
-          <ArrowSVG />
-        </button>
-      </div>
-    </Splide>
-  </SiteContainer>
+    <div class="splide__arrows">
+      <button class="splide__arrow splide__arrow--prev">
+        <ArrowSVG />
+      </button>
+      <button class="splide__arrow splide__arrow--next">
+        <ArrowSVG />
+      </button>
+    </div>
+  </Splide>
 </template>
 
 <script setup>

@@ -125,10 +125,15 @@
     </SiteContainer>
 
     <BackgroundHolder class="u-pt-huge u-pb-huge" tag="section">
-      <ProductCards
-        :products="products.homepage"
-        title="Guarda tra i nostri prodotti consigliati"
-      />
+      <SiteContainer>
+        <BaseHeading
+          class="u-mb-medium u-text-center u-text-left@tablet"
+          tag="h5"
+          >Guarda tra i nostri prodotti consigliati</BaseHeading
+        >
+
+        <ProductCards :products="products.homepage" />
+      </SiteContainer>
     </BackgroundHolder>
   </section>
 </template>

@@ -71,15 +71,17 @@
 <script setup>
 import { useApi } from '@/composables/api'
 
-//form data
-const formData = reactive({
+const DEFAULT_STATUS = {
   firstName: '',
   lastName: '',
   email: '',
   phone: '',
   message: '',
   acceptance: false,
-})
+}
+
+//form data
+const formData = reactive({ ...DEFAULT_STATUS })
 
 const feedback = reactive({
   status: null,
@@ -90,16 +92,20 @@ const emit = defineEmits(['api:start', 'api:end'])
 
 const { sending, send, sent } = useSender(emit)
 
+const { recaptcha } = useCaptcha()
+
 const submitForm = async () => {
   if (sending.value) {
     return
   }
 
+  const token = await recaptcha()
+
   const response = await send(
     async () =>
       await useApi(`form/contacts`, {
         method: 'POST',
-        body: formData,
+        body: { ...formData, _wpcf7_recaptcha_response: token },
       })
   )
   if (sent) {
@@ -111,13 +117,9 @@ const submitForm = async () => {
     Array.from(inputs).forEach((input) => {
       input.classList.remove('is-valid', 'is-init')
     })
+
     if (feedback.status == 'mail_sent') {
-      formData.firstName = ''
-      formData.lastName = ''
-      formData.email = ''
-      formData.phone = ''
-      formData.message = ''
-      formData.acceptance = false
+      formData = { ...DEFAULT_STATUS }
     }
   }
 }
