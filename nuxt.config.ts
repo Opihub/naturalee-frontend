@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     },
   },
   experimental: {
-    inlineRouteRules: true
+    inlineRouteRules: true,
   },
   css: [
     '@splidejs/vue-splide/css/core',
@@ -50,6 +50,7 @@ export default defineNuxtConfig({
     '/checkout': { ssr: false },
   },
   modules: [
+    '@zadigetvoltaire/nuxt-gtm',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
@@ -154,6 +155,9 @@ export default defineNuxtConfig({
   },
   svgo: {
     defaultImport: 'component',
+  },
+  gtm: {
+    id: process.env?.GTM_ID || '',
   },
   // @ts-ignore
   storybook: {
