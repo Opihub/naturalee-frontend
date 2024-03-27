@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32"
+  height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="profile-clip-path">
+      <circle cx="16" cy="16" r="16" fill="#f0f1fb" stroke="#f0f1fb"
+        stroke-width="2" />
+    </clipPath>
+  </defs>
+  <g transform="translate(-18 -34)">
+    <path
+      d="M16,0A16,16,0,1,1,0,16,16,16,0,0,1,16,0Z" transform="translate(18 34)" fill="#ffd100" />
+    <g transform="translate(18 34)"
+      clip-path="url(#profile-clip-path)">
+      <path
+        d="M12.588,14.161A7.081,7.081,0,1,0,5.507,7.081,7.082,7.082,0,0,0,12.588,14.161Zm6.294,1.573H16.172a8.559,8.559,0,0,1-7.169,0H6.294A6.293,6.293,0,0,0,0,22.028v.787c0,1.3,1.057,4.044,2.36,4.044H22.815c1.3,0,2.36-2.741,2.36-4.044v-.787A6.293,6.293,0,0,0,18.881,15.734Z"
+        transform="translate(3.368 6.737)" fill="#00966e" />
+    </g>
+  </g>
+</svg>

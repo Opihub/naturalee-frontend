@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "sass:meta";
+
+@mixin transition-properties($properties...) {
+  transition-property: #{$properties};
+}
+
+@mixin transition($properties...) {
+  @include transition-properties($properties);
+
+  transition-timing-function: $transition-timing-function;
+  transition-duration: $transition-duration;
+  transition-delay: $transition-delay;
+}
+
+@mixin transition-inline($duration: null, $timing: null, $delay: null) {
+  @if (meta.type-of($duration) == map) {
+    $map: $duration;
+
+    $duration: if(map.has-key($map, duration), map.get($map, duration), null);
+    $timing: if(map.has-key($map, timing), map.get($map, timing), null);
+    $delay: if(map.has-key($map, delay), map.get($map, delay), null);
+  }
+
+  @if ($timing) {
+    transition-timing-function: $timing;
+  }
+
+  @if ($duration) {
+    transition-duration: $duration;
+  }
+
+  @if ($delay) {
+    transition-delay: $delay;
+  }
+}

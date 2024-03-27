@@ -1,0 +1,76 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+@mixin assemble-utilities-with-sizes($media: false) {
+  @each $prop, $rules in $utilities-with-sizes {
+    $rules: if(meta.type-of($rules) == list, $rules, ($rules));
+
+    @each $key, $value in $utilities-sizes {
+      @if ($media) {
+        @include from($media) {
+          @include utility(#{$prop}-#{$key}\@#{$media}) {
+            @each $rule in $rules {
+              #{$rule}: if(
+                meta.type-of($value) == number,
+                rem($value),
+                $value
+              ) !important;
+            }
+          }
+        }
+      } @else {
+        @include utility(#{$prop}-#{$key}) {
+          @each $rule in $rules {
+            #{$rule}: if(
+              meta.type-of($value) == number,
+              rem($value),
+              $value
+            ) !important;
+          }
+        }
+      }
+    }
+
+    @if ($media) {
+      @include from($media) {
+        @include utility(#{$prop}-custom\@#{$media}) {
+          @each $rule in $rules {
+            #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+          }
+        }
+      }
+    } @else {
+      @include utility(#{$prop}-custom) {
+        @each $rule in $rules {
+          #{$rule}: get-var($prop, inherit, $prefix: 'custom') !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin assemble-utilities-without-sizes($media: false) {
+  @each $prop, $options in $utilities-without-sizes {
+    @each $value in map.get($options, values) {
+      @if ($media) {
+        @include from($media) {
+          @include utility(#{$prop}-#{$value}\@#{$media}) {
+            #{map.get($options, rule)}: $value !important;
+          }
+        }
+      } @else {
+        @include utility(#{$prop}-#{$value}) {
+          #{map.get($options, rule)}: $value !important;
+        }
+      }
+    }
+  }
+}
+
+@include assemble-utilities-with-sizes();
+@include assemble-utilities-without-sizes();
+//@include assemble-utilities-position();
+@each $media, $_ in $responsive {
+  @include assemble-utilities-with-sizes($media);
+  @include assemble-utilities-without-sizes($media);
+}

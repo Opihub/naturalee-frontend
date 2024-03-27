@@ -1,0 +1,42 @@
+@use "sass:map";
+
+$variables-to-set: (
+  font-size: $font-size,
+
+  border-circle: 999em,
+  rgb-green: hex-to-rgb($green),
+  color-green: $green,
+  rgb-red: hex-to-rgb($red),
+  color-red: $red,
+  rgb-brown: hex-to-rgb($brown),
+  color-brown: $brown,
+  rgb-orange: hex-to-rgb($orange),
+  color-orange: $orange,
+  rgb-yellow: hex-to-rgb($yellow),
+  color-yellow: $yellow,
+  rgb-light: hex-to-rgb($light),
+  color-light: $light,
+  rgb-dark: hex-to-rgb($dark),
+  color-dark: $dark,
+  rgb-white: hex-to-rgb($white),
+  color-white: $white,
+  rgb-black: hex-to-rgb($black),
+  color-black: $black,
+
+  rgb-text-color: hex-to-rgb($text-color),
+  text-color: $text-color,
+  background-color: $background-color,
+  container-width: rem($container-width),
+  container-default-padding: rem($container-padding),
+  container-size: calc(#{get-var(container-width)} + #{get-var(container-default-padding)} * 2),
+
+  z-header: map.get($z-index, header),
+  z-notification: map.get($z-index, notification),
+  z-bottom-bar: map.get($z-index, bottom-bar),
+  z-categories: map.get($z-index, categories),
+  z-overlay: map.get($z-index, overlay),
+  z-modal: map.get($z-index, modal),
+
+  scrollbar-track-color: get-var(color-green),
+  scrollbar-thumb-color: get-var(color-yellow),
+);

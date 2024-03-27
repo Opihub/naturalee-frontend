@@ -1,0 +1,194 @@
+<template>
+  <span :class="className">
+    <input
+      v-model="emitValue"
+      :class="`${CSS_NAME}__input`"
+      type="radio"
+      :name="name"
+      :value="value"
+      v-bind="attributes"
+      @change="input"
+    />
+
+    <span :class="`${CSS_NAME}__display`" />
+  </span>
+</template>
+
+<script setup>
+// Imports
+
+// Constants
+const CSS_NAME = 'o-radio'
+
+// Define (Props, Emits, Page Meta)
+const props = defineProps({
+  name: {
+    type: String,
+    default: null,
+  },
+  value: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+  modelValue: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+})
+const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
+
+// Component life-cycle hooks
+
+// Data
+const isValid = ref(false)
+
+const firstInteraction = ref(false)
+
+const attrs = useAttrs()
+
+// Watcher
+
+// Computed
+const className = computed(() => {
+  let className = [CSS_NAME]
+
+  if (isValid.value === true) {
+    className.push('is-valid')
+  } else if (isValid.value === false) {
+    className.push('is-invalid')
+  }
+
+  if (firstInteraction.value) {
+    className.push('is-init')
+  }
+
+  if (attrs?.class) {
+    className = [...className, ...assembleClassName(attrs.class)]
+  }
+
+  return className
+})
+
+const attributes = computed(() => {
+  const attributes = Object.assign({}, attrs)
+
+  delete attributes.class
+
+  return attributes
+})
+
+const emitValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  },
+})
+
+// Methods
+const input = (event) => {
+  emit('update:modelValue', event.target.value)
+
+  check(event)
+}
+
+const check = (event) => {
+  firstInteraction.value = true
+
+  let eventName = 'invalid'
+  if (event.target.checkValidity()) {
+    eventName = 'valid'
+    isValid.value = true
+  } else {
+    isValid.value = false
+  }
+
+  emit(eventName, event.target.value)
+}
+</script>
+
+<style lang="scss">
+$prefix: 'radio';
+
+%input-invalid {
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      border-color: get-var(color-red),
+    )
+  );
+}
+
+@include object($prefix) {
+  $prefix-svg: 'svg';
+
+  @include set-vars(
+    $prefix: $prefix,
+    $map: (
+      border-width: rem(2px),
+    )
+  );
+
+  cursor: pointer;
+  padding: 0;
+  display: inline-block;
+  user-select: none;
+  pointer-events: none;
+  position: relative;
+  border: get-var(border-width, $prefix: $prefix) solid
+    get-var(border-color, get-var(color-yellow), $prefix: $prefix);
+  border-radius: 100%;
+  background-color: get-var(color-white);
+  width: get-var(size, rem(20px), $prefix: $prefix);
+  height: get-var(size, rem(20px), $prefix: $prefix);
+
+  @include element('input') {
+    opacity: 0;
+    appearance: none;
+    padding: 0;
+    pointer-events: all;
+    cursor: inherit;
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: get-var(size, rem(20px), $prefix: $prefix);
+    height: get-var(size, rem(20px), $prefix: $prefix);
+    transform: translate(-50%, -50%);
+
+    &:checked + #{compose-element(root(&), 'display')} {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          on: 1,
+        )
+      );
+    }
+  }
+
+  &:focus-within {
+    @extend %base-focus;
+  }
+
+  @include element('display') {
+    display: block;
+    position: absolute;
+    inset: 0;
+    opacity: get-var(on, 0, $prefix: $prefix);
+    transform: scale(0.8);
+    background-color: get-var(color-brown);
+    border-radius: 100%;
+
+    @include transition(opacity);
+  }
+
+  @include is('init') {
+    @include is('invalid') {
+      @extend %input-invalid;
+    }
+
+    &:invalid {
+      @extend %input-invalid;
+    }
+  }
+}
+</style>

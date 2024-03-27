@@ -1,0 +1,32 @@
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:string';
+@use 'sass:selector';
+
+@function current($selector) {
+  $list: string-split($selector, ' ');
+
+  $current: get-real-selector($list);
+
+  @return selector.simple-selectors($current);
+}
+
+@function root($selector) {
+  $list: string-split($selector, ' ');
+
+  $current: get-real-selector($list, 1);
+
+  @return selector.simple-selectors($current);
+}
+
+@function get-real-selector($list, $select: -1, $pseudo-select: 1) {
+  $current: list.nth($list, $select);
+
+  @if (string.index($current, ':') != null) {
+    $list: string-split($current, ':');
+
+    @return get-real-selector($list, $pseudo-select);
+  }
+
+  @return $current;
+}

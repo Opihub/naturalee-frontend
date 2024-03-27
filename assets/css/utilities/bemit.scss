@@ -1,0 +1,173 @@
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:string';
+@use 'sass:selector';
+
+@function filter-selector($selector) {
+  $blocks: ();
+
+  @each $block in $selector {
+    @if (string.index($block, '--') == null) {
+      $blocks: list.append($blocks, $block, $separator: comma);
+    }
+  }
+
+  @return $blocks;
+}
+
+@function compose-element($block, $element) {
+  @return selector.append($block, '__#{$element}');
+}
+
+@mixin element($element, $root: false) {
+  $current: current(&);
+  @if ($root == true) {
+    $current: root(&);
+  }
+  $selector: compose-element(filter-selector($current), $element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-modifier($block, $element) {
+  @return selector.append($block, '--#{$element}');
+}
+
+@mixin modifier($element, $root: false) {
+  $current: current(&);
+  @if ($root == true) {
+    $current: root(&);
+  }
+  $selector: compose-modifier(filter-selector($current), $element);
+
+  &#{$selector} {
+    @content;
+  }
+}
+
+@function compose-object($selector) {
+  @return selector.append('.o-', $selector);
+}
+
+@mixin object($element) {
+  $selector: compose-object($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-scope($selector) {
+  // TODO: controllare se passato numero
+  @return selector.append('.s-', $selector);
+}
+
+@mixin scope($element) {
+  $selector: compose-scope($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-component($selector) {
+  @return selector.append('.c-', $selector);
+}
+
+@mixin component($element) {
+  $selector: compose-component($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-utility($selector) {
+  @return selector.append('.u-', $selector);
+}
+
+@mixin utility($element) {
+  $selector: compose-utility($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-hack($selector) {
+  @return selector.append('._', $selector);
+}
+
+@mixin hack($element) {
+  $selector: compose-hack($element);
+
+  #{$selector} {
+    @content;
+  }
+}
+
+@function compose-state($selector, $has: false) {
+  @if ($has) {
+    @return selector.append('.has-', $selector);
+  }
+
+  @return selector.append('.is-', $selector);
+}
+
+@mixin state($element, $has: false) {
+  @if (meta.type-of($element) == map) {
+    @each $state in $element {
+      @include state($state, $has) {
+        @content;
+      }
+    }
+  } @else {
+    $selector: compose-state($element, $has);
+
+    &#{$selector} {
+      @content;
+    }
+  }
+}
+
+@mixin is($element) {
+  @if (meta.type-of($element) == map) {
+    @each $state in $element {
+      @include is($state) {
+        @content;
+      }
+    }
+  } @else {
+    @include state($element, false) {
+      @content;
+    }
+  }
+}
+
+@mixin has($element) {
+  @if (meta.type-of($element) == map) {
+    @each $state in $element {
+      @include has($state) {
+        @content;
+      }
+    }
+  } @else {
+    @include state($element, true) {
+      @content;
+    }
+  }
+}
+
+@mixin is-not($element) {
+  &:not(#{compose-state($element, false)}) {
+    @content;
+  }
+}
+
+@mixin has-not($element) {
+  &:not(#{compose-state($element, true)}) {
+    @content;
+  }
+}

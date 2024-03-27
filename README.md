@@ -1,20 +1,51 @@
-# Nuxt 3 Minimal Starter
+# Naturalee
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Il design del sito seguirà le linee guida dell'[Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)
+
+https://www.futurelearn.com/info/blog/atomic-design-molecules-organisms
 
 ## Setup
 
 Make sure to install the dependencies:
 
 ```bash
-# npm
 npm install
+```
 
-# pnpm
-pnpm install
+### Develop a component
 
-# yarn
-yarn install
+```html
+<template>
+  <!--  -->
+</template>
+
+<script setup>
+// Imports
+
+// Constants
+
+// Define (Props, Emits, Page Meta)
+
+// Component life-cycle hooks
+
+// Composables
+
+// Data
+
+// Watcher
+
+// Computed
+
+// Methods
+</script>
+
+<style lang="scss">
+$prefix: '';
+@include component($prefix) {
+  /* */
+}
+</style>
+
 ```
 
 ## Development Server
@@ -22,14 +53,7 @@ yarn install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
 ```
 
 ## Production
@@ -37,27 +61,13 @@ yarn dev
 Build the application for production:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
 ```
 
 Locally preview production build:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

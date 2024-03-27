@@ -1,0 +1,109 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+$registered-variables: ();
+
+@function get-variable-name($name, $prefix: null) {
+  @return if($prefix, $prefix + '-' + $name, '' + $name);
+}
+
+@mixin set-variable(
+  $name,
+  $value,
+  $group: default,
+  $prefix: null,
+  $override: true
+) {
+  $var-name: get-variable-name($name, $prefix);
+
+  --#{$var-name}: #{$value};
+
+  @if ($override) {
+    $registered-group-variables: map.get($registered-variables, $group);
+    @if ($registered-group-variables == null) {
+      $registered-group-variables: ();
+    }
+
+    $registered-group-variables: map.set(
+      $registered-group-variables,
+      $var-name,
+      $value
+    );
+
+    $registered-variables: map.set(
+      $registered-variables,
+      $group,
+      $registered-group-variables
+    ) !global;
+  }
+}
+
+@mixin set-var($name, $value, $group: default, $prefix: null, $override: true) {
+  @include set-variable($name, $value, $group, $prefix, $override);
+}
+
+@mixin set-vars($map, $group: default, $prefix: null, $override: true) {
+  @each $name, $value in $map {
+    @include set-variable($name, $value, $group, $prefix, $override);
+  }
+}
+
+@mixin set-local-var($name, $value, $group: default, $prefix: null) {
+  @include set-variable($name, $value, $group, $prefix, false);
+}
+
+@mixin set-local-vars($map, $group: default, $prefix: null) {
+  @include set-vars($map, $group, $prefix, false);
+}
+
+@function get-variable($name, $default: null, $group: default, $prefix: null) {
+  $var-name: get-variable-name($name, $prefix);
+
+  @if ($default) {
+    @return var(--#{$var-name}, #{$default});
+  }
+
+  @if (map.has-key($registered-variables, $group)) {
+    $registered-group-variables: map.get($registered-variables, $group);
+
+    @if (map.has-key($registered-group-variables, $var-name)) {
+      @return var(
+        --#{$var-name},
+        #{map.get($registered-group-variables, $var-name)}
+      );
+    }
+  }
+
+  @return var(--#{$var-name});
+}
+
+@function get-var($name, $default: null, $group: default, $prefix: null) {
+  @return get-variable($name, $default, $group, $prefix);
+}
+
+@mixin set-media-variables($name, $variables, $prefix: null) {
+  $var-name: get-variable-name($name, $prefix);
+
+  @if (meta.type-of($variables) == map) {
+    @each $media, $value in $variables {
+      @if ($media == 0 or $media == mobile) {
+        @include set-var($var-name, $value, mobile);
+      } @else {
+        $size: $media;
+        @if (meta.type-of($size) == string) {
+          $size: map.get($responsive, $size);
+        }
+
+        @media (min-width: "#{$size}px") {
+          @include set-var($var-name, $value, $media);
+        }
+      }
+    }
+  } @else {
+    @include set-var($var-name, $variables);
+  }
+}
+
+@mixin set-media-vars($name, $variables, $prefix: null) {
+  @include set-media-variables($name, $variables, $prefix);
+}

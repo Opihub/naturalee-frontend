@@ -1,0 +1,20 @@
+@use 'sass:map';
+@use 'sass:math';
+
+@mixin font-weight($size) {
+  font-weight: #{font-weight($size)};
+}
+
+@function font-weight($size) {
+  @return get-var(weight-#{$size}, #{map.get($weights, $size)});
+}
+
+// Converte il valore da XD a CSS
+@mixin letter-spacing($spacing) {
+  letter-spacing: math.div($spacing, 1000) * 1em;
+}
+
+@mixin typography($font-size, $line-height) {
+  font-size: rem($font-size);
+  line-height: ratio($line-height, $font-size);
+}
