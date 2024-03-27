@@ -4,7 +4,6 @@
   <form
     :class="className"
     method="GET"
-    action="search"
     v-bind="$attrs"
     @submit.prevent="goToSearch"
   >
@@ -107,7 +106,7 @@ const goToSearch = async () => {
   }
 
   await navigateTo({
-    path: '/search',
+    name: 'search',
     query: { search: searchValue.value },
   })
 }
