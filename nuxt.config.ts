@@ -27,6 +27,12 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'it-IT',
       },
+      bodyAttrs: {
+        id: 'body',
+        'attr-lang': 'it',
+        'iubenda-site-id': process.env?.IUBENDA_SITE_ID || '',
+        'iubenda-cookie-policy-id': process.env?.IUBENDA_ID || '',
+      },
     },
   },
   experimental: {
