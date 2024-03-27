@@ -27,9 +27,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  validate: async (route) => {
-    return isCategory(route.params.category)
-  },
+  name: 'product-parent'
 })
 
 // Component life-cycle hooks
