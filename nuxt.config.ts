@@ -27,10 +27,16 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'it-IT',
       },
+      bodyAttrs: {
+        id: 'body',
+        'attr-lang': 'it',
+        'iubenda-site-id': process.env?.IUBENDA_SITE_ID || '',
+        'iubenda-cookie-policy-id': process.env?.IUBENDA_ID || '',
+      },
     },
   },
   experimental: {
-    inlineRouteRules: true
+    inlineRouteRules: true,
   },
   css: [
     '@splidejs/vue-splide/css/core',
@@ -50,6 +56,7 @@ export default defineNuxtConfig({
     '/checkout': { ssr: false },
   },
   modules: [
+    '@zadigetvoltaire/nuxt-gtm',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
@@ -154,6 +161,9 @@ export default defineNuxtConfig({
   },
   svgo: {
     defaultImport: 'component',
+  },
+  gtm: {
+    id: process.env?.GTM_ID || '',
   },
   // @ts-ignore
   storybook: {
