@@ -11,10 +11,15 @@
     </template>
 
     <SiteContainer class="u-pt-huge u-pb-huge">
+      <BaseHeading
+        class="u-mb-medium u-text-center u-text-left@tablet"
+        tag="h5"
+        >{{ $t('products.related') }}</BaseHeading
+      >
+
       <ProductCards
-        v-if="related.data && related.data.length"
+        v-if="!pending && related.data && related.data.length"
         :products="related.data"
-        :title="$t('products.related')"
       />
     </SiteContainer>
   </section>
@@ -42,7 +47,7 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const related = await useApi(
+const { pending, data: related } = useFetchApi(
   `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`
 )
 

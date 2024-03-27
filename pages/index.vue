@@ -76,10 +76,15 @@
       class="c-fourth-section u-pt-small u-pb-huge u-pt-custom@desktop u-pb-custom@desktop"
       tag="section"
     >
-      <ProductCards
-        :products="products.homepage"
-        :title="$t('products.homepageFeatured')"
-      />
+      <SiteContainer>
+        <BaseHeading
+          class="u-mb-medium u-text-center u-text-left@tablet"
+          tag="h5"
+          >{{ $t('products.homepageFeatured') }}</BaseHeading
+        >
+
+        <ProductCards :products="products.homepage" />
+      </SiteContainer>
     </BackgroundHolder>
 
     <TrackRow class="c-fifth-section">
