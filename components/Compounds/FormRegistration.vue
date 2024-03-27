@@ -89,6 +89,8 @@ const formData = reactive({
   marketing: false,
 })
 
+const { recaptcha } = useCaptcha()
+
 // Watcher
 
 // Computed
@@ -101,7 +103,9 @@ const register = async () => {
 
   resetFeedback()
 
-  const response = await send(async () => await store.signIn(formData))
+  const token = await recaptcha()
+
+  const response = await send(async () => await store.signIn({ ...formData, recaptcha_token: token }))
 
   if (response.value.success && response.value.data.token) {
     feedback.status = 'success'

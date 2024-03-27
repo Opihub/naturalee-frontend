@@ -103,7 +103,9 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Composables
 const config = useRuntimeConfig()
 const route = useRoute()
-const { sending, sent, send } = useSender(emit)
+const { sending, send } = useSender(emit)
+
+const { recaptcha } = useCaptcha()
 
 // Data
 const token = ref(route.query.token)
@@ -144,8 +146,6 @@ const randomizePassword = () => {
 }
 
 const updatePassword = async () => {
-  console.debug('test')
-
   if (sending.value) {
     return
   }
@@ -189,6 +189,8 @@ const updatePassword = async () => {
     return
   }
 
+  const recaptcha_token = await recaptcha()
+
   const response = await send(async () => {
     return await useApi(`auth/password-recovery/confirm`, {
       method: 'POST',
@@ -196,6 +198,7 @@ const updatePassword = async () => {
         ...formData,
         token,
         login,
+        recaptcha_token
       },
     })
   })

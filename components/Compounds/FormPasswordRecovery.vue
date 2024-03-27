@@ -77,6 +77,8 @@ const formData = reactive({
   username: '',
 })
 
+const { recaptcha } = useCaptcha()
+
 // Watcher
 
 // Computed
@@ -89,14 +91,15 @@ const passwordRecovery = async () => {
 
   user.value = formData.username
 
+  const token = await recaptcha()
+
   const response = await send(async () => {
     return await useApi(`auth/password-recovery/request`, {
       method: 'POST',
-      body: formData,
+      body: { ...formData, recaptcha_token: token },
     })
   })
 
-  console.debug(response.value)
   success.value = response.value.code
 }
 </script>
