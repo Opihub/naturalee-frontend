@@ -1,28 +1,8 @@
-import { useFetch, ref, storeToRefs, useRuntimeConfig } from '#imports'
+import { ref, useFetchApi } from '#imports'
 import { createResponse } from '@/server/utils/responses'
-import { useAccountStore } from '@/stores/account'
 import { useLogout } from '@/composables/logout'
 
-function getApiUrl(url, options = {}) {
-  let path = '/'
-  const paths = [url]
-
-  if (options?.version) {
-    paths.unshift(`v${options.version}`)
-  }
-
-  path += paths.join('/').replaceAll(/\/+/g, '/')
-
-  if (options?.params) {
-    path += '?' + new URLSearchParams(options.params).toString()
-  }
-
-  return path
-}
-
 export async function useApi(url, options = {}, innerOptions = {}) {
-  const config = useRuntimeConfig()
-
   innerOptions = {
     version: 1,
     dataOnly: false,
@@ -31,31 +11,9 @@ export async function useApi(url, options = {}, innerOptions = {}) {
 
   options = options || {}
 
-  const auth = useAccountStore()
-  const { token, isLoggedIn } = storeToRefs(auth)
-
   let cached = ref(null)
 
-  const fetchOptions = {
-    ...options,
-    headers: {
-      Authorization:
-        isLoggedIn && isLoggedIn.value ? `Bearer ${token.value}` : '',
-      ...options?.headers,
-    },
-    pick: null,
-  }
-  //console.log(fetchOptions)
-  if (!innerOptions.local && config?.public?.endpoint) {
-    fetchOptions.baseURL = config.public.endpoint
-  }
-
-  const { data, error } = await useFetch(
-    getApiUrl(url, {
-      version: innerOptions.version,
-    }),
-    fetchOptions
-  )
+  const { data, error } = await useFetchApi(url, options, innerOptions)
 
   let responseData = data.value
   if (error.value) {
