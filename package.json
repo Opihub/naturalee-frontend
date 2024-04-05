@@ -16,6 +16,7 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@capacitor/cli": "^5.7.4",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint-config": "^0.1.1",
     "@nuxt/image": "^1.1.0",
@@ -55,6 +56,9 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "@capacitor/android": "^5.7.4",
+    "@capacitor/core": "^5.7.4",
+    "@capacitor/ios": "^5.7.4",
     "@pinia/nuxt": "^0.4.7",
     "@splidejs/vue-splide": "^0.6.12",
     "@vuepic/vue-datepicker": "^7.2.0",
