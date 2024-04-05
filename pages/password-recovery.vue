@@ -70,31 +70,58 @@
 definePageMeta({
   layout: 'standard',
   name: 'password-recovery',
-  validate: async (route) => {
-    const { token, login } = route.query
+  // validate: async (route) => {
+  //   const { token, login } = route.query
 
-    if (!login || !token) {
-      return false
-    }
+  //   if (!login || !token) {
+  //     return false
+  //   }
 
-    const isTokenValid = token.match(getPasswordRecoveryTokenPattern())
+  //   const isTokenValid = token.match(getPasswordRecoveryTokenPattern())
 
-    if (!isTokenValid || isTokenValid.length <= 0) {
-      return false
-    }
+  //   if (!isTokenValid || isTokenValid.length <= 0) {
+  //     return false
+  //   }
 
-    const response = await useApi(`auth/password-recovery/validate-token`, {
-      method: 'POST',
-      body: {
-        token,
-        login,
-      },
-    })
+  //   const response = await useApi(`auth/password-recovery/validate-token`, {
+  //     method: 'POST',
+  //     body: {
+  //       token,
+  //       login,
+  //     },
+  //   })
 
-    return response.value.success
-    // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
+  //   return response.value.success
+  //   // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
+  // },
+})
+
+const route = useRoute()
+
+const token = ref(route.query.token)
+const login = ref(route.query.login)
+
+if (!login.value || !token.value) {
+  throw createError({ statusCode: 404 })
+}
+
+const isTokenValid = token.value.match(getPasswordRecoveryTokenPattern())
+
+if (!isTokenValid || isTokenValid.length <= 0) {
+  throw createError({ statusCode: 404 })
+}
+
+const response = await useApi(`auth/password-recovery/validate-token`, {
+  method: 'POST',
+  body: {
+    token,
+    login,
   },
 })
+
+if (!response.value.success) {
+  throw createError({ statusCode: 404 })
+}
 
 const emit = defineEmits(['api:start', 'api:end'])
 
@@ -102,14 +129,11 @@ const emit = defineEmits(['api:start', 'api:end'])
 
 // Composables
 const config = useRuntimeConfig()
-const route = useRoute()
 const { sending, send } = useSender(emit)
 
 const { recaptcha } = useCaptcha()
 
 // Data
-const token = ref(route.query.token)
-const login = ref(route.query.login)
 const formData = reactive({
   password: '',
   confirmPassword: '',
@@ -198,7 +222,7 @@ const updatePassword = async () => {
         ...formData,
         token,
         login,
-        recaptcha_token
+        recaptcha_token,
       },
     })
   })
