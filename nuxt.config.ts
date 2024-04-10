@@ -22,8 +22,14 @@ export default defineNuxtConfig({
     head: {
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        {
+          rel: 'apple-touch-icon',
+          type: 'image/png',
+          href: '/favicon-180x180.png',
+        },
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       ],
+      meta: [{ name: 'theme-color', content: '#00966e' }],
       htmlAttrs: {
         lang: 'it-IT',
       },
@@ -52,6 +58,101 @@ export default defineNuxtConfig({
       },
     },
   },
+  pwa: {
+    // strategies: sw ? 'injectManifest' : 'generateSW',
+    // srcDir: sw ? 'service-worker' : undefined,
+    // filename: sw ? 'sw.ts' : undefined,
+    registerType: 'autoUpdate',
+    includeAssets: [
+      'favicon.ico',
+      'android-icon-192x192.png',
+      'favicon-32x32.png',
+      'favicon-naturalee-512x512.png',
+      '**/*',
+    ],
+    manifest: {
+      name: process.env.APP_TITLE,
+      short_name: 'Naturalee',
+      description: 'Naturalee',
+      theme_color: '#00966e',
+      icons: [
+        {
+          src: 'android-icon-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: 'favicon-naturalee-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          // purpose: 'any maskable',
+        },
+      ],
+    },
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,scss,html,png,svg,ico,vue}', '**/*'],
+    },
+    workbox: {
+      globPatterns: ['**/*.{js,css,scss,html,png,svg,ico,vue}', '**/*'],
+      runtimeCaching: [
+        // {
+        //   urlPattern: /^https:\/\/api\.naturalee\.it\/.*/i,
+        //   handler: 'CacheFirst',
+        //   options: {
+        //     cacheName: 'api-cache',
+        //     expiration: {
+        //       // maxEntries: 10,
+        //       maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+        //     },
+        //     cacheableResponse: {
+        //       statuses: [0, 200],
+        //     },
+        //   },
+        // },
+        {
+          urlPattern: /^https:\/\/api\.naturalee\.it\/api\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'api-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          urlPattern: /^https:\/\/api\.naturalee\.it\/wp-content\/uploads.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'media-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+      ],
+    },
+    client: {
+      installPrompt: true,
+      // you don't need to include this: only for testing purposes
+      // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
+      periodicSyncForUpdates: 20,
+    },
+    devOptions: {
+      enabled: true,
+      suppressWarnings: true,
+      // navigateFallback: '/',
+      navigateFallbackAllowlist: [/^\/$/, /^(.*)$/],
+      type: 'module',
+    },
+  },
   routeRules: {
     '/checkout': { ssr: false },
   },
@@ -75,6 +176,7 @@ export default defineNuxtConfig({
     ],
     ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
     '@nuxtjs/sitemap',
+    '@vite-pwa/nuxt',
   ],
   googleFonts: {
     download: true,
