@@ -68,7 +68,6 @@ export default defineNuxtConfig({
       'android-icon-192x192.png',
       'favicon-32x32.png',
       'favicon-naturalee-512x512.png',
-      '**/*',
     ],
     manifest: {
       name: process.env.APP_TITLE,
@@ -90,10 +89,10 @@ export default defineNuxtConfig({
       ],
     },
     injectManifest: {
-      globPatterns: ['**/*.{js,css,scss,html,png,svg,ico,vue}', '**/*'],
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,scss,html,png,svg,ico,vue}', '**/*'],
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       runtimeCaching: [
         // {
         //   urlPattern: /^https:\/\/api\.naturalee\.it\/.*/i,
@@ -149,7 +148,7 @@ export default defineNuxtConfig({
       enabled: true,
       suppressWarnings: true,
       // navigateFallback: '/',
-      navigateFallbackAllowlist: [/^\/$/, /^(.*)$/],
+      // navigateFallbackAllowlist: [/^\/$/, /^(.*)$/],
       type: 'module',
     },
   },
