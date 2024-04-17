@@ -6,6 +6,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "preview:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt preview --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "postinstall": "nuxt prepare",
     "mock-server": "node mock/server.js",
     "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
