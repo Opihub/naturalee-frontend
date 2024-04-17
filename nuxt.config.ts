@@ -79,11 +79,11 @@ export default defineNuxtConfig({
   googleFonts: {
     download: true,
     inject: true,
-    outputDir: 'public',
-    stylePath: 'google-fonts.css',
-    fontsDir: 'fonts',
-    // useStylesheet: true,
-    fontsPath: '/fonts',
+    // outputDir: 'public',
+    // stylePath: 'google-fonts.css',
+    // fontsDir: 'fonts',
+    // // useStylesheet: true,
+    // fontsPath: '/fonts',
     display: 'swap',
     families: {
       Mulish: [400, 700, 800],
