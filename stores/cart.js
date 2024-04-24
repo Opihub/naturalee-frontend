@@ -16,12 +16,9 @@ import {
 
 import { useApi } from '@/composables/api'
 import { useAccountStore } from '@/stores/account'
-import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
 
 export const useCartStore = defineStore('cart', () => {
-  const { t } = useI18n()
-
   const profile = useAccountStore()
 
   const { isLoggedIn } = storeToRefs(profile)
@@ -136,12 +133,16 @@ export const useCartStore = defineStore('cart', () => {
     if (response.value.success && login) {
       localCart.forEach((element) => {
         notify({
-          message: t('cart.addedToCart', element.quantity, {
-            named: {
-              name: element.title,
-              count: element.quantity,
+          message: [
+            'cart.addedToCart',
+            element.quantity,
+            {
+              named: {
+                name: element.title,
+                count: element.quantity,
+              },
             },
-          }),
+          ],
           status: 'success',
         })
       })
@@ -223,13 +224,16 @@ export const useCartStore = defineStore('cart', () => {
       cart.value[index].quantity += quantity
 
       notify({
-        // message: t('cart.quantityUpdated'),
-        message: t('cart.addedToCart', quantity, {
-          named: {
-            name: title,
-            count: quantity,
+        message: [
+          'cart.addedToCart',
+          quantity,
+          {
+            named: {
+              name: title,
+              count: quantity,
+            },
           },
-        }),
+        ],
         status: 'success',
       })
 
@@ -254,12 +258,16 @@ export const useCartStore = defineStore('cart', () => {
     })
 
     notify({
-      message: t('cart.addedToCart', 1, {
-        named: {
-          name: title,
-          count: quantity,
+      message: [
+        'cart.addedToCart',
+        1,
+        {
+          named: {
+            name: title,
+            count: quantity,
+          },
         },
-      }),
+      ],
       status: 'success',
     })
 
@@ -281,13 +289,17 @@ export const useCartStore = defineStore('cart', () => {
       if (server) {
         notify({
           message: !server
-            ? t('cart.quantityUpdated')
-            : t('cart.addedToCart', diff, {
-                named: {
-                  name: product.title,
-                  count: diff,
+            ? ['cart.quantityUpdated']
+            : [
+                'cart.addedToCart',
+                diff,
+                {
+                  named: {
+                    name: product.title,
+                    count: diff,
+                  },
                 },
-              }),
+              ],
           status: 'success',
         })
       }
@@ -325,7 +337,7 @@ export const useCartStore = defineStore('cart', () => {
 
     if (!existingProduct) {
       notify({
-        message: t('cart.missingProduct'),
+        message: ['cart.missingProduct'],
         status: 'warning',
       })
 
@@ -335,11 +347,15 @@ export const useCartStore = defineStore('cart', () => {
     cart.value = cart.value.filter((item) => item !== existingProduct)
 
     notify({
-      message: t('cart.removedFromCart', 1, {
-        named: {
-          name: product.title,
+      message: [
+        'cart.removedFromCart',
+        1,
+        {
+          named: {
+            name: product.title,
+          },
         },
-      }),
+      ],
       status: 'warning',
     })
 
@@ -366,29 +382,31 @@ export const useCartStore = defineStore('cart', () => {
       )
 
       if (now > expiration) {
-        error = t('coupon.expired')
+        error = ['coupon.expired']
       }
     } else if (
       coupon.value.minimum_amount &&
       subTotal.value < coupon.value.minimum_amount
     ) {
-      error = t('coupon.missingMinimumAmount')
+      error = ['coupon.missingMinimumAmount']
+      // deepcode ignore DuplicateIfBody: Documentazione
     } else if (
       coupon.value.maximum_amount &&
       subTotal.value > coupon.value.maximum_amount
     ) {
-      error = t('coupon.reachMaximumAmount')
+      error = ['coupon.reachMaximumAmount']
     } else if (validProducts.value.length === 0) {
       // Se non c'è alcun prodotto valido per il coupon,
       // a prescindere dalla tipologia di sconto, invalido il coupon
-      error = t('coupon.invalidCoupon')
+      error = ['coupon.invalidCoupon']
     } else if (
       ['fixed_cart', 'percent'].includes(coupon.value.discount_type) &&
       validProducts.value.length !== cart.value.length
+      // deepcode ignore DuplicateIfBody: Documentazione
     ) {
       // Se il coupon si applica al carrello, ed il numero di prodotti validi
       // non combacia con quello attuale, allora invalido il coupon
-      error = t('coupon.invalidCoupon')
+      error = ['coupon.invalidCoupon']
     }
 
     if (error) {
