@@ -76,6 +76,7 @@ const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
 // Component life-cycle hooks
 
 // Data
+const instance = getCurrentInstance();
 const isValid = ref(false)
 const firstInteraction = ref(false)
 
@@ -115,6 +116,8 @@ const input = (event) => {
   if (isNaN(value) || value < props.min) {
     value = props.min
   }
+
+  instance?.proxy?.$forceUpdate();
 
   emit('update:modelValue', value)
 
