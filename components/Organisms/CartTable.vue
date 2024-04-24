@@ -55,7 +55,7 @@
             :data-title="$t('products.quantity')"
             align="center"
           >
-            <BaseCounter v-if="!readonly" v-model="product.quantity" />
+            <BaseCounter v-if="!readonly" v-model.number="product.quantity" />
             <span v-else>{{ product.quantity }}</span>
           </td>
           <td
