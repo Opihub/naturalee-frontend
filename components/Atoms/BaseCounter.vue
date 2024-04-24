@@ -20,7 +20,7 @@
       :step="step"
       :max="max"
       :size="size"
-      @input="input"
+      @input.prevent="input"
       @blur="check"
     />
     <button
@@ -108,9 +108,15 @@ const size = computed(() => {
 
 // Methods
 const input = (event) => {
-  const { value } = event.target
+  let { value } = event.target
 
-  emit('update:modelValue', isNaN(value) || value === '' ? props.min : value)
+  value = parseInt(value)
+
+  if (isNaN(value) || value < props.min) {
+    value = props.min
+  }
+
+  emit('update:modelValue', value)
 
   check(event)
 }
