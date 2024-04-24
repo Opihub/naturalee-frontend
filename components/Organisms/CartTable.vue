@@ -93,7 +93,7 @@
             :class="`${CSS_NAME}__empty`"
             type="button"
             color="green"
-            :disabled="products.length <= 0"
+            :disabled="!canUpdate"
             @click="onSave"
           >
             {{ $t('cart.updateCart') }}
@@ -113,7 +113,7 @@ const CSS_NAME_ITEM = `${CSS_NAME}__item`
 const CSS_NAME_ITEM_CELL = `${CSS_NAME_ITEM}__cell`
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   products: {
     type: Array,
     required: true,
@@ -152,6 +152,19 @@ defineProps({
 
 // Computed
 const { calculatedPrice } = usePrice()
+
+const canUpdate = computed(() => {
+  return (
+    // bisogna avere almeno un prodotto nel carrello
+    props.products.length > 0 &&
+    // tutti i prodotti devono avere una quantità intera e non minore di 1
+    props.products.every((product) => {
+      return (
+        parseInt(product.quantity) === product.quantity && product.quantity >= 1
+      )
+    })
+  )
+})
 
 // Methods
 </script>
