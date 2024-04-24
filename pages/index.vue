@@ -300,8 +300,8 @@ const { t } = useI18n({
   },
   "firstSection": {
     "supTitle": "Direttamente dalle nostre coltivazioni alla tua tavola",
-    "title": "Autentica freschezza e qualità che raccontano la storia della nostra terra.",
-    "paragraph": "Benvenuti in Naturalee, dove il sapore e la bontà si manifestano attraverso prodotti freschi e genuini. Coltiviamo non solo frutta e verdura, ma anche una passione per la qualità e l'autenticità che rievocano i sapori di un tempo",
+    "title": "Autentica freschezza e qualità che raccontano la storia della nostra terra",
+    "paragraph": "Benvenuti in Naturalee, dove il sapore e la bontà si manifestano attraverso prodotti freschi e genuini. Coltiviamo non solo frutta e verdura, ma anche una passione per la qualità e l'autenticità che rievocano i sapori di un tempo.",
     "cta": "Chi siamo"
   },
   "fifthSection": {
