@@ -215,8 +215,6 @@ export const useCartStore = defineStore('cart', () => {
       image,
     } = product
 
-    quantity = parseInt(quantity)
-
     const existingProduct = pickProduct(variationId)
 
     if (existingProduct) {
@@ -484,6 +482,8 @@ export const useCartStore = defineStore('cart', () => {
 
       return false
     }
+
+    quantity = parseInt(quantity)
 
     if (!isLoggedIn.value) {
       return addToCart(product, quantity)
