@@ -213,14 +213,16 @@ $prefix: 'content-row';
       border-radius: get-var(image-radius, 0, $prefix: $prefix);
 
       @include until(tablet) {
-        width: -webkit-fill-available;
+        width: 100%;
         max-width: 100%;
       }
+
       @include from(tablet) {
         margin: get-var(offset, 0, $prefix: $prefix-parallax);
       }
+
       @include from(large) {
-        height: -webkit-fill-available;
+        height: 100%;
         max-height: 100%;
       }
     }
