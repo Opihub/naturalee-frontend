@@ -295,7 +295,7 @@ const { t } = useI18n({
   },
   "deliverySection": {
     "title": "Il servizio è attivo su Milano città e hinterland",
-    "title_2": "Consegnamo la spesa direttamente a casa tua con consegna rapida a domicilio.",
+    "title_2": "Consegna rapida a domicilio",
     "cta": "Verifica se il tuo indirizzo è coperto dal servizio"
   },
   "firstSection": {
