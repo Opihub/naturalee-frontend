@@ -458,6 +458,15 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function remoteAddToCart(product, quantity = 1) {
+    if (quantity < 1) {
+      notify({
+        message: 'Quantità non valida',
+        status: 'danger',
+      })
+
+      return false
+    }
+
     if (!isLoggedIn.value) {
       return addToCart(product, quantity)
     }
