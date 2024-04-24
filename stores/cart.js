@@ -77,8 +77,9 @@ export const useCartStore = defineStore('cart', () => {
 
   async function load(login = false) {
     const localCart = toRaw(cart.value)
-    if (cart.value && isLoggedIn.value && login) {
-      await remoteAddToCartBatch(toRaw(cart.value))
+
+    if (localCart.value && isLoggedIn.value && login) {
+      await remoteAddToCartBatch(localCart.value)
     }
 
     if (!isLoggedIn.value) {
