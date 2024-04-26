@@ -54,14 +54,8 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   function addToWishlist(product) {
-    const {
-      variationId,
-      price,
-      categories,
-      discountPrice,
-      title,
-      selling,
-    } = product
+    const { variationId, price, categories, discountPrice, title, selling } =
+      product
 
     const existingProduct = pick.value(variationId)
 
@@ -92,6 +86,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
       // item_list_name: '',
       item_variant: selling,
       price: price,
+      quantity: 1,
     }
 
     categories.forEach((element, index) => {
@@ -105,7 +100,6 @@ export const useWishlistStore = defineStore('wishlist', () => {
         key += index + 1
       }
 
-      console.debug(element.title, key)
       item[key] = element.title
     })
 
