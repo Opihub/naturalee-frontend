@@ -170,6 +170,8 @@ onMounted(() => {
     basket.value = syncProduct.value
 
     validateCoupon()
+
+    trackEcommerceEvent('view_cart', basket.value);
   })
 })
 
