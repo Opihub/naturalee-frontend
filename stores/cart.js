@@ -6,8 +6,7 @@ import {
   storeToRefs,
   toRaw,
   useCart,
-  useGtm,
-  useRuntimeConfig,
+  trackEcommerceEvent,
 } from '#imports'
 
 import {
@@ -22,8 +21,6 @@ import { notify } from '@/utils/notify'
 
 export const useCartStore = defineStore('cart', () => {
   const profile = useAccountStore()
-  const gtm = useGtm()
-  const config = useRuntimeConfig()
 
   const { isLoggedIn } = storeToRefs(profile)
 
@@ -220,46 +217,7 @@ export const useCartStore = defineStore('cart', () => {
       image,
     } = product
 
-    const item = {
-      item_id: variationId, // ID del prodotto, obbligatorio
-      item_name: title, // Nome del prodotto, obbligatorio
-      // affiliation: null,
-      // coupon: null,
-      currency: config.public.currency,
-      discount: discountPrice === 0 ? discountPrice : price - discountPrice,
-      // index: 0,
-      item_brand: config.public.title,
-      // item_category: '',
-      // item_category2: '',
-      // item_list_id: '',
-      // item_list_name: '',
-      item_variant: selling,
-      price: price,
-      quantity: quantity,
-    }
-
-    categories.forEach((element, index) => {
-      // Google accetta solo 5 categorie
-      if (index > 4) {
-        return
-      }
-
-      let key = 'item_category'
-      if (index > 0) {
-        key += index + 1
-      }
-
-      item[key] = element.title
-    })
-
-    gtm.trackEvent({
-      event: 'add_to_cart',
-      currency: config.public.currency,
-      value: item.quantity * item.price,
-      ecommerce: {
-        items: [item],
-      },
-    })
+    trackEcommerceEvent('add_to_cart', product)
 
     const existingProduct = pickProduct(variationId)
 
@@ -376,15 +334,7 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
-    const {
-      variationId,
-      price,
-      categories,
-      discountPrice,
-      title,
-      selling,
-      quantity,
-    } = product
+    const { variationId } = product
     const existingProduct = pickProduct(variationId)
 
     if (!existingProduct) {
@@ -398,39 +348,7 @@ export const useCartStore = defineStore('cart', () => {
 
     cart.value = cart.value.filter((item) => item !== existingProduct)
 
-    const item = {
-      item_id: variationId,
-      item_name: title,
-      currency: config.public.currency,
-      discount: discountPrice === 0 ? discountPrice : price - discountPrice,
-      item_brand: config.public.title,
-      item_variant: selling,
-      price: price,
-      quantity: quantity,
-    }
-
-    categories.forEach((element, index) => {
-      // Google accetta solo 5 categorie
-      if (index > 4) {
-        return
-      }
-
-      let key = 'item_category'
-      if (index > 0) {
-        key += index + 1
-      }
-
-      item[key] = element.title
-    })
-
-    gtm.trackEvent({
-      event: 'remove_from_cart',
-      currency: config.public.currency,
-      value: item.quantity * item.price,
-      ecommerce: {
-        items: [item],
-      },
-    })
+    trackEcommerceEvent('remove_from_cart', product)
 
     notify({
       message: [
