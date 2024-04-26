@@ -249,7 +249,6 @@ export const useCartStore = defineStore('cart', () => {
         key += index + 1
       }
 
-      console.debug(element.title, key)
       item[key] = element.title
     })
 
@@ -377,8 +376,16 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
-    const { variationId: id } = product
-    const existingProduct = pickProduct(id)
+    const {
+      variationId,
+      price,
+      categories,
+      discountPrice,
+      title,
+      selling,
+      quantity,
+    } = product
+    const existingProduct = pickProduct(variationId)
 
     if (!existingProduct) {
       notify({
@@ -390,6 +397,40 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     cart.value = cart.value.filter((item) => item !== existingProduct)
+
+    const item = {
+      item_id: variationId,
+      item_name: title,
+      currency: config.public.currency,
+      discount: discountPrice === 0 ? discountPrice : price - discountPrice,
+      item_brand: config.public.title,
+      item_variant: selling,
+      price: price,
+      quantity: quantity,
+    }
+
+    categories.forEach((element, index) => {
+      // Google accetta solo 5 categorie
+      if (index > 4) {
+        return
+      }
+
+      let key = 'item_category'
+      if (index > 0) {
+        key += index + 1
+      }
+
+      item[key] = element.title
+    })
+
+    gtm.trackEvent({
+      event: 'remove_from_cart',
+      currency: config.public.currency,
+      value: item.quantity * item.price,
+      ecommerce: {
+        items: [item],
+      },
+    })
 
     notify({
       message: [
