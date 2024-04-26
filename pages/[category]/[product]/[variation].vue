@@ -35,8 +35,6 @@ definePageMeta({
   name: 'product-child',
 })
 
-// Component life-cycle hooks
-
 // Data
 const route = useRoute()
 const { page } = await usePage(
@@ -51,11 +49,10 @@ const { pending, data: related } = useFetchApi(
   `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`
 )
 
-// Watcher
-
-// Computed
-
-// Methods
+// Component life-cycle hooks
+onMounted(() => {
+  trackEcommerceEvent('view_item', page.value)
+})
 </script>
 
 <style lang="scss" scoped>
