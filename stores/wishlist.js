@@ -4,6 +4,8 @@ import {
   skipHydrate,
   computed,
   storeToRefs,
+  useGtm,
+  useRuntimeConfig,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -12,6 +14,8 @@ import { notify } from '@/utils/notify'
 
 export const useWishlistStore = defineStore('wishlist', () => {
   const profile = useAccountStore()
+  const gtm = useGtm()
+  const config = useRuntimeConfig()
 
   const { isLoggedIn } = storeToRefs(profile)
 
@@ -50,7 +54,14 @@ export const useWishlistStore = defineStore('wishlist', () => {
   }
 
   function addToWishlist(product) {
-    const { variationId, title } = product
+    const {
+      variationId,
+      price,
+      categories,
+      discountPrice,
+      title,
+      selling,
+    } = product
 
     const existingProduct = pick.value(variationId)
 
@@ -67,6 +78,45 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
       return true
     }
+
+    const item = {
+      item_id: variationId,
+      item_name: title,
+      currency: config.public.currency,
+      discount: discountPrice === 0 ? discountPrice : price - discountPrice,
+      // index: 0,
+      item_brand: config.public.title,
+      // item_category: '',
+      // item_category2: '',
+      // item_list_id: '',
+      // item_list_name: '',
+      item_variant: selling,
+      price: price,
+    }
+
+    categories.forEach((element, index) => {
+      // Google accetta solo 5 categorie
+      if (index > 4) {
+        return
+      }
+
+      let key = 'item_category'
+      if (index > 0) {
+        key += index + 1
+      }
+
+      console.debug(element.title, key)
+      item[key] = element.title
+    })
+
+    gtm.trackEvent({
+      event: 'add_to_wishlist',
+      currency: config.public.currency,
+      value: item.quantity * item.price,
+      ecommerce: {
+        items: [item],
+      },
+    })
 
     wishlist.value.push(product)
 
