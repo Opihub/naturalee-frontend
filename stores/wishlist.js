@@ -8,12 +8,9 @@ import {
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
 import { useAccountStore } from '@/stores/account'
-import { useI18n } from 'vue-i18n'
 import { notify } from '@/utils/notify'
 
 export const useWishlistStore = defineStore('wishlist', () => {
-  const { t } = useI18n()
-
   const profile = useAccountStore()
 
   const { isLoggedIn } = storeToRefs(profile)
@@ -59,9 +56,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     if (existingProduct) {
       notify({
-        message: t('wishlist.added', {
-          name: title,
-        }),
+        message: [
+          'wishlist.added',
+          {
+            name: title,
+          },
+        ],
         status: 'success',
       })
 
@@ -71,9 +71,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
     wishlist.value.push(product)
 
     notify({
-      message: t('wishlist.added', {
-        name: title,
-      }),
+      message: [
+        'wishlist.added',
+        {
+          name: title,
+        },
+      ],
       status: 'success',
     })
 
@@ -85,7 +88,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     if (!existingProduct) {
       notify({
-        message: t('wishlist.missingProduct'),
+        message: ['wishlist.missingProduct'],
         status: 'warning',
       })
 
@@ -95,9 +98,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
     wishlist.value = wishlist.value.filter((item) => item !== existingProduct)
 
     notify({
-      message: t('wishlist.removed', {
-        name: product.title,
-      }),
+      message: [
+        'wishlist.removed',
+        {
+          name: product.title,
+        },
+      ],
       status: 'warning',
     })
 
@@ -108,7 +114,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     wishlist.value = []
 
     notify({
-      message: t('wishlist.cleared'),
+      message: ['wishlist.cleared'],
       status: 'warning',
     })
 

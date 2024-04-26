@@ -20,7 +20,7 @@
       :step="step"
       :max="max"
       :size="size"
-      @input="input"
+      @input.prevent="input"
       @blur="check"
     />
     <button
@@ -76,6 +76,7 @@ const emit = defineEmits(['update:modelValue', 'valid', 'invalid'])
 // Component life-cycle hooks
 
 // Data
+const instance = getCurrentInstance();
 const isValid = ref(false)
 const firstInteraction = ref(false)
 
@@ -108,9 +109,17 @@ const size = computed(() => {
 
 // Methods
 const input = (event) => {
-  const { value } = event.target
+  let { value } = event.target
 
-  emit('update:modelValue', isNaN(value) || value === '' ? props.min : value)
+  value = parseInt(value)
+
+  if (isNaN(value) || value < props.min) {
+    value = props.min
+  }
+
+  instance?.proxy?.$forceUpdate();
+
+  emit('update:modelValue', value)
 
   check(event)
 }

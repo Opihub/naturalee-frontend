@@ -3,7 +3,8 @@ import { computed } from '#imports'
 export const useTotal = (products, config) => {
   const subTotal = computed(() => {
     return (products?.value || products || []).reduce((total, current) => {
-      return total + (current.discountPrice || current.price) * current.quantity
+      const quantity = current.quantity >= 0 ? parseInt(current.quantity) : 0
+      return total + (current.discountPrice || current.price) * quantity
     }, 0)
   })
 
