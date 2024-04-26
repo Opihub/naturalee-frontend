@@ -6,6 +6,8 @@ import {
   storeToRefs,
   toRaw,
   useCart,
+  useGtm,
+  useRuntimeConfig,
 } from '#imports'
 
 import {
@@ -20,6 +22,8 @@ import { notify } from '@/utils/notify'
 
 export const useCartStore = defineStore('cart', () => {
   const profile = useAccountStore()
+  const gtm = useGtm()
+  const config = useRuntimeConfig()
 
   const { isLoggedIn } = storeToRefs(profile)
 
@@ -215,6 +219,48 @@ export const useCartStore = defineStore('cart', () => {
       costDescription,
       image,
     } = product
+
+    const item = {
+      item_id: variationId, // ID del prodotto, obbligatorio
+      item_name: title, // Nome del prodotto, obbligatorio
+      // affiliation: null,
+      // coupon: null,
+      currency: 'EUR',
+      discount: discountPrice === 0 ? discountPrice : price - discountPrice,
+      // index: 0,
+      item_brand: config.public.title,
+      // item_category: '',
+      // item_category2: '',
+      // item_list_id: '',
+      // item_list_name: '',
+      item_variant: selling,
+      price: price,
+      quantity: quantity,
+    }
+
+    categories.forEach((element, index) => {
+      // Google accetta solo 5 categorie
+      if (index > 4) {
+        return
+      }
+
+      let key = 'item_category'
+      if (index > 0) {
+        key += index + 1
+      }
+
+      console.debug(element.title, key)
+      item[key] = element.title
+    })
+
+    gtm.trackEvent({
+      event: 'add_to_cart',
+      currency: 'EUR',
+      value: item.quantity * item.price,
+      ecommerce: {
+        items: [item],
+      },
+    })
 
     const existingProduct = pickProduct(variationId)
 
