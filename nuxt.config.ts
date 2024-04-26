@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
+      currency: 'EUR',
     },
   },
   app: {

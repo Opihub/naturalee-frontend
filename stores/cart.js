@@ -225,7 +225,7 @@ export const useCartStore = defineStore('cart', () => {
       item_name: title, // Nome del prodotto, obbligatorio
       // affiliation: null,
       // coupon: null,
-      currency: 'EUR',
+      currency: config.public.currency,
       discount: discountPrice === 0 ? discountPrice : price - discountPrice,
       // index: 0,
       item_brand: config.public.title,
@@ -255,7 +255,7 @@ export const useCartStore = defineStore('cart', () => {
 
     gtm.trackEvent({
       event: 'add_to_cart',
-      currency: 'EUR',
+      currency: config.public.currency,
       value: item.quantity * item.price,
       ecommerce: {
         items: [item],
