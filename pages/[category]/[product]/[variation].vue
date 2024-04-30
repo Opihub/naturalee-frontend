@@ -20,6 +20,10 @@
       <ProductCards
         v-if="!pending && related.data && related.data.length"
         :products="related.data"
+        :trackable="{
+          id: `related_${route.fullPath}`,
+          name: `Correlati ${page.title}`,
+        }"
       />
     </SiteContainer>
   </section>
