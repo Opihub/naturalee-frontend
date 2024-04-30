@@ -14,6 +14,7 @@
       :filters="page.filters"
       paginate
       sortable
+      :trackable="`Categoria ${route.params.category}`"
     />
   </section>
 </template>

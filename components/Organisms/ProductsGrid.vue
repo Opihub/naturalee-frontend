@@ -94,6 +94,17 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  trackable: {
+    type: [String, Object],
+    default: null,
+    validator(value) {
+      if (typeof value === 'object') {
+        return 'name' in value
+      }
+
+      return value
+    },
+  },
   use: {
     type: Array,
     default() {
@@ -117,6 +128,7 @@ const timeout = useTimeoutFn(
 
 const route = useRoute()
 const router = useRouter()
+const attrs = useAttrs()
 
 // Data
 const products = ref([])
@@ -154,10 +166,32 @@ watch(
 )
 
 watch(products, (updated, old) => {
+  // Verifica che la props trackable sia valida
+  if (
+    !props.trackable ||
+    // Se è un oggetto, deve avere sia almeno il Name
+    (typeof props.trackable === 'object' && !props.trackable?.name)
+  ) {
+    return
+  }
+
   const difference = updated.filter((x) => !old.includes(x))
+
+  let list = props.trackable
+  // Se è una string, allora la accorpa in un oggetto
+  if (typeof list === 'string') {
+    list = { name: list }
+  }
+
+  // Se l'ID è assente, allora viene utilizzato o l'attributo ID nell'HTML
+  // oppure l'intero path della rotta corrente
+  if (!list?.id) {
+    list.id = attrs.id || route.fullPath
+  }
 
   trackEcommerceEvent('view_item_list', difference, {
     offset: updated.indexOf(difference[0]),
+    ...list,
   })
 })
 
