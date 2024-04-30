@@ -165,6 +165,9 @@ export default defineNuxtConfig({
   },
   gtm: {
     id: process.env?.GTM_ID || '',
+    enabled: Boolean(process.env?.GTM_ID),
+    debug: Boolean(process.env?.GTM_DEBUG),
+    trackOnNextTick: true,
   },
   // @ts-ignore
   storybook: {
