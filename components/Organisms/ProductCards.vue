@@ -107,6 +107,49 @@ const options = computed(() => {
   return options
 })
 
+// Component life-cycle hooks
+onBeforeRouteUpdate((leaveGuard) => {
+  if (
+    !props.trackable ||
+    // Se è un oggetto, deve avere sia almeno il Name
+    (typeof props.trackable === 'object' && !props.trackable?.name)
+  ) {
+    return
+  }
+
+  const product = props.products.find((product) => {
+    let { link } = product
+
+    if (!link.endsWith('/')) {
+      link += '/'
+    }
+
+    return link === leaveGuard.fullPath
+  })
+
+  if (!product) {
+    console.warn('Prodotto non trovato')
+    return true
+  }
+
+  let list = props.trackable
+  // Se è una string, allora la accorpa in un oggetto
+  if (typeof list === 'string') {
+    list = { name: list }
+  }
+
+  // Se l'ID è assente, allora viene utilizzato o l'attributo ID nell'HTML
+  // oppure l'intero path della rotta corrente
+  if (!list?.id) {
+    list.id = attrs.id || route.fullPath
+  }
+
+  trackEcommerceEvent('select_item', product, {
+    index: props.products.indexOf(product),
+    ...list,
+  })
+})
+
 onMounted(() => {
   // Verifica che la props trackable sia valida
   if (
