@@ -71,7 +71,7 @@ export function trackEcommerceEvent(event, products, argsList = {}) {
   }
 
   const items = products.map((product, index) =>
-    generateItem(product, { ...argsList, index })
+    generateItem(product, { index, ...argsList })
   )
 
   const ecommerce = {
