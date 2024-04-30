@@ -120,7 +120,7 @@ const router = useRouter()
 
 // Data
 const products = ref([])
-const page = ref(0)
+const page = ref(1)
 const canFetch = ref(true)
 const isFetching = ref(false)
 
@@ -153,6 +153,14 @@ watch(
   }
 )
 
+watch(products, (updated, old) => {
+  const difference = updated.filter((x) => !old.includes(x))
+
+  trackEcommerceEvent('view_item_list', difference, {
+    offset: updated.indexOf(difference[0]),
+  })
+})
+
 // Computed
 const isGrid = computed(() => {
   return props.listType === 'grid'
@@ -182,7 +190,7 @@ const showLoader = computed(() => {
 
 // Methods
 const resetParams = () => {
-  page.value = 0
+  page.value = 1
   products.value = []
   canFetch.value = true
 }
@@ -229,7 +237,7 @@ const fetchProducts = async () => {
   if (props.paginate) {
     params.limit = DEFAULT_LIMIT
 
-    if (page.value > 0) {
+    if (page.value > 1) {
       params.page = page.value
     }
   }
@@ -268,9 +276,8 @@ const lazyFetchProducts = async () => {
         (page.value + 1) * DEFAULT_LIMIT
       )
 
-      page.value += 1
-
       products.value = [...products.value, ...records]
+      page.value += 1
 
       if (records.length < DEFAULT_LIMIT) {
         last = true
