@@ -1,6 +1,6 @@
 import { useRuntimeConfig, useGtm } from '#imports'
 
-export function generateItem(product) {
+export function generateItem(product, listArgs = {}) {
   const config = useRuntimeConfig()
 
   const {
@@ -32,6 +32,19 @@ export function generateItem(product) {
     quantity: quantity || 1,
   }
 
+  if (!isNaN(listArgs.index)) {
+    const offset = listArgs?.offset || 0
+    item.index = listArgs.index + offset
+  }
+
+  if (listArgs.id) {
+    item.item_list_id = listArgs.id
+  }
+
+  if (listArgs.name) {
+    item.item_list_name = listArgs.name
+  }
+
   categories.forEach((element, index) => {
     // Google accetta solo 5 categorie
     if (index > 4) {
@@ -49,7 +62,7 @@ export function generateItem(product) {
   return item
 }
 
-export function trackEcommerceEvent(event, products) {
+export function trackEcommerceEvent(event, products, listArgs = {}) {
   const config = useRuntimeConfig()
   const gtm = useGtm()
 
@@ -57,7 +70,9 @@ export function trackEcommerceEvent(event, products) {
     products = [products]
   }
 
-  const items = products.map(generateItem)
+  const items = products.map((product, index) =>
+    generateItem(product, { ...listArgs, index })
+  )
 
   gtm.trackEvent({
     event,
