@@ -32,7 +32,7 @@ export function generateItem(product, listArgs = {}) {
     quantity: quantity || 1,
   }
 
-  if (!isNaN(listArgs.index)) {
+  if (!Number.isNaN(listArgs.index)) {
     const offset = listArgs?.offset || 0
     item.index = listArgs.index + offset
   }
@@ -62,7 +62,7 @@ export function generateItem(product, listArgs = {}) {
   return item
 }
 
-export function trackEcommerceEvent(event, products, listArgs = {}) {
+export function trackEcommerceEvent(event, products, argsList = {}) {
   const config = useRuntimeConfig()
   const gtm = useGtm()
 
@@ -71,18 +71,32 @@ export function trackEcommerceEvent(event, products, listArgs = {}) {
   }
 
   const items = products.map((product, index) =>
-    generateItem(product, { ...listArgs, index })
+    generateItem(product, { ...argsList, index })
   )
+
+  const ecommerce = {
+    items,
+  }
+
+  if (argsList.id) {
+    ecommerce.item_list_id = argsList.id
+  }
+
+  if (argsList.name) {
+    ecommerce.item_list_name = argsList.name
+  }
+
+  // Controllo Hardcoded per includere il valore di una lista in base all'evento richiesto
+  if (!['view_item_list', 'select_item'].includes(event)) {
+    ecommerce.currency = config.public.currency
+    ecommerce.value = items.reduce((sum, item) => {
+      sum += item.quantity * item.price
+      return sum
+    }, 0)
+  }
 
   gtm.trackEvent({
     event,
-    currency: config.public.currency,
-    value: items.reduce((sum, item) => {
-      sum += item.quantity * item.price
-      return sum
-    }, 0),
-    ecommerce: {
-      items,
-    },
+    ecommerce,
   })
 }
