@@ -36,7 +36,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
   // Actions
   async function load() {
-    const response = await useApi('shop/wishlist/products').catch((error) => {
+    const { data: response } = await useApi('shop/wishlist/products').catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/wishlist/products"',
         error
@@ -138,7 +138,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi('shop/wishlist/add', {
+      const { data: response } = await useApi('shop/wishlist/add', {
         method: 'POST',
         body: {
           id: product.id,
@@ -168,7 +168,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi('shop/wishlist/remove', {
+      const { data: response } = await useApi('shop/wishlist/remove', {
         method: 'DELETE',
         body: {
           id: product.id,
@@ -198,7 +198,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi('shop/wishlist/clear', {
+      const { data: response } = await useApi('shop/wishlist/clear', {
         method: 'DELETE',
       })
 

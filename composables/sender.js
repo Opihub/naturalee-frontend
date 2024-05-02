@@ -12,7 +12,7 @@ export function useSender(emit = null) {
     sending.value = true
     sent.value = false
 
-    const response = await callback().catch((err) => {
+    const { data: response } = await callback().catch((err) => {
       console.debug(err)
 
       return false

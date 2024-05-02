@@ -76,7 +76,7 @@ definePageMeta({
         return false
       }
 
-      const response = await useApi(`shop/orders/${orderId}`)
+      const { data: response } = await useApi(`shop/orders/${orderId}`)
 
       if (!response.value.success) {
         return navigateTo({
@@ -108,9 +108,8 @@ const route = useRoute()
 const order = ref(null)
 onMounted(() => {
   nextTick(async () => {
-    const response = await useApi(
+    const { data: response } = await useApi(
       `shop/orders/${route.query.orderId}`,
-      {},
       {
         dataOnly: true,
       }

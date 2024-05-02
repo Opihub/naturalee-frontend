@@ -17,11 +17,12 @@ export const useConfigurationStore = defineStore('configuration', () => {
   )
 
   const load = async () => {
-    const response = await useApi('config', {
-      key: 'config'
-    }, { dataOnly: true })
+    const { data } = await useApi('config', {
+      key: 'config',
+      dataOnly: true,
+    })
 
-    configuration.value = response.value
+    configuration.value = data.value
   }
 
   const shopCategories = computed(() => {

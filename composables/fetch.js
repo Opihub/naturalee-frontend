@@ -18,16 +18,13 @@ function getApiUrl(url, options = {}) {
   return path
 }
 
-export function useFetchApi(url, options = {}, innerOptions = {}) {
+export function useFetchApi(url, options = {}) {
   const config = useRuntimeConfig()
 
-  innerOptions = {
-    version: 1,
-    dataOnly: false,
-    ...innerOptions,
-  }
-
   options = options || {}
+
+  const version = options?.version || 1
+  const clientSide = !!options?.clientSide || false
 
   const auth = useAccountStore()
   const { token, isLoggedIn } = storeToRefs(auth)
@@ -46,10 +43,8 @@ export function useFetchApi(url, options = {}, innerOptions = {}) {
     fetchOptions.baseURL = config.public.endpoint
   }
 
-  return useFetch(
-    getApiUrl(url, {
-      version: innerOptions.version,
-    }),
+  return (clientSide ? $fetch : useFetch)(
+    getApiUrl(url, { version }),
     fetchOptions
   )
 }

@@ -1,75 +1,58 @@
-import { ref, useFetchApi } from '#imports'
-import { createResponse } from '@/server/utils/responses'
-import { useLogout } from '@/composables/logout'
+import { useFetchApi, createResponse, useLogout } from '#imports'
 
-export async function useApi(url, options = {}, innerOptions = {}) {
-  innerOptions = {
-    version: 1,
-    dataOnly: false,
-    ...innerOptions,
-  }
-
+export async function useApi(url, options = {}) {
   options = options || {}
 
-  let cached = ref(null)
+  const dataOnly = options?.dataOnly || false
 
-  const { data, error } = await useFetchApi(url, options, innerOptions)
+  return useFetchApi(url, {
+    ...options,
+    async onRequestError({ request, options, error }) {
+      console.log('[fetch request error]', request, error)
+    },
+    async onResponse({ response }) {
+      const data = createResponse(response._data)
+      console.log('onResponse')
+      console.log(data)
 
-  let responseData = data.value
-  if (error.value) {
-    const errorData = error.value?.data || {}
+      response._data = dataOnly ? data.data : data
+    },
+    async onResponseError({ response }) {
+      let data = response._data
 
-    if (
-      'data' in errorData &&
-      'success' in errorData &&
-      'code' in errorData &&
-      'message' in errorData &&
-      'statusCode' in errorData
-    ) {
-      /**
-       * Server error, can happen
-       */
-      responseData = errorData
-      console.warn('errore previsto generato dal server:', responseData)
+      console.log('onResponseError')
+      console.log(data)
 
       if (
-        ['jwt_auth_user_not_found', 'jwt_auth_invalid_token'].includes(
-          responseData.code
-        )
+        'data' in data &&
+        'success' in data &&
+        'code' in data &&
+        'message' in data &&
+        'statusCode' in data
       ) {
-        const { logout } = useLogout()
-        await logout(true)
+        data = createResponse(response._data)
+        response._data = dataOnly ? data.data : data
 
-        return
+        console.warn('errore previsto generato dal server:', data)
+
+        if (
+          ['jwt_auth_user_not_found', 'jwt_auth_invalid_token'].includes(
+            data.code
+          )
+        ) {
+          const { logout } = useLogout()
+
+          return logout(true)
+        }
+
+        response.ok = true
+      } else {
+        /**
+         * Client error, must not happen
+         * Reason: calling wrong endpoint
+         */
+        throw response
       }
-    } else {
-      /**
-       * Client error, must not happen
-       * Reason: calling wrong endpoint
-       */
-      throw error.value
-    }
-  }
-
-  let response = createResponse(responseData)
-
-  if (
-    'pick' in options &&
-    Array.isArray(options.pick) &&
-    options.pick.length > 0
-  ) {
-    response.data = Object.keys(response.data).reduce((accumulator, key) => {
-      const value = response[key]
-
-      if (options.pick.includes(key)) {
-        accumulator[key] = value
-      }
-
-      return accumulator
-    }, {})
-  }
-
-  cached.value = innerOptions.dataOnly ? response.data : response
-
-  return cached
+    },
+  })
 }

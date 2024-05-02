@@ -59,7 +59,7 @@ export const useAccountStore = defineStore('account', () => {
       return account
     }
 
-    const response = await useApi('profile').catch((error) => {
+    const { data: response } = await useApi('profile').catch((error) => {
       console.error('Errore durante il caricamento di "profile"', error)
     })
 
@@ -73,7 +73,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function signIn(formData) {
-    const response = await useApi(`auth/sign-in`, {
+    const { data: response } = await useApi(`auth/sign-in`, {
       method: 'POST',
       body: formData,
     })
@@ -88,7 +88,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function signUp(formData) {
-    const response = await useApi(`auth/login`, {
+    const { data: response } = await useApi(`auth/login`, {
       method: 'POST',
       body: formData,
     })
@@ -192,7 +192,7 @@ export const useAccountStore = defineStore('account', () => {
       }
     }
 
-    const response = await useApi(`profile/update`, {
+    const { data: response } = await useApi(`profile/update`, {
       method: 'POST',
       body: user,
     })

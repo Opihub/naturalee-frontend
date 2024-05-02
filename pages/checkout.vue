@@ -454,13 +454,9 @@ const { t } = useI18n({
 })
 
 const user = useAccountStore()
-const timeSlots = await useApi(
-  'time-slots',
-  {},
-  {
-    dataOnly: true,
-  }
-)
+const { data: timeSlots } = await useApi('time-slots', {
+  dataOnly: true,
+})
 
 // Data
 const sending = ref(false)
@@ -487,25 +483,15 @@ const isStripeComplete = ref(false)
 
 provide('stripe', stripe)
 
-const shippingAddress = await useApi(
-  'shop/addresses/shipping',
-  {
-    method: 'GET',
-  },
-  {
-    dataOnly: true,
-  }
-)
+const { data: shippingAddress } = await useApi('shop/addresses/shipping', {
+  method: 'GET',
+  dataOnly: true,
+})
 
-const userBillingAddress = await useApi(
-  'shop/addresses/billing',
-  {
-    method: 'GET',
-  },
-  {
-    dataOnly: true,
-  }
-)
+const { data: userBillingAddress } = await useApi('shop/addresses/billing', {
+  method: 'GET',
+  dataOnly: true,
+})
 
 const { address, invoice } = useBillingAddress(userBillingAddress)
 const billingAddress = ref({ ...address.value })

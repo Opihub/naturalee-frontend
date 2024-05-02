@@ -1,5 +1,5 @@
 import PostcodeModal from '@/components/Compounds/PostcodeModal.vue'
-import { createResponse } from '@/server/utils/responses'
+import { createResponse } from '~/utils/responses'
 import { random } from '@/utils/random'
 
 const foundedPostcode = {

@@ -79,6 +79,8 @@ export const useCartStore = defineStore('cart', () => {
   async function load(login = false) {
     const localCart = toRaw(cart.value)
 
+    console.debug(localCart)
+
     if (localCart.value && isLoggedIn.value && login) {
       await remoteAddToCartBatch(localCart.value)
     }
@@ -96,7 +98,9 @@ export const useCartStore = defineStore('cart', () => {
       if (body.length <= 0) {
         return cart
       }
-      const response = await useApi(`shop/cart/sync`, {
+
+      console.warn(body)
+      const { data: response } = await useApi(`shop/cart/sync`, {
         method: 'POST',
         body,
       }).catch((error) => {
@@ -105,6 +109,8 @@ export const useCartStore = defineStore('cart', () => {
           error
         )
       })
+      console.warn(response.value)
+
       if (!response.value.success) {
         throw new Error(response)
       }
@@ -120,12 +126,14 @@ export const useCartStore = defineStore('cart', () => {
       return cart
     }
 
-    const response = await useApi('shop/cart/products').catch((error) => {
-      console.error(
-        'Errore durante il caricamento di "shop/cart/products"',
-        error
-      )
-    })
+    const { data: response } = await useApi('shop/cart/products').catch(
+      (error) => {
+        console.error(
+          'Errore durante il caricamento di "shop/cart/products"',
+          error
+        )
+      }
+    )
 
     if (!response.value.success) {
       throw new Error(response)
@@ -173,7 +181,7 @@ export const useCartStore = defineStore('cart', () => {
       })
     }
 
-    const response = await useApi('shop/cart/update/batch', {
+    const { data: response } = await useApi('shop/cart/update/batch', {
       method: 'PUT',
       body,
     }).catch((error) => {
@@ -437,7 +445,7 @@ export const useCartStore = defineStore('cart', () => {
       cart: cart.value,
     }
 
-    const response = await useApi(`shop/coupon/validate`, {
+    const { data: response } = await useApi(`shop/coupon/validate`, {
       method: 'POST',
       body,
     })
@@ -468,7 +476,7 @@ export const useCartStore = defineStore('cart', () => {
       return clearCart()
     }
 
-    const response = await useApi('shop/cart/clear', {
+    const { data: response } = await useApi('shop/cart/clear', {
       method: 'DELETE',
     })
 
@@ -496,7 +504,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     try {
-      const response = await useApi('shop/cart/add', {
+      const { data: response } = await useApi('shop/cart/add', {
         method: 'POST',
         body: {
           quantity,
@@ -536,7 +544,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     try {
-      const response = await useApi('shop/cart/remove', {
+      const { data: response } = await useApi('shop/cart/remove', {
         method: 'DELETE',
         body: {
           key: product.key,
@@ -564,7 +572,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function remoteAddToCartBatch(products = []) {
-    const response = await useApi('shop/cart/add/batch', {
+    const { data: response } = await useApi('shop/cart/add/batch', {
       method: 'POST',
       body: products,
     }).catch((error) => {
@@ -585,7 +593,7 @@ export const useCartStore = defineStore('cart', () => {
 
   async function requestPaymentIntent(email, data = {}) {
     // Create a PaymentIntent with the order amount and currency
-    const response = await useApi('shop/checkout/payment-intent', {
+    const { data: response } = await useApi('shop/checkout/payment-intent', {
       method: 'POST',
       body: {
         data: { email, ...data },

@@ -169,18 +169,6 @@ defineI18nRoute({
   locales: ['it'],
 })
 
-// Component life-cycle hooks
-onMounted(() => {
-  nextTick(async () => {
-    const syncProduct = await cartStore.load()
-    basket.value = syncProduct.value
-
-    validateCoupon()
-
-    trackEcommerceEvent('view_cart', basket.value);
-  })
-})
-
 // Composables
 const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
@@ -282,6 +270,18 @@ const goToCheckout = async () => {
     name: 'checkout',
   })
 }
+
+// Component life-cycle hooks
+const syncProduct = await cartStore.load()
+basket.value = syncProduct.value
+
+validateCoupon()
+
+onMounted(() => {
+  console.debug('view_cart')
+  console.debug(basket.value)
+  trackEcommerceEvent('view_cart', basket.value)
+})
 </script>
 
 <style lang="scss" scoped>

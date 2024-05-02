@@ -126,9 +126,9 @@ cartStore.$onAction(({ name, args, after, onError }) => {
       default:
         break
     }
-    console.debug(name)
-    console.debug(result)
-    console.info(args)
+    // console.debug(name)
+    // console.debug(result)
+    // console.info(args)
 
     if (!notification) {
       return
@@ -152,8 +152,8 @@ cartStore.$onAction(({ name, args, after, onError }) => {
       default:
         break
     }
-    console.debug(error.message, name)
-    console.info(args)
+    console.warn(error.message, name)
+    console.warn(args)
 
     if (!notification) {
       return
