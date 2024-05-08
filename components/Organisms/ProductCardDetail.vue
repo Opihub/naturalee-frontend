@@ -31,7 +31,7 @@
 
       <div :class="[className, `${CSS_NAME}__row`]">
         <BaseCounter
-          v-model="quantity"
+          v-model.number="quantity"
           :disabled="isDisabled"
           big
           class="u-mb-half"

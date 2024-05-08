@@ -4,8 +4,9 @@
     :icon-set="iconSet"
     v-bind="$props"
     :size="checkSize"
+    class="o-icon o-icon--icomoon"
   />
-  <NuxtIcon v-else :name="name" :style="checkSize" />
+  <NuxtIcon v-else :name="name" :style="checkSize" class="o-icon" />
 </template>
 
 <script setup>
@@ -71,5 +72,14 @@ const checkSize = computed(() => {
 </script>
 
 <style lang="scss">
-$prefix: 'icomoon';
+$prefix: 'icon';
+@include object($prefix) {
+  @include modifier(icomoon) {
+    &,
+    svg,
+    svg * {
+      stroke-width: 0;
+    }
+  }
+}
 </style>

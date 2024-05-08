@@ -1,14 +1,25 @@
 import { defineStore, acceptHMRUpdate, ref } from '#imports'
 import { useTimeoutFn } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 export const useNotificationsStore = defineStore('notifications', () => {
+  const { t } = useI18n({ useScope: 'global' })
+
   const notifications = ref([])
 
   const notify = async (notification, time = 3000) => {
     const id = Date.now().toString()
 
+    let { message } = notification
+
+    // Passa tutti i parametri di message per tradurli
+    if (Array.isArray(message)) {
+      message = t(...message)
+    }
+
     notification = {
       id,
+      message,
       ...notification,
     }
 

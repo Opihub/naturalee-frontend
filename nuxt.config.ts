@@ -79,11 +79,11 @@ export default defineNuxtConfig({
   googleFonts: {
     download: true,
     inject: true,
-    outputDir: 'public',
-    stylePath: 'google-fonts.css',
-    fontsDir: 'fonts',
-    // useStylesheet: true,
-    fontsPath: '/fonts',
+    // outputDir: 'public',
+    // stylePath: 'google-fonts.css',
+    // fontsDir: 'fonts',
+    // // useStylesheet: true,
+    // fontsPath: '/fonts',
     display: 'swap',
     families: {
       Mulish: [400, 700, 800],
@@ -119,18 +119,18 @@ export default defineNuxtConfig({
     },
     vueI18n: './i18n.config.ts', // if you are using custom path, default
   },
-  image: {
-    providers: {
-      myProvider: {
-        name: 'clientProvider', // optional value to overrider provider name
-        provider: '~/providers/clientProvider.ts', // Path to custom provider
-        options: {
-          // ... provider options
-          baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
-        },
-      },
-    },
-  },
+  // image: {
+  //   providers: {
+  //     myProvider: {
+  //       name: 'clientProvider', // optional value to overrider provider name
+  //       provider: '~/providers/clientProvider.ts', // Path to custom provider
+  //       options: {
+  //         // ... provider options
+  //         baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
+  //       },
+  //     },
+  //   },
+  // },
 
   sitemap: {
     sitemaps: {

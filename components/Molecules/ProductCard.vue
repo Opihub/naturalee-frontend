@@ -55,7 +55,7 @@
     </div>
 
     <div :class="[`${CSS_NAME}__row`, `${CSS_NAME}__buy`]">
-      <BaseCounter v-model="quantity" :disabled="isDisabled" />
+      <BaseCounter v-model.number="quantity" :disabled="isDisabled" />
 
       <AddToCartButton
         :class="`${CSS_NAME}__button`"
