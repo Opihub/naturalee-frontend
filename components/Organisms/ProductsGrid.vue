@@ -94,6 +94,17 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  trackable: {
+    type: [String, Object],
+    default: null,
+    validator(value) {
+      if (typeof value === 'object') {
+        return 'name' in value
+      }
+
+      return value
+    },
+  },
   use: {
     type: Array,
     default() {
@@ -103,6 +114,47 @@ const props = defineProps({
 })
 
 // Component life-cycle hooks
+onBeforeRouteLeave((leaveGuard) => {
+  if (
+    !props.trackable ||
+    // Se è un oggetto, deve avere sia almeno il Name
+    (typeof props.trackable === 'object' && !props.trackable?.name)
+  ) {
+    return
+  }
+
+  const product = products.value.find((product) => {
+    let { link } = product
+
+    if (!link.endsWith('/')) {
+      link += '/'
+    }
+
+    return link === leaveGuard.fullPath
+  })
+
+  if (!product) {
+    console.warn('Prodotto non trovato')
+    return true
+  }
+
+  let list = props.trackable
+  // Se è una string, allora la accorpa in un oggetto
+  if (typeof list === 'string') {
+    list = { name: list }
+  }
+
+  // Se l'ID è assente, allora viene utilizzato o l'attributo ID nell'HTML
+  // oppure l'intero path della rotta corrente
+  if (!list?.id) {
+    list.id = attrs.id || route.fullPath
+  }
+
+  trackEcommerceEvent('select_item', product, {
+    index: products.value.indexOf(product),
+    ...list,
+  })
+})
 
 // Composables
 const timeout = useTimeoutFn(
@@ -117,10 +169,11 @@ const timeout = useTimeoutFn(
 
 const route = useRoute()
 const router = useRouter()
+const attrs = useAttrs()
 
 // Data
 const products = ref([])
-const page = ref(0)
+const page = ref(1)
 const canFetch = ref(true)
 const isFetching = ref(false)
 
@@ -153,6 +206,36 @@ watch(
   }
 )
 
+watch(products, (updated, old) => {
+  // Verifica che la props trackable sia valida
+  if (
+    !props.trackable ||
+    // Se è un oggetto, deve avere sia almeno il Name
+    (typeof props.trackable === 'object' && !props.trackable?.name)
+  ) {
+    return
+  }
+
+  const difference = updated.filter((x) => !old.includes(x))
+
+  let list = props.trackable
+  // Se è una string, allora la accorpa in un oggetto
+  if (typeof list === 'string') {
+    list = { name: list }
+  }
+
+  // Se l'ID è assente, allora viene utilizzato o l'attributo ID nell'HTML
+  // oppure l'intero path della rotta corrente
+  if (!list?.id) {
+    list.id = attrs.id || route.fullPath
+  }
+
+  trackEcommerceEvent('view_item_list', difference, {
+    offset: updated.indexOf(difference[0]),
+    ...list,
+  })
+})
+
 // Computed
 const isGrid = computed(() => {
   return props.listType === 'grid'
@@ -182,7 +265,7 @@ const showLoader = computed(() => {
 
 // Methods
 const resetParams = () => {
-  page.value = 0
+  page.value = 1
   products.value = []
   canFetch.value = true
 }
@@ -229,7 +312,7 @@ const fetchProducts = async () => {
   if (props.paginate) {
     params.limit = DEFAULT_LIMIT
 
-    if (page.value > 0) {
+    if (page.value > 1) {
       params.page = page.value
     }
   }
@@ -268,9 +351,8 @@ const lazyFetchProducts = async () => {
         (page.value + 1) * DEFAULT_LIMIT
       )
 
-      page.value += 1
-
       products.value = [...products.value, ...records]
+      page.value += 1
 
       if (records.length < DEFAULT_LIMIT) {
         last = true

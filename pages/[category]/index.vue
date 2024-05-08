@@ -14,21 +14,16 @@
       :filters="page.filters"
       paginate
       sortable
+      :trackable="`Categoria ${route.params.category}`"
     />
   </section>
 </template>
 
 <script setup>
-// Imports
-
-// Constants
-
 // Define (Props, Emits, Page Meta)
 definePageMeta({
   name: 'category'
 })
-
-// Component life-cycle hooks
 
 // Data
 const route = useRoute()
@@ -36,10 +31,4 @@ const { page } = await usePage(route.params.category, 'shop/categories')
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
-
-// Watcher
-
-// Computed
-
-// Methods
 </script>

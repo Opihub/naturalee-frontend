@@ -4,6 +4,7 @@ import {
   skipHydrate,
   computed,
   storeToRefs,
+  trackEcommerceEvent,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -67,6 +68,8 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
       return true
     }
+
+    trackEcommerceEvent('add_to_wishlist', product)
 
     wishlist.value.push(product)
 

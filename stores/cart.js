@@ -6,6 +6,7 @@ import {
   storeToRefs,
   toRaw,
   useCart,
+  trackEcommerceEvent,
 } from '#imports'
 
 import {
@@ -216,6 +217,8 @@ export const useCartStore = defineStore('cart', () => {
       image,
     } = product
 
+    trackEcommerceEvent('add_to_cart', product)
+
     const existingProduct = pickProduct(variationId)
 
     if (existingProduct) {
@@ -331,8 +334,8 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
-    const { variationId: id } = product
-    const existingProduct = pickProduct(id)
+    const { variationId } = product
+    const existingProduct = pickProduct(variationId)
 
     if (!existingProduct) {
       notify({
@@ -344,6 +347,8 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     cart.value = cart.value.filter((item) => item !== existingProduct)
+
+    trackEcommerceEvent('remove_from_cart', product)
 
     notify({
       message: [

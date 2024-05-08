@@ -83,7 +83,13 @@
           >{{ $t('products.homepageFeatured') }}</BaseHeading
         >
 
-        <ProductCards :products="products.homepage" />
+        <ProductCards
+          :products="products.homepage"
+          :trackable="{
+            id: 'related_home',
+            name: 'Offerte Speciali: Scelti per Te',
+          }"
+        />
       </SiteContainer>
     </BackgroundHolder>
 

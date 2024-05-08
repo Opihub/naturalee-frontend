@@ -132,7 +132,13 @@
           >Guarda tra i nostri prodotti consigliati</BaseHeading
         >
 
-        <ProductCards :products="products.homepage" />
+        <ProductCards
+          :products="products.homepage"
+          :trackable="{
+            id: 'related_cart',
+            name: 'Prodotti consigliati',
+          }"
+        />
       </SiteContainer>
     </BackgroundHolder>
   </section>
@@ -170,6 +176,8 @@ onMounted(() => {
     basket.value = syncProduct.value
 
     validateCoupon()
+
+    trackEcommerceEvent('view_cart', basket.value);
   })
 })
 
