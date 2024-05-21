@@ -9,6 +9,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
 
   const notify = async (notification, time = 3000) => {
     const id = Date.now().toString()
+    let formattedNotification;
 
     let { message } = notification
 
@@ -17,19 +18,19 @@ export const useNotificationsStore = defineStore('notifications', () => {
       message = t(...message)
     }
 
-    notification = {
+    formattedNotification = {
+      ...notification,
       id,
       message,
-      ...notification,
     }
 
-    notifications.value.push(notification)
+    notifications.value.push(formattedNotification)
 
     if (time > 0) {
-      await removeNotification(notification.id, time)
+      await removeNotification(formattedNotification.id, time)
     }
 
-    return notification.id
+    return formattedNotification.id
   }
 
   const removeNotification = async (id, time = 0) => {
