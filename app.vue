@@ -4,7 +4,7 @@
   <NuxtLoadingIndicator />
 
   <Transition name="fade">
-    <SiteLoader v-if="isLoading" />
+    <SiteLoader v-if="loading" />
   </Transition>
 
   <NuxtLayout>
@@ -32,6 +32,7 @@ import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 import { useNotificationsStore } from '@/stores/notifications'
 import { useConfigurationStore } from '@/stores/configuration'
+import { useLoadingStore } from '@/stores/loading'
 import { useI18n } from 'vue-i18n'
 
 // Constants
@@ -42,17 +43,22 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const cartStore = useCartStore()
 const notificationsStore = useNotificationsStore()
+const loadingStore = useLoadingStore()
 const accountStore = useAccountStore()
 const configurationStore = useConfigurationStore()
 
 // Data
 const { notifications } = storeToRefs(notificationsStore)
+const {loading} = storeToRefs(loadingStore)
+const {setLoading} = loadingStore;
 
 const nuxtApp = useNuxtApp()
-const isLoading = ref(true)
 
+nuxtApp.hook('page:start', () => {
+  setLoading(true);
+})
 nuxtApp.hook('page:finish', () => {
-  isLoading.value = false
+  setLoading(false);
 })
 
 /**

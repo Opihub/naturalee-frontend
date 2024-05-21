@@ -51,7 +51,7 @@
       class="u-mt-large"
       color="green"
       type="submit"
-      :disabled="sending || disabled"
+      :disabled="loading || disabled"
       >{{ $t('form.signUp') }}</BaseButton
     >
   </form>
@@ -60,6 +60,12 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
+const {setLoading} = loadingStore;
 
 // Constants
 const CSS_NAME = 'c-registration-form'
@@ -76,7 +82,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Component life-cycle hooks
 
 // Composables
-const { sending, send } = useSender(emit)
+const { send } = useSender(emit)
 const store = useAccountStore()
 
 const { feedback, resetFeedback } = useFeedback()
@@ -97,9 +103,11 @@ const { recaptcha } = useCaptcha()
 
 // Methods
 const register = async () => {
-  if (sending.value) {
+  if (loading.value) {
     return
   }
+
+  setLoading(true)
 
   resetFeedback()
 
@@ -112,8 +120,8 @@ const register = async () => {
     feedback.message = 'Registrazione avvenuta con successo'
   } else {
     feedback.message = response.value.message
-  }
-
+    setLoading(false)
+  }  
   notify(feedback)
 
   await navigateTo({

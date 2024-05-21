@@ -25,7 +25,7 @@
       class="u-mt-large"
       color="green"
       type="submit"
-      :disabled="sending || disabled"
+      :disabled="loading || disabled"
       >{{ $t('form.password.recovery') }}</BaseButton
     >
     <BaseMessage v-if="sent" class="u-mt-half">
@@ -52,6 +52,13 @@
 
 <script setup>
 // Imports
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
+const {setLoading} = loadingStore;
+
 
 // Constants
 const CSS_NAME = 'c-password-recovery-form'
@@ -68,7 +75,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Component life-cycle hooks
 
 // Composables
-const { sending, sent, send } = useSender(emit)
+const { sent, send } = useSender(emit)
 
 // Data
 const user = ref(null)
@@ -85,9 +92,11 @@ const { recaptcha } = useCaptcha()
 
 // Methods
 const passwordRecovery = async () => {
-  if (sending.value) {
+  if (loading.value) {
     return
   }
+
+  setLoading(true);
 
   user.value = formData.username
 
@@ -99,6 +108,8 @@ const passwordRecovery = async () => {
       body: { ...formData, recaptcha_token: token },
     })
   })
+
+  setLoading(false);
 
   success.value = response.value.code
 }

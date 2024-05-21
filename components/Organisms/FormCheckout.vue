@@ -47,8 +47,16 @@
 <script setup>
 //Imports
 import { useCartStore } from '@/stores/cart'
+
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
+const {setLoading} = loadingStore;
+
+
 // Define (Props, Emits, Page Meta)
-const emit = defineEmits(['api:start', 'api:end'])
 const props = defineProps({
   shippingAddress: {
     type: Object,
@@ -114,7 +122,6 @@ const { requestPaymentIntent, clearCart, removeCoupon } = cartStore
 
 const stripe = inject('stripe')
 const orderId = ref(null)
-const sending = ref(false)
 
 // Methods
 const submitOrder = async () => {
@@ -122,11 +129,11 @@ const submitOrder = async () => {
     return
   }
 
-  if (sending.value) {
+  if (loading.value) {
     return
   }
 
-  sending.value = true
+  setLoading(true);
 
   resetFeedback()
 
@@ -195,14 +202,12 @@ const submitOrder = async () => {
   }
 
   if (hasErrors.value) {
-    sending.value = false
+    setLoading(false);
     window.scrollTo(0, 0)
     return
   }
 
   try {
-    emit('api:start')
-
     // Se è Stripe, genero il paymentIntent
     if (props.paymentMethod.id === 'stripe') {
       const paymentIntentData = { ...formData }
@@ -287,8 +292,7 @@ const submitOrder = async () => {
 
     feedback.errors.push(error.message)
   } finally {
-    sending.value = false
-    emit('api:end')
+    setLoading(false);
   }
 }
 </script>

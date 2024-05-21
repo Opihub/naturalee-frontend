@@ -1,9 +1,5 @@
 <template>
   <section class="s-checkout">
-    <Transition name="fade">
-      <LoadingOverlay v-if="sending" />
-    </Transition>
-
     <SiteContainer>
       <BaseMessage v-if="isEmpty" :message="$t('cart.empty')" />
 
@@ -20,8 +16,6 @@
           :cart="cartStore.checkout"
           :stripe-card="card"
           :can-submit="canSubmit"
-          @api:start="sending = true"
-          @api:end="sending = false"
         >
           <template
             #resume="{
@@ -306,7 +300,7 @@
                         type="submit"
                         color="green"
                         :disabled="
-                          sending ||
+                          loading ||
                           (paymentMethod.id === 'stripe' && !isStripeComplete)
                         "
                         >Paga ora</BaseButton
@@ -366,6 +360,12 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
+
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
 
 // Constants
 const STRIPE_OPTIONS = {
