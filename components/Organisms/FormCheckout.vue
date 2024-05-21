@@ -252,14 +252,10 @@ const submitOrder = async () => {
           receipt_email: email.value,
         }
       )
-
       // Se il pagamento via Stripe fallisce, allora
-      if (
-        !('status' in response.payment_intent) ||
-        response.payment_intent?.status !== 'succeeded'
-      ) {
+      if(response?.error||false){
         throw new Error(
-          'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
+          response?.error?.message||'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
           {
             cause: response.error,
           }
