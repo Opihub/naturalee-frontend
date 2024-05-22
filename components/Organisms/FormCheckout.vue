@@ -223,7 +223,13 @@ const submitOrder = async () => {
       formData.paymentIntentId = response.value.intentId
     }
 
-    formData.products = props.cart
+    formData.products = props.cart.map((item) => ({
+      id: item.id,
+      variationId: item.variationId,
+      quantity: item.quantity,
+      title: item.title,
+    }))
+
     formData.email = email
     formData.orderId = orderId.value
 
@@ -244,6 +250,7 @@ const submitOrder = async () => {
     }
 
     orderId.value = response.value.data.id
+    formData.shipping.cost = response.value.data.shipping.cost
 
     // Se si paga tramite Stripe, allora aspetto la creazione dell'ordine
     // prima di mandare il pagamento a Stripe
@@ -267,6 +274,20 @@ const submitOrder = async () => {
         )
       }
     }
+
+    let extraValue = {}
+
+    if(formData.coupon){
+      extraValue.coupon = formData.coupon;
+    }
+
+    extraValue.transaction_id = orderId.value;
+
+    if(formData.shipping.cost>0){
+      extraValue.shipping = formData.shipping.cost;
+    }
+    console.log(formData.products);
+    trackEcommerceEvent('purchase', props.cart, extraValue);
 
     // Una volta che l'ordine è ok, pulisco il carrello e rimuovo i coupon,
     // quindi procedo alla pagina di conferma ordine

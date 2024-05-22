@@ -86,6 +86,18 @@ export function trackEcommerceEvent(event, products, argsList = {}) {
     ecommerce.item_list_name = argsList.name
   }
 
+  if (argsList.coupon) {
+    ecommerce.coupon = argsList.coupon
+  }
+
+  if (argsList.transaction_id) {
+    ecommerce.transaction_id = argsList.transaction_id
+  }
+
+  if (argsList.shipping) {
+    ecommerce.shipping = argsList.shipping
+  }
+
   // Controllo Hardcoded per includere il valore di una lista in base all'evento richiesto
   if (!['view_item_list', 'select_item'].includes(event)) {
     ecommerce.currency = config.public.currency

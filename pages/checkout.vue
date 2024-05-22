@@ -13,7 +13,7 @@
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
           :coupon="coupon.code"
-          :cart="cartStore.checkout"
+          :cart="basket"
           :stripe-card="card"
           :can-submit="canSubmit"
         >
@@ -524,6 +524,13 @@ if (!billingAddress.value.phone) {
   billingAddress.value.phone = account.value?.phone || null
 }
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
+
+let extraValue = {}
+if(coupon.value.code){
+  extraValue.coupon = coupon.value.code;
+}
+
+trackEcommerceEvent('begin_checkout', basket.value, extraValue);
 
 // Computed
 const shippingData = computed(() => ({

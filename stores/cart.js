@@ -62,14 +62,14 @@ export const useCartStore = defineStore('cart', () => {
     total,
   } = useCart(cart, coupon, paymentMethod)
 
-  const checkout = computed(() => {
+/*   const checkout = computed(() => {
     return cart.value.map((item) => ({
       id: item.id,
       variationId: item.variationId,
       quantity: item.quantity,
       title: item.title,
     }))
-  })
+  }) */
 
   // Actions
   function pickProduct(id) {
@@ -619,7 +619,6 @@ export const useCartStore = defineStore('cart', () => {
     total,
     granTotal,
     subTotal,
-    checkout,
     hasFreeShipping,
     hasMinimumOrderCost,
     costBeforeFreeShipping,
