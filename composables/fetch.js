@@ -2,7 +2,7 @@ import { useFetch, storeToRefs, useRuntimeConfig } from '#imports'
 import { useAccountStore } from '@/stores/account'
 
 function getApiUrl(url, options = {}) {
-  let path = '/'
+  let path = '/api/'
   const paths = [url]
 
   if (options?.version) {
@@ -39,9 +39,10 @@ export function useFetchApi(url, options = {}) {
     pick: null,
   }
 
-  if (!fetchOptions.baseURL && config?.public?.endpoint) {
-    fetchOptions.baseURL = config.public.endpoint
-  }
+  // fetchOptions.baseURL = '/api'
+  // if (!fetchOptions.baseURL && config?.public?.endpoint) {
+  //   fetchOptions.baseURL = config.public.endpoint
+  // }
 
   return (clientSide ? $fetch : useFetch)(
     getApiUrl(url, { version }),
