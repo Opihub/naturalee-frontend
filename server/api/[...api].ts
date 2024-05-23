@@ -41,6 +41,9 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const token = getCookie(event, 'auth._token.local')
+  const headers = getRequestHeaders(event)
+  console.log(headers);
+
 
   if (!cache.get(url)) {
     const response = $fetch(url, {
@@ -51,6 +54,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       retry: 10,
       signal: abortController.signal,
       headers: {
+        ...headers,
         Authorization: `${token}`,
       },
 
@@ -100,7 +104,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     // Set response to cache
     cache.set(url, response)
 
-    console.debug(response)
+    //console.debug(response)
 
     return response
   }
