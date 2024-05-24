@@ -1,9 +1,5 @@
 <template>
   <section class="s-checkout">
-    <Transition name="fade">
-      <LoadingOverlay v-if="sending" />
-    </Transition>
-
     <SiteContainer>
       <BaseMessage v-if="isEmpty" :message="$t('cart.empty')" />
 
@@ -17,11 +13,9 @@
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
           :coupon="coupon.code"
-          :cart="cartStore.checkout"
+          :cart="basket"
           :stripe-card="card"
           :can-submit="canSubmit"
-          @api:start="sending = true"
-          @api:end="sending = false"
         >
           <template
             #resume="{
@@ -306,7 +300,7 @@
                         type="submit"
                         color="green"
                         :disabled="
-                          sending ||
+                          loading ||
                           (paymentMethod.id === 'stripe' && !isStripeComplete)
                         "
                         >Paga ora</BaseButton
@@ -366,6 +360,12 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
+
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
 
 // Constants
 const STRIPE_OPTIONS = {
@@ -524,6 +524,13 @@ if (!billingAddress.value.phone) {
   billingAddress.value.phone = account.value?.phone || null
 }
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
+
+let extraValue = {}
+if(coupon.value.code){
+  extraValue.coupon = coupon.value.code;
+}
+
+trackEcommerceEvent('begin_checkout', basket.value, extraValue);
 
 // Computed
 const shippingData = computed(() => ({

@@ -37,7 +37,7 @@
       class="u-mt-large"
       color="green"
       type="submit"
-      :disabled="sending || disabled"
+      :disabled="loading || disabled"
       >{{ $t('form.login') }}</BaseButton
     >
   </form>
@@ -48,6 +48,13 @@
 import { useAccountStore } from '@/stores/account'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
+
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
+const {setLoading} = loadingStore;
 
 // Constants
 const CSS_NAME = 'c-login-form'
@@ -64,7 +71,6 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Component life-cycle hooks
 
 // Composables
-const { sending } = useSender(emit)
 const store = useAccountStore()
 const cart = useCartStore()
 const wishlist = useWishlistStore()
@@ -84,11 +90,11 @@ const { recaptcha } = useCaptcha()
 
 // Methods
 const login = async () => {
-  if (sending.value) {
+  if (loading.value) {
     return
   }
 
-  sending.value = true
+  setLoading(true);
 
   const token = await recaptcha()
 
@@ -103,10 +109,10 @@ const login = async () => {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
-    await cart.load(true)
-    await wishlist.load()
+    await Promise.all([cart.load(true),wishlist.load()]);
   } else {
     message.message = response.value.message
+    setLoading(false);
   }
 
   notify(message)
@@ -114,8 +120,6 @@ const login = async () => {
   await navigateTo({
     name: 'dashboard',
   })
-
-  sending.value = false
 }
 </script>
 

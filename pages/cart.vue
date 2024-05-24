@@ -1,20 +1,9 @@
 <template>
   <section class="s-cart">
-    <Transition name="fade">
-      <LoadingOverlay v-if="sending" />
-    </Transition>
-
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
-    <SiteContainer v-if="isEmpty" class="u-pt-huge">
-      <BaseHeading
-        text="Non hai ancora nessun prodotto nel carrello"
-        tag="h4"
-        color="black"
-      />
-    </SiteContainer>
 
-    <SiteContainer v-else class="u-pt-huge">
+    <SiteContainer class="u-pt-huge">
       <FormWrapper class="o-form--cart" @submit.prevent="goToCheckout">
         <template #default="{ columnClassName }">
           <div :class="[columnClassName, 'o-form__basket']">
@@ -23,6 +12,7 @@
               :on-delete="deleteFromBasket"
               :on-clear="clearBasket"
               :on-save="saveCart"
+              :on-loading="loadingBasket"
             />
           </div>
 
@@ -111,7 +101,7 @@
               <template #after="{ footerClassName }">
                 <div :class="footerClassName">
                   <BaseButton
-                    :disabled="sending || !hasMinimumOrderCost"
+                    :disabled="loading || !hasMinimumOrderCost"
                     type="submit"
                     color="green"
                     :text="$t('cart.proceed')"
@@ -149,6 +139,13 @@
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
 import { useConfigurationStore } from '@/stores/configuration'
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+const loadingBasket = ref(true);
+
+const {loading} = storeToRefs(loadingStore);
+const {setLoading} = loadingStore;
 
 // Constants
 const userStore = useAccountStore()
@@ -171,13 +168,8 @@ defineI18nRoute({
 
 // Component life-cycle hooks
 onMounted(() => {
-  nextTick(async () => {
-    const syncProduct = await cartStore.load()
-    basket.value = syncProduct.value
-
-    validateCoupon()
-
-    trackEcommerceEvent('view_cart', basket.value);
+  nextTick(() => {
+    loadCart();
   })
 })
 
@@ -188,10 +180,10 @@ if (page.value && 'seo' in page.value) {
 }
 
 const { products } = storeToRefs(configurationStore)
-const sending = ref(false)
 
 // Data
-const { isEmpty, coupon } = storeToRefs(cartStore)
+const { cart, isEmpty, coupon } = storeToRefs(cartStore)
+
 const basket = ref([])
 
 // Computed
@@ -207,40 +199,69 @@ const { isLoggedIn } = storeToRefs(userStore)
 
 // Watcher
 
+watch(cart, (updated,old)=> {
+  updateCart(JSON.parse(JSON.stringify(updated)));
+})
+
 // Methods
 const { deleteFromCart, clearCart, validateCoupon } = cartStore
+
+const loadCart = async () => {
+  const syncProduct = await cartStore.load()
+  trackEcommerceEvent('view_cart', syncProduct.value);
+  loadingBasket.value=false;
+}
+
+const updateCart = (products) => {
+  basket.value = products
+  validateCoupon()
+}
+
 const deleteFromBasket = async (product) => {
+  if (loading.value) {
+    return false
+  }
+
+  setLoading(true)
+
   const success = await deleteFromCart(product)
 
   if (!success) {
+    setLoading(false)
     return
   }
 
-  basket.value = basket.value.filter(
-    (item) => item.variationId !== product.variationId
-  )
+  setLoading(false)
 }
 
 const clearBasket = async () => {
+  if (loading.value) {
+    return false
+  }
+
+  setLoading(true)
+
   try {
     const feedback = await clearCart()
 
     if (!feedback.success) {
+      setLoading(false)
       return
     }
   } catch (error) {
+    setLoading(false)
     return
   }
 
-  basket.value = []
+  setLoading(false)
 }
 
 const saveCart = async (direct = true) => {
-  if (sending.value) {
+  if (loading.value) {
     return false
   }
 
-  sending.value = true
+  setLoading(true)
   let success = false
   try {
     await cartStore.save(basket)
@@ -254,7 +275,7 @@ const saveCart = async (direct = true) => {
       message: error,
     })
   } finally {
-    sending.value = !direct
+    setLoading(!direct)
   }
 
   return success

@@ -1,6 +1,8 @@
 import { useFetch, storeToRefs, useRuntimeConfig } from '#imports'
 import { useAccountStore } from '@/stores/account'
 
+/* import https from 'https' */
+
 function getApiUrl(url, options = {}) {
   let path = '/'
   const paths = [url]
@@ -45,6 +47,10 @@ export function useFetchApi(url, options = {}, innerOptions = {}) {
   if (!fetchOptions.baseURL && config?.public?.endpoint) {
     fetchOptions.baseURL = config.public.endpoint
   }
+
+  /* fetchOptions.agent = new https.Agent({
+    rejectUnauthorized: false,
+  }); */
 
   return useFetch(
     getApiUrl(url, {
