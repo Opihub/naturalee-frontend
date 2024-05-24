@@ -4,7 +4,7 @@ import { useAccountStore } from '@/stores/account'
 /* import https from 'https' */
 
 function getApiUrl(url, options = {}) {
-  let path = '/'
+  let path = '/api/'
   const paths = [url]
 
   if (options?.version) {
@@ -20,16 +20,13 @@ function getApiUrl(url, options = {}) {
   return path
 }
 
-export function useFetchApi(url, options = {}, innerOptions = {}) {
+export function useFetchApi(url, options = {}) {
   const config = useRuntimeConfig()
 
-  innerOptions = {
-    version: 1,
-    dataOnly: false,
-    ...innerOptions,
-  }
-
   options = options || {}
+
+  const version = options?.version || 1
+  const clientSide = !!options?.clientSide || false
 
   const auth = useAccountStore()
   const { token, isLoggedIn } = storeToRefs(auth)
@@ -44,18 +41,13 @@ export function useFetchApi(url, options = {}, innerOptions = {}) {
     pick: null,
   }
 
-  if (!fetchOptions.baseURL && config?.public?.endpoint) {
-    fetchOptions.baseURL = config.public.endpoint
-  }
+  // fetchOptions.baseURL = '/api'
+  // if (!fetchOptions.baseURL && config?.public?.endpoint) {
+  //   fetchOptions.baseURL = config.public.endpoint
+  // }
 
-  /* fetchOptions.agent = new https.Agent({
-    rejectUnauthorized: false,
-  }); */
-
-  return useFetch(
-    getApiUrl(url, {
-      version: innerOptions.version,
-    }),
+  return (clientSide ? $fetch : useFetch)(
+    getApiUrl(url, { version }),
     fetchOptions
   )
 }

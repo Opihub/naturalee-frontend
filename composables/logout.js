@@ -12,7 +12,7 @@ export function useLogout() {
       await removeToken()
     }
 
-    await navigateTo({
+    return navigateTo({
       path: '/',
       query: {
         logout: true,

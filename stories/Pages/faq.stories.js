@@ -4,7 +4,7 @@ import DefaultLayout from '@/layouts/default.vue'
 import Layout from '@/stories/Layouts/default.stories'
 import SVGDefinitions from '@/components/Atoms/SVGDefinitions.vue'
 
-import { createResponse } from '@/server/utils/responses'
+import { createResponse } from '~/utils/responses'
 import { getFromMock } from '@/utils/mock'
 
 const foundedFAQs = {

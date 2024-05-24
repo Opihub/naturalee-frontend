@@ -51,9 +51,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 // Composables
-const paymentMethods = await useApi(
+const { data: paymentMethods } = await useApi(
   'shop/checkout/payments-methods',
-  {},
   {
     dataOnly: true,
   }

@@ -1,75 +1,86 @@
-import { ref, useFetchApi } from '#imports'
-import { createResponse } from '@/server/utils/responses'
-import { useLogout } from '@/composables/logout'
+import { useFetchApi, createResponse, useLogout } from '#imports'
 
-export async function useApi(url, options = {}, innerOptions = {}) {
-  innerOptions = {
-    version: 1,
-    dataOnly: false,
-    ...innerOptions,
-  }
-
+export async function useApi(url, options = {}) {
+  const nuxtApp = useNuxtApp()
+  
   options = options || {}
 
-  let cached = ref(null)
+  const dataOnly = options?.dataOnly || false
 
-  const { data, error } = await useFetchApi(url, options, innerOptions)
+  const defaultExpirationHours = options?.expiration_hours||1;
+  options.headers = options.headers || {}
+  options.headers.expiration_hours = defaultExpirationHours;
 
-  let responseData = data.value
-  if (error.value) {
-    const errorData = error.value?.data || {}
-
-    if (
-      'data' in errorData &&
-      'success' in errorData &&
-      'code' in errorData &&
-      'message' in errorData &&
-      'statusCode' in errorData
-    ) {
-      /**
-       * Server error, can happen
-       */
-      responseData = errorData
-      console.warn('errore previsto generato dal server:', responseData)
-
-      if (
-        ['jwt_auth_user_not_found', 'jwt_auth_invalid_token'].includes(
-          responseData.code
-        )
-      ) {
-        const { logout } = useLogout()
-        await logout(true)
-
+  return useFetchApi(url, {
+    ...options,
+    transform(input) {
+      return {
+        ...input,
+        fetchedAt: new Date()
+      }
+    },
+    getCachedData: (key) => {
+      //const data = nuxtApp.isHydrating ? nuxtApp.payload.data[key] : nuxtApp.static.data[key]
+      const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+      if (!data) {
         return
       }
-    } else {
-      /**
-       * Client error, must not happen
-       * Reason: calling wrong endpoint
-       */
-      throw error.value
-    }
-  }
 
-  let response = createResponse(responseData)
-
-  if (
-    'pick' in options &&
-    Array.isArray(options.pick) &&
-    options.pick.length > 0
-  ) {
-    response.data = Object.keys(response.data).reduce((accumulator, key) => {
-      const value = response[key]
-
-      if (options.pick.includes(key)) {
-        accumulator[key] = value
+      const expirationDate = new Date(data.fetchedAt)
+      expirationDate.setTime(expirationDate.getTime() + defaultExpirationHours * 60 * 60 * 1000)
+      const isExpired = expirationDate.getTime() < Date.now()
+      if(isExpired) {
+        return
       }
 
-      return accumulator
-    }, {})
-  }
+      return data
+    },
+    async onRequestError({ request, options, error }) {
+      console.log('[fetch request error]', request, error)
+    },
+    async onResponse({ response }) {
+      const data = createResponse(response._data)
+      /* console.log('onResponse')
+      console.log(data) */
 
-  cached.value = innerOptions.dataOnly ? response.data : response
+      response._data = dataOnly ? data.data : data
+    },
+    async onResponseError({ response }) {
+      let data = response._data
 
-  return cached
+      console.log('onResponseError')
+      console.log(data)
+
+      if (
+        'data' in data &&
+        'success' in data &&
+        'code' in data &&
+        'message' in data &&
+        'statusCode' in data
+      ) {
+        data = createResponse(response._data)
+        response._data = dataOnly ? data.data : data
+
+        console.warn('errore previsto generato dal server:', data)
+
+        if (
+          ['jwt_auth_user_not_found', 'jwt_auth_invalid_token'].includes(
+            data.code
+          )
+        ) {
+          const { logout } = useLogout()
+
+          return logout(true)
+        }
+
+        response.ok = true
+      } else {
+        /**
+         * Client error, must not happen
+         * Reason: calling wrong endpoint
+         */
+        throw response
+      }
+    },
+  })
 }

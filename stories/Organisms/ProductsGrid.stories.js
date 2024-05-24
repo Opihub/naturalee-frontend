@@ -3,7 +3,7 @@ import SVGDefinitions from '@/components/Atoms/SVGDefinitions.vue'
 import {
   createResponse,
   createPaginatedResponse,
-} from '@/server/utils/responses'
+} from '~/utils/responses'
 import { random } from '@/utils/random'
 import slugify from 'slugify'
 

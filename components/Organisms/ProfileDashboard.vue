@@ -4,7 +4,7 @@
       <InlineMenu
         :class="`${CSS_NAME}__menu`"
         :item-class="`${CSS_NAME}__menu__item`"
-        :menu="menu.data"
+        :menu="menu.profile"
         color="dark"
         direction="vertical"
       >
@@ -30,18 +30,20 @@
 
 <script setup>
 // Imports
+import { useConfigurationStore } from '@/stores/configuration';
 
 // Constants
 const CSS_NAME = 'c-profile-dashboard'
+const configurationStore = useConfigurationStore()
+
+// Composables
+const { menu } = storeToRefs(configurationStore)
 
 // Define (Props, Emits, Page Meta)
 
 // Component life-cycle hooks
 
 // Composables
-const menu = await useApi('menu/dashboard').catch((error) => {
-  console.error('Errore durante il caricamento di "menu/categories"', error)
-})
 
 // Data
 

@@ -49,13 +49,22 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const { pending, data: related } = useFetchApi(
-  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`
+const { pending, data: related, refresh } = await useApi(
+  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`,
+  {
+    expiration_hours:6
+  }
 )
+
+
+if (!related.value) {
+  console.log("qui related");
+    await refresh()
+  }
 
 // Component life-cycle hooks
 onMounted(() => {
-  trackEcommerceEvent('view_item', page.value)
+  trackEcommerceEvent('view_item', page?.value)
 })
 </script>
 
