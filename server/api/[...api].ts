@@ -42,10 +42,12 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const body = method === 'GET' ? undefined : await readBody(event)
   const token = getCookie(event, 'auth._token.local')
   const headers = getRequestHeaders(event)
+  let cacheData = cache.get(url);
+  cacheData = false;
   console.log(headers);
 
 
-  if (!cache.get(url)) {
+  if (!cacheData) {
     const response = $fetch(url, {
       baseURL: config.endpoint,
       params,
@@ -63,7 +65,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         timer = setTimeout(() => {
           abortController.abort()
           console.log(`Retrying request to: ${request}`)
-        }, 2500) // Abort request in 2.5s.
+        }, 5500) // Abort request in 2.5s.
 
         startTime = new Date().getTime()
         options.headers = new Headers(options.headers)

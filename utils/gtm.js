@@ -45,7 +45,7 @@ export function generateItem(product, listArgs = {}) {
     item.item_list_name = listArgs.name
   }
 
-  categories.forEach((element, index) => {
+  categories?.forEach((element, index) => {
     // Google accetta solo 5 categorie
     if (index > 4) {
       return

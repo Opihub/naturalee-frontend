@@ -78,7 +78,7 @@ export const useAccountStore = defineStore('account', () => {
       body: formData,
     })
 
-    if (response.value.success) {
+    if (response?.value?.success) {
       await login(response.value.data, true)
     } else {
       console.warn(response)
@@ -92,7 +92,7 @@ export const useAccountStore = defineStore('account', () => {
       method: 'POST',
       body: formData,
     })
-    if (response.value.success) {
+    if (response?.value?.success) {
       await login(response.value.data, formData.remember)
     } else {
       console.warn(response)
