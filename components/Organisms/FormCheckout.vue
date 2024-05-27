@@ -234,7 +234,7 @@ const submitOrder = async () => {
     formData.orderId = orderId.value
 
     // Registro l'ordine
-    const response = await useApi('shop/checkout/save', {
+    const { data: response } = await useApi('shop/checkout/save', {
       method: 'POST',
       body: formData,
     })

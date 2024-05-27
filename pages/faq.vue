@@ -54,13 +54,9 @@ defineI18nRoute({
 // Component life-cycle hooks
 
 // Data
-const faqs = await useApi(
-  'faq',
-  {},
-  {
-    dataOnly: true,
-  }
-)
+const { data: faqs } = await useApi('faq', {
+  dataOnly: true,
+})
 const { page } = await usePage()
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)

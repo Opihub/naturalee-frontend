@@ -329,7 +329,7 @@ const fetchProducts = async () => {
     params['filters[]'] = chosenFilters.value
   }
 
-  return await useApi(props.from, {
+  return useApi(props.from, {
     method: 'GET',
     params,
   })
@@ -378,7 +378,7 @@ const lazyFetchProducts = async () => {
   }
 
   try {
-    const response = await fetchProducts()
+    const { data: response } = await fetchProducts()
 
     if (response.value.success) {
       if (!props.paginate) {

@@ -7,6 +7,8 @@ const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
+    endpoint: process.env.API_ENDPOINT_URL || '/',
+
     public: {
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',

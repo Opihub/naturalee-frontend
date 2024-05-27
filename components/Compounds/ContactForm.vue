@@ -1,5 +1,5 @@
 <template>
-  <FormWrapper method="POST" @submit.prevent="submitForm()">
+  <FormWrapper ref="form" method="POST" @submit.prevent="submitForm()">
     <template
       #default="{ columnFullClassName, columnHalfClassName, columnClassName }"
     >
@@ -69,8 +69,6 @@
 </template>
 
 <script setup>
-import { useApi } from '@/composables/api'
-
 const DEFAULT_STATUS = {
   firstName: '',
   lastName: '',
@@ -81,16 +79,15 @@ const DEFAULT_STATUS = {
 }
 
 //form data
-const formData = reactive({ ...DEFAULT_STATUS })
+const formData = ref({ ...DEFAULT_STATUS })
+const form = ref(null)
 
 const feedback = reactive({
   status: null,
   message: null,
 })
 
-const emit = defineEmits(['api:start', 'api:end'])
-
-const { sending, send, sent } = useSender(emit)
+const sending = ref(false)
 
 const { recaptcha } = useCaptcha()
 
@@ -99,29 +96,36 @@ const submitForm = async () => {
     return
   }
 
+  sending.value = true
   const token = await recaptcha()
 
-  const response = await send(
-    async () =>
-      await useApi(`form/contacts`, {
-        method: 'POST',
-        body: { ...formData, _wpcf7_recaptcha_response: token },
-      })
-  )
-  if (sent) {
-    feedback.status =
-      response.value.data.status == 'mail_sent' ? 'success' : 'danger'
-    feedback.message = response.value.data.message
-
-    const inputs = document.querySelectorAll('.o-input.is-valid')
-    Array.from(inputs).forEach((input) => {
-      input.classList.remove('is-valid', 'is-init')
+  try {
+    const { data: response } = await useApi(`form/contacts`, {
+      method: 'POST',
+      clientSide: true,
+      body: { ...formData.value, _wpcf7_recaptcha_response: token },
     })
 
-    if (feedback.status == 'mail_sent') {
-      formData = { ...DEFAULT_STATUS }
-    }
+    feedback.status =
+      response.value.data.status === 'mail_sent' ? 'success' : 'danger'
+    feedback.message = response.value.data.message
+  } catch (error) {
+    feedback.status = 'danger'
+    feedback.message =
+      "È avvenuto un errore imprevisto durante l'invio della form..."
   }
+
+  const inputs = document.querySelectorAll('.o-input.is-valid')
+  Array.from(inputs).forEach((input) => {
+    input.classList.remove('is-valid', 'is-init')
+  })
+
+  if (feedback.status === 'success') {
+    formData.value = DEFAULT_STATUS
+    getElement(form.value).reset()
+  }
+
+  sending.value = false
 }
 </script>
 
