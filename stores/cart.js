@@ -481,7 +481,8 @@ export const useCartStore = defineStore('cart', () => {
 
     const { data: response } = await useApi('shop/cart/clear', {
       method: 'DELETE',
-      cache: 'no-cache'
+      cache: 'no-cache',
+      body: { test: 0 },
     })
 
     if (!response.value.success) {
