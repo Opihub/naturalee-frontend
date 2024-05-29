@@ -1,7 +1,6 @@
 import { LRUCache as LRU } from 'lru-cache'
-import { getCookie, H3Event } from 'h3'
+import { H3Event } from 'h3'
 import { useRuntimeConfig, isError, getQuery } from '#imports'
-import { useRemoteApi } from '@/server/utils/remoteApi'
 
 const config = useRuntimeConfig()
 
@@ -22,15 +21,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   console.info(url)
 
-  // try {
-  //   const response = await useRemoteApi(event, slug)
-
-  //   return createResponse(response)
-  // } catch (error) {
-  //   console.error(error)
-  //   return createErrorResponse(error)
-  // }
-
   let startTime: number
   let duration: number
 
@@ -41,7 +31,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const headers = getRequestHeaders(event)
-  let cacheData = await cache.get(url);
+  const cacheData = await cache.get(url)
 
   if (!cacheData || !cacheData?.success) {
     const response = $fetch(url, {
@@ -55,14 +45,17 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
       // Log request
       async onRequest({ request, options }) {
-        timer = setTimeout(() => {
-          abortController.abort()
-          console.log(`Retrying request to: ${request}`)
-        }, 5500) // Abort request in 2.5s.
+        if (method === 'GET') {
+          timer = setTimeout(() => {
+            abortController.abort()
+            console.log(`Retrying request to: ${request}`)
+          }, 5000) // Abort request in 2.5s.
+        }
 
         startTime = new Date().getTime()
         options.headers = new Headers(options.headers)
         options.headers.set('starttime', `${new Date().getTime()}`)
+
         await console.log(
           `%c[${new Date().toLocaleTimeString()}] %cSSR-Request: %c${request}`,
           'color: gray',
@@ -79,6 +72,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
         const currentTime = new Date().getTime()
         duration = currentTime - startTime
+
         await console.log(
           `✔️%cSSR-Response: ${request} - ${response.status} %c(${duration}ms)`,
           'color: orange',
@@ -95,8 +89,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         )
       },
     })
-    
-    if(method !== "GET" || headers?.['x-cache'] === 'no-cache'){
+
+    if (method !== 'GET' || headers?.['x-cache'] === 'no-cache') {
       return response
     }
 
