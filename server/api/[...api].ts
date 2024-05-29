@@ -35,6 +35,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   if (!cacheData || !cacheData?.success) {
     const response = $fetch(url, {
+      // Serve ad far "scivolare" la gestione degli errori al client
+      ignoreResponseError: true,
       baseURL: config.endpoint,
       params,
       method,
