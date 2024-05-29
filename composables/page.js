@@ -1,4 +1,4 @@
-import { ref, createError, useApi, useSlug } from '#imports'
+import { ref, createError, showError, useApi, useSlug } from '#imports'
 
 export const usePage = async (slug = null, namespace = 'pages') => {
   const endpoint = slug || useSlug()
@@ -13,8 +13,17 @@ export const usePage = async (slug = null, namespace = 'pages') => {
     await refresh()
   }
 
+  console.debug(response.value)
+
   if (!response.value.success) {
-    throw createError({
+    if (process.server) {
+      throw createError({
+        statusCode: response.value.statusCode,
+        statusMessage: response.value.message,
+      })
+    }
+
+    showError({
       statusCode: response.value.statusCode,
       statusMessage: response.value.message,
     })
