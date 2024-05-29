@@ -512,11 +512,9 @@ if (!billingAddress.value.phone) {
   billingAddress.value.phone = account.value?.phone || null
 }
 
-timeSlots.value = Object.keys(timeSlots.value).filter(t=>timeSlots.value[t]?.id).map(t=>timeSlots.value[t]);
-
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
 
-let extraValue = {}
+const extraValue = {}
 if(coupon.value.code){
   extraValue.coupon = coupon.value.code;
 }
