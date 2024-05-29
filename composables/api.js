@@ -1,31 +1,35 @@
-import { useFetchApi, createResponse, useLogout } from '#imports'
+import { useFetchApi, createResponse, useLogout, useNuxtApp } from '#imports'
 
 export async function useApi(url, options = {}) {
   const nuxtApp = useNuxtApp()
-  
+
   options = options || {}
 
   const dataOnly = options?.dataOnly || false
 
-  const defaultExpirationHours = options?.expiration_hours||1;
+  const defaultExpirationHours = options?.expiration_hours || 1
   options.headers = options.headers || {}
-  options.headers.expiration_hours = defaultExpirationHours;
+  options.headers.expiration_hours = defaultExpirationHours
 
-  const doCache = options?.cache === "no-cache" ? options?.cache : "cache"
-  options.headers["x-cache"] = doCache
+  const doCache = options?.cache === 'no-cache' ? options?.cache : 'cache'
+  options.headers['x-cache'] = doCache
+
+  const method = options?.method?.toUpperCase() || 'GET'
+  options.method = method
 
   return useFetchApi(url, {
     ...options,
-    transform(input) {
-      return {
-        ...input,
-        fetchedAt: new Date()
-      }
+    transform(original) {
+      return dataOnly ? original.data : original
+      // return {
+      //   ...original,
+      //   fetchedAt: new Date(),
+      // }
     },
     getCachedData: (key) => {
-
-      if(options?.method?.toUpperCase() !== "GET" || doCache === "no-cache")
-          return
+      if (method !== 'GET' || doCache === 'no-cache') {
+        return
+      }
 
       //const data = nuxtApp.isHydrating ? nuxtApp.payload.data[key] : nuxtApp.static.data[key]
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
@@ -34,15 +38,17 @@ export async function useApi(url, options = {}) {
       }
 
       const expirationDate = new Date(data.fetchedAt)
-      expirationDate.setTime(expirationDate.getTime() + defaultExpirationHours * 60 * 60 * 1000)
+      expirationDate.setTime(
+        expirationDate.getTime() + defaultExpirationHours * 60 * 60 * 1000
+      )
       const isExpired = expirationDate.getTime() < Date.now()
-      if(isExpired) {
+      if (isExpired) {
         return
       }
 
       return data
     },
-    async onRequestError({ request, options, error }) {
+    async onRequestError({ request, error }) {
       console.log('[fetch request error]', request, error)
     },
     async onResponse({ response }) {
@@ -50,7 +56,9 @@ export async function useApi(url, options = {}) {
       /* console.log('onResponse')
       console.log(data) */
 
-      response._data = dataOnly ? data.data : data
+      data.fetchedAt = new Date()
+
+      response._data = data
     },
     async onResponseError({ response }) {
       let data = response._data
@@ -66,7 +74,7 @@ export async function useApi(url, options = {}) {
         'statusCode' in data
       ) {
         data = createResponse(response._data)
-        response._data = dataOnly ? data.data : data
+        response._data = data
 
         console.warn('errore previsto generato dal server:', data)
 
