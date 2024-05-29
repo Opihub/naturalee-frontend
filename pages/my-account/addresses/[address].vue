@@ -44,6 +44,7 @@ const { data: response } = await useApi(
   `/shop/addresses/${route.params.address}`,
   {
     dataOnly: true,
+    cache: 'no-cache'
   }
 )
 

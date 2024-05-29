@@ -486,11 +486,13 @@ provide('stripe', stripe)
 const { data: shippingAddress } = await useApi('shop/addresses/shipping', {
   method: 'GET',
   dataOnly: true,
+  cache: 'no-cache'
 })
 
 const { data: userBillingAddress } = await useApi('shop/addresses/billing', {
   method: 'GET',
   dataOnly: true,
+  cache: 'no-cache'
 })
 
 const { address, invoice } = useBillingAddress(userBillingAddress)

@@ -104,6 +104,7 @@ const submitForm = async () => {
       method: 'POST',
       clientSide: true,
       body: { ...formData.value, _wpcf7_recaptcha_response: token },
+      cache: 'no-cache'
     })
 
     feedback.status =

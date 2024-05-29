@@ -91,6 +91,7 @@ definePageMeta({
           token,
           login,
         },
+        cache: 'no-cache'
       }
     )
 
@@ -203,6 +204,7 @@ const updatePassword = async () => {
         login,
         recaptcha_token,
       },
+      cache: 'no-cache'
     })
   })
 

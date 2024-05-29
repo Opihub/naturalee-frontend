@@ -106,6 +106,7 @@ const passwordRecovery = async () => {
     return await useApi(`auth/password-recovery/request`, {
       method: 'POST',
       body: { ...formData, recaptcha_token: token },
+      cache: 'no-cache'
     })
   })
 
