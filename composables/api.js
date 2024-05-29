@@ -46,7 +46,7 @@ export async function useApi(url, options = {}) {
         return
       }
 
-      return data
+      return dataOnly ? data.data : data
     },
     async onRequestError({ request, error }) {
       console.log('[fetch request error]', request, error)
