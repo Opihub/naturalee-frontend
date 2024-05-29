@@ -160,6 +160,7 @@ const updateAddress = async () => {
           {
             method: 'POST',
             body: formData,
+            cache: 'no-cache'
           }
         )
     )

@@ -40,12 +40,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const method = event.method
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
-  const token = getCookie(event, 'auth._token.local')
   const headers = getRequestHeaders(event)
-  console.log(headers);
+  let cacheData = await cache.get(url);
 
-
-  if (!cache.get(url)) {
+  if (!cacheData || !cacheData?.success) {
     const response = $fetch(url, {
       baseURL: config.endpoint,
       params,
@@ -53,17 +51,14 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       body,
       retry: 10,
       signal: abortController.signal,
-      headers: {
-        ...headers,
-        Authorization: `${token}`,
-      },
+      headers,
 
       // Log request
       async onRequest({ request, options }) {
         timer = setTimeout(() => {
           abortController.abort()
           console.log(`Retrying request to: ${request}`)
-        }, 2500) // Abort request in 2.5s.
+        }, 5500) // Abort request in 2.5s.
 
         startTime = new Date().getTime()
         options.headers = new Headers(options.headers)
@@ -100,6 +95,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         )
       },
     })
+    
+    if(method !== "GET" || headers?.['x-cache'] === 'no-cache'){
+      return response
+    }
 
     // Set response to cache
     cache.set(url, response)

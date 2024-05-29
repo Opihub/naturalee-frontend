@@ -36,7 +36,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
   // Actions
   async function load() {
-    const { data: response } = await useApi('shop/wishlist/products').catch((error) => {
+    const { data: response } = await useApi('shop/wishlist/products',{cache: 'no-cache'}).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/wishlist/products"',
         error
@@ -144,6 +144,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
           id: product.id,
           variationId: product.variationId,
         },
+        cache: 'no-cache'
       })
 
       if (response.value.success) {
@@ -174,6 +175,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
           id: product.id,
           variationId: product.variationId,
         },
+        cache: 'no-cache'
       })
 
       if (response.value.success) {
@@ -200,6 +202,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
     try {
       const { data: response } = await useApi('shop/wishlist/clear', {
         method: 'DELETE',
+        cache: 'no-cache'
       })
 
       if (response.value.success) {

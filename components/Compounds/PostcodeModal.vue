@@ -175,6 +175,7 @@ const checkPostcode = async () => {
       clientSide: true,
       method: 'POST',
       body: formData,
+      cache: 'no-cache'
     })
 
     feedback.value = response.value.data
@@ -205,6 +206,7 @@ const registerEmail = async () => {
         clientSide: true,
         method: 'POST',
         body: formData,
+        cache: 'no-cache'
       }
     )
 

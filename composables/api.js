@@ -11,6 +11,9 @@ export async function useApi(url, options = {}) {
   options.headers = options.headers || {}
   options.headers.expiration_hours = defaultExpirationHours;
 
+  const doCache = options?.cache === "no-cache" ? options?.cache : "cache"
+  options.headers["x-cache"] = doCache
+
   return useFetchApi(url, {
     ...options,
     transform(input) {
@@ -20,6 +23,10 @@ export async function useApi(url, options = {}) {
       }
     },
     getCachedData: (key) => {
+
+      if(options?.method?.toUpperCase() !== "GET" || doCache === "no-cache")
+          return
+
       //const data = nuxtApp.isHydrating ? nuxtApp.payload.data[key] : nuxtApp.static.data[key]
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
       if (!data) {

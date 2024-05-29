@@ -26,7 +26,7 @@ export function useFetchApi(url, options = {}) {
   options = options || {}
 
   const version = options?.version || 1
-  const clientSide = !!options?.clientSide || false
+  const clientSide = (typeof options?.server == "boolean") ? !options?.server : false
 
   const auth = useAccountStore()
   const { token, isLoggedIn } = storeToRefs(auth)

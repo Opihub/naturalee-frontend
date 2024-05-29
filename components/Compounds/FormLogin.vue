@@ -105,13 +105,13 @@ const login = async () => {
     message: 'È avvenuto un errore durante il login',
   }
 
-  if (response.value.success && response.value.data.token) {
+  if (response?.value?.success && response?.value?.data.token) {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
     await Promise.all([cart.load(true),wishlist.load()]);
   } else {
-    message.message = response.value.message
+    message.message = response?.value?.message || "Errore generico"
     setLoading(false);
   }
 

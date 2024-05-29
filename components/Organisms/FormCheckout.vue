@@ -237,6 +237,7 @@ const submitOrder = async () => {
     const { data: response } = await useApi('shop/checkout/save', {
       method: 'POST',
       body: formData,
+      cache: 'no-cache'
     })
 
     // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni
