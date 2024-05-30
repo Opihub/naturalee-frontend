@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div :class="[`${CSS_NAME}__row`]">
+    <div :class="[`${CSS_NAME}__row`,`${CSS_NAME}__price`]">
       <PriceHolder
         class="u-mb-mini"
         :price="product.price"
@@ -279,6 +279,10 @@ $prefix: 'product-card';
     font-weight: get-var(weight-regular);
     margin-bottom: rem(22px);
     @include typography(16px, 20px);
+  }
+
+  @include element('price') {
+    margin-top: auto;
   }
 
   @include element('descriptor') {
