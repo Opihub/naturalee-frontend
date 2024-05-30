@@ -199,10 +199,10 @@ const { isLoggedIn } = storeToRefs(userStore)
 
 // Watcher
 
-watch(cart, (updated,old)=> {
+/* watch(cart, (updated,old)=> {
   updateCart(JSON.parse(JSON.stringify(updated)));
 })
-
+ */
 // Methods
 const { deleteFromCart, clearCart, validateCoupon } = cartStore
 
@@ -304,17 +304,42 @@ const goToCheckout = async () => {
   })
 }
 
-// Component life-cycle hooks
-/* const syncProduct = await cartStore.load()
-basket.value = syncProduct.value
+cartStore.$onAction(({ args, name, after }) => {
+  after((result) => {
+    if(name==="validateCoupon")
+      return
 
-validateCoupon()
+    let currentCart = JSON.parse(JSON.stringify(cart.value));
+    switch (name) {
+      case 'deleteFromCart':
+        currentCart.map(i=>{
+          var tempItem = basket.value.find(t=>t.variationId === i.variationId);
+          if(tempItem){
+            i.quantity = tempItem.quantity;
+          }
+          return i;
+        })
+        break
+      case 'addToCart':
+        const [product, quantity] = args;
+        currentCart.map(i=>{
+          var tempItem = basket.value.find(t=>t.variationId === i.variationId);
+          
+          if(tempItem){
+            i.quantity = tempItem.quantity;
 
-onMounted(() => {
-  console.debug('view_cart')
-  console.debug(basket.value)
-  trackEcommerceEvent('view_cart', basket.value)
-}) */
+            if(tempItem.variationId === product.variationId){
+              i.quantity += quantity
+            }
+          }
+          return i;
+        })
+        break
+    }
+
+    updateCart(currentCart);
+  })
+})
 </script>
 
 <style lang="scss" scoped>
