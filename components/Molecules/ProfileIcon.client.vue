@@ -1,6 +1,6 @@
 <template>
   <BaseLink
-    :to="{ name: 'login' }"
+    :to="profileLink"
     :class="CSS_NAME"
     :label-class-name="`${CSS_NAME}__label`"
   >
@@ -20,12 +20,15 @@
 const CSS_NAME = 'c-profile-icon'
 
 // Define (Props, Emits, Page Meta)
-defineProps({
+const props = defineProps({
   isLoggedIn: {
     type: Boolean,
     default: false,
   },
 })
+
+const profileLink = computed(()=> props.isLoggedIn ? { name: 'dashboard' } : { name: 'login'})
+
 </script>
 
 <style lang="scss">
