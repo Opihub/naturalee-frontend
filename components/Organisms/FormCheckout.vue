@@ -47,8 +47,16 @@
 <script setup>
 //Imports
 import { useCartStore } from '@/stores/cart'
+
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
+const {setLoading} = loadingStore;
+
+
 // Define (Props, Emits, Page Meta)
-const emit = defineEmits(['api:start', 'api:end'])
 const props = defineProps({
   shippingAddress: {
     type: Object,
@@ -114,7 +122,6 @@ const { requestPaymentIntent, clearCart, removeCoupon } = cartStore
 
 const stripe = inject('stripe')
 const orderId = ref(null)
-const sending = ref(false)
 
 // Methods
 const submitOrder = async () => {
@@ -122,11 +129,11 @@ const submitOrder = async () => {
     return
   }
 
-  if (sending.value) {
+  if (loading.value) {
     return
   }
 
-  sending.value = true
+  setLoading(true);
 
   resetFeedback()
 
@@ -195,14 +202,12 @@ const submitOrder = async () => {
   }
 
   if (hasErrors.value) {
-    sending.value = false
+    setLoading(false);
     window.scrollTo(0, 0)
     return
   }
 
   try {
-    emit('api:start')
-
     // Se è Stripe, genero il paymentIntent
     if (props.paymentMethod.id === 'stripe') {
       const paymentIntentData = { ...formData }
@@ -218,14 +223,21 @@ const submitOrder = async () => {
       formData.paymentIntentId = response.value.intentId
     }
 
-    formData.products = props.cart
+    formData.products = props.cart.map((item) => ({
+      id: item.id,
+      variationId: item.variationId,
+      quantity: item.quantity,
+      title: item.title,
+    }))
+
     formData.email = email
     formData.orderId = orderId.value
 
     // Registro l'ordine
-    const response = await useApi('shop/checkout/save', {
+    const { data: response } = await useApi('shop/checkout/save', {
       method: 'POST',
       body: formData,
+      cache: 'no-cache'
     })
 
     // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni
@@ -239,6 +251,7 @@ const submitOrder = async () => {
     }
 
     orderId.value = response.value.data.id
+    formData.shipping.cost = response.value.data.shipping.cost
 
     // Se si paga tramite Stripe, allora aspetto la creazione dell'ordine
     // prima di mandare il pagamento a Stripe
@@ -252,20 +265,30 @@ const submitOrder = async () => {
           receipt_email: email.value,
         }
       )
-
       // Se il pagamento via Stripe fallisce, allora
-      if (
-        !('status' in response.paymentIntent) ||
-        response.paymentIntent?.status !== 'succeeded'
-      ) {
+      if(response?.error||false){
         throw new Error(
-          'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
+          response?.error?.message||'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
           {
             cause: response.error,
           }
         )
       }
     }
+
+    let extraValue = {}
+
+    if(formData.coupon){
+      extraValue.coupon = formData.coupon;
+    }
+
+    extraValue.transaction_id = orderId.value;
+
+    if(formData.shipping.cost>0){
+      extraValue.shipping = formData.shipping.cost;
+    }
+    console.log(formData.products);
+    trackEcommerceEvent('purchase', props.cart, extraValue);
 
     // Una volta che l'ordine è ok, pulisco il carrello e rimuovo i coupon,
     // quindi procedo alla pagina di conferma ordine
@@ -291,8 +314,7 @@ const submitOrder = async () => {
 
     feedback.errors.push(error.message)
   } finally {
-    sending.value = false
-    emit('api:end')
+    setLoading(false);
   }
 }
 </script>

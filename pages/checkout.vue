@@ -1,9 +1,5 @@
 <template>
   <section class="s-checkout">
-    <Transition name="fade">
-      <LoadingOverlay v-if="sending" />
-    </Transition>
-
     <SiteContainer>
       <BaseMessage v-if="isEmpty" :message="$t('cart.empty')" />
 
@@ -17,11 +13,9 @@
           :payment-method="paymentMethod"
           :shipping-method="shippingMethod"
           :coupon="coupon.code"
-          :cart="cartStore.checkout"
+          :cart="basket"
           :stripe-card="card"
           :can-submit="canSubmit"
-          @api:start="sending = true"
-          @api:end="sending = false"
         >
           <template
             #resume="{
@@ -306,7 +300,7 @@
                         type="submit"
                         color="green"
                         :disabled="
-                          sending ||
+                          loading ||
                           (paymentMethod.id === 'stripe' && !isStripeComplete)
                         "
                         >Paga ora</BaseButton
@@ -366,6 +360,12 @@
 // Imports
 import { useCartStore } from '@/stores/cart'
 import { useAccountStore } from '@/stores/account'
+
+import { useLoadingStore } from '@/stores/loading';
+
+const loadingStore = useLoadingStore();
+
+const {loading} = storeToRefs(loadingStore);
 
 // Constants
 const STRIPE_OPTIONS = {
@@ -454,13 +454,9 @@ const { t } = useI18n({
 })
 
 const user = useAccountStore()
-const timeSlots = await useApi(
-  'time-slots',
-  {},
-  {
-    dataOnly: true,
-  }
-)
+const { data: timeSlots } = await useApi('time-slots', {
+  dataOnly: true,
+})
 
 // Data
 const sending = ref(false)
@@ -487,25 +483,17 @@ const isStripeComplete = ref(false)
 
 provide('stripe', stripe)
 
-const shippingAddress = await useApi(
-  'shop/addresses/shipping',
-  {
-    method: 'GET',
-  },
-  {
-    dataOnly: true,
-  }
-)
+const { data: shippingAddress } = await useApi('shop/addresses/shipping', {
+  method: 'GET',
+  dataOnly: true,
+  cache: 'no-cache'
+})
 
-const userBillingAddress = await useApi(
-  'shop/addresses/billing',
-  {
-    method: 'GET',
-  },
-  {
-    dataOnly: true,
-  }
-)
+const { data: userBillingAddress } = await useApi('shop/addresses/billing', {
+  method: 'GET',
+  dataOnly: true,
+  cache: 'no-cache'
+})
 
 const { address, invoice } = useBillingAddress(userBillingAddress)
 const billingAddress = ref({ ...address.value })
@@ -523,7 +511,15 @@ if (!shippingAddress.value.phone) {
 if (!billingAddress.value.phone) {
   billingAddress.value.phone = account.value?.phone || null
 }
+
 const timeSlot = ref(timeSlots.value.find(() => true)?.id)
+
+const extraValue = {}
+if(coupon.value.code){
+  extraValue.coupon = coupon.value.code;
+}
+
+trackEcommerceEvent('begin_checkout', basket.value, extraValue);
 
 // Computed
 const shippingData = computed(() => ({

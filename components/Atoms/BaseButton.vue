@@ -179,6 +179,7 @@ $prefix: 'button';
     height: #{get-var(height, $prefix: $svg-prefix)};
     fill: get-var(fill, currentColor, $prefix: $prefix);
     stroke: get-var(stroke, currentColor, $prefix: $prefix);
+    min-width: 14px;
 
     @include transition(fill, stroke);
   }

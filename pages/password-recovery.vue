@@ -83,13 +83,17 @@ definePageMeta({
       return false
     }
 
-    const response = await useApi(`auth/password-recovery/validate-token`, {
-      method: 'POST',
-      body: {
-        token,
-        login,
-      },
-    })
+    const { data: response } = await useApi(
+      `auth/password-recovery/validate-token`,
+      {
+        method: 'POST',
+        body: {
+          token,
+          login,
+        },
+        cache: 'no-cache'
+      }
+    )
 
     return response.value.success
     // http://localhost/wp-login.php?action=rp&key=xxxxxxxxxxxxxxxxxxxx&login=yyyyyyyy
@@ -198,8 +202,9 @@ const updatePassword = async () => {
         ...formData,
         token,
         login,
-        recaptcha_token
+        recaptcha_token,
       },
+      cache: 'no-cache'
     })
   })
 

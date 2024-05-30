@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div :class="[`${CSS_NAME}__row`, 'u-mt-auto']">
+    <div :class="[`${CSS_NAME}__row`]">
       <PriceHolder
         class="u-mb-mini"
         :price="product.price"
@@ -198,7 +198,7 @@ $prefix: 'product-card';
     $prefix: 'counter',
     $map: (
       width: rem(108px),
-      margin: auto 0 0,
+      /* margin: auto 0 0, */
     )
   );
   display: flex;
@@ -248,6 +248,9 @@ $prefix: 'product-card';
     svg {
       @include until(large) {
         padding: 0 rem(15px);
+      }
+      @include until(tablet) {
+        padding: 0 rem(30px);
       }
       width: 100%;
       margin: 0 auto;
@@ -375,13 +378,21 @@ $prefix: 'product-card';
   @include element('buy') {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
+    gap:20px;
+
+    @include until(small){
+      flex-direction: column;
+    }
 
     @include object('counter') {
       flex: 0 0 rem(108px);
+      @include until(small){
+        flex: 0;
+      }
     }
 
     @include element('button', true) {

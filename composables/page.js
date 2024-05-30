@@ -1,18 +1,29 @@
-import { ref, createError } from '#imports'
-import { useApi } from '@/composables/api'
-import { useSlug } from '@/composables/slug'
+import { ref, createError, showError, useApi, useSlug } from '#imports'
 
-export const usePage = async (
-  slug = null,
-  namespace = 'pages'
-) => {
+export const usePage = async (slug = null, namespace = 'pages') => {
   const endpoint = slug || useSlug()
   const page = ref({})
 
-  const response = await useApi(`${namespace}/${endpoint}`, {})
+  const { data: response, refresh } = await useApi(`${namespace}/${endpoint}`,{
+    expiration_hours:6
+  })
+
+  if (!response.value) {
+    console.log("qui page");
+    await refresh()
+  }
+
+  console.debug(response.value)
 
   if (!response.value.success) {
-    throw createError({
+    if (process.server) {
+      throw createError({
+        statusCode: response.value.statusCode,
+        statusMessage: response.value.message,
+      })
+    }
+
+    showError({
       statusCode: response.value.statusCode,
       statusMessage: response.value.message,
     })

@@ -59,7 +59,7 @@ export const useAccountStore = defineStore('account', () => {
       return account
     }
 
-    const response = await useApi('profile').catch((error) => {
+    const { data: response } = await useApi('profile',{cache: 'no-cache'}).catch((error) => {
       console.error('Errore durante il caricamento di "profile"', error)
     })
 
@@ -73,12 +73,13 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function signIn(formData) {
-    const response = await useApi(`auth/sign-in`, {
+    const { data: response } = await useApi(`auth/sign-in`, {
       method: 'POST',
       body: formData,
+      cache: 'no-cache'
     })
 
-    if (response.value.success) {
+    if (response?.value?.success) {
       await login(response.value.data, true)
     } else {
       console.warn(response)
@@ -88,11 +89,12 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function signUp(formData) {
-    const response = await useApi(`auth/login`, {
+    const { data: response } = await useApi(`auth/login`, {
       method: 'POST',
       body: formData,
+      cache: 'no-cache'
     })
-    if (response.value.success) {
+    if (response?.value?.success) {
       await login(response.value.data, formData.remember)
     } else {
       console.warn(response)
@@ -192,9 +194,10 @@ export const useAccountStore = defineStore('account', () => {
       }
     }
 
-    const response = await useApi(`profile/update`, {
+    const { data: response } = await useApi(`profile/update`, {
       method: 'POST',
       body: user,
+      cache: 'no-cache'
     })
 
     delete user.oldPassword

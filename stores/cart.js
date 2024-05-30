@@ -6,6 +6,7 @@ import {
   storeToRefs,
   toRaw,
   useCart,
+  trackEcommerceEvent,
 } from '#imports'
 
 import {
@@ -61,14 +62,14 @@ export const useCartStore = defineStore('cart', () => {
     total,
   } = useCart(cart, coupon, paymentMethod)
 
-  const checkout = computed(() => {
+/*   const checkout = computed(() => {
     return cart.value.map((item) => ({
       id: item.id,
       variationId: item.variationId,
       quantity: item.quantity,
       title: item.title,
     }))
-  })
+  }) */
 
   // Actions
   function pickProduct(id) {
@@ -78,8 +79,10 @@ export const useCartStore = defineStore('cart', () => {
   async function load(login = false) {
     const localCart = toRaw(cart.value)
 
-    if (localCart.value && isLoggedIn.value && login) {
-      await remoteAddToCartBatch(localCart.value)
+    console.debug(localCart)
+
+    if (localCart && isLoggedIn.value && login) {
+      await remoteAddToCartBatch(localCart)
     }
 
     if (!isLoggedIn.value) {
@@ -95,15 +98,20 @@ export const useCartStore = defineStore('cart', () => {
       if (body.length <= 0) {
         return cart
       }
-      const response = await useApi(`shop/cart/sync`, {
+
+      console.warn(body)
+      const { data: response } = await useApi(`shop/cart/sync`, {
         method: 'POST',
         body,
+        cache: 'no-cache'
       }).catch((error) => {
         console.error(
           'Errore durante il caricamento di "shop/cart/sync"',
           error
         )
       })
+      console.warn(response.value)
+
       if (!response.value.success) {
         throw new Error(response)
       }
@@ -119,12 +127,14 @@ export const useCartStore = defineStore('cart', () => {
       return cart
     }
 
-    const response = await useApi('shop/cart/products').catch((error) => {
-      console.error(
-        'Errore durante il caricamento di "shop/cart/products"',
-        error
-      )
-    })
+    const { data: response } = await useApi('shop/cart/products',{cache:'no-cache'}).catch(
+      (error) => {
+        console.error(
+          'Errore durante il caricamento di "shop/cart/products"',
+          error
+        )
+      }
+    )
 
     if (!response.value.success) {
       throw new Error(response)
@@ -132,20 +142,11 @@ export const useCartStore = defineStore('cart', () => {
 
     cart.value = response.value.data
     if (response.value.success && login) {
-      localCart.forEach((element) => {
-        notify({
-          message: [
-            'cart.addedToCart',
-            element.quantity,
-            {
-              named: {
-                name: element.title,
-                count: element.quantity,
-              },
-            },
-          ],
-          status: 'success',
-        })
+      notify({
+        message: [
+          'cart.updated',
+        ],
+        status: 'success',
       })
     }
 
@@ -172,9 +173,10 @@ export const useCartStore = defineStore('cart', () => {
       })
     }
 
-    const response = await useApi('shop/cart/update/batch', {
+    const { data: response } = await useApi('shop/cart/update/batch', {
       method: 'PUT',
       body,
+      cache: 'no-cache'
     }).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/cart/update/batch"',
@@ -215,6 +217,8 @@ export const useCartStore = defineStore('cart', () => {
       costDescription,
       image,
     } = product
+
+    trackEcommerceEvent('add_to_cart', product)
 
     const existingProduct = pickProduct(variationId)
 
@@ -331,8 +335,8 @@ export const useCartStore = defineStore('cart', () => {
   // }
 
   function deleteFromCart(product) {
-    const { variationId: id } = product
-    const existingProduct = pickProduct(id)
+    const { variationId } = product
+    const existingProduct = pickProduct(variationId)
 
     if (!existingProduct) {
       notify({
@@ -344,6 +348,8 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     cart.value = cart.value.filter((item) => item !== existingProduct)
+
+    trackEcommerceEvent('remove_from_cart', product)
 
     notify({
       message: [
@@ -432,9 +438,10 @@ export const useCartStore = defineStore('cart', () => {
       cart: cart.value,
     }
 
-    const response = await useApi(`shop/coupon/validate`, {
+    const { data: response } = await useApi(`shop/coupon/validate`, {
       method: 'POST',
       body,
+      cache: 'no-cache'
     })
 
     if (response.value.success) {
@@ -463,8 +470,10 @@ export const useCartStore = defineStore('cart', () => {
       return clearCart()
     }
 
-    const response = await useApi('shop/cart/clear', {
+    const { data: response } = await useApi('shop/cart/clear', {
       method: 'DELETE',
+      cache: 'no-cache',
+      body: { test: 0 },
     })
 
     if (!response.value.success) {
@@ -491,13 +500,14 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     try {
-      const response = await useApi('shop/cart/add', {
+      const { data: response } = await useApi('shop/cart/add', {
         method: 'POST',
         body: {
           quantity,
           id: product.id,
           variationId: product.variationId,
         },
+        cache: 'no-cache'
       })
 
       if (response.value.success) {
@@ -531,13 +541,14 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     try {
-      const response = await useApi('shop/cart/remove', {
+      const { data: response } = await useApi('shop/cart/remove', {
         method: 'DELETE',
         body: {
           key: product.key,
           id: product.id,
           variationId: product.variationId,
         },
+        cache: 'no-cache'
       })
 
       if (response.value.success) {
@@ -559,9 +570,10 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function remoteAddToCartBatch(products = []) {
-    const response = await useApi('shop/cart/add/batch', {
+    const { data: response } = await useApi('shop/cart/add/batch', {
       method: 'POST',
       body: products,
+      cache: 'no-cache'
     }).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/cart/add/batch"',
@@ -580,13 +592,14 @@ export const useCartStore = defineStore('cart', () => {
 
   async function requestPaymentIntent(email, data = {}) {
     // Create a PaymentIntent with the order amount and currency
-    const response = await useApi('shop/checkout/payment-intent', {
+    const { data: response } = await useApi('shop/checkout/payment-intent', {
       method: 'POST',
       body: {
         data: { email, ...data },
         cart: cart.value,
         intent: stripePaymentIntent.value?.intentId,
       },
+      cache: 'no-cache'
     })
 
     if (!response.value.success) {
@@ -614,7 +627,6 @@ export const useCartStore = defineStore('cart', () => {
     total,
     granTotal,
     subTotal,
-    checkout,
     hasFreeShipping,
     hasMinimumOrderCost,
     costBeforeFreeShipping,

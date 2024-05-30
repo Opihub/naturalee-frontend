@@ -15,11 +15,7 @@
 
     <template #body>
       <template v-if="products.length > 0">
-        <tr
-          v-for="product in products"
-          :key="product.id"
-          :class="CSS_NAME_ITEM"
-        >
+        <tr v-for="product in products" :key="product.id" :class="CSS_NAME_ITEM">
           <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--image`]">
             <ProductImage :src="product.image" :alt="product.title" />
           </td>
@@ -29,40 +25,24 @@
           <td :class="CSS_NAME_ITEM_CELL" :data-title="$t('products.type')">
             {{ product.selling }}
           </td>
-          <td
-            :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('products.price')"
-            align="center"
-          >
-            <PriceHolder
-              :price="product.price"
-              :sales-price="product?.discountPrice"
-            >
+          <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]" :data-title="$t('products.price')"
+            align="center">
+            <PriceHolder :price="product.price" :sales-price="product?.discountPrice">
               <template v-if="product.discountPrice">
-                <PriceHolder
-                  class="u-block"
-                  :sales-price="product?.discountKgPrice"
-                />
+                <PriceHolder class="u-block" :sales-price="product?.discountKgPrice" />
               </template>
             </PriceHolder>
           </td>
-          <td
-            :class="[
+          <td :class="[
               CSS_NAME_ITEM_CELL,
               `${CSS_NAME_ITEM_CELL}--emphasis`,
               `${CSS_NAME_ITEM_CELL}--inline`,
-            ]"
-            :data-title="$t('products.quantity')"
-            align="center"
-          >
+            ]" :data-title="$t('products.quantity')" align="center">
             <BaseCounter v-if="!readonly" v-model.number="product.quantity" />
             <span v-else>{{ product.quantity }}</span>
           </td>
-          <td
-            :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]"
-            :data-title="$t('common.subTotal')"
-            align="center"
-          >
+          <td :class="[CSS_NAME_ITEM_CELL, `${CSS_NAME_ITEM_CELL}--emphasis`]" :data-title="$t('common.subTotal')"
+            align="center">
             <PriceHolder :price="calculatedPrice(product)" />
           </td>
           <td v-if="!readonly" :class="CSS_NAME_ITEM_CELL" align="center">
@@ -70,32 +50,45 @@
           </td>
         </tr>
       </template>
-      <tr v-else :class="CSS_NAME_ITEM">
-        <td :class="CSS_NAME_ITEM_CELL" colspan="7" align="center">
-          {{ $t('cart.empty') }}
-        </td>
-      </tr>
+      <template v-else :class="CSS_NAME_ITEM">
+        <tr v-if="onLoading" class="c-cart-table__item">
+          <td class="c-cart-table__item__cell c-cart-table__item__cell--image"><svg viewBox="0 0 600 600"
+              class="o-product-image" alt="Arance Spremuta Sicilia"
+              style="--product-image-background: var(--color-light);">
+              <g style="clip-path: url(&quot;#product-mask&quot;);">
+                <rect width="600" height="600" stroke="#eee"></rect>
+              </g>
+            </svg></td>
+          <td class="c-cart-table__item__cell" data-title="prodotto"><div class="c-skeleton"></div></td>
+          <td class="c-cart-table__item__cell" data-title="Tipologia"><div class="c-skeleton"></div></td>
+          <td class="c-cart-table__item__cell c-cart-table__item__cell--emphasis" data-title="Prezzo" align="center">
+            <span class="o-price"><span class="o-price__value"><div class="c-skeleton"></div></span></span></td>
+          <td class="c-cart-table__item__cell c-cart-table__item__cell--emphasis c-cart-table__item__cell--inline"
+            data-title="Quantità" align="center">
+            <div class="c-skeleton"></div>
+          </td>
+          <td class="c-cart-table__item__cell c-cart-table__item__cell--emphasis" data-title="Subtotale" align="center">
+            <span class="o-price"><span class="o-price__value"><div class="c-skeleton"></div></span></span></td>
+          <td class="c-cart-table__item__cell" align="center"><button class="o-cross" type="button"><span
+                class="o-cross__scale"><span class="o-cross__times"> × </span></span></button></td>
+        </tr>
+        <tr v-else>
+          <td :class="CSS_NAME_ITEM_CELL" colspan="7" align="center">
+            {{ $t('cart.empty') }}
+          </td>
+        </tr>
+      </template>
+
     </template>
     <template v-if="!readonly" #footer>
       <tr :class="`${CSS_NAME}__footer`">
         <td colspan="7">
-          <button
-            :class="`${CSS_NAME}__empty u-mr-small`"
-            type="button"
-            color="green"
-            :disabled="products.length <= 0"
-            @click="onClear"
-          >
+          <button :class="`${CSS_NAME}__empty u-mr-small`" type="button" color="green" :disabled="products.length <= 0"
+            @click="onClear">
             {{ $t('cart.clearCart') }}
           </button>
 
-          <button
-            :class="`${CSS_NAME}__empty`"
-            type="button"
-            color="green"
-            :disabled="!canUpdate"
-            @click="onSave"
-          >
+          <button :class="`${CSS_NAME}__empty`" type="button" color="green" :disabled="!canUpdate" @click="onSave">
             {{ $t('cart.updateCart') }}
           </button>
         </td>
@@ -135,6 +128,10 @@ const props = defineProps({
     default() {
       return () => {}
     },
+  },
+  onLoading: {
+    type: Boolean,
+    default: true,
   },
   readonly: {
     type: Boolean,
@@ -352,6 +349,15 @@ $prefix: 'cart-table';
     }
   }
 }
+
+@include component('skeleton') {
+  background-color: #f0f1fb;
+  color: #f0f1fb;
+  height: 20px;
+  width: 100px;
+  border-radius: 20px;
+}
+
 tfoot {
   @include until(tablet) {
     display: block;

@@ -1,12 +1,12 @@
 <template>
   <section class="s-checkout">
     <SiteContainer :max-width="1060">
-      <template v-if="order">
+      <template v-if="order.data">
         <BaseHeading
           tag="h4"
           class="u-mb-large u-text-center@tablet"
           style="text-wrap: balance"
-          >Grazie. Il tuo ordine n. {{ orderId(order.id) }} è stato ricevuto ed
+          >Grazie. Il tuo ordine n. {{ orderId(order.data.id) }} è stato ricevuto ed
           è attualmente In lavorazione</BaseHeading
         >
         <SiteContainer padless="">
@@ -14,20 +14,20 @@
             >Ecco i dettagli del tuo ordine</BaseHeading
           >
 
-          <OrderDetails class="u-mb-huge u-mt-medium" :order="order" />
+          <OrderDetails class="u-mb-huge u-mt-medium" :order="order.data" />
           <div class="o-row">
             <div class="o-row__column">
               <BaseHeading tag="h5" class="u-mb-small">{{
                 $t('addresses.shipping')
               }}</BaseHeading>
-              <ShopAddress :address="order.addresses.shipping" />
+              <ShopAddress :address="order.data.addresses.shipping" />
             </div>
 
             <div class="o-row__column">
               <BaseHeading tag="h5" class="u-mb-small">{{
                 $t('addresses.billing')
               }}</BaseHeading>
-              <ShopAddress :address="order.addresses.billing" />
+              <ShopAddress :address="order.data.addresses.billing" />
             </div>
           </div>
         </SiteContainer>
@@ -72,19 +72,8 @@ definePageMeta({
 
       const { orderId } = to.query
 
-      if (!orderId || isNaN(orderId)) {
+      if (!orderId || Number.isNaN(orderId)) {
         return false
-      }
-
-      const response = await useApi(`shop/orders/${orderId}`)
-
-      if (!response.value.success) {
-        return navigateTo({
-          name: 'orders-list',
-          query: {
-            redirectBecause: 'orderNotFound',
-          },
-        })
       }
 
       return true
@@ -105,20 +94,14 @@ defineRouteRules({
 const config = useRuntimeConfig()
 const route = useRoute()
 
-const order = ref(null)
-onMounted(() => {
-  nextTick(async () => {
-    const response = await useApi(
-      `shop/orders/${route.query.orderId}`,
-      {},
-      {
-        dataOnly: true,
-      }
-    )
+const { data: order } = await useApi(`shop/orders/${route.query.orderId}`)
 
-    order.value = response.value
+if (!order.value || !order.value.success) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Order Not Found',
   })
-})
+}
 
 // Watcher
 
@@ -132,6 +115,7 @@ const seoTitle = computed(() => {
 
   return title
 })
+
 usePageSeo({
   title: seoTitle,
 })

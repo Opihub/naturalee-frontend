@@ -40,13 +40,11 @@ defineI18nRoute({
 
 // Composables
 const route = useRoute()
-const response = await useApi(
+const { data: response } = await useApi(
   `/shop/addresses/${route.params.address}`,
   {
-    method: 'GET',
-  },
-  {
     dataOnly: true,
+    cache: 'no-cache'
   }
 )
 

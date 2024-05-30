@@ -1,4 +1,4 @@
-import { createResponse } from '@/server/utils/responses'
+import { createResponse } from '~/utils/responses'
 import { useRuntimeConfig, isError, getQuery } from '#imports'
 import { $fetch } from 'ofetch'
 import { H3Event } from 'h3'

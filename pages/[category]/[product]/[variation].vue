@@ -20,6 +20,10 @@
       <ProductCards
         v-if="!pending && related.data && related.data.length"
         :products="related.data"
+        :trackable="{
+          id: `related_${route.fullPath}`,
+          name: `Correlati ${page.title}`,
+        }"
       />
     </SiteContainer>
   </section>
@@ -35,8 +39,6 @@ definePageMeta({
   name: 'product-child',
 })
 
-// Component life-cycle hooks
-
 // Data
 const route = useRoute()
 const { page } = await usePage(
@@ -47,15 +49,23 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const { pending, data: related } = useFetchApi(
-  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`
+const { pending, data: related, refresh } = await useApi(
+  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`,
+  {
+    expiration_hours:6
+  }
 )
 
-// Watcher
 
-// Computed
+if (!related.value) {
+  console.log("qui related");
+    await refresh()
+  }
 
-// Methods
+// Component life-cycle hooks
+onMounted(() => {
+  trackEcommerceEvent('view_item', page?.value)
+})
 </script>
 
 <style lang="scss" scoped>

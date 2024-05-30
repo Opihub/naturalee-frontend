@@ -115,6 +115,19 @@
         </Transition>
       </div>
     </Transition>
+
+    <Transition name="fade">
+      <BaseMessage
+        v-if="matchedPostcode === null && errorMessage"
+        class="u-mt-half"
+      >
+        <BaseParagraph
+          v-if="feedbackMessage"
+          class="u-mb-micro"
+          text="Oh no... È avvenuto un errore durante l'invio della richiesta. Riprova più tardi"
+        />
+      </BaseMessage>
+    </Transition>
   </ModalContainer>
 </template>
 
@@ -131,6 +144,7 @@ const sending = ref(false)
 const matchedPostcode = ref(null)
 const savedEmail = ref(null)
 const feedback = ref(null)
+const errorMessage = ref(false)
 
 const resetStatus = () => {
   sending.value = false
@@ -144,6 +158,7 @@ const checkPostcode = async () => {
   savedEmail.value = null
   matchedPostcode.value = null
   feedback.value = null
+  errorMessage.value = false
 
   if (!formData.postcode) {
     return
@@ -155,19 +170,27 @@ const checkPostcode = async () => {
 
   sending.value = true
 
-  const response = await useApi('postcodes/validate', {
-    method: 'POST',
-    body: formData,
-  })
+  try {
+    const { data: response } = await useApi('postcodes/validate', {
+      clientSide: true,
+      method: 'POST',
+      body: formData,
+      cache: 'no-cache'
+    })
 
-  feedback.value = response.value.data
+    feedback.value = response.value.data
 
-  matchedPostcode.value =
-    response.value.success && response.value.code !== 'cap_not_available'
+    matchedPostcode.value =
+      response.value.success && response.value.code !== 'cap_not_available'
+  } catch (error) {
+    errorMessage.value = true
+  }
+
   sending.value = false
 }
 
 const registerEmail = async () => {
+  errorMessage.value = false
   sending.value = false
 
   if (!formData.email) {
@@ -176,12 +199,21 @@ const registerEmail = async () => {
 
   sending.value = true
 
-  const response = await useApi(`postcodes/update/${feedback.value}`, {
-    method: 'POST',
-    body: formData,
-  })
+  try {
+    const { data: response } = await useApi(
+      `postcodes/update/${feedback.value}`,
+      {
+        clientSide: true,
+        method: 'POST',
+        body: formData,
+        cache: 'no-cache'
+      }
+    )
 
-  savedEmail.value = response.value.success
+    savedEmail.value = response.value.success
+  } catch (error) {
+    errorMessage.value = true
+  }
   sending.value = false
 }
 

@@ -4,6 +4,7 @@ import {
   skipHydrate,
   computed,
   storeToRefs,
+  trackEcommerceEvent,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -35,12 +36,15 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
   // Actions
   async function load() {
-    const response = await useApi('shop/wishlist/products').catch((error) => {
+    const { data: response, refresh } = await useApi('shop/wishlist/products',{cache: 'no-cache'}).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/wishlist/products"',
         error
       )
     })
+
+    if (!response.value)
+      await refresh()
 
     if (response.value.success) {
       wishlist.value = response.value.data
@@ -67,6 +71,8 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
       return true
     }
+
+    trackEcommerceEvent('add_to_wishlist', product)
 
     wishlist.value.push(product)
 
@@ -135,12 +141,13 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi('shop/wishlist/add', {
+      const { data: response } = await useApi('shop/wishlist/add', {
         method: 'POST',
         body: {
           id: product.id,
           variationId: product.variationId,
         },
+        cache: 'no-cache'
       })
 
       if (response.value.success) {
@@ -165,12 +172,13 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi('shop/wishlist/remove', {
+      const { data: response } = await useApi('shop/wishlist/remove', {
         method: 'DELETE',
         body: {
           id: product.id,
           variationId: product.variationId,
         },
+        cache: 'no-cache'
       })
 
       if (response.value.success) {
@@ -195,8 +203,9 @@ export const useWishlistStore = defineStore('wishlist', () => {
     }
 
     try {
-      const response = await useApi('shop/wishlist/clear', {
+      const { data: response } = await useApi('shop/wishlist/clear', {
         method: 'DELETE',
+        cache: 'no-cache'
       })
 
       if (response.value.success) {

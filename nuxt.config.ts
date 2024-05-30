@@ -7,12 +7,15 @@ const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
+    endpoint: process.env.API_ENDPOINT_URL || '/',
+
     public: {
       title: process.env.APP_TITLE,
       endpoint: process.env.API_ENDPOINT_URL || '/',
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
+      currency: 'EUR',
     },
   },
   app: {
@@ -164,6 +167,9 @@ export default defineNuxtConfig({
   },
   gtm: {
     id: process.env?.GTM_ID || '',
+    enabled: Boolean(process.env?.GTM_ID),
+    debug: Boolean(process.env?.GTM_DEBUG),
+    trackOnNextTick: true,
   },
   // @ts-ignore
   storybook: {

@@ -8,6 +8,8 @@ import {
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 
 export const useConfigurationStore = defineStore('configuration', () => {
+  const nuxtApp = useNuxtApp()
+
   const configuration = useLocalStorage(
     'configuration',
     {},
@@ -17,11 +19,18 @@ export const useConfigurationStore = defineStore('configuration', () => {
   )
 
   const load = async () => {
-    const response = await useApi('config', {
-      key: 'config'
-    }, { dataOnly: true })
+    const { data, refresh } = await useApi('config', {
+      key: 'config',
+      dataOnly: true,
+      expiration_hours:24
+    })
 
-    configuration.value = response.value
+    if (!data.value) {
+      await refresh()
+    } else {
+      configuration.value = data.value
+    }
+
   }
 
   const shopCategories = computed(() => {
