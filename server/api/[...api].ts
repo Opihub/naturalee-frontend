@@ -35,6 +35,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   if (!cacheData || !cacheData?.success) {
     const response = $fetch(url, {
+      // Serve ad far "scivolare" la gestione degli errori al client
+      ignoreResponseError: true,
       baseURL: config.endpoint,
       params,
       method,
@@ -45,10 +47,12 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
       // Log request
       async onRequest({ request, options }) {
-        timer = setTimeout(() => {
-          abortController.abort()
-          console.log(`Retrying request to: ${request}`)
-        }, method === 'GET' ? 5000 : 10000) // Abort request in 2.5s.
+        if (method === 'GET') {
+          timer = setTimeout(() => {
+            abortController.abort()
+            console.log(`Retrying request to: ${request}`)
+          }, 5000) // Abort request in 2.5s.
+        }
 
         startTime = new Date().getTime()
         options.headers = new Headers(options.headers)
