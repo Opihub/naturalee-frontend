@@ -41,6 +41,11 @@ watch(
   () => route.path,
   async () => {
     let path = route.path
+
+    if(path === "/il-mio-account/"){
+      return navigateTo({name:'dashboard'}, { redirectCode: 301 })
+    }
+
     const isOrderChild = ['order-products', 'order-view'].includes(route.name)
 
     if (isOrderChild) {
