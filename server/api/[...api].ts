@@ -12,7 +12,7 @@ const cache = new LRU({
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const url = event.context.params?.api
-
+  const cacheKey = event?._path
   if (!url) {
     throw createError({
       statusCode: 403,
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const headers = getRequestHeaders(event)
-  const cacheData = await cache.get(url)
+  const cacheData = await cache.get(cacheKey)
 
   if (!cacheData || !cacheData?.success) {
     const response = $fetch(url, {
@@ -97,7 +97,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     }
 
     // Set response to cache
-    cache.set(url, response)
+    cache.set(cacheKey, response)
 
     //console.debug(response)
 
@@ -107,5 +107,5 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   // Log a cache hit to a given request URL
   console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
 
-  return cache.get(url)
+  return cache.get(cacheKey)
 })
