@@ -81,8 +81,8 @@ export const useCartStore = defineStore('cart', () => {
 
     console.debug(localCart)
 
-    if (localCart.value && isLoggedIn.value && login) {
-      await remoteAddToCartBatch(localCart.value)
+    if (localCart && isLoggedIn.value && login) {
+      await remoteAddToCartBatch(localCart)
     }
 
     if (!isLoggedIn.value) {
@@ -142,20 +142,11 @@ export const useCartStore = defineStore('cart', () => {
 
     cart.value = response.value.data
     if (response.value.success && login) {
-      localCart.forEach((element) => {
-        notify({
-          message: [
-            'cart.addedToCart',
-            element.quantity,
-            {
-              named: {
-                name: element.title,
-                count: element.quantity,
-              },
-            },
-          ],
-          status: 'success',
-        })
+      notify({
+        message: [
+          'cart.updated',
+        ],
+        status: 'success',
       })
     }
 
