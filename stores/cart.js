@@ -141,7 +141,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     cart.value = response.value.data
-    if (response.value.success && login) {
+    if (response.value.success && login && cart.value.length>0) {
       notify({
         message: [
           'cart.updated',
