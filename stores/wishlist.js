@@ -36,12 +36,15 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
   // Actions
   async function load() {
-    const { data: response } = await useApi('shop/wishlist/products',{cache: 'no-cache'}).catch((error) => {
+    const { data: response, refresh } = await useApi('shop/wishlist/products',{cache: 'no-cache'}).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/wishlist/products"',
         error
       )
     })
+
+    if (!response.value)
+      await refresh()
 
     if (response.value.success) {
       wishlist.value = response.value.data

@@ -9,7 +9,6 @@
         v-if="wishlist.length > 0"
         class="u-pb-huge u-pt-none u-pt-medium@desktop"
         :use="wishlist"
-        paginate
       />
       <SiteContainer v-else class="u-pb-huge u-pt-huge">
         <BaseMessage
