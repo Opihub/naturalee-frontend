@@ -73,7 +73,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function signIn(formData) {
-    const { data: response } = await useApi(`auth/sign-in`, {
+    const { data: response } = await useApi('auth/sign-in', {
       method: 'POST',
       body: formData,
       cache: 'no-cache'
@@ -89,7 +89,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   async function signUp(formData) {
-    const { data: response } = await useApi(`auth/login`, {
+    const { data: response } = await useApi('auth/login', {
       method: 'POST',
       body: formData,
       cache: 'no-cache'
