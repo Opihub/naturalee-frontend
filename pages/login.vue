@@ -20,7 +20,6 @@ definePageMeta({
     const { isLoggedIn } = storeToRefs(store)
 
     if (isLoggedIn.value) {
-      console.debug(isLoggedIn.value)
       return navigateTo({ name: 'my-account' })
     }
 

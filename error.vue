@@ -22,7 +22,7 @@
         }}</BaseHeading>
 
         <BaseHeading tag="h4">{{ error.message }}</BaseHeading>
-        <div class="u-mt-large u-mb-large" v-html="error.stack"></div>
+        <div v-if="!config?.public?.isProduction" class="u-mt-large u-mb-large" v-html="error.stack"></div>
       </template>
 
       <BaseButton @click="handleError">{{

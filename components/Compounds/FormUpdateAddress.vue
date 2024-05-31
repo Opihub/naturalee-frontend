@@ -200,7 +200,6 @@ const updateAddress = async () => {
     emit('completed')
   }
 
-  console.debug(feedback)
   feedback.message = message
 
   setLoading(false)

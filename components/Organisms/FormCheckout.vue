@@ -48,13 +48,12 @@
 //Imports
 import { useCartStore } from '@/stores/cart'
 
-import { useLoadingStore } from '@/stores/loading';
+import { useLoadingStore } from '@/stores/loading'
 
-const loadingStore = useLoadingStore();
+const loadingStore = useLoadingStore()
 
-const {loading} = storeToRefs(loadingStore);
-const {setLoading} = loadingStore;
-
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
 
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
@@ -133,7 +132,7 @@ const submitOrder = async () => {
     return
   }
 
-  setLoading(true);
+  setLoading(true)
 
   resetFeedback()
 
@@ -202,7 +201,7 @@ const submitOrder = async () => {
   }
 
   if (hasErrors.value) {
-    setLoading(false);
+    setLoading(false)
     window.scrollTo(0, 0)
     return
   }
@@ -237,7 +236,7 @@ const submitOrder = async () => {
     const { data: response } = await useApi('shop/checkout/save', {
       method: 'POST',
       body: formData,
-      cache: 'no-cache'
+      cache: 'no-cache',
     })
 
     // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni
@@ -266,9 +265,10 @@ const submitOrder = async () => {
         }
       )
       // Se il pagamento via Stripe fallisce, allora
-      if(response?.error||false){
+      if (response?.error || false) {
         throw new Error(
-          response?.error?.message||'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
+          response?.error?.message ||
+            'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
           {
             cause: response.error,
           }
@@ -276,19 +276,18 @@ const submitOrder = async () => {
       }
     }
 
-    let extraValue = {}
+    const extraValue = {}
 
-    if(formData.coupon){
-      extraValue.coupon = formData.coupon;
+    if (formData.coupon) {
+      extraValue.coupon = formData.coupon
     }
 
-    extraValue.transaction_id = orderId.value;
+    extraValue.transaction_id = orderId.value
 
-    if(formData.shipping.cost>0){
-      extraValue.shipping = formData.shipping.cost;
+    if (formData.shipping.cost > 0) {
+      extraValue.shipping = formData.shipping.cost
     }
-    console.log(formData.products);
-    trackEcommerceEvent('purchase', props.cart, extraValue);
+    trackEcommerceEvent('purchase', props.cart, extraValue)
 
     // Una volta che l'ordine è ok, pulisco il carrello e rimuovo i coupon,
     // quindi procedo alla pagina di conferma ordine
@@ -298,23 +297,18 @@ const submitOrder = async () => {
 
     stripePaymentIntent.value = null
 
-    const bool = await navigateTo({
+    await navigateTo({
       name: 'order-confirmed',
       query: {
         orderId: orderId.value,
       },
     })
-
-    if (bool) {
-      console.log(bool)
-    }
   } catch (error) {
-    console.log(error)
-    console.log(error.cause)
+    console.warn(error)
 
     feedback.errors.push(error.message)
   } finally {
-    setLoading(false);
+    setLoading(false)
   }
 }
 </script>
