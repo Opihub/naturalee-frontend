@@ -1,4 +1,5 @@
 import {
+  ref,
   defineStore,
   acceptHMRUpdate,
   skipHydrate,
@@ -144,17 +145,17 @@ export const useAccountStore = defineStore('account', () => {
 
   async function updateUser(profile) {
     const user = { ...profile }
+    const feedback = ref({
+      success: false,
+      message: "È avvenuto un errore durante l'aggiornamento dell'utente"
+    })
 
     if (
       user.oldPassword === '' &&
       (user.newPassword !== '' || user.confirmPassword !== '')
     ) {
-      return {
-        value: {
-          success: false,
-          message: 'La password corrente è errata',
-        },
-      }
+      feedback.message = 'La password corrente è errata'
+      return feedback
     }
 
     if (
@@ -178,34 +179,28 @@ export const useAccountStore = defineStore('account', () => {
         !user.newPassword.match(getPasswordPattern()) &&
         !user.confirmPassword.match(getPasswordPattern())
       ) {
-        return {
-          value: {
-            success: false,
-            message: 'La password non è nel formato richiesto',
-          },
-        }
+        feedback.message = 'La password non è nel formato richiesto'
+        return feedback
       }
+
       if (user.newPassword !== user.confirmPassword) {
-        return {
-          value: {
-            success: false,
-            message: 'Le password non corrispondono',
-          },
-        }
+        feedback.message = 'Le password non corrispondono'
+        return feedback
       }
     }
 
-    const { data: response } = await useApi(`profile/update`, {
+    const { data: response } = await useApi('profile/update', {
       method: 'POST',
       body: user,
       cache: 'no-cache',
     })
 
-    delete user.oldPassword
-    delete user.newPassword
-    delete user.confirmPassword
+    if (!response.value.success) {
+      throw new Error(response)
+    }
 
-    account.value = user
+    account.value = response.value.data
+
     return response
   }
 
