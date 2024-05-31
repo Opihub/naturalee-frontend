@@ -36,15 +36,20 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'product-child',
+  name: 'product-page',
 })
 
 // Data
 const route = useRoute()
-const { page } = await usePage(
-  route.params.variation,
-  `shop/categories/${route.params.category}/products/${route.params.product}`
-)
+const { category, product, variation } = route.params
+
+const baseRoute = ['shop', 'categories', category, 'products']
+
+const { page } = await usePage(variation || product, [
+  ...baseRoute,
+  variation ? product : null,
+])
+
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
@@ -53,12 +58,9 @@ const {
   pending,
   data: related,
   refresh,
-} = await useApi(
-  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`,
-  {
-    expiration_hours: 6,
-  }
-)
+} = await useApi([...baseRoute, product, variation, 'related'], {
+  expiration_hours: 6,
+})
 
 if (!related.value) {
   await refresh()
