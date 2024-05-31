@@ -113,7 +113,7 @@ const options = computed(() => {
     props.data.forEach((el) => {
       data[el[props.valueKey]] = el[props.labelKey]
     })
-    //console.log(data)
+
     return data
   }
 

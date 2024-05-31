@@ -52,13 +52,12 @@
 
 <script setup>
 // Imports
-import { useLoadingStore } from '@/stores/loading';
+import { useLoadingStore } from '@/stores/loading'
 
-const loadingStore = useLoadingStore();
+const loadingStore = useLoadingStore()
 
-const {loading} = storeToRefs(loadingStore);
-const {setLoading} = loadingStore;
-
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
 
 // Constants
 const CSS_NAME = 'c-password-recovery-form'
@@ -70,16 +69,15 @@ defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['api:start', 'api:end'])
 
 // Component life-cycle hooks
 
 // Composables
-const { sent, send } = useSender(emit)
 
 // Data
 const user = ref(null)
 const success = ref(false)
+const sent = ref(false)
 const formData = reactive({
   username: '',
 })
@@ -96,22 +94,28 @@ const passwordRecovery = async () => {
     return
   }
 
-  setLoading(true);
+  setLoading(true)
 
+  sent.value = false
   user.value = formData.username
 
   const token = await recaptcha()
 
-  const response = await send(async () => {
-    return await useApi(`auth/password-recovery/request`, {
+  try {
+    const { data: response } = await useApi('auth/password-recovery/request', {
       method: 'POST',
       body: { ...formData, recaptcha_token: token },
-      cache: 'no-cache'
+      cache: 'no-cache',
     })
-  })
 
-  setLoading(false);
+    success.value = response.value.code
+  } catch (error) {
+    console.warn(error)
 
-  success.value = response.value.code
+    success.value = false
+  } finally {
+    sent.value = true
+    setLoading(false)
+  }
 }
 </script>

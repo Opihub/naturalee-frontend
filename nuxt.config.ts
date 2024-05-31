@@ -15,6 +15,7 @@ export default defineNuxtConfig({
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
+      isProduction: process.env?.IS_PRODUCTION || false,
       currency: 'EUR',
     },
   },

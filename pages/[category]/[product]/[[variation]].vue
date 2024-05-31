@@ -36,26 +36,39 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'product-parent'
+  name: 'product-page',
 })
 
 // Data
 const route = useRoute()
-const { page } = await usePage(
-  route.params.product,
-  `shop/categories/${route.params.category}/products`
-)
+const { category, product, variation } = route.params
+
+const baseRoute = ['shop', 'categories', category, 'products']
+
+const { page } = await usePage(variation || product, [
+  ...baseRoute,
+  variation ? product : null,
+])
+
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const { pending, data: related } = useFetchApi(
-  `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`
-)
+const {
+  pending,
+  data: related,
+  refresh,
+} = await useApi([...baseRoute, product, variation, 'related'], {
+  expiration_hours: 6,
+})
+
+if (!related.value) {
+  await refresh()
+}
 
 // Component life-cycle hooks
 onMounted(() => {
-  trackEcommerceEvent('view_item', page.value)
+  trackEcommerceEvent('view_item', page?.value)
 })
 </script>
 

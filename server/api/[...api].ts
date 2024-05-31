@@ -99,8 +99,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     // Set response to cache
     cache.set(cacheKey, response)
 
-    //console.debug(response)
-
     return response
   }
 

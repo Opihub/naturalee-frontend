@@ -73,12 +73,15 @@
         <BaseButton
           color="green"
           type="submit"
-          :disabled="sending"
+          :disabled="loading"
           :text="$t('form.saveChanges')"
         />
       </div>
 
-      <div v-if="feedback.message" :class="[columnClassName, columnFullClassName, 'u-mt-ten']">
+      <div
+        v-if="feedback.message"
+        :class="[columnClassName, columnFullClassName, 'u-mt-ten']"
+      >
         <BaseMessage :status="feedback.status">
           <span>{{ feedback.message }}</span>
         </BaseMessage>
@@ -90,6 +93,7 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
+import { useLoadingStore } from '@/stores/loading'
 
 // Constants
 const CSS_NAME = 'c-profile-update-form'
@@ -121,35 +125,51 @@ const feedback = reactive({
   message: null,
 })
 
-const { sending, send } = useSender()
-
 const update = useAccountStore()
+const loadingStore = useLoadingStore()
+
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
 
 const updateAccount = async () => {
-  if (sending.value) {
+  if (loading.value) {
     return
   }
 
+  setLoading(true)
+
+  let status = 'danger'
+  let message = 'danger'
+
   feedback.message = null
 
-  const response = await send(async () => await update.updateUser(formData))
+  try {
+    const response = await update.updateUser(formData)
 
-  feedback.status = 'danger'
+    if (response.value.success) {
+      status = 'success'
 
-  if (response.value.success) {
-    feedback.status = 'success'
-    feedback.message = response.value.message
+      formData.firstName = response.value.data.firstName
+      formData.lastName = response.value.data.lastName
+      formData.email = response.value.data.email
+      formData.phone = response.value.data.phone
+      formData.oldPassword = ''
+      formData.newPassword = ''
+      formData.confirmPassword = ''
+    }
 
-    formData.firstName = response.value.data.firstName
-    formData.lastName = response.value.data.lastName
-    formData.email = response.value.data.email
-    formData.phone = response.value.data.phone
-    formData.oldPassword = ''
-    formData.newPassword = ''
-    formData.confirmPassword = ''
+    message = response.value.message
+  } catch (error) {
+    console.warn(error)
+
+    message =
+      "È avvenuto un errore durante l'aggiornamento dell'utente"
   }
 
-  feedback.message = response.value.message
+  feedback.status = status
+  feedback.message = message
+
+  setLoading(false)
 }
 </script>
 
