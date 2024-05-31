@@ -214,6 +214,8 @@ export const useCartStore = defineStore('cart', () => {
       image,
     } = product
 
+    product.quantity = quantity
+
     trackEcommerceEvent('add_to_cart', product)
 
     const existingProduct = pickProduct(variationId)
