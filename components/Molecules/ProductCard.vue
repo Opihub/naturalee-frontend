@@ -164,30 +164,6 @@ const isDisabled = computed(() => {
 $prefix: 'product-card';
 
 @include component($prefix) {
-  @include from(tablet) {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 2,
-      )
-    );
-  }
-  @include from(desktop) {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 3,
-      )
-    );
-  }
-  @include from(full) {
-    @include set-local-vars(
-      $prefix: 'row',
-      $map: (
-        columns: 4,
-      )
-    );
-  }
   @include set-vars(
     $prefix: $prefix,
     $map: (

@@ -471,6 +471,15 @@ $prefix: 'products-grid';
         columns: 4,
       )
     );
+
+    @include is('compact') {
+      @include set-local-vars(
+        $prefix: 'row',
+        $map: (
+          columns: 3,
+        )
+      );
+    }
   }
 
   @include modifier('list') {
