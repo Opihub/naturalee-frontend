@@ -145,7 +145,6 @@ const updateAccount = async () => {
 
   try {
     const response = await update.updateUser(formData)
-    console.log(response)
 
     if (response.value.success) {
       status = 'success'

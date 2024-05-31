@@ -4,29 +4,44 @@ export const usePage = async (slug = null, namespace = 'pages') => {
   const endpoint = slug || useSlug()
   const page = ref({})
 
-  const { data: response, refresh } = await useApi(`${namespace}/${endpoint}`,{
-    expiration_hours:6
+  if (Array.isArray(namespace)) {
+    namespace = namespace.filter((part) => part).join('/')
+  }
+
+  const {
+    data: response,
+    error,
+    refresh,
+  } = await useApi(`${namespace}/${endpoint}`, {
+    expiration_hours: 6,
   })
 
   if (!response.value) {
-    console.log("qui page");
     await refresh()
   }
 
-  console.debug(response.value)
+  let feedbackError = false
+  if (error.value) {
+    feedbackError = {
+      statusCode: 500,
+      message:
+        'È avvenuto un errore inaspettato durante il caricamento della pagina',
+    }
+  } else if (!response.value?.success) {
+    feedbackError = {
+      statusCode: response.value.statusCode,
+      message: response.value.message,
+    }
+  }
 
-  if (!response.value.success) {
+  if (feedbackError) {
+    console.error(error.value)
+
     if (process.server) {
-      throw createError({
-        statusCode: response.value.statusCode,
-        statusMessage: response.value.message,
-      })
+      throw createError(feedbackError)
     }
 
-    showError({
-      statusCode: response.value.statusCode,
-      statusMessage: response.value.message,
-    })
+    showError(feedbackError)
   }
 
   page.value = response.value.data

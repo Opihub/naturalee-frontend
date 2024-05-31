@@ -2,7 +2,7 @@
   <section>
     <Suspense>
       <ProductsGrid
-        class="u-pb-huge u-pt-none"
+        class="u-pb-huge u-pt-none is-compact"
         :from="`shop/orders/${$route.params.id}/products`"
         :cached="false"
       />

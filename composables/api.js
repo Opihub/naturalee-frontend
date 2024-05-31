@@ -17,6 +17,10 @@ export async function useApi(url, options = {}) {
   const method = options?.method?.toUpperCase() || 'GET'
   options.method = method
 
+  if (Array.isArray(url)) {
+    url = url.filter((part) => part).join('/')
+  }
+
   return useFetchApi(url, {
     ...options,
     transform(original) {
@@ -87,8 +91,6 @@ export async function useApi(url, options = {}) {
 
           return logout(true)
         }
-
-        response.ok = true
       } else {
         /**
          * Client error, must not happen
