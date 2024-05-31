@@ -21,17 +21,8 @@ export async function useApi(url, options = {}) {
     ...options,
     transform(original) {
       return dataOnly ? original.data : original
-      // return {
-      //   ...original,
-      //   fetchedAt: new Date(),
-      // }
     },
     getCachedData: (key) => {
-      if (method !== 'GET' || doCache === 'no-cache') {
-        return
-      }
-
-      //const data = nuxtApp.isHydrating ? nuxtApp.payload.data[key] : nuxtApp.static.data[key]
       const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
       if (!data) {
         return
@@ -46,15 +37,22 @@ export async function useApi(url, options = {}) {
         return
       }
 
+      // Se NUXT non è in fase di idratazione lato client,
+      // allora verifico se la chiamata è cacheabile
+      if (
+        !nuxtApp.isHydrating &&
+        (method !== 'GET' || doCache === 'no-cache')
+      ) {
+        return
+      }
+
       return data
     },
     async onRequestError({ request, error }) {
-      console.log('[fetch request error]', request, error)
+      console.warn('[fetch request error]', request, error)
     },
     async onResponse({ response }) {
       const data = createResponse(response._data)
-      /* console.log('onResponse')
-      console.log(data) */
 
       data.fetchedAt = new Date()
 
@@ -62,9 +60,6 @@ export async function useApi(url, options = {}) {
     },
     async onResponseError({ response }) {
       let data = response._data
-
-      console.log('onResponseError')
-      console.log(data)
 
       if (
         'data' in data &&
