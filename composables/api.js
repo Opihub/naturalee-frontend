@@ -77,11 +77,16 @@ export async function useApi(url, options = {}) {
         response._data = data
 
         console.warn('errore previsto generato dal server:', data)
-
         if (
-          ['jwt_auth_user_not_found', 'jwt_auth_invalid_token'].includes(
-            data.code
-          )
+          [
+            'jwt_auth_user_not_found',
+            'jwt_auth_invalid_token',
+            'jwt_auth_obsolete_token',
+            'jwt_auth_invalid_refresh_token',
+            'jwt_auth_obsolete_refresh_token',
+            'jwt_auth_expired_refresh_token',
+            'jwt_auth_bad_iss',
+          ].includes(data.code)
         ) {
           const { logout } = useLogout()
 
