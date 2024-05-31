@@ -60,7 +60,7 @@
           class="u-mt-half"
           color="green"
           type="submit"
-          :disabled="sending"
+          :disabled="loading"
           >{{ $t('form.saveChanges') }}</BaseButton
         >
       </div>
@@ -78,6 +78,8 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
+import { useLoadingStore } from '@/stores/loading'
+
 // Define (Props, Emits, Page Meta)
 const props = defineProps({
   isBilling: {
@@ -100,9 +102,13 @@ const props = defineProps({
 const emit = defineEmits(['update:address', 'update:invoice', 'completed'])
 
 // Composables
-const { sending, send } = useSender()
 const user = useAccountStore()
+const loadingStore = useLoadingStore()
+
 // Data
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
+
 const data = ref({
   address: props.address,
   invoice: props.invoice,
@@ -126,9 +132,11 @@ const { t } = useI18n({
 // Watcher
 // Methods
 const updateAddress = async () => {
-  if (sending.value) {
+  if (loading.value) {
     return
   }
+
+  setLoading(true)
 
   resetFeedback()
 
@@ -152,32 +160,35 @@ const updateAddress = async () => {
     return
   }
 
+  let success = false
+  let message = t('addresses.updated', {
+    type: props.isBilling ? t('orders.billing') : t('orders.shipping'),
+  })
+
   if (isLoggedIn.value) {
-    const response = await send(
-      async () =>
-        await useApi(
-          `/shop/addresses/${props.isBilling ? 'billing' : 'shipping'}/update`,
-          {
-            method: 'POST',
-            body: formData,
-            cache: 'no-cache'
-          }
-        )
-    )
+    try {
+      const { data: response } = await useApi(
+        `/shop/addresses/${props.isBilling ? 'billing' : 'shipping'}/update`,
+        {
+          method: 'POST',
+          body: formData,
+          cache: 'no-cache',
+        }
+      )
 
-    if (response.value.success) {
-      setSuccess()
+      success = response.value.success
+      message = response.value.message
+    } catch (error) {
+      console.warn(error)
 
-      emit('update:address', formData.address)
-
-      if (props.isBilling) {
-        emit('update:invoice', formData.invoice)
-      }
-
-      emit('completed')
+      success = false
+      message = "È avvenuto un errore durante la modifica dell'indirizzo"
     }
-    feedback.message = response.value.message
   } else {
+    success = true
+  }
+
+  if (success) {
     setSuccess()
 
     emit('update:address', formData.address)
@@ -187,10 +198,11 @@ const updateAddress = async () => {
     }
 
     emit('completed')
-
-    feedback.message = t('addresses.updated', {
-      type: props.isBilling ? t('orders.billing') : t('orders.shipping'),
-    })
   }
+
+  console.debug(feedback)
+  feedback.message = message
+
+  setLoading(false)
 }
 </script>

@@ -34,7 +34,15 @@ defineI18nRoute({
 const user = useAccountStore()
 
 // Data
-const account = await user.load()
+const account = await user.load().catch((error) => {
+  console.error(error)
+
+  notify({
+    status: 'error',
+    notification:
+      'È avvenuto un errore durante il recupero dei dati del profilo. Prova a ricaricare la pagina',
+  })
+})
 
 // Watcher
 
