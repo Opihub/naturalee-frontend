@@ -1,4 +1,4 @@
-import { useFetch, storeToRefs, useRuntimeConfig } from '#imports'
+import { useFetch, storeToRefs } from '#imports'
 import { useAccountStore } from '@/stores/account'
 
 /* import https from 'https' */
@@ -21,8 +21,6 @@ function getApiUrl(url, options = {}) {
 }
 
 export function useFetchApi(url, options = {}) {
-  const config = useRuntimeConfig()
-
   options = options || {}
 
   const version = options?.version || 1
