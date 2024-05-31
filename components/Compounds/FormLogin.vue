@@ -49,12 +49,12 @@ import { useAccountStore } from '@/stores/account'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 
-import { useLoadingStore } from '@/stores/loading';
+import { useLoadingStore } from '@/stores/loading'
 
-const loadingStore = useLoadingStore();
+const loadingStore = useLoadingStore()
 
-const {loading} = storeToRefs(loadingStore);
-const {setLoading} = loadingStore;
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
 
 // Constants
 const CSS_NAME = 'c-login-form'
@@ -66,7 +66,6 @@ defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['api:start', 'api:end'])
 
 // Component life-cycle hooks
 
@@ -94,7 +93,7 @@ const login = async () => {
     return
   }
 
-  setLoading(true);
+  setLoading(true)
 
   const token = await recaptcha()
 
@@ -109,10 +108,10 @@ const login = async () => {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
-    await Promise.all([cart.load(true),wishlist.load()]);
+    await Promise.all([cart.load(true), wishlist.load()])
   } else {
-    message.message = response?.value?.message || "Errore generico"
-    setLoading(false);
+    message.message = response?.value?.message || 'Errore generico'
+    setLoading(false)
   }
 
   notify(message)
