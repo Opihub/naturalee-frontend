@@ -77,12 +77,10 @@ defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['api:start', 'api:end'])
 
 // Component life-cycle hooks
 
 // Composables
-const { send } = useSender(emit)
 const store = useAccountStore()
 
 const { feedback, resetFeedback } = useFeedback()
@@ -113,7 +111,8 @@ const register = async () => {
 
   const token = await recaptcha()
 
-  const response = await send(async () => await store.signIn({ ...formData, recaptcha_token: token }))
+  const response = await store.signIn({ ...formData, recaptcha_token: token })
+  console.debug(response)
 
   if (response.value.success && response.value.data.token) {
     feedback.status = 'success'
@@ -121,7 +120,7 @@ const register = async () => {
   } else {
     feedback.message = response.value.message
     setLoading(false)
-  }  
+  }
   notify(feedback)
 
   await navigateTo({
