@@ -49,18 +49,20 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
-const { pending, data: related, refresh } = await useApi(
+const {
+  pending,
+  data: related,
+  refresh,
+} = await useApi(
   `shop/categories/${route.params.category}/products/${route.params.product}/${route.params.variation}/related`,
   {
-    expiration_hours:6
+    expiration_hours: 6,
   }
 )
 
-
 if (!related.value) {
-  console.log("qui related");
-    await refresh()
-  }
+  await refresh()
+}
 
 // Component life-cycle hooks
 onMounted(() => {

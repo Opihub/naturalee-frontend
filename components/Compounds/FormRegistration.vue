@@ -112,7 +112,6 @@ const register = async () => {
   const token = await recaptcha()
 
   const response = await store.signIn({ ...formData, recaptcha_token: token })
-  console.debug(response)
 
   if (response.value.success && response.value.data.token) {
     feedback.status = 'success'

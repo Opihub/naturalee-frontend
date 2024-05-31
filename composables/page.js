@@ -9,11 +9,8 @@ export const usePage = async (slug = null, namespace = 'pages') => {
   })
 
   if (!response.value) {
-    console.log("qui page");
     await refresh()
   }
-
-  console.debug(response.value)
 
   if (!response.value.success) {
     if (process.server) {

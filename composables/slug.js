@@ -10,7 +10,5 @@ export const useSlug = () => {
     slug = route.path
   }
 
-  console.debug(slug)
-
   return slug
 }

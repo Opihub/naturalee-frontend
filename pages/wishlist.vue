@@ -50,8 +50,6 @@ if (page.value && 'seo' in page.value) {
 
 const wishlist = await store.load()
 
-console.debug(wishlist.value);
-
 // Watcher
 
 // Computed

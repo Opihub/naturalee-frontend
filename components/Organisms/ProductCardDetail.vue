@@ -88,10 +88,6 @@ const quantity = ref(1)
 const stockClassName = computed(() => {
   const className = [`${CSS_NAME}__stock`]
 
-  if (props.stock) {
-    console.debug(props.stock)
-  }
-
   return className
 })
 

@@ -79,8 +79,6 @@ export const useCartStore = defineStore('cart', () => {
   async function load(login = false) {
     const localCart = toRaw(cart.value)
 
-    console.debug(localCart)
-
     if (localCart && isLoggedIn.value && login) {
       await remoteAddToCartBatch(localCart)
     }
@@ -99,7 +97,6 @@ export const useCartStore = defineStore('cart', () => {
         return cart
       }
 
-      console.warn(body)
       const { data: response } = await useApi(`shop/cart/sync`, {
         method: 'POST',
         body,
@@ -110,7 +107,6 @@ export const useCartStore = defineStore('cart', () => {
           error
         )
       })
-      console.warn(response.value)
 
       if (!response.value.success) {
         throw new Error(response)
