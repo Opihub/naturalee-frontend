@@ -581,6 +581,7 @@ const toggleShippingModal = (status = null) => {
 }
 
 const closeShippingModal = () => {
+  trackEcommerceEvent('add_shipping_info', basket.value, extraValue);
   notify({
     status: 'success',
     message: 'Indirizzo di spedizione aggiornato',
