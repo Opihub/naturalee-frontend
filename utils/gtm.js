@@ -74,7 +74,7 @@ export function trackEcommerceEvent(event, products, argsList = {}) {
     generateItem(product, { index, ...argsList })
   )
 
-  const ecommerce = {
+  let ecommerce = {
     items,
   }
 
@@ -106,6 +106,11 @@ export function trackEcommerceEvent(event, products, argsList = {}) {
       return sum
     }, 0)
   }
+
+  gtm.trackEvent({
+    event:"flush_event",
+    ecommerce:null,
+  })
 
   gtm.trackEvent({
     event,
