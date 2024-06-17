@@ -10,7 +10,7 @@
       <ProductsGrid
         class="u-pb-huge u-pt-none"
         from="shop/search/products"
-        :search="$route.query?.search || ''"
+        :search="search || ''"
         paginate
       />
     </Suspense>
@@ -38,13 +38,12 @@ defineI18nRoute({
 const config = useRuntimeConfig()
 const route = useRoute()
 const search = ref(route.query.search ? route.query.search : '')
-
 // Watcher
 
 // Computed
 const title = computed(() => {
-  if (route.query.search) {
-    return `Hai cercato: ${route.query.search}`
+  if (search.value) {
+    return `Hai cercato: ${search.value}`
   }
 
   return 'Scrivi almeno tre caratteri per avviare la ricerca'
@@ -52,8 +51,8 @@ const title = computed(() => {
 
 const breadcrumbTitle = computed(() => {
   let title = 'Ricerca nei prodotti'
-  if (route.query.search) {
-    title = `Hai cercato: ${route.query.search}`
+  if (search.value) {
+    title = `Hai cercato: ${search.value}`
   }
 
   return title

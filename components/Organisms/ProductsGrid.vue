@@ -163,7 +163,7 @@ const timeout = useTimeoutFn(
 
     lazyFetchProducts()
   },
-  300,
+  500,
   { immediate: false }
 )
 
@@ -190,7 +190,7 @@ const orderby = ref(route.query.sort || null)
 
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
-  if (newValue) {
+  if (!newValue) {
     lazyFetchProducts()
   }
 })
