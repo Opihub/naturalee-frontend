@@ -1,6 +1,8 @@
 import { useServerSeoMeta, useSeoMeta } from '#imports'
 
 export const usePageSeo = (seo) => {
+  const location = useRequestURL();
+  
   useServerSeoMeta({
     title: seo?.title,
     ogTitle: seo?.ogTitle || seo?.title,
@@ -20,4 +22,13 @@ export const usePageSeo = (seo) => {
     twitterCard: seo?.twitterCard,
     ...seo,
   })
+
+  useHead(() => ({
+    link: [
+      {
+        rel: 'canonical',
+        href: seo?.canonical || location.href,
+      },
+    ],
+  }))
 }
