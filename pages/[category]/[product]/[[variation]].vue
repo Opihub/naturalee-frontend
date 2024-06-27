@@ -41,15 +41,6 @@ definePageMeta({
 
 // Data
 const route = useRoute()
-const location = useRequestURL();
-useHead(() => ({
-  link: [
-    {
-      rel: 'canonical',
-      href: location.href,
-    },
-  ],
-}))
 
 const { category, product, variation } = route.params
 
