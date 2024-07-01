@@ -117,7 +117,8 @@ const {
 } = useFeedback()
 
 const { stripePaymentIntent } = storeToRefs(cartStore)
-const { requestPaymentIntent, clearCart, removeCoupon } = cartStore
+const { requestPaymentIntent, clearPaymentIntent, clearCart, removeCoupon } =
+  cartStore
 
 const stripe = inject('stripe')
 const orderId = ref(null)
@@ -264,15 +265,27 @@ const submitOrder = async () => {
           receipt_email: email.value,
         }
       )
+
       // Se il pagamento via Stripe fallisce, allora
-      if (response?.error || false) {
-        throw new Error(
-          response?.error?.message ||
-            'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare',
-          {
-            cause: response.error,
-          }
-        )
+      if (response?.error) {
+        clearPaymentIntent()
+
+        console.error(response?.error?.message)
+        let message =
+          'È avvenuto un errore durante il pagamento. Controlla i dati della carta di credito e riprovare'
+
+        if (
+          ['resource_missing', 'invalid_request_error'].includes(
+            response.error?.code
+          )
+        ) {
+          message =
+            'È avvenuto un errore durante il checkout. Riprova ad effettuare il pagamento'
+        }
+
+        throw new Error(message, {
+          cause: response.error,
+        })
       }
     }
 
@@ -295,7 +308,7 @@ const submitOrder = async () => {
 
     removeCoupon()
 
-    stripePaymentIntent.value = null
+    clearPaymentIntent()
 
     await navigateTo({
       name: 'order-confirmed',
