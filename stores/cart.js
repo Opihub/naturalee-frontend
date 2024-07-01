@@ -603,9 +603,13 @@ export const useCartStore = defineStore('cart', () => {
     })
 
     if (!response.value.success) {
-      throw new Error(response.value.message, {
-        cause: response.value.errors,
-      })
+      if (response.value.code !== 'stripe_intent_already_done') {
+        throw new Error(response.value.message, {
+          cause: response.value.errors,
+        })
+      } else {
+        console.warn(response.value.message)
+      }
     }
 
     stripePaymentIntent.value = response.value.data
