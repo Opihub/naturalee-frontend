@@ -5,10 +5,10 @@ import { useRuntimeConfig, isError, getQuery } from '#imports'
 
 const config = useRuntimeConfig()
 
-/* const cache = new LRU({
+const cache = {
   max: 100,
   ttl: 1000 * 60 * 60, // One hour
-}) */
+}
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
@@ -99,7 +99,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
     // Set response to cache
     try {
-      await kv.set(cacheKey, response)
+      await kv.set(cacheKey, response,{ ex: cache.ttl })
     } catch (error) {
       console.log("kv error ",error);
     }
