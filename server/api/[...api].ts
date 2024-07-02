@@ -1,18 +1,19 @@
-import { LRUCache as LRU } from 'lru-cache'
+/* import { LRUCache as LRU } from 'lru-cache' */
+import { kv } from '@vercel/kv';
 import { H3Event } from 'h3'
 import { useRuntimeConfig, isError, getQuery } from '#imports'
 
 const config = useRuntimeConfig()
 
-const cache = new LRU({
+/* const cache = new LRU({
   max: 100,
   ttl: 1000 * 60 * 60, // One hour
-})
+}) */
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const url = event.context.params?.api
-  const cacheKey = event?._path
+  const cacheKey = event?._path || '';
   if (!url) {
     throw createError({
       statusCode: 403,
@@ -31,10 +32,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const headers = getRequestHeaders(event)
-  const cacheData = await cache.get(cacheKey)
+  const cacheData = await kv.get(cacheKey)
 
   if (!cacheData || !cacheData?.success) {
-    const response = $fetch(url, {
+    const response = await $fetch(url, {
       // Serve ad far "scivolare" la gestione degli errori al client
       ignoreResponseError: true,
       baseURL: config.endpoint,
@@ -76,7 +77,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         duration = currentTime - startTime
 
         await console.log(
-          `✔️%cSSR-Response: ${request} - ${response.status} %c(${duration}ms)`,
+          `✔️ %c SSR-Response: ${request} - ${response.status} %c(${duration}ms)`,
           'color: orange',
           'color: white'
         )
@@ -97,13 +98,16 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     }
 
     // Set response to cache
-    cache.set(cacheKey, response)
-
+    try {
+      await kv.set(cacheKey, response)
+    } catch (error) {
+      console.log("kv error ",error);
+    }
     return response
   }
 
   // Log a cache hit to a given request URL
   console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
 
-  return cache.get(cacheKey)
+  return kv.get(cacheKey)
 })
