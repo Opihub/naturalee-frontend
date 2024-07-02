@@ -1,6 +1,8 @@
 <template>
   <SVGDefinitions v-once />
 
+  <NuxtPwaManifest />
+
   <NuxtLoadingIndicator />
 
   <Transition name="fade">
@@ -10,6 +12,13 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+
+  <!-- You can use $pwa directly in templates! -->
+  <div v-show="$pwa && $pwa.needRefresh">
+    <span> New content available, click on reload button to update. </span>
+
+    <button @click="$pwa.updateServiceWorker()">Reload</button>
+  </div>
 
   <ClientOnly>
     <TransitionGroup id="notifications" name="fade" tag="div">
@@ -53,6 +62,13 @@ const {loading} = storeToRefs(loadingStore)
 const {setLoading} = loadingStore;
 
 const nuxtApp = useNuxtApp()
+const { $pwa } = useNuxtApp()
+
+onMounted(() => {
+  if ($pwa.offlineReady) {
+    notify({status: 'success', notification: 'App ready to work offline'})
+  }
+})
 
 nuxtApp.hook('page:start', () => {
   setLoading(true);

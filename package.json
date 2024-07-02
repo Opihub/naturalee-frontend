@@ -4,6 +4,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "preview:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt preview --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
@@ -17,6 +18,7 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@capacitor/cli": "^5.7.4",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint-config": "^0.1.1",
     "@nuxt/image": "^1.1.0",
@@ -34,6 +36,7 @@
     "@storybook/vue3-vite": "^7.0.24",
     "@types/node": "^18",
     "@types/three": "^0.150.0",
+    "@vite-pwa/nuxt": "^0.6.0",
     "@zadigetvoltaire/nuxt-gtm": "^0.0.13",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.7.0",
@@ -56,6 +59,9 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "@capacitor/android": "^5.7.4",
+    "@capacitor/core": "^5.7.4",
+    "@capacitor/ios": "^5.7.4",
     "@pinia/nuxt": "^0.4.7",
     "@splidejs/vue-splide": "^0.6.12",
     "@vercel/kv": "^1.0.1",
