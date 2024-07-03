@@ -28,7 +28,7 @@
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
 
-      <span v-if="showLoader" ref="loader" :class="`${CSS_NAME}__loader`">{{
+      <span v-if="showLoader && products.length>0" ref="loader" :class="`${CSS_NAME}__loader`">{{
         $t('common.loading')
       }}</span>
     </SiteContainer>
@@ -190,7 +190,7 @@ const orderby = ref(route.query.sort || null)
 
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
-  if (!newValue) {
+  if (newValue) {
     lazyFetchProducts()
   }
 })
