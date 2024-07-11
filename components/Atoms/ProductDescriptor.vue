@@ -36,6 +36,10 @@ const props = defineProps({
 
 // Computed
 const iconName = computed(() => {
+  if (!props.icon && !props.value) {
+    return 'sfuso'
+  }
+
   let iconName = slugify(props.icon || props.value, {
     lower: true,
   })
