@@ -369,6 +369,7 @@ const {loading} = storeToRefs(loadingStore);
 
 // Constants
 const STRIPE_OPTIONS = {
+  disableLink: true,
   hidePostalCode: true,
   style: {
     base: {
