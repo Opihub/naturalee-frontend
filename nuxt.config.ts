@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     endpoint: process.env.API_ENDPOINT_URL || '/',
+    useKV: !!process.env?.USE_KV || !!process.env?.KV_URL || false,
 
     public: {
       title: process.env.APP_TITLE,
