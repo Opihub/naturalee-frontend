@@ -62,7 +62,7 @@ export const useCartStore = defineStore('cart', () => {
     total,
   } = useCart(cart, coupon, paymentMethod)
 
-/*   const checkout = computed(() => {
+  /*   const checkout = computed(() => {
     return cart.value.map((item) => ({
       id: item.id,
       variationId: item.variationId,
@@ -100,7 +100,7 @@ export const useCartStore = defineStore('cart', () => {
       const { data: response } = await useApi(`shop/cart/sync`, {
         method: 'POST',
         body,
-        cache: 'no-cache'
+        cache: 'no-cache',
       }).catch((error) => {
         console.error(
           'Errore durante il caricamento di "shop/cart/sync"',
@@ -123,25 +123,23 @@ export const useCartStore = defineStore('cart', () => {
       return cart
     }
 
-    const { data: response } = await useApi('shop/cart/products',{cache:'no-cache'}).catch(
-      (error) => {
-        console.error(
-          'Errore durante il caricamento di "shop/cart/products"',
-          error
-        )
-      }
-    )
+    const { data: response } = await useApi('shop/cart/products', {
+      cache: 'no-cache',
+    }).catch((error) => {
+      console.error(
+        'Errore durante il caricamento di "shop/cart/products"',
+        error
+      )
+    })
 
     if (!response.value.success) {
       throw new Error(response)
     }
 
     cart.value = response.value.data
-    if (response.value.success && login && cart.value.length>0) {
+    if (response.value.success && login && cart.value.length > 0) {
       notify({
-        message: [
-          'cart.updated',
-        ],
+        message: ['cart.updated'],
         status: 'success',
       })
     }
@@ -172,7 +170,7 @@ export const useCartStore = defineStore('cart', () => {
     const { data: response } = await useApi('shop/cart/update/batch', {
       method: 'PUT',
       body,
-      cache: 'no-cache'
+      cache: 'no-cache',
     }).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/cart/update/batch"',
@@ -439,7 +437,7 @@ export const useCartStore = defineStore('cart', () => {
     const { data: response } = await useApi(`shop/coupon/validate`, {
       method: 'POST',
       body,
-      cache: 'no-cache'
+      cache: 'no-cache',
     })
 
     if (response.value.success) {
@@ -505,7 +503,7 @@ export const useCartStore = defineStore('cart', () => {
           id: product.id,
           variationId: product.variationId,
         },
-        cache: 'no-cache'
+        cache: 'no-cache',
       })
 
       if (response.value.success) {
@@ -546,7 +544,7 @@ export const useCartStore = defineStore('cart', () => {
           id: product.id,
           variationId: product.variationId,
         },
-        cache: 'no-cache'
+        cache: 'no-cache',
       })
 
       if (response.value.success) {
@@ -571,7 +569,7 @@ export const useCartStore = defineStore('cart', () => {
     const { data: response } = await useApi('shop/cart/add/batch', {
       method: 'POST',
       body: products,
-      cache: 'no-cache'
+      cache: 'no-cache',
     }).catch((error) => {
       console.error(
         'Errore durante il caricamento di "shop/cart/add/batch"',
@@ -588,6 +586,10 @@ export const useCartStore = defineStore('cart', () => {
     return paymentMethod.value
   }
 
+  function clearPaymentIntent() {
+    stripePaymentIntent.value = null
+  }
+
   async function requestPaymentIntent(email, data = {}) {
     // Create a PaymentIntent with the order amount and currency
     const { data: response } = await useApi('shop/checkout/payment-intent', {
@@ -597,13 +599,17 @@ export const useCartStore = defineStore('cart', () => {
         cart: cart.value,
         intent: stripePaymentIntent.value?.intentId,
       },
-      cache: 'no-cache'
+      cache: 'no-cache',
     })
 
     if (!response.value.success) {
-      throw new Error(response.value.message, {
-        cause: response.value.errors,
-      })
+      if (response.value.code !== 'stripe_intent_already_done') {
+        throw new Error(response.value.message, {
+          cause: response.value.errors,
+        })
+      } else {
+        console.warn(response.value.message)
+      }
     }
 
     stripePaymentIntent.value = response.value.data
@@ -640,6 +646,7 @@ export const useCartStore = defineStore('cart', () => {
     applyCoupon,
     remoteAddToCartBatch,
     requestPaymentIntent,
+    clearPaymentIntent,
   }
 })
 
