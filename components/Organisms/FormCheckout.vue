@@ -340,12 +340,18 @@ const submitOrder = async () => {
   @include modifier('checkout') {
     @include element('resume') {
       width: 100%;
-      max-width: rem(1060px);
+      max-width: 100%;
+      @include from(desktop) {
+        max-width: 65%;
+      }
     }
 
     @include element('action') {
       width: 100%;
-      max-width: rem(520px);
+      max-width: 100%;
+      @include from(desktop) {
+        max-width: 32%;
+      }
     }
   }
 }
