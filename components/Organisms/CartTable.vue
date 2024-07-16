@@ -320,6 +320,9 @@ $prefix: 'cart-table';
               $prefix: $prefix
             )}
         );
+        svg {
+          min-width: 65px;
+        }
         @include until('tablet') {
           padding-left: 0;
           padding-right: 0;
