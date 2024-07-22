@@ -369,6 +369,7 @@ const {loading} = storeToRefs(loadingStore);
 
 // Constants
 const STRIPE_OPTIONS = {
+  disableLink: true,
   hidePostalCode: true,
   style: {
     base: {
@@ -663,6 +664,14 @@ useHead({
   }
 
   @include scope('checkout-delivery') {
+    @media screen and (max-width:991px) and (min-width:767px){
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: rem(10px);
+      align-items: flex-start;
+    }
     @include component('toggle-field') {
       @include set-local-vars(
         $prefix: 'toggle-field',
