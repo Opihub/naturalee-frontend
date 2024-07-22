@@ -20,7 +20,10 @@ defineI18nRoute({
 const config = useRuntimeConfig()
 
 if (config.public?.iubenda?.cookiePolicyId) {
-  await navigateTo(`https://www.iubenda.com/termini-e-condizioni/${config.public.iubenda.cookiePolicyId}`)
+  await navigateTo(
+    `https://www.iubenda.com/termini-e-condizioni/${config.public.iubenda.cookiePolicyId}`,
+    { external: true }
+  )
 }
 
 await navigateTo({ name: 'home' })
