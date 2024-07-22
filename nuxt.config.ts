@@ -18,6 +18,10 @@ export default defineNuxtConfig({
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
       isProduction: process.env?.IS_PRODUCTION || false,
       currency: 'EUR',
+      iubenda: {
+        siteId: process.env?.IUBENDA_SITE_ID,
+        cookiePolicyId: process.env?.IUBENDA_ID,
+      },
     },
   },
   app: {
