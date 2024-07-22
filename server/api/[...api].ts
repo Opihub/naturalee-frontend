@@ -57,6 +57,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     return cacheData
   }
 
+  // le chiamate con cache sono sempre anonime rimuovendo authorization
+  if(headers?.['x-cache'] !== 'no-cache'){
+    if(headers?.['authorization']){
+      delete headers['authorization']
+    }
+  }
+
   const response = await $fetch(url, {
     // Serve ad far "scivolare" la gestione degli errori al client
     ignoreResponseError: true,

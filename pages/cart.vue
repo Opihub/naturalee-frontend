@@ -349,18 +349,35 @@ cartStore.$onAction(({ args, name, after }) => {
       @include set-local-vars(
         $prefix: 'field',
         $map: (
-          width: rem(1060px),
+          width: 65%,
         )
       );
+      @include until(desktop){
+        @include set-local-vars(
+        $prefix: 'field',
+        $map: (
+          width: 100%,
+        )
+      );
+      }
+      
     }
 
     @include element('resume') {
       @include set-local-vars(
         $prefix: 'field',
         $map: (
-          width: rem(520px),
+          width: 32%,
         )
       );
+      @include until(desktop){
+        @include set-local-vars(
+        $prefix: 'field',
+        $map: (
+          width: 100%,
+        )
+      );
+      }
     }
   }
 }
