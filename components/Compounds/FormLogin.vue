@@ -73,6 +73,7 @@ defineProps({
 const store = useAccountStore()
 const cart = useCartStore()
 const wishlist = useWishlistStore()
+const route = useRoute()
 
 // Data
 const formData = reactive({
@@ -116,9 +117,16 @@ const login = async () => {
 
   notify(message)
 
-  await navigateTo({
+  let routeParam = {
     name: 'dashboard',
-  })
+  }
+  if (route.query?.redirectBecause) {
+    routeParam = {
+      name: route.query?.redirectTo || 'checkout',
+    }
+  }
+
+  await navigateTo(routeParam)
 }
 </script>
 
