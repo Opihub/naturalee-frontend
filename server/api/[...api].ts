@@ -35,10 +35,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   let timer: NodeJS.Timeout | null = null
 
   const KV_ENABLED =
-    KV_URL &&
-    KV_REST_API_URL &&
-    KV_REST_API_TOKEN &&
-    KV_REST_API_READ_ONLY_TOKEN
+    config.useKv &&
+    !!KV_URL &&
+    !!KV_REST_API_URL &&
+    !!KV_REST_API_TOKEN &&
+    !!KV_REST_API_READ_ONLY_TOKEN
+
+  console.info(`KV_ENABLED: ${KV_ENABLED}`)
 
   const method = event.method
   const params = getQuery(event)
@@ -52,6 +55,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
     // return kv.get(cacheKey)
     return cacheData
+  }
+
+  // le chiamate con cache sono sempre anonime rimuovendo authorization
+  if(headers?.['x-cache'] !== 'no-cache'){
+    if(headers?.['authorization']){
+      delete headers['authorization']
+    }
   }
 
   const response = await $fetch(url, {

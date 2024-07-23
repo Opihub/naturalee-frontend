@@ -1,9 +1,3 @@
-<template>
-  <section class="s-wip">
-    <WorkInProgress />
-  </section>
-</template>
-
 <script setup>
 // Imports
 
@@ -23,24 +17,17 @@ defineI18nRoute({
   locales: ['it'],
 })
 
-// Component life-cycle hooks
+const config = useRuntimeConfig()
 
-// Data
-const {page} = await usePage()
-if (page.value && 'seo' in page.value) {
-  usePageSeo(page.value.seo)
+if (!config.public?.iubenda?.cookiePolicyId) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+  })
 }
 
-// Watcher
-
-// Computed
-
-// Methods
+await navigateTo(
+  `https://www.iubenda.com/termini-e-condizioni/${config.public.iubenda.cookiePolicyId}`,
+  { external: true }
+)
 </script>
-
-<style lang="scss">
-@include scope('wip') {
-  flex: 1 1 100%;
-  display: flex;
-}
-</style>

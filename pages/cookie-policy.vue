@@ -1,9 +1,3 @@
-<template>
-  <section class="s-wip">
-    <WorkInProgress />
-  </section>
-</template>
-
 <script setup>
 // Imports
 
@@ -11,15 +5,7 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  layout: 'standard',
-  name: 'cookie-policy',
-})
-
-defineI18nRoute({
-  paths: {
-    it: '/cookie-policy',
-  },
-  locales: ['it'],
+  name: 'cookie-policy ',
 })
 
 defineRouteRules({
@@ -27,24 +13,17 @@ defineRouteRules({
   robots: false,
 })
 
-// Component life-cycle hooks
+const config = useRuntimeConfig()
 
-// Data
-const { page } = await usePage()
-if (page.value && 'seo' in page.value) {
-  usePageSeo(page.value.seo)
+if (!config.public?.iubenda?.cookiePolicyId) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+  })
 }
 
-// Watcher
-
-// Computed
-
-// Methods
+await navigateTo(
+  `https://www.iubenda.com/privacy-policy/${config.public.iubenda.cookiePolicyId}/cookie-policy`,
+  { external: true }
+)
 </script>
-
-<style lang="scss">
-@include scope('wip') {
-  flex: 1 1 100%;
-  display: flex;
-}
-</style>

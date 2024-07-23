@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     endpoint: process.env.API_ENDPOINT_URL || '/',
+    useKV: !!process.env?.USE_KV || !!process.env?.KV_URL || false,
 
     public: {
       title: process.env.APP_TITLE,
@@ -17,6 +18,10 @@ export default defineNuxtConfig({
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
       isProduction: process.env?.IS_PRODUCTION || false,
       currency: 'EUR',
+      iubenda: {
+        siteId: process.env?.IUBENDA_SITE_ID,
+        cookiePolicyId: process.env?.IUBENDA_ID,
+      },
     },
   },
   app: {
