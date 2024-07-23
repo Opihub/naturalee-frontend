@@ -287,6 +287,7 @@ const goToCheckout = async () => {
       name: 'login',
       query: {
         redirectBecause: 'needAccount',
+        redirectTo: 'checkout',
       },
     })
 
@@ -309,11 +310,11 @@ cartStore.$onAction(({ args, name, after }) => {
     if(name==="validateCoupon")
       return
 
-    let currentCart = JSON.parse(JSON.stringify(cart.value));
+    const currentCart = JSON.parse(JSON.stringify(cart.value));
     switch (name) {
       case 'deleteFromCart':
         currentCart.map(i=>{
-          var tempItem = basket.value.find(t=>t.variationId === i.variationId);
+          const tempItem = basket.value.find(t=>t.variationId === i.variationId);
           if(tempItem){
             i.quantity = tempItem.quantity;
           }
@@ -323,8 +324,8 @@ cartStore.$onAction(({ args, name, after }) => {
       case 'addToCart':
         const [product, quantity] = args;
         currentCart.map(i=>{
-          var tempItem = basket.value.find(t=>t.variationId === i.variationId);
-          
+          const tempItem = basket.value.find(t=>t.variationId === i.variationId);
+
           if(tempItem){
             i.quantity = tempItem.quantity;
 
@@ -360,7 +361,7 @@ cartStore.$onAction(({ args, name, after }) => {
         )
       );
       }
-      
+
     }
 
     @include element('resume') {

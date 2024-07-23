@@ -22,12 +22,14 @@ export default defineNuxtRouteMiddleware((to) => {
     if (to.path.indexOf(myAccountRoute.path) === 0) {
       navigate.query = {
         redirectBecause: 'needAccount',
+        redirectTo: 'dashboard',
       }
     } else {
       switch (to.name) {
         case 'checkout':
           navigate.query = {
             redirectBecause: 'needAccount',
+            redirectTo: 'checkout',
           }
           break
       }
