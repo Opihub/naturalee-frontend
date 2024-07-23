@@ -82,6 +82,7 @@ defineProps({
 
 // Composables
 const store = useAccountStore()
+const route = useRoute()
 
 const { feedback, resetFeedback } = useFeedback()
 
@@ -122,8 +123,15 @@ const register = async () => {
   }
   notify(feedback)
 
-  await navigateTo({
+  let routeParam = {
     name: 'dashboard',
-  })
+  }
+  if (route.query?.redirectBecause) {
+    routeParam = {
+      name: route.query?.redirectTo || 'checkout',
+    }
+  }
+
+  await navigateTo(routeParam)
 }
 </script>
