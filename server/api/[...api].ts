@@ -2,6 +2,7 @@
 import { kv } from '@vercel/kv'
 import { H3Event } from 'h3'
 import { useRuntimeConfig, isError, getQuery } from '#imports'
+import cacheControlParser from 'cache-control-parser';
 
 const config = useRuntimeConfig()
 
@@ -49,6 +50,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const headers = getRequestHeaders(event)
   const cacheData = KV_ENABLED ? await kv.get(cacheKey) : null
 
+  const { "max-age": maxAge, 'no-cache': noCache = false } = cacheControlParser.parse(getRequestHeader(event,'Cache-Control') || '');
+  
+  cache.ttl = maxAge||cache.ttl;
+
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
     console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
@@ -58,7 +63,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   }
 
   // le chiamate con cache sono sempre anonime rimuovendo authorization
-  if(headers?.['x-cache'] !== 'no-cache'){
+  if(!noCache){
     if(headers?.['authorization']){
       delete headers['authorization']
     }
@@ -112,6 +117,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       )
 
       if (response.status !== 200) {
+        console.log("🔴 questa chiama "+response.status+" non la salvo in cache");
         await console.log(
           `✔️ %c SSR-Feedback: request ${JSON.stringify(request)})`,
           'color: orange',
@@ -122,6 +128,19 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
           'color: orange',
           'color: white'
         )
+      }else{
+        if (method === 'GET' && !noCache) {
+          console.log("🟢 questa chiama la salvo in cache ("+cache.ttl+", "+noCache+")");
+          if (KV_ENABLED) {
+            try {
+              await kv.set(cacheKey, response, { ex: cache.ttl })
+            } catch (error) {
+              console.log('kv error ', error)
+            }
+          }
+        }else{
+          console.log("🟡 questa chiama 200 non la salvo in cache");
+        }        
       }
     },
 
@@ -134,19 +153,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       )
     },
   })
-
-  if (method !== 'GET' || headers?.['x-cache'] === 'no-cache') {
-    return response
-  }
-
-  // Set response to cache
-  if (KV_ENABLED) {
-    try {
-      await kv.set(cacheKey, response, { ex: cache.ttl })
-    } catch (error) {
-      console.log('kv error ', error)
-    }
-  }
 
   return response
 })
