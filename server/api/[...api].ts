@@ -2,7 +2,7 @@
 import { kv } from '@vercel/kv'
 import { H3Event } from 'h3'
 import { useRuntimeConfig, isError, getQuery } from '#imports'
-import cacheControlParser from 'cache-control-parser';
+/* import cacheControlParser from 'cache-control-parser'; */
 
 const config = useRuntimeConfig()
 
@@ -50,9 +50,9 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const headers = getRequestHeaders(event)
   const cacheData = KV_ENABLED ? await kv.get(cacheKey) : null
 
-  const { "max-age": maxAge, 'no-cache': noCache = false } = cacheControlParser.parse(getRequestHeader(event,'Cache-Control') || '');
+  /* const { "max-age": maxAge, 'no-cache': noCache = false } = cacheControlParser.parse(getRequestHeader(event,'Cache-Control') || '');
   
-  cache.ttl = maxAge||cache.ttl;
+  cache.ttl = maxAge||cache.ttl; */
 
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
@@ -63,7 +63,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   }
 
   // le chiamate con cache sono sempre anonime rimuovendo authorization
-  if(!noCache){
+  /* if(!noCache){ */
+  if(headers?.['x-cache'] !== 'no-cache'){
     if(headers?.['authorization']){
       delete headers['authorization']
     }
@@ -129,8 +130,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
           'color: white'
         )
       }else{
-        if (method === 'GET' && !noCache) {
-          console.log("🟢 questa chiama la salvo in cache ("+cache.ttl+", "+noCache+")");
+        if (method === 'GET' && headers?.['x-cache'] !== 'no-cache') {
+          console.log("🟢 questa chiama la salvo in cache ("+cache.ttl+", "+headers?.['x-cache']+")");
           if (KV_ENABLED) {
             try {
               await kv.set(cacheKey, response, { ex: cache.ttl })
