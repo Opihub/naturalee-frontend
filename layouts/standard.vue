@@ -1,4 +1,15 @@
 <template>
+  <ModalContainer
+    v-if="isADVModalOpen"
+    :max-width="800"
+    @close="toggleADVModal(false)"
+  >
+    <template #header>
+      <BaseHeading tag="h5">Benvenuto!</BaseHeading>
+    </template>
+
+    <h2 style="text-align:center;">Inserisci il codice <strong style="color:#00966e;">BENVENUTO10</strong> nel carrello e ottieni 10% di sconto e spedizione gratuita sul tuo primo ordine.<br>Non lasciarti sfuggire questa offerta, ordina oggi stesso e risparmia!</h2>
+  </ModalContainer>
   <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
       ref="topBarElement"
@@ -87,6 +98,10 @@ onMounted(() => {
   window.addEventListener('resize', setHeaderGap)
   window.addEventListener('resize', setHeaderOffset)
   window.addEventListener('scroll', setHeaderOffset)
+
+  setTimeout(()=>{
+    toggleADVModal(isADV.value)
+  },1000)
 })
 
 onUnmounted(() => {
@@ -98,6 +113,7 @@ onUnmounted(() => {
 
 // Composables
 const { menu, layout } = storeToRefs(configurationStore)
+const route = useRoute()
 
 // Data
 const layoutElement = ref(null)
@@ -110,9 +126,23 @@ const { top } = useElementBounding(headerElement)
 const document = ref(globalThis.window?.document.body || null)
 const isLocked = useScrollLock(document)
 
-//Watcher
+
+const isADVModalOpen = ref(false)
+
 
 // Computed
+const isADV = computed(() => {
+  let adv = false;
+
+  if (route.query.utm_source == "google" && route.query.utm_medium=="cpc") {
+    adv = true;
+    toggleADVModal(true);
+  }
+
+  return adv
+})
+
+//Watcher
 
 // Methods
 const setBottomGap = () => {
@@ -157,6 +187,11 @@ const updateMobileMenuStatus = (status) => {
   setHeaderOffset()
 
   isLocked.value = status
+}
+
+const toggleADVModal = (status = null) => {
+  isADVModalOpen.value =
+    status !== null ? !!status : !isADVModalOpen.value
 }
 
 // Provide
