@@ -2,13 +2,13 @@
   <ModalContainer
     v-if="isADVModalOpen"
     :max-width="800"
+    :full-content="true"
     @close="toggleADVModal(false)"
   >
     <template #header>
-      <BaseHeading tag="h5">Benvenuto!</BaseHeading>
+      <BaseHeading tag="h5">Il tuo regalo di benvenuto su Naturalee</BaseHeading>
     </template>
-
-    <h2 style="text-align:center;">Inserisci il codice <strong style="color:#00966e;">BENVENUTO10</strong> nel carrello e ottieni 10% di sconto e spedizione gratuita sul tuo primo ordine.<br>Non lasciarti sfuggire questa offerta, ordina oggi stesso e risparmia!</h2>
+    <div class="naturalee-promo"><div class="naturalee-content"><p><img src="https://api.naturalee.it/wp-content/uploads/2024/07/logo-naturalee-w.png"></p><p>Inserisci il codice</p><p class="naturalee-codice-promo">BENVENUTO10</p><p>nel carrello per ottenere un'esclusivo <span>sconto del 10% e la spedizione gratuita</span> sul tuo primo ordine.</p></div><div class="naturalee-image"><img src="https://api.naturalee.it/wp-content/uploads/2024/07/sfondo-popup.png"></div></div>
   </ModalContainer>
   <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
@@ -134,7 +134,7 @@ const isADVModalOpen = ref(false)
 const isADV = computed(() => {
   let adv = false;
 
-  if (route.query.utm_source == "google" && route.query.utm_medium=="cpc") {
+  if ((route.query.utm_source == "google" && route.query.utm_medium == "cpc")||route.query.gad_source == 1||route.query.gclid != undefined) {
     adv = true;
     toggleADVModal(true);
   }
@@ -232,4 +232,6 @@ $prefix: 'layout';
     }
   }
 }
+
+.naturalee-promo{display:flex;flex-direction:column;align-items:center;text-align:center;background-color:var(--color-yellow);overflow:hidden;width:100%}.naturalee-content{padding:20px}.naturalee-content .naturalee-codice-promo{color:var(--color-green);font-weight:var(--weight-bold);font-size:3rem}.naturalee-content p{margin-bottom:10px;font-size: 17px;}.naturalee-content p img{margin-bottom:20px}.naturalee-content p span{color:var(--color-green);font-weight:var(--weight-bold)}.naturalee-image{width:100%;position:relative}.naturalee-image img{width:80%;height:auto;float:right}@media (min-width:600px){.naturalee-promo{flex-direction:row;text-align:left}.naturalee-content p img{width:60%;margin-bottom:40px}.naturalee-content{flex:1}.naturalee-image{flex:1;max-width:60%}.naturalee-image img{width:100%}}
 </style>
