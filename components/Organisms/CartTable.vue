@@ -83,14 +83,16 @@
     <template v-if="!readonly" #footer>
       <tr :class="`${CSS_NAME}__footer`">
         <td colspan="7">
-          <button :class="`${CSS_NAME}__empty u-mr-small`" type="button" color="green" :disabled="products.length <= 0"
-            @click="onClear">
-            {{ $t('cart.clearCart') }}
-          </button>
+          <div :class="`${CSS_NAME}__footer__flex`">
+            <button :class="`${CSS_NAME}__empty`" type="button" color="green" :disabled="products.length <= 0"
+              @click="onClear">
+              {{ $t('cart.clearCart') }}
+            </button>
 
-          <button :class="`${CSS_NAME}__empty`" type="button" color="green" :disabled="!canUpdate" @click="onSave">
-            {{ $t('cart.updateCart') }}
-          </button>
+            <button :class="`${CSS_NAME}__reload`" type="button" color="green" :disabled="!canUpdate" @click="onSave">
+              {{ $t('cart.updateCart') }}
+            </button>
+          </div>
         </td>
       </tr>
     </template>
@@ -235,9 +237,18 @@ $prefix: 'cart-table';
         }
       }
     }
+
+    @include element('flex'){
+      display: flex;
+      justify-content: space-between;
+      @include until(tablet){
+        flex-direction: column-reverse;
+        gap: 15px;
+      }
+    }
   }
 
-  @include element('empty') {
+  @include element('reload') {
     border: 0;
     border-radius: 0;
     padding: 0;
@@ -249,6 +260,33 @@ $prefix: 'cart-table';
     text-decoration-color: get-var(color-green);
     text-underline-offset: rem(8px);
     text-decoration-thickness: 2px;
+    cursor: pointer;
+    @include typography(16px, 28px);
+    @include transition(color, text-decoration-color);
+    outline-offset: 3px;
+
+    &:hover {
+      color: get-var(color-green);
+      text-decoration-color: get-var(color-yellow);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: get-var(color-light);
+      text-decoration-color: get-var(color-light);
+    }
+  }
+
+  @include element('empty') {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background-color: transparent;
+    font-weight: get-var(weight-bold);
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 14px !important;
+    color: get-var(color-red);
     cursor: pointer;
     @include typography(16px, 28px);
     @include transition(color, text-decoration-color);
