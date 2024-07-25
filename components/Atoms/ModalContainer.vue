@@ -13,7 +13,7 @@
           />
         </div>
 
-        <div :class="`${className}__main`">
+        <div :class="[`${className}__main`,{'full-content':fullContent}]">
           <slot />
         </div>
 
@@ -41,6 +41,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  fullContent: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const emit = defineEmits(['open', 'close', 'toggle'])
@@ -106,6 +110,10 @@ $prefix: 'modal';
 
     @include from(tablet) {
       padding-top: rem(30px);
+    }
+
+    &.full-content {
+      padding: 0;
     }
   }
 
