@@ -332,7 +332,7 @@ const fetchProducts = async () => {
   }
 
   return useApi(props.from, {
-    cache: props.cached ? null : 'no-cache',
+    cache: props.cached ? 'default' : 'no-cache',
     method: 'GET',
     params,
   })
