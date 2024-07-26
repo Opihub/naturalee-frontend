@@ -69,7 +69,9 @@ defineI18nRoute({
 
 // Composables
 const route = useRoute()
-const { data: order } = await useApi(`shop/orders/${route.params.id}`)
+const { data: order } = await useApi(`shop/orders/${route.params.id}`, {
+  cache: 'no-cache',
+})
 
 // Data
 

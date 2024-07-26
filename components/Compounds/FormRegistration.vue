@@ -60,6 +60,9 @@
 <script setup>
 // Imports
 import { useAccountStore } from '@/stores/account'
+import { useCartStore } from '@/stores/cart'
+import { useWishlistStore } from '@/stores/wishlist'
+
 import { useLoadingStore } from '@/stores/loading';
 
 const loadingStore = useLoadingStore();
@@ -82,6 +85,8 @@ defineProps({
 
 // Composables
 const store = useAccountStore()
+const cart = useCartStore()
+const wishlist = useWishlistStore()
 const route = useRoute()
 
 const { feedback, resetFeedback } = useFeedback()
@@ -117,6 +122,8 @@ const register = async () => {
   if (response.value.success && response.value.data.token) {
     feedback.status = 'success'
     feedback.message = 'Registrazione avvenuta con successo'
+
+    await Promise.all([cart.load(true), wishlist.load()])
   } else {
     feedback.message = response.value.message
     setLoading(false)

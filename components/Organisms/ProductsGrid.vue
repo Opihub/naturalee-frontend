@@ -1,6 +1,5 @@
 <template>
   <section :class="className">
-
     <ProductsFilters
       v-if="sortable || filters.length"
       class="u-mb-huge"
@@ -29,7 +28,11 @@
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
 
-      <span v-if="showLoader && products.length>=0" ref="loader" :class="`${CSS_NAME}__loader`"></span>
+      <span
+        v-if="showLoader && products.length >= 0"
+        ref="loader"
+        :class="`${CSS_NAME}__loader`"
+      ></span>
     </SiteContainer>
   </section>
 </template>
@@ -329,6 +332,7 @@ const fetchProducts = async () => {
   }
 
   return useApi(props.from, {
+    cache: props.cached ? 'default' : 'no-cache',
     method: 'GET',
     params,
   })
@@ -378,7 +382,7 @@ const lazyFetchProducts = async () => {
 
   try {
     const { data: response } = await fetchProducts()
-    isFetching.value = true;
+    isFetching.value = true
 
     if (response.value.success) {
       if (!props.paginate) {
@@ -480,25 +484,25 @@ $prefix: 'products-grid';
       position: absolute;
       top: 0;
       left: 50%;
-      transform: translateX(-50%) scale(0.3,0.3);
+      transform: translateX(-50%) scale(0.3, 0.3);
       border-radius: 200px;
       transform-origin: center center;
-      opacity:1;
-      z-index:59;
+      opacity: 1;
+      z-index: 59;
     }
 
     @keyframes pulse {
-      0%{
+      0% {
         opacity: 0.5;
-        transform: translateX(-50%) scale(0.1,0.1);
+        transform: translateX(-50%) scale(0.1, 0.1);
       }
-      60%{
+      60% {
         opacity: 0.5;
-        transform: translateX(-50%) scale(1,1);
+        transform: translateX(-50%) scale(1, 1);
       }
-      100%{
-        opacity:0;
-        transform: translateX(-50%) scale(1.3,1.3);
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) scale(1.3, 1.3);
       }
     }
   }

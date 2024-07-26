@@ -94,7 +94,9 @@ defineRouteRules({
 const config = useRuntimeConfig()
 const route = useRoute()
 
-const { data: order } = await useApi(`shop/orders/${route.query.orderId}`)
+const { data: order } = await useApi(`shop/orders/${route.query.orderId}`, {
+  cache: 'no-cache',
+})
 
 if (!order.value || !order.value.success) {
   throw createError({
