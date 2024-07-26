@@ -1,8 +1,8 @@
-// import { LRUCache as LRU } from 'lru-cache'
 import { kv } from '@vercel/kv'
 import { H3Event } from 'h3'
-import { useRuntimeConfig, isError, getQuery } from '#imports'
-/* import cacheControlParser from 'cache-control-parser'; */
+import { useRuntimeConfig, getQuery } from '#imports'
+import { LRUCache } from 'lru-cache'
+// import cacheControlParser from 'cache-control-parser'
 
 const config = useRuntimeConfig()
 
@@ -10,6 +10,8 @@ const cache = {
   max: 100,
   ttl: 1000 * 60 * 60, // One hour
 }
+
+const lru = new LRUCache(cache)
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
@@ -35,7 +37,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   let timer: NodeJS.Timeout | null = null
 
   const KV_ENABLED =
-    config.useKv &&
+    !!config.useKv &&
     !!KV_URL &&
     !!KV_REST_API_URL &&
     !!KV_REST_API_TOKEN &&
@@ -45,9 +47,9 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const headers = getRequestHeaders(event)
-  const cacheData = KV_ENABLED ? await kv.get(cacheKey) : null
-  console.info(url, headers?.['x-cache'])
-  console.info(`KV_ENABLED: ${KV_ENABLED}`)
+  const cacheData = await (KV_ENABLED ? kv.get(cacheKey) : lru.get(cacheKey))
+
+  console.info(url, headers?.['x-cache'], `CACHE USATA: ${KV_ENABLED ? 'KV' : 'LRU'}`)
 
   /* const { "max-age": maxAge, 'no-cache': noCache = false } = cacheControlParser.parse(getRequestHeader(event,'Cache-Control') || '');
 
@@ -139,12 +141,14 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
               headers?.['x-cache'] +
               ')'
           )
-          if (KV_ENABLED) {
-            try {
-              await kv.set(cacheKey, response, { ex: cache.ttl })
-            } catch (error) {
-              console.log('kv error ', error)
+          try {
+            if (KV_ENABLED) {
+              await kv.set(cacheKey, response._data, { ex: cache.ttl })
+            } else {
+              await lru.set(cacheKey, response._data)
             }
+          } catch (error) {
+            console.log('Cache error ', error)
           }
         } else {
           console.log('🟡 questa chiama 200 non la salvo in cache')
