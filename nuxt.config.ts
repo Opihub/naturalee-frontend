@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
