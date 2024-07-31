@@ -24,7 +24,7 @@ export const useNuxtApp = () => ({
 export const useRuntimeConfig = () => ({
   public: {
     title: process.env.APP_TITLE,
-    endpoint: process.env.API_ENDPOINT_URL || '/',
+    endpoint: process.env.API_ENDPOINT_URL+"/api" || '/',
   },
 })
 
