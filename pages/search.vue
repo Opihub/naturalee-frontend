@@ -13,6 +13,10 @@
         :search="search || ''"
         paginate
       />
+
+      <template #fallback>
+        <MiniLoader />
+      </template>
     </Suspense>
   </section>
 </template>
