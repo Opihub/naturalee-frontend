@@ -108,9 +108,11 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     useCredentials: true,
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globIgnores: ['google70829fb40494f313'],
     },
     workbox: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globIgnores: ['google70829fb40494f313'],
       navigateFallback: null,
       runtimeCaching: [
         // {
