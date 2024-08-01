@@ -105,6 +105,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
         },
       ],
     },
+    useCredentials: true,
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
