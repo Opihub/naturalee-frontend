@@ -127,6 +127,16 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
         //   },
         // },
         {
+          urlPattern: '/',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'html-cache',
+            expiration: {
+              maxEntries: 10,
+            },
+          },
+        },
+        {
           urlPattern: new RegExp((process.env.NUXT_PUBLIC_SITE_URL||'')+"/api/.*"),
           handler: 'CacheFirst',
           options: {
