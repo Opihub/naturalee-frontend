@@ -111,6 +111,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     },
     workbox: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      navigateFallback: null,
       runtimeCaching: [
         // {
         //   urlPattern: /^https:\/\/api\.naturalee\.it\/.*/i,
