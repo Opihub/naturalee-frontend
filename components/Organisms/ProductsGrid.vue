@@ -27,9 +27,13 @@
       </div>
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
-
       <ClientOnly>
-        <MiniLoader v-if="showLoader" :data-ref="products.length > 1?'loader':''" :ref="products.length > 1?'loader':''" />
+        <div v-show="products.length>1">
+          <MiniLoader v-show="showLoader" ref="loader" />
+        </div>
+        <div v-show="products.length<=0">
+          <MiniLoader v-show="showLoader" />
+        </div>
       </ClientOnly>
     </SiteContainer>
   </section>
@@ -37,7 +41,7 @@
 
 <script setup>
 // Imports
-import { useIntersectionObserver, useTimeoutFn } from '@vueuse/core'
+import { useElementVisibility, useTimeoutFn } from '@vueuse/core'
 
 // Constants
 const CSS_NAME = 'c-products-grid'
@@ -178,19 +182,7 @@ const canFetch = ref(true)
 const isFetching = ref(false)
 
 const loader = ref(null)
-//const loaderIsVisible = useElementVisibility(loader)
-
-const { stop } = useIntersectionObserver(
-  loader,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting) {
-      lazyFetchProducts()
-    }
-  },
-  {
-    threshold: 1,
-  }
-);
+const loaderIsVisible = useElementVisibility(loader)
 
 const noProductsMessage = ref('Nessun prodotto trovato')
 
@@ -201,12 +193,11 @@ const chosenFilters = ref(
 const orderby = ref(route.query.sort || null)
 
 // Watcher
-/* const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
-  console.log(newValue);
+const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
   if (newValue) {
     lazyFetchProducts()
   }
-}) */
+})
 
 watch(
   () => props.search,
@@ -376,9 +367,9 @@ const lazyFetchProducts = async () => {
       last = true
     }
 
-    /* if (last) {
+    if (last) {
       stopLazyLoad()
-    } */
+    }
 
     return
   }
@@ -401,7 +392,7 @@ const lazyFetchProducts = async () => {
         products.value = records
 
         canFetch.value = false
-        /* stopLazyLoad() */
+        stopLazyLoad()
         return
       }
 
