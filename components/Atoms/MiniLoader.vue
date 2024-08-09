@@ -1,5 +1,5 @@
 <template>
-  <span
+  <span ref="loader"
     :class="CSS_NAME"
   ></span>
 </template>
@@ -7,6 +7,10 @@
 <script setup>
 // Constants
 const CSS_NAME = 'o-miniloader'
+
+const loader = ref(null)
+
+defineExpose({ loader })
 
 // Define (Props, Emits, Page Meta)
 defineProps({

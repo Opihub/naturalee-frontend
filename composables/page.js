@@ -10,8 +10,8 @@ export const usePage = async (slug = null, namespace = 'pages') => {
 
   //CONTROLLO CHE LA PAGINA DI CATEGORIA ESISTA
   if(namespace === "shop/categories"){
-    console.log("🔴 È stata richiesta una pagina che non esiste: "+slug);
     if(!shopCategories.value.some(cat=>cat.title.toLowerCase() == slug)){
+      console.log("🔴 È stata richiesta una pagina che non esiste: "+slug);
       let feedbackError = {
         statusCode: 404,
         message:
