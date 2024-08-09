@@ -177,17 +177,19 @@ const isFetching = ref(false)
 const loader = ref(null)
 //const loaderIsVisible = useElementVisibility(loader)
 
-const { stop } = useIntersectionObserver(
-  loader,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting) {
-      lazyFetchProducts()
+onMounted(() => {
+  const { stop } = useIntersectionObserver(
+    loader,
+    ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        lazyFetchProducts()
+      }
+    },
+    {
+      threshold: 1,
     }
-  },
-  {
-    threshold: 1,
-  }
-)
+  )
+})
 
 const noProductsMessage = ref('Nessun prodotto trovato')
 
