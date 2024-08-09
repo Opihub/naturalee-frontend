@@ -16,6 +16,7 @@
         @submit.prevent="checkPostcode"
       >
         <InputField
+          :key="takeForm"
           v-model="formData.postcode"
           name="postcode"
           :error="$t('addresses.invalidPostCode')"
@@ -27,6 +28,7 @@
         >
 
         <InputField
+          :key="takeForm"
           v-model="formData.address"
           :class="`${CSS_NAME}__form__address`"
           name="address"
@@ -134,11 +136,14 @@
 <script setup>
 const CSS_NAME = 'c-postcode-modal'
 
-const formData = reactive({
-  postcode: '',
-  address: '',
+const formDataInitState = {
+  postcode: null,
+  address: null,
   email: null,
-})
+};
+const takeForm = ref(Math.random());
+
+const formData = reactive({ ...formDataInitState })
 
 const sending = ref(false)
 const matchedPostcode = ref(null)
@@ -151,6 +156,8 @@ const resetStatus = () => {
 
   savedEmail.value = null
   matchedPostcode.value = null
+  Object.assign(formData, formDataInitState);
+  takeForm.value = Math.random();
 }
 
 const checkPostcode = async () => {
@@ -174,11 +181,17 @@ const checkPostcode = async () => {
     const { data: response } = await useApi('postcodes/validate', {
       clientSide: true,
       method: 'POST',
-      body: formData,
+      body: {...formData},
       cache: 'no-cache'
     })
 
     feedback.value = response.value.data
+
+    if(feedback.value.status === 500){
+      errorMessage.value = true;
+      sending.value = false
+      return
+    }
 
     matchedPostcode.value =
       response.value.success && response.value.code !== 'cap_not_available'
