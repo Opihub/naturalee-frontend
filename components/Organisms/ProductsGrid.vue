@@ -27,7 +27,8 @@
       </div>
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
-      <MiniLoader v-if="showLoader" :ref="products.length > 0?'loader':''" />
+      {{ products.length }}
+      <MiniLoader v-if="showLoader" :ref="products.length > 1?'loader':''" />
     </SiteContainer>
   </section>
 </template>
@@ -187,6 +188,7 @@ const orderby = ref(route.query.sort || null)
 
 // Watcher
 const stopLazyLoad = watch(loaderIsVisible, (newValue) => {
+  console.log(newValue);
   if (newValue) {
     lazyFetchProducts()
   }
