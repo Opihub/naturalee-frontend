@@ -27,7 +27,10 @@
       </div>
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
-      <MiniLoader v-if="showLoader" :ref="products.length > 1?'loader':''" />
+
+      <ClientOnly>
+        <MiniLoader v-if="showLoader" :data-ref="products.length > 1?'loader':''" :ref="products.length > 1?'loader':''" />
+      </ClientOnly>
     </SiteContainer>
   </section>
 </template>
@@ -177,19 +180,17 @@ const isFetching = ref(false)
 const loader = ref(null)
 //const loaderIsVisible = useElementVisibility(loader)
 
-onMounted(() => {
-  const { stop } = useIntersectionObserver(
-    loader,
-    ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        lazyFetchProducts()
-      }
-    },
-    {
-      threshold: 1,
+const { stop } = useIntersectionObserver(
+  loader,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting) {
+      lazyFetchProducts()
     }
-  )
-})
+  },
+  {
+    threshold: 1,
+  }
+);
 
 const noProductsMessage = ref('Nessun prodotto trovato')
 
