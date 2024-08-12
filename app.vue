@@ -78,6 +78,7 @@ if (process.client) {
 }
 
 await configurationStore.load()
+configurationStore.set_cookie()
 
 // Watcher
 
