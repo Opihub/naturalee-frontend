@@ -18,6 +18,20 @@ export const useConfigurationStore = defineStore('configuration', () => {
     }
   )
 
+  const referer_link = useCookie('referer_link');
+  const landing_page = useCookie('landing_page');
+
+
+  const set_cookie = () => {
+    debugger
+    if(!referer_link.value)
+      referer_link.value = document?.referer_link;
+
+    if(!landing_page.value)
+      landing_page.value = window?.location?.href;
+  }
+
+
   const load = async () => {
     const { data, refresh } = await useApi('config', {
       key: 'config',
@@ -56,6 +70,7 @@ export const useConfigurationStore = defineStore('configuration', () => {
     layout,
     menu,
     load,
+    set_cookie
   }
 })
 
