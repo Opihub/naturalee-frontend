@@ -23,7 +23,6 @@ export const useConfigurationStore = defineStore('configuration', () => {
 
 
   const set_cookie = () => {
-    debugger
     if(!referer_link.value)
       referer_link.value = document?.referer_link;
 
