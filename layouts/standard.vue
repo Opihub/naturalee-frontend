@@ -113,6 +113,7 @@ onMounted(() => {
 
   setTimeout(()=>{
     toggleADVModal(isADV.value)
+    toggleSummerModal(cookieSummerPopup.value=="closed"?false:true)
   },1000)
 })
 
@@ -140,7 +141,7 @@ const isLocked = useScrollLock(document)
 
 const cookieSummerPopup = useCookie('summer-popup');
 const isADVModalOpen = ref(false)
-const isSummerModalOpen = ref(cookieSummerPopup.value=="closed"?false:true)
+const isSummerModalOpen = ref(false)
 
 
 // Computed
@@ -208,7 +209,9 @@ const toggleADVModal = (status = null) => {
 }
 
 const toggleSummerModal = (status = null) => {
-  cookieSummerPopup.value = "closed"
+  if(status===false)
+    cookieSummerPopup.value = "closed"
+
   isSummerModalOpen.value =
     status !== null ? !!status : !isSummerModalOpen.value
 }
