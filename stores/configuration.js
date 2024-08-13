@@ -44,6 +44,8 @@ export const useConfigurationStore = defineStore('configuration', () => {
       configuration.value = data.value
     }
 
+    set_cookie()
+
   }
 
   const shopCategories = computed(() => {
