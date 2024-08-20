@@ -7,12 +7,12 @@ const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
-    endpoint: process.env.API_ENDPOINT_URL+"/api" || '/',
+    endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
     useKV: !!process.env?.USE_KV || !!process.env?.KV_URL || false,
 
     public: {
       title: process.env.APP_TITLE,
-      endpoint: process.env.API_ENDPOINT_URL+"/api" || '/',
+      endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
@@ -54,7 +54,7 @@ export default defineNuxtConfig({
 fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           type: 'text/javascript',
-        }
+        },
       ],
     },
   },
@@ -113,6 +113,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     workbox: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       globIgnores: ['google70829fb40494f313'],
+      navigateFallbackDenylist: [/^\/api/],
       navigateFallback: null,
       runtimeCaching: [
         // {
@@ -140,12 +141,15 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           },
         },
         {
-          urlPattern: new RegExp((process.env.NUXT_PUBLIC_SITE_URL||'')+"/api/.*"),
+          urlPattern: new RegExp(
+            `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/api/.*`,
+            'i'
+          ),
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-cache',
             expiration: {
-              maxEntries: 10,
+              // maxEntries: 10,
               maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
             },
             cacheableResponse: {
@@ -154,12 +158,15 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           },
         },
         {
-          urlPattern: new RegExp((process.env.API_ENDPOINT_URL||'')+"/wp-content/uploads/.*"),
+          urlPattern: new RegExp(
+            `^${process.env.API_ENDPOINT_URL || ''}/wp-content/uploads/.*`,
+            'i'
+          ),
           handler: 'CacheFirst',
           options: {
             cacheName: 'media-cache',
             expiration: {
-              maxEntries: 10,
+              // maxEntries: 10,
               maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
             },
             cacheableResponse: {
@@ -167,62 +174,6 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
             },
           },
         },
-        //{
-        //  urlPattern: /^https:\/\/api\.naturalee\.it\/api\/.*/i,
-        //  handler: 'CacheFirst',
-        //  options: {
-        //    cacheName: 'api-cache',
-        //    expiration: {
-        //      maxEntries: 10,
-        //      maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-        //    },
-        //    cacheableResponse: {
-        //      statuses: [0, 200],
-        //    },
-        //  },
-        //},
-        //{
-        //  urlPattern: /^https:\/\/naturalee\.promo\.it\/api\/.*/i,
-        //  handler: 'CacheFirst',
-        //  options: {
-        //    cacheName: 'api-cache-demo',
-        //    expiration: {
-        //      maxEntries: 10,
-        //      maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-        //    },
-        //    cacheableResponse: {
-        //      statuses: [0, 200],
-        //    },
-        //  },
-        //},
-        //{
-        //  urlPattern: /^https:\/\/api\.naturalee\.it\/wp-content\/uploads.*/i,
-        //  handler: 'CacheFirst',
-        //  options: {
-        //    cacheName: 'media-cache',
-        //    expiration: {
-        //      maxEntries: 10,
-        //      maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-        //    },
-        //    cacheableResponse: {
-        //      statuses: [0, 200],
-        //    },
-        //  },
-        //},
-        //{
-        //  urlPattern: /^https:\/\/naturalee\.promo\.it\/wp-content\/uploads.*/i,
-        //  handler: 'CacheFirst',
-        //  options: {
-        //    cacheName: 'media-cache-demo',
-        //    expiration: {
-        //      maxEntries: 10,
-        //      maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-        //    },
-        //    cacheableResponse: {
-        //      statuses: [0, 200],
-        //    },
-        //  },
-        //},
       ],
     },
     client: {
