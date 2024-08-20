@@ -1,5 +1,16 @@
 <template>
   <ModalContainer
+    v-if="isSummerModalOpen"
+    :max-width="500"
+    @close="toggleSummerModal(false)"
+  >
+    <template #header>
+      <BaseHeading tag="h5">Pausa di Ferragosto</BaseHeading>
+    </template>
+    <h3>Saremo chiusi dal 15 al 18 Agosto compresi.<br>Le consegne riprenderanno regolarmente da Lunedì 19.<br>Buone vacanze</h3>
+  </ModalContainer>
+
+  <ModalContainer
     v-if="isADVModalOpen"
     :max-width="800"
     :full-content="true"
@@ -10,6 +21,7 @@
     </template>
     <div class="naturalee-promo"><div class="naturalee-content"><p><img src="https://api.naturalee.it/wp-content/uploads/2024/07/logo-naturalee-w.png"></p><p>Inserisci il codice</p><p class="naturalee-codice-promo">BENVENUTO10</p><p>nel carrello per ottenere un'esclusivo <span>sconto del 10% e la spedizione gratuita</span> sul tuo primo ordine.</p></div><div class="naturalee-image"><img src="https://api.naturalee.it/wp-content/uploads/2024/07/sfondo-popup.png"></div></div>
   </ModalContainer>
+
   <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
       ref="topBarElement"
@@ -129,6 +141,7 @@ onMounted(() => {
 
   setTimeout(()=>{
     toggleADVModal(isADV.value)
+    //toggleSummerModal(cookieSummerPopup.value=="closed"?false:true)
     if(!$pwa.isPWAInstalled)
       togglePWAPopup(true) //$pwa?.showInstallPrompt
   },1000)
@@ -162,8 +175,9 @@ const { top } = useElementBounding(headerElement)
 const document = ref(globalThis.window?.document.body || null)
 const isLocked = useScrollLock(document)
 
-
+const cookieSummerPopup = useCookie('summer-popup');
 const isADVModalOpen = ref(false)
+const isSummerModalOpen = ref(false)
 const isPWAPopupOpen = ref(false)
 const PWAShowInfo = ref(false);
 
@@ -295,6 +309,14 @@ const updateMobileMenuStatus = (status) => {
 const toggleADVModal = (status = null) => {
   isADVModalOpen.value =
     status !== null ? !!status : !isADVModalOpen.value
+}
+
+const toggleSummerModal = (status = null) => {
+  if(status===false)
+    cookieSummerPopup.value = "closed"
+
+  isSummerModalOpen.value =
+    status !== null ? !!status : !isSummerModalOpen.value
 }
 
 const togglePWAPopup = (status = null) => {

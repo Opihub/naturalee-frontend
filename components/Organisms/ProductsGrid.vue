@@ -27,7 +27,14 @@
       </div>
 
       <BaseMessage v-else-if="!canFetch">{{ noProductsMessage }}</BaseMessage>
-      <MiniLoader v-if="showLoader" :ref="products.length > 0?'loader':''" />
+      <ClientOnly>
+        <div v-show="products.length>1">
+          <MiniLoader v-show="showLoader" ref="loader" />
+        </div>
+        <div v-show="products.length<=0">
+          <MiniLoader v-show="showLoader" />
+        </div>
+      </ClientOnly>
     </SiteContainer>
   </section>
 </template>
