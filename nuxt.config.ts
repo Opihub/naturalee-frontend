@@ -108,11 +108,11 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     useCredentials: true,
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-      globIgnores: ['google70829fb40494f313'],
+      globIgnores: ['google70829fb40494f313.html'],
     },
     workbox: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-      globIgnores: ['google70829fb40494f313'],
+      globIgnores: ['google70829fb40494f313.html'],
       navigateFallbackDenylist: [/^\/api/],
       navigateFallback: null,
       runtimeCaching: [
