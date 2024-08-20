@@ -141,6 +141,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           },
         },
         {
+          // API
           urlPattern: new RegExp(
             `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/api/.*`,
             'i'
@@ -148,6 +149,42 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           handler: 'CacheFirst',
           options: {
             cacheName: 'api-cache',
+            expiration: {
+              // maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24, // <== 1 day
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          // Remote image
+          urlPattern: new RegExp(
+            `^${process.env.API_ENDPOINT_URL || ''}/wp-content/uploads/.*`,
+            'i'
+          ),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'media-cache',
+            expiration: {
+              // maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 30, // <== 30 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          // Local image
+          urlPattern: new RegExp(
+            `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/.*/.*.(png|jpe?g|webp)`,
+            'i'
+          ),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'image-cache',
             expiration: {
               // maxEntries: 10,
               maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
@@ -158,15 +195,46 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           },
         },
         {
+          // Local fonts
           urlPattern: new RegExp(
-            `^${process.env.API_ENDPOINT_URL || ''}/wp-content/uploads/.*`,
+            `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/.*/.*.(woff2?|ttf)`,
             'i'
           ),
           handler: 'CacheFirst',
           options: {
-            cacheName: 'media-cache',
+            cacheName: 'image-cache',
             expiration: {
               // maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          // Google Fonts
+          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          // Google Fonts
+          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'gstatic-fonts-cache',
+            expiration: {
+              maxEntries: 10,
               maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
             },
             cacheableResponse: {
