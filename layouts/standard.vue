@@ -113,7 +113,7 @@ onMounted(() => {
 
   setTimeout(()=>{
     toggleADVModal(isADV.value)
-    toggleSummerModal(cookieSummerPopup.value=="closed"?false:true)
+    //toggleSummerModal(cookieSummerPopup.value=="closed"?false:true)
   },1000)
 })
 
