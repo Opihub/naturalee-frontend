@@ -44,6 +44,20 @@ const route = useRoute()
 
 const { category, product, variation } = route.params
 
+if (!isValidCategory(category)) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+  })
+}
+
+if (variation && !isValidSellingMethod(variation)) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+  })
+}
+
 const baseRoute = ['shop', 'categories', category, 'products']
 
 const { page } = await usePage(variation || product, [
