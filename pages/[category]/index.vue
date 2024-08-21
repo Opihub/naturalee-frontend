@@ -28,7 +28,7 @@ definePageMeta({
 // Data
 const route = useRoute()
 
-if (!isCategory(route.params.category)) {
+if (!isValidCategory(route.params.category)) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Pagina non trovata',
