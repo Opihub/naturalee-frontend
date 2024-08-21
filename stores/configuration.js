@@ -4,12 +4,11 @@ import {
   skipHydrate,
   computed,
   useApi,
+  useCookie,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 
 export const useConfigurationStore = defineStore('configuration', () => {
-  const nuxtApp = useNuxtApp()
-
   const configuration = useLocalStorage(
     'configuration',
     {},
@@ -52,6 +51,10 @@ export const useConfigurationStore = defineStore('configuration', () => {
     return configuration.value.categories || []
   })
 
+  const shopSellingMethods = computed(() => {
+    return configuration.value.selling_methods || []
+  })
+
   const menu = computed(() => {
     return configuration.value.menu || {}
   })
@@ -67,11 +70,12 @@ export const useConfigurationStore = defineStore('configuration', () => {
   return {
     configuration: skipHydrate(configuration),
     shopCategories,
+    shopSellingMethods,
     products,
     layout,
     menu,
     load,
-    set_cookie
+    set_cookie,
   }
 })
 

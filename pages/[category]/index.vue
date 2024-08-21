@@ -22,12 +22,21 @@
 <script setup>
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'category'
+  name: 'category',
 })
 
 // Data
 const route = useRoute()
+
+if (!isValidCategory(route.params.category)) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+  })
+}
+
 const { page } = await usePage(route.params.category, 'shop/categories')
+
 if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
