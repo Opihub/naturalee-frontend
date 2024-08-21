@@ -4,9 +4,6 @@
   <NuxtLayout name="error">
     <SiteContainer flex class="u-pt-huge u-pb-huge">
       <template v-if="error.statusCode === 404">
-        <BaseParagraph class="">
-          {{ $t('errors.ops') }}
-        </BaseParagraph>
         <BaseHeading tag="h1" use="custom" class="u-mb-large _error-title">{{ error.statusCode }}</BaseHeading>
         <BaseHeading tag="h2" use="h3" class="u-mb-tiny">
           {{ $t('errors.404.title') }}
