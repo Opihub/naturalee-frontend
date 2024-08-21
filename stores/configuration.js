@@ -4,12 +4,11 @@ import {
   skipHydrate,
   computed,
   useApi,
+  useCookie,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 
 export const useConfigurationStore = defineStore('configuration', () => {
-  const nuxtApp = useNuxtApp()
-
   const configuration = useLocalStorage(
     'configuration',
     {},

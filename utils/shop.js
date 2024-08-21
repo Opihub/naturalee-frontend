@@ -1,7 +1,11 @@
-export function isCategory(category = null) {
-  return ['verdura', 'frutta', 'esotico', 'aromi', 'dispensa'].includes(
-    category
-  )
+import { storeToRefs } from '#imports'
+import { useConfigurationStore } from '@/stores/configuration'
+
+export function isCategory(slug = null) {
+  const configurationStore = useConfigurationStore()
+  const { shopCategories } = storeToRefs(configurationStore)
+
+  return shopCategories.value.some((category) => category.slug === slug)
 }
 
 export function orderId(id) {
