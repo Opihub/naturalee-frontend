@@ -59,6 +59,7 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "@isaacs/ttlcache": "^1.4.1",
     "@capacitor/android": "^5.7.4",
     "@capacitor/core": "^5.7.4",
     "@capacitor/ios": "^5.7.4",
@@ -68,9 +69,8 @@
     "@vuepic/vue-datepicker": "^7.2.0",
     "@vueuse/components": "^10.4.1",
     "@vueuse/core": "^9.13.0",
-    "cache-control-parser": "^2.0.6",
+    "cache-parser": "^1.2.5",
     "gsap": "^3.11.4",
-    "lru-cache": "^10.4.3",
     "pinia": "^2.0.33",
     "vlitejs": "^6.0.0",
     "vue-icomoon": "^0.6.1",
