@@ -1,17 +1,17 @@
 import { kv } from '@vercel/kv'
 import { H3Event } from 'h3'
 import { useRuntimeConfig, getQuery } from '#imports'
-import { LRUCache } from 'lru-cache'
-// import cacheControlParser from 'cache-control-parser'
+import TTLCache from '@isaacs/ttlcache'
+import cacheControlParser from 'cache-control-parser'
 
 const config = useRuntimeConfig()
 
-const cache = {
+const cacheOptions = {
   max: 100,
   ttl: 1000 * 60 * 60, // One hour
 }
 
-const lru = new LRUCache(cache)
+const storageCache = new TTLCache(cacheOptions)
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
@@ -47,13 +47,18 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const headers = getRequestHeaders(event)
-  const cacheData = await (KV_ENABLED ? kv.get(cacheKey) : lru.get(cacheKey))
+  const cacheData = await (KV_ENABLED ? kv.get(cacheKey) : storageCache.get(cacheKey))
 
-  console.info(url, headers?.['x-cache'], `CACHE USATA: ${KV_ENABLED ? 'KV' : 'LRU'}`)
+  const { 'max-age': maxAge, 'no-cache': noCache = false } =
+    cacheControlParser.parse(getRequestHeader(event, 'Cache-Control') || '')
 
-  /* const { "max-age": maxAge, 'no-cache': noCache = false } = cacheControlParser.parse(getRequestHeader(event,'Cache-Control') || '');
+  console.info(
+    url,
+    noCache ? 'Cache non salvabile' : 'Cache registrabile',
+    `CACHE USATA: ${KV_ENABLED ? 'KV' : 'LRU'}`
+  )
 
-  cache.ttl = maxAge||cache.ttl; */
+  const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
@@ -64,8 +69,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   }
 
   // le chiamate con cache sono sempre anonime rimuovendo authorization
-  /* if(!noCache){ */
-  if (headers?.['x-cache'] !== 'no-cache') {
+  if (!noCache) {
     if (headers?.['authorization']) {
       delete headers['authorization']
     }
@@ -133,19 +137,15 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
           'color: white'
         )
       } else {
-        if (method === 'GET' && headers?.['x-cache'] !== 'no-cache') {
+        if (method === 'GET' && !noCache) {
           console.log(
-            '🟢 questa chiama la salvo in cache (' +
-              cache.ttl +
-              ', ' +
-              headers?.['x-cache'] +
-              ')'
+            `🟢 questa chiama la salvo in cache per ${ttl}ms`
           )
           try {
             if (KV_ENABLED) {
-              await kv.set(cacheKey, response._data, { ex: cache.ttl })
+              await kv.set(cacheKey, response._data, { px: ttl })
             } else {
-              await lru.set(cacheKey, response._data)
+              await storageCache.set(cacheKey, response._data, { ttl })
             }
           } catch (error) {
             console.log('Cache error ', error)
