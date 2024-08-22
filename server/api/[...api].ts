@@ -55,7 +55,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
-  console.info(url, `CACHE USATA: ${KV_ENABLED ? 'KV' : 'LRU'}`)
+  console.info(url)
 
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
@@ -144,6 +144,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
             } else {
               await storageCache.set(cacheKey, response._data, { ttl })
             }
+            console.log(`CACHE USATA: ${KV_ENABLED ? 'KV' : 'LRU'}`)
           } catch (error) {
             console.log('Cache error ', error)
           }

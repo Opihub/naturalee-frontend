@@ -20,8 +20,6 @@ export async function useApi(url, options = {}) {
   })
   options.headers['Cache-Control'] = cacheControl.join(', ')
 
-  console.info(options.headers)
-
   const method = options?.method?.toUpperCase() || 'GET'
   options.method = method
 
