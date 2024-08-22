@@ -1,4 +1,5 @@
 import { useFetchApi, createResponse, useLogout, useNuxtApp } from '#imports'
+import { stringify } from 'cache-control-parser'
 import * as cacheControlParser from 'cache-control-parser'
 
 export async function useApi(url, options = {}) {
@@ -16,8 +17,9 @@ export async function useApi(url, options = {}) {
   const doCache = options?.cache === 'no-cache' ? 'no-cache' : 'cache'
   // options.headers['x-cache'] = doCache
 
-  console.info(cacheControlParser)
-  const cacheControl = cacheControlParser.stringify({
+  console.info(cacheControlParser?.default, cacheControlParser)
+  console.info((cacheControlParser?.default || cacheControlParser).stringify)
+  const cacheControl = stringify({
     'max-age': defaultExpirationSeconds,
     'no-cache': doCache === 'no-cache',
   })
