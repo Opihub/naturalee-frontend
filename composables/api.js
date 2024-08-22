@@ -1,6 +1,5 @@
 import { useFetchApi, createResponse, useLogout, useNuxtApp } from '#imports'
-import { stringify } from 'cache-control-parser'
-import * as cacheControlParser from 'cache-control-parser'
+import { tokenize } from 'cache-parser'
 
 export async function useApi(url, options = {}) {
   const nuxtApp = useNuxtApp()
@@ -12,18 +11,14 @@ export async function useApi(url, options = {}) {
   const defaultExpirationHours = options?.expiration_hours || 1
   const defaultExpirationSeconds = defaultExpirationHours * 60 * 60
   options.headers = options.headers || {}
-  // options.headers.expiration_hours = defaultExpirationHours
 
   const doCache = options?.cache === 'no-cache' ? 'no-cache' : 'cache'
-  // options.headers['x-cache'] = doCache
 
-  console.info(cacheControlParser?.default, cacheControlParser)
-  console.info((cacheControlParser?.default || cacheControlParser).stringify)
-  const cacheControl = stringify({
-    'max-age': defaultExpirationSeconds,
-    'no-cache': doCache === 'no-cache',
+  const cacheControl = tokenize({
+    maxAge: defaultExpirationSeconds,
+    noCache: doCache === 'no-cache',
   })
-  options.headers['Cache-Control'] = cacheControl
+  options.headers['Cache-Control'] = cacheControl.join(', ')
 
   console.info(options.headers)
 
