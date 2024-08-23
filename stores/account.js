@@ -29,6 +29,17 @@ export const useAccountStore = defineStore('account', () => {
     default: () => rememberMe.value,
   })
 
+  const webpushr_sid = useCookie('webpushr_sid');
+
+  try {
+    webpushr('fetch_id',function (sid) {
+      if(sid)
+        webpushr_sid.value = sid;
+    });
+  } catch (error) {
+    console.log("Webpushr non inizializzato");
+  }
+
   const isLoggedIn = computed(() => {
     return !!token.value
   })
