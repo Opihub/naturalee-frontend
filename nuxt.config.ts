@@ -1,7 +1,30 @@
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
+import type { ModuleOptions } from '@nuxt/image'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
+
+const imageSettings: Partial<ModuleOptions> &
+  Pick<ModuleOptions, 'domains' | 'alias'> = {
+  domains: [],
+  alias: {},
+  // providers: {
+  //   myProvider: {
+  //     name: 'clientProvider', // optional value to overrider provider name
+  //     provider: '~/providers/clientProvider.ts', // Path to custom provider
+  //     options: {
+  //       // ... provider options
+  //       baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
+  //     },
+  //   },
+  // },
+}
+
+if (process.env.API_ENDPOINT_URL) {
+  const endpoint = new URL(process.env.API_ENDPOINT_URL)
+  imageSettings.domains.push(endpoint.host)
+  imageSettings.alias.remote = endpoint.protocol + '//' + endpoint.host
+}
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -128,18 +151,7 @@ export default defineNuxtConfig({
     },
     vueI18n: './i18n.config.ts', // if you are using custom path, default
   },
-  // image: {
-  //   providers: {
-  //     myProvider: {
-  //       name: 'clientProvider', // optional value to overrider provider name
-  //       provider: '~/providers/clientProvider.ts', // Path to custom provider
-  //       options: {
-  //         // ... provider options
-  //         baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
-  //       },
-  //     },
-  //   },
-  // },
+  image: imageSettings,
 
   sitemap: {
     sitemaps: {
