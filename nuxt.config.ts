@@ -99,6 +99,9 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     },
   },
   pwa: {
+    strategies: 'injectManifest',
+    srcDir: 'service-worker',
+    filename: 'sw.ts',
     // strategies: sw ? 'injectManifest' : 'generateSW',
     // srcDir: sw ? 'service-worker' : undefined,
     // filename: sw ? 'sw.ts' : undefined,
@@ -132,140 +135,6 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       globIgnores: ['google70829fb40494f313.html'],
-    },
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-      globIgnores: ['google70829fb40494f313.html'],
-      navigateFallbackDenylist: [/^\/api/],
-      navigateFallback: null,
-      runtimeCaching: [
-        // {
-        //   urlPattern: /^https:\/\/api\.naturalee\.it\/.*/i,
-        //   handler: 'CacheFirst',
-        //   options: {
-        //     cacheName: 'api-cache',
-        //     expiration: {
-        //       // maxEntries: 10,
-        //       maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-        //     },
-        //     cacheableResponse: {
-        //       statuses: [0, 200],
-        //     },
-        //   },
-        // },
-        {
-          urlPattern: '/',
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'html-cache',
-            expiration: {
-              maxEntries: 10,
-            },
-          },
-        },
-        {
-          // API
-          urlPattern: new RegExp(
-            `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/api/.*`,
-            'i'
-          ),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'api-cache',
-            expiration: {
-              // maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24, // <== 1 day
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-        {
-          // Remote image
-          urlPattern: new RegExp(
-            `^${process.env.API_ENDPOINT_URL || ''}/wp-content/uploads/.*`,
-            'i'
-          ),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'media-cache',
-            expiration: {
-              // maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 30, // <== 30 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-        {
-          // Local image
-          urlPattern: new RegExp(
-            `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/.*/.*.(png|jpe?g|webp)`,
-            'i'
-          ),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'image-cache',
-            expiration: {
-              // maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-        {
-          // Local fonts
-          urlPattern: new RegExp(
-            `^${process.env.NUXT_PUBLIC_SITE_URL || ''}/.*/.*.(woff2?|ttf)`,
-            'i'
-          ),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'image-cache',
-            expiration: {
-              // maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-        {
-          // Google Fonts
-          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'google-fonts-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-        {
-          // Google Fonts
-          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'gstatic-fonts-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-      ],
     },
     client: {
       installPrompt: true,
