@@ -89,7 +89,6 @@ const href = computed(() => {
 
   const source = props.src ? props.src : '/logo.png'
 
-  console.debug(img(source, imgConfig))
   return img(source, imgConfig)
 })
 </script>
