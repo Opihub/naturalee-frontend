@@ -16,6 +16,16 @@
             >Company Info</BaseLink
           >
         </li>
+        <li :class="itemClassName">
+          R-innovazione by
+          <BaseLink
+            to="https://www.opiquad.it/"
+            target="_blank"
+            color="white"
+            underline
+            >Opiquad.it</BaseLink
+          >
+        </li>
       </template>
     </InlineMenu>
 
@@ -28,13 +38,8 @@
     >
       <template #after="{ itemClassName }">
         <li :class="itemClassName">
-          R-innovazione by
-          <BaseLink
-            to="https://www.opiquad.it/"
-            target="_blank"
-            color="white"
-            underline
-            >Opiquad.it</BaseLink
+          <InlineButton class="iubenda-cs-preferences-link" color="white"
+            >Le tue preferenze relative alla privacy</InlineButton
           >
         </li>
       </template>
@@ -118,29 +123,40 @@ const getYear = () => {
 $prefix: 'footer-copyright';
 @include component($prefix) {
   @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      row-gap: rem(20px),
+      column-gap: rem(10px),
+    )
+  );
+
+  @include set-local-vars(
     $prefix: 'menu',
     $map: (
-      row-gap: rem(4px),
+      row-gap: rem(10px),
       font-size: 13px,
       line-height: 16px,
       font-weight: get-var(weight-regular),
     )
   );
+
   @include set-local-vars(
-    $prefix: $prefix,
+    $prefix: 'button',
     $map: (
-      column-gap: rem(10px),
+      underline-offset: 1px,
     )
   );
 
   display: flex;
   flex-direction: column;
   color: get-var(color-white);
-  gap: rem(10px) get-var(column-gap, rem(10px), $prefix: $prefix);
+  gap: get-var(row-gap, rem(10px), $prefix: $prefix)
+    get-var(column-gap, rem(10px), $prefix: $prefix);
   flex-wrap: wrap;
 
   @include element('menu') {
     flex-wrap: wrap;
+    text-align: center;
     justify-content: center;
   }
 
@@ -148,9 +164,18 @@ $prefix: 'footer-copyright';
     @include set-local-vars(
       $prefix: $prefix,
       $map: (
+        row-gap: rem(10px),
         column-gap: rem(8px),
       )
     );
+
+    @include set-local-vars(
+      $prefix: 'menu',
+      $map: (
+        row-gap: rem(4px),
+      )
+    );
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
