@@ -144,7 +144,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
             } else {
               await storageCache.set(cacheKey, response._data, { ttl })
             }
-            console.log(`CACHE USATA: ${KV_ENABLED ? 'KV' : 'LRU'}`)
+            console.log(`CACHE USATA: ${KV_ENABLED ? 'KV' : 'Local'}`)
           } catch (error) {
             console.log('Cache error ', error)
           }
