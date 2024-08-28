@@ -19,7 +19,6 @@ console.info(self)
 // await fetch('https://cdn.webpushr.com/sw-server.min.js')
 
 // self.__WB_MANIFEST is default injection point
-console.log(self.__WB_MANIFEST)
 precacheAndRoute(self.__WB_MANIFEST)
 
 // // to allow work offline
