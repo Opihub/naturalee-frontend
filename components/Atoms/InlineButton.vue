@@ -142,6 +142,24 @@ $prefix: 'button';
       );
     }
 
+    @include modifier('white') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-white),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            text-color: get-var(color-yellow),
+          )
+        );
+      }
+    }
+
     @include modifier('yellow') {
       @include set-local-vars(
         $prefix: $prefix,
