@@ -77,6 +77,7 @@ export default defineNuxtConfig({
 fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
           type: 'text/javascript',
+          tagPosition: 'bodyOpen',
         },
       ],
     },
