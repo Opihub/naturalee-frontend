@@ -30,12 +30,12 @@ if (process.env.API_ENDPOINT_URL) {
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
-    endpoint: process.env.API_ENDPOINT_URL || '/',
+    endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
     useKV: !!process.env?.USE_KV || !!process.env?.KV_URL || false,
 
     public: {
       title: process.env.APP_TITLE,
-      endpoint: process.env.API_ENDPOINT_URL || '/',
+      endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
