@@ -39,6 +39,39 @@
         </li>
       </template>
     </InlineMenu>
+
+    <InlineMenu
+      :class="`${CSS_NAME}__menu`"
+      color="white"
+      gap="mini"
+      separator="-"
+    >
+      <template #after="{ className }">
+        <li :class="className">
+          Questo sito è protetto da reCAPTCHA, il suo utilizzo è soggetto alla
+          <BaseLink
+            to="https://policies.google.com/privacy"
+            color="white"
+            underline
+            rel="nofollow"
+            target="_blank"
+            title="Google Privacy Policy"
+            >Privacy Policy</BaseLink
+          >
+          e ai
+          <BaseLink
+            to="https://policies.google.com/terms"
+            color="white"
+            underline
+            rel="nofollow"
+            target="_blank"
+            title="Google Terms of Service"
+            >termini di utilizzo</BaseLink
+          >
+          di Google.
+        </li>
+      </template>
+    </InlineMenu>
   </SiteContainer>
 </template>
 
@@ -84,19 +117,6 @@ const getYear = () => {
 <style lang="scss">
 $prefix: 'footer-copyright';
 @include component($prefix) {
-  display: flex;
-  flex-direction: column;
-  color: get-var(color-white);
-  gap: rem(10px);
-
-  @include from(desktop) {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    column-gap: rem(8px);
-  }
-
   @include set-local-vars(
     $prefix: 'menu',
     $map: (
@@ -106,10 +126,45 @@ $prefix: 'footer-copyright';
       font-weight: get-var(weight-regular),
     )
   );
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      column-gap: rem(10px),
+    )
+  );
+
+  display: flex;
+  flex-direction: column;
+  color: get-var(color-white);
+  gap: rem(10px) get-var(column-gap, rem(10px), $prefix: $prefix);
+  flex-wrap: wrap;
 
   @include element('menu') {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  @include from(desktop) {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        column-gap: rem(8px),
+      )
+    );
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @include element('menu') {
+      justify-content: flex-start;
+      flex: 0 1 auto;
+      max-width: calc(50% - get-var(column-gap, rem(10px), $prefix: $prefix));
+
+      &:nth-child(even) {
+        justify-content: flex-end;
+      }
+    }
   }
 }
 </style>
