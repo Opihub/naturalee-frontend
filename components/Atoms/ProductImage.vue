@@ -2,10 +2,11 @@
   <svg viewBox="0 0 600 600" :class="CSS_NAME" :style="style">
     <g style="clip-path: url(#product-mask)">
       <rect width="600" height="600" stroke="none" />
+
       <image
         width="600"
         height="600"
-        :href="src || '/logo.png'"
+        :href="href"
         :preserveAspectRatio="aspectRatio"
       />
     </g>
@@ -39,6 +40,14 @@ const props = defineProps({
       ].includes(value)
     },
   },
+  width: {
+    type: Number,
+    default: 600,
+  },
+  height: {
+    type: Number,
+    default: 600,
+  },
   size: {
     type: String,
     default: 'cover',
@@ -47,6 +56,8 @@ const props = defineProps({
     },
   },
 })
+
+const img = useImage()
 
 // Computed
 const style = computed(() => {
@@ -66,6 +77,19 @@ const aspectRatio = computed(() => {
   }
 
   return 'xMidYMid slice'
+})
+
+const href = computed(() => {
+  const imgConfig = {
+    width: props.width,
+    height: props.height,
+    quality: 70,
+    format: 'webp',
+  }
+
+  const source = props.src ? props.src : '/logo.png'
+
+  return img(source, imgConfig)
 })
 </script>
 
