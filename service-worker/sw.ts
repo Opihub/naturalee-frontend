@@ -113,4 +113,4 @@ setDefaultHandler(new NetworkOnly())
 importScripts('https://cdn.webpushr.com/sw-server.min.js')
 
 // self.skipWaiting()
-// clientsClaim()
+clientsClaim()
