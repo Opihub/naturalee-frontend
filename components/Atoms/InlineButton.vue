@@ -75,7 +75,7 @@ $prefix: 'button';
     padding: 0;
     background-color: transparent;
     // TODO: metterlo a tutti = 0
-    outline-offset: 3px;
+    outline-offset: get-var(underline-offset, 3px, $prefix: $prefix);
     font-weight: get-var(
       font-weight,
       get-var(weight-regular),
@@ -140,6 +140,24 @@ $prefix: 'button';
           text-color: get-var(color-green),
         )
       );
+    }
+
+    @include modifier('white') {
+      @include set-local-vars(
+        $prefix: $prefix,
+        $map: (
+          text-color: get-var(color-white),
+        )
+      );
+
+      &:hover {
+        @include set-local-vars(
+          $prefix: $prefix,
+          $map: (
+            text-color: get-var(color-yellow),
+          )
+        );
+      }
     }
 
     @include modifier('yellow') {

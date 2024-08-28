@@ -16,6 +16,16 @@
             >Company Info</BaseLink
           >
         </li>
+        <li :class="itemClassName">
+          R-innovazione by
+          <BaseLink
+            to="https://www.opiquad.it/"
+            target="_blank"
+            color="white"
+            underline
+            >Opiquad.it</BaseLink
+          >
+        </li>
       </template>
     </InlineMenu>
 
@@ -26,16 +36,44 @@
       gap="mini"
       separator="-"
     >
-      <template #after="{ className }">
-        <li :class="className">
-          R-innovazione by
+      <template #after="{ itemClassName }">
+        <li :class="itemClassName">
+          <InlineButton class="iubenda-cs-preferences-link" color="white"
+            >Le tue preferenze relative alla privacy</InlineButton
+          >
+        </li>
+      </template>
+    </InlineMenu>
+
+    <InlineMenu
+      :class="`${CSS_NAME}__menu`"
+      color="white"
+      gap="mini"
+      separator="-"
+    >
+      <template #after="{ itemClassName }">
+        <li :class="itemClassName">
+          Questo sito è protetto da reCAPTCHA, il suo utilizzo è soggetto alla
           <BaseLink
-            to="https://www.opiquad.it/"
-            target="_blank"
+            to="https://policies.google.com/privacy"
             color="white"
             underline
-            >Opiquad.it</BaseLink
+            rel="nofollow"
+            target="_blank"
+            title="Google Privacy Policy"
+            >Privacy Policy</BaseLink
           >
+          e ai
+          <BaseLink
+            to="https://policies.google.com/terms"
+            color="white"
+            underline
+            rel="nofollow"
+            target="_blank"
+            title="Google Terms of Service"
+            >termini di utilizzo</BaseLink
+          >
+          di Google.
         </li>
       </template>
     </InlineMenu>
@@ -84,32 +122,74 @@ const getYear = () => {
 <style lang="scss">
 $prefix: 'footer-copyright';
 @include component($prefix) {
-  display: flex;
-  flex-direction: column;
-  color: get-var(color-white);
-  gap: rem(10px);
-
-  @include from(desktop) {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    column-gap: rem(8px);
-  }
+  @include set-local-vars(
+    $prefix: $prefix,
+    $map: (
+      row-gap: rem(20px),
+      column-gap: rem(10px),
+    )
+  );
 
   @include set-local-vars(
     $prefix: 'menu',
     $map: (
-      row-gap: rem(4px),
+      row-gap: rem(10px),
       font-size: 13px,
       line-height: 16px,
       font-weight: get-var(weight-regular),
     )
   );
 
+  @include set-local-vars(
+    $prefix: 'button',
+    $map: (
+      underline-offset: 1px,
+    )
+  );
+
+  display: flex;
+  flex-direction: column;
+  color: get-var(color-white);
+  gap: get-var(row-gap, rem(10px), $prefix: $prefix)
+    get-var(column-gap, rem(10px), $prefix: $prefix);
+  flex-wrap: wrap;
+
   @include element('menu') {
     flex-wrap: wrap;
+    text-align: center;
     justify-content: center;
+  }
+
+  @include from(desktop) {
+    @include set-local-vars(
+      $prefix: $prefix,
+      $map: (
+        row-gap: rem(10px),
+        column-gap: rem(8px),
+      )
+    );
+
+    @include set-local-vars(
+      $prefix: 'menu',
+      $map: (
+        row-gap: rem(4px),
+      )
+    );
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @include element('menu') {
+      justify-content: flex-start;
+      flex: 0 1 auto;
+      max-width: calc(50% - get-var(column-gap, rem(10px), $prefix: $prefix));
+
+      &:nth-child(even) {
+        justify-content: flex-end;
+      }
+    }
   }
 }
 </style>
