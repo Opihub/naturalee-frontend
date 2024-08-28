@@ -19,6 +19,7 @@ console.info(self)
 // await fetch('https://cdn.webpushr.com/sw-server.min.js')
 
 // self.__WB_MANIFEST is default injection point
+console.log(self.__WB_MANIFEST)
 precacheAndRoute(self.__WB_MANIFEST)
 
 // // to allow work offline
@@ -110,7 +111,11 @@ registerRoute(
 
 setDefaultHandler(new NetworkOnly())
 
-importScripts('https://cdn.webpushr.com/sw-server.min.js')
+try {
+  importScripts('https://cdn.webpushr.com/sw-server.min.js')
+} catch (error) {
+  console.warn('caricamento fallito per Webpushr')
+}
 
 // self.skipWaiting()
 clientsClaim()
