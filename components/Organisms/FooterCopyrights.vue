@@ -26,8 +26,8 @@
       gap="mini"
       separator="-"
     >
-      <template #after="{ className }">
-        <li :class="className">
+      <template #after="{ itemClassName }">
+        <li :class="itemClassName">
           R-innovazione by
           <BaseLink
             to="https://www.opiquad.it/"
@@ -46,8 +46,8 @@
       gap="mini"
       separator="-"
     >
-      <template #after="{ className }">
-        <li :class="className">
+      <template #after="{ itemClassName }">
+        <li :class="itemClassName">
           Questo sito è protetto da reCAPTCHA, il suo utilizzo è soggetto alla
           <BaseLink
             to="https://policies.google.com/privacy"
