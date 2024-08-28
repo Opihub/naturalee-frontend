@@ -106,6 +106,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}' });`,
     // strategies: sw ? 'injectManifest' : 'generateSW',
     // srcDir: sw ? 'service-worker' : undefined,
     // filename: sw ? 'sw.ts' : undefined,
+    injectRegister: false,
     registerType: 'autoUpdate',
     includeAssets: [
       'favicon.ico',
