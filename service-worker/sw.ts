@@ -16,6 +16,8 @@ const { VITE_SITE_URL } = import.meta.env
 console.info(import.meta.env)
 console.info(self)
 
+// await fetch('https://cdn.webpushr.com/sw-server.min.js')
+
 // self.__WB_MANIFEST is default injection point
 precacheAndRoute(self.__WB_MANIFEST)
 
@@ -108,5 +110,7 @@ registerRoute(
 
 setDefaultHandler(new NetworkOnly())
 
-self.skipWaiting()
-clientsClaim()
+importScripts('https://cdn.webpushr.com/sw-server.min.js')
+
+// self.skipWaiting()
+// clientsClaim()
