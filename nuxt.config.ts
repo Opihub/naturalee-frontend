@@ -135,12 +135,43 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     },
     useCredentials: true,
     injectManifest: {
-      // manifestTransforms: [(manifestEntries) => {
-      //   return {
-      //     manifest: manifestEntries,
-      //   }
-      // }],
-      additionalManifestEntries: ['faq', 'api/v1/faq'],
+      additionalManifestEntries: [
+        '/',
+        'api/v1/config',
+
+        'login/',
+        'api/v1/pages/login',
+
+        'faq/',
+        'api/v1/pages/faq',
+        'api/v1/faq',
+
+        'contatti/',
+        'api/v1/pages/contatti',
+
+        'azienda/',
+        'api/v1/pages/azienda',
+
+        'frutta/',
+        'api/v1/shop/categories/frutta',
+        'api/v1/shop/categories/frutta/products?limit=12',
+
+        'verdura/',
+        'api/v1/shop/categories/verdura',
+        'api/v1/shop/categories/verdura/products?limit=12',
+
+        'aromi/',
+        'api/v1/shop/categories/aromi',
+        'api/v1/shop/categories/aromi/products?limit=12',
+
+        'esotico/',
+        'api/v1/shop/categories/esotico',
+        'api/v1/shop/categories/esotico/products?limit=12',
+
+        'dispensa/',
+        'api/v1/shop/categories/dispensa',
+        'api/v1/shop/categories/dispensa/products?limit=12',
+      ],
       globPatterns: ['**/*.{js,css,html,jpeg,jpeg,png,svg,ico}'],
       globIgnores: ['google70829fb40494f313.html'],
     },
