@@ -110,7 +110,11 @@ registerRoute(
 
 setDefaultHandler(new NetworkOnly())
 
-importScripts('https://cdn.webpushr.com/sw-server.min.js')
+try {
+  importScripts('https://cdn.webpushr.com/sw-server.min.js')
+} catch (error) {
+  console.warn('caricamento fallito per Webpushr')
+}
 
 // self.skipWaiting()
 clientsClaim()
