@@ -26,5 +26,7 @@ storybook-static
 public/fonts/*
 public/google-fonts.css
 
-localhost*.pem
+*.pem
+*.key
+*.crt
 .vercel
