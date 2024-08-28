@@ -135,7 +135,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     },
     useCredentials: true,
     injectManifest: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: ['**/*.{js,css,html,jpeg,jpeg,png,svg,ico}'],
       globIgnores: ['google70829fb40494f313.html'],
     },
     client: {
