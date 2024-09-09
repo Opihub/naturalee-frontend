@@ -31,6 +31,12 @@ export const useAccountStore = defineStore('account', () => {
 
   const webpushr_sid = useCookie('webpushr_sid');
 
+  window?.addEventListener("storage", function(event) {
+    if (event.key.includes('webpushr')) {
+        console.log('Il valore di _webpushr è cambiato:', event.newValue);
+    }
+  });
+
   try {
     webpushr('fetch_id',function (sid) {
       if(sid)
