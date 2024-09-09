@@ -24,6 +24,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   }
 
   const {
+    USE_KV,
     KV_URL,
     KV_REST_API_URL,
     KV_REST_API_TOKEN,
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   let timer: NodeJS.Timeout | null = null
 
   const KV_ENABLED =
-    !!config.useKv &&
+    !!USE_KV &&
     !!KV_URL &&
     !!KV_REST_API_URL &&
     !!KV_REST_API_TOKEN &&
