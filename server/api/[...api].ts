@@ -90,7 +90,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     }
   } catch (error) {
     if (params?.debug) {
-      if (error instanceof UpstashError) console.log(error)
+      console.log(error)
       console.log(error?.constructor)
       console.log(error?.constructor?.name)
       console.log(error?.message)
