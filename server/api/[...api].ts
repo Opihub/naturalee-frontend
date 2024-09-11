@@ -85,6 +85,11 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       cacheData = await storageCache.get(cacheKey)
     }
   } catch (error) {
+    if (params?.debug) {
+      console.log(error)
+      console.log(error?.constructor)
+      console.log(error?.constructor?.name)
+    }
     console.log('Cache load error ', error)
   }
   ++dailyKVCounter
