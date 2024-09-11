@@ -4,8 +4,6 @@ import { useRuntimeConfig, getQuery } from '#imports'
 import TTLCache from '@isaacs/ttlcache'
 import { parse } from 'cache-parser'
 
-const config = useRuntimeConfig()
-
 const cacheOptions = {
   max: 100,
   ttl: 1000 * 60 * 60, // One hour
@@ -23,7 +21,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     })
   }
 
+  const config = useRuntimeConfig()
+
   const {
+    USE_KV,
     KV_URL,
     KV_REST_API_URL,
     KV_REST_API_TOKEN,
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   let timer: NodeJS.Timeout | null = null
 
   const KV_ENABLED =
-    !!config.useKv &&
+    !!USE_KV &&
     !!KV_URL &&
     !!KV_REST_API_URL &&
     !!KV_REST_API_TOKEN &&
@@ -47,7 +48,17 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
   const headers = getRequestHeaders(event)
-  const cacheData = await (KV_ENABLED ? kv.get(cacheKey) : storageCache.get(cacheKey))
+
+  let cacheData = null
+  try {
+    if (KV_ENABLED) {
+      cacheData = await kv.get(cacheKey)
+    } else {
+      cacheData = await storageCache.get(cacheKey)
+    }
+  } catch (error) {
+    console.log('Cache load error ', error)
+  }
 
   const { maxAge, noCache = false } = parse(
     getRequestHeader(event, 'Cache-Control') || ''
@@ -146,7 +157,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
             }
             console.log(`CACHE USATA: ${KV_ENABLED ? 'KV' : 'Local'}`)
           } catch (error) {
-            console.log('Cache error ', error)
+            console.log('Cache save error ', error)
           }
         } else {
           console.log('🟡 questa chiama 200 non la salvo in cache')

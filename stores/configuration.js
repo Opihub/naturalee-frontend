@@ -17,13 +17,13 @@ export const useConfigurationStore = defineStore('configuration', () => {
     }
   )
 
-  const referer_link = useCookie('referer_link');
+  const referrer_link = useCookie('referrer_link');
   const landing_page = useCookie('landing_page');
 
 
   const set_cookie = () => {
-    if(!referer_link.value)
-      referer_link.value = document?.referer_link;
+    if(!referrer_link.value)
+      referrer_link.value = document?.referrer;
 
     if(!landing_page.value)
       landing_page.value = window?.location?.href;
