@@ -3,16 +3,25 @@ import { H3Event } from 'h3'
 import { useRuntimeConfig, getQuery } from '#imports'
 import TTLCache from '@isaacs/ttlcache'
 import { parse } from 'cache-parser'
+import { request } from 'http'
 
 const cacheOptions = {
   max: 100,
   ttl: 1000 * 60 * 60, // One hour
 }
 
+let monthlyKVCounter = 0
+let dailyKVCounter = 0
+let lastDay: Date | null = new Date('2024-05-2')
+let outOfBudget = false
+
 const storageCache = new TTLCache(cacheOptions)
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
+  const config = useRuntimeConfig()
+  const today = new Date()
+
   const url = event.context.params?.api
   const cacheKey = event?._path || ''
   if (!url) {
@@ -21,10 +30,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     })
   }
 
-  const config = useRuntimeConfig()
-
   const {
-    USE_KV,
     KV_URL,
     KV_REST_API_URL,
     KV_REST_API_TOKEN,
@@ -38,11 +44,38 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   let timer: NodeJS.Timeout | null = null
 
   const KV_ENABLED =
-    !!USE_KV &&
+    config.useKV &&
     !!KV_URL &&
     !!KV_REST_API_URL &&
     !!KV_REST_API_TOKEN &&
     !!KV_REST_API_READ_ONLY_TOKEN
+
+  if (KV_ENABLED && lastDay) {
+    // Se l'ultima data risale a prima di oggi, allora resetto la quota giornaliera
+    if (today.getDate() - lastDay.getDate() > 0) {
+      dailyKVCounter = 0
+      outOfBudget = false
+      console.log('NEW DAY: Resetting daily requests')
+    }
+
+    // Se l'ultima data risale ai mesi precedenti, allora resetto la quota mensile
+    if (today.getMonth() - lastDay.getMonth() > 0) {
+      dailyKVCounter = 0
+      outOfBudget = false
+      console.log('NEW MONTH: Resetting monthly requests')
+    }
+  }
+
+  const KV_REACH_DAILY_LIMIT =
+    config.dailyKVLimit !== 0 && dailyKVCounter >= config.dailyKVLimit
+  const KV_REACH_MONTHLY_LIMIT =
+    config.monthlyKVLimit !== 0 && monthlyKVCounter >= config.monthlyKVLimit
+
+  const LOAD_KV =
+    KV_ENABLED &&
+    !KV_REACH_DAILY_LIMIT &&
+    !KV_REACH_MONTHLY_LIMIT &&
+    !outOfBudget
 
   const method = event.method
   const params = getQuery(event)
@@ -51,14 +84,21 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   let cacheData = null
   try {
-    if (KV_ENABLED) {
+    if (LOAD_KV) {
       cacheData = await kv.get(cacheKey)
     } else {
       cacheData = await storageCache.get(cacheKey)
     }
   } catch (error) {
+    if (params?.debug) {
+      console.log(error)
+      console.log(error?.constructor)
+      console.log(error?.constructor?.name)
+    }
     console.log('Cache load error ', error)
   }
+  ++dailyKVCounter
+  ++monthlyKVCounter
 
   const { maxAge, noCache = false } = parse(
     getRequestHeader(event, 'Cache-Control') || ''
@@ -146,16 +186,16 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         )
       } else {
         if (method === 'GET' && !noCache) {
-          console.log(
-            `🟢 questa chiama la salvo in cache per ${ttl}ms`
-          )
+          console.log(`🟢 questa chiama la salvo in cache per ${ttl}ms`)
           try {
-            if (KV_ENABLED) {
+            if (LOAD_KV) {
               await kv.set(cacheKey, response._data, { px: ttl })
+              ++dailyKVCounter
+              ++monthlyKVCounter
             } else {
               await storageCache.set(cacheKey, response._data, { ttl })
             }
-            console.log(`CACHE USATA: ${KV_ENABLED ? 'KV' : 'Local'}`)
+            console.log(`CACHE USATA: ${LOAD_KV ? 'KV' : 'Local'}`)
           } catch (error) {
             console.log('Cache save error ', error)
           }
@@ -174,6 +214,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       )
     },
   })
+
+  lastDay = today
 
   return response
 })
