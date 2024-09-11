@@ -3,6 +3,7 @@ import { H3Event } from 'h3'
 import { useRuntimeConfig, getQuery } from '#imports'
 import TTLCache from '@isaacs/ttlcache'
 import { parse } from 'cache-parser'
+import { request } from 'http'
 
 const cacheOptions = {
   max: 100,
@@ -12,6 +13,7 @@ const cacheOptions = {
 let monthlyKVCounter = 0
 let dailyKVCounter = 0
 let lastDay: Date | null = new Date('2024-05-2')
+let outOfBudget = false
 
 const storageCache = new TTLCache(cacheOptions)
 
@@ -52,12 +54,14 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     // Se l'ultima data risale a prima di oggi, allora resetto la quota giornaliera
     if (today.getDate() - lastDay.getDate() > 0) {
       dailyKVCounter = 0
+      outOfBudget = false
       console.log('NEW DAY: Resetting daily requests')
     }
 
     // Se l'ultima data risale ai mesi precedenti, allora resetto la quota mensile
     if (today.getMonth() - lastDay.getMonth() > 0) {
       dailyKVCounter = 0
+      outOfBudget = false
       console.log('NEW MONTH: Resetting monthly requests')
     }
   }
@@ -70,7 +74,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const LOAD_KV =
     KV_ENABLED &&
     !KV_REACH_DAILY_LIMIT &&
-    !KV_REACH_MONTHLY_LIMIT
+    !KV_REACH_MONTHLY_LIMIT &&
+    !outOfBudget
 
   const method = event.method
   const params = getQuery(event)
