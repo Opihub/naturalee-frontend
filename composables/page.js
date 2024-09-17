@@ -14,7 +14,7 @@ export const usePage = async (slug = null, namespace = 'pages') => {
     error,
     refresh,
   } = await useApi(`${namespace}/${endpoint}`, {
-    expiration_hours: 6,
+    expiration_hours: 48,
   })
 
   if (!response.value) {
