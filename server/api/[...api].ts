@@ -128,7 +128,9 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     }
   }
 
-  const response = await $fetch(url, {
+  lastDay = today
+
+  return $fetch(url, {
     // Serve ad far "scivolare" la gestione degli errori al client
     ignoreResponseError: true,
     baseURL: config.endpoint,
@@ -219,8 +221,4 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       )
     },
   })
-
-  lastDay = today
-
-  return response
 })
