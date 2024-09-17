@@ -100,9 +100,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   ++dailyKVCounter
   ++monthlyKVCounter
 
-  const { maxAge, noCache = false } = parse(
-    getRequestHeader(event, 'Cache-Control') || ''
-  )
+  const cacheControl = getRequestHeader(event, 'Cache-Control') || ''
+
+  const { maxAge, noCache = false } = parse(cacheControl)
+
+  if (cacheControl) {
+    event.node.res.setHeader('Cache-Control', cacheControl)
+  }
 
   const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
