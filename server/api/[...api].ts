@@ -115,6 +115,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
     console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
+    event.node.res.setHeader('X-Cache', 'HIT')
 
     // return kv.get(cacheKey)
     return cacheData
