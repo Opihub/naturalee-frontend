@@ -3,7 +3,6 @@ import { H3Event } from 'h3'
 import { useRuntimeConfig, getQuery } from '#imports'
 import TTLCache from '@isaacs/ttlcache'
 import { parse } from 'cache-parser'
-import { request } from 'http'
 
 const cacheOptions = {
   max: 100,
@@ -94,6 +93,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       console.log(error)
       console.log(error?.constructor)
       console.log(error?.constructor?.name)
+      console.log(error?.message)
+      console.log(error?.code)
     }
     console.log('Cache load error ', error)
   }
