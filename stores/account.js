@@ -29,22 +29,7 @@ export const useAccountStore = defineStore('account', () => {
     default: () => rememberMe.value,
   })
 
-  const webpushr_sid = useCookie('webpushr_sid');
-
-  window?.addEventListener("storage", function(event) {
-    if (event.key.includes('webpushr')) {
-        console.log('Il valore di _webpushr è cambiato:', event.newValue);
-    }
-  });
-
-  try {
-    webpushr('fetch_id',function (sid) {
-      if(sid)
-        webpushr_sid.value = sid;
-    });
-  } catch (error) {
-    console.log("Webpushr non inizializzato");
-  }
+  const webpushr_sid = useCookie('webpushr_sid')
 
   const isLoggedIn = computed(() => {
     return !!token.value
@@ -138,6 +123,31 @@ export const useAccountStore = defineStore('account', () => {
     }
 
     account.value = user
+  }
+
+  function getWebpushrId() {
+    if (!window?.webpushr) {
+      console.warn('Webpushr non inizializzato')
+      return
+    }
+
+    try {
+      window.webpushr('fetch_id', function (sid) {
+        if (!sid) {
+          console.warn('Dispositivo non ancora iscritto a Webpushr')
+          return
+        }
+
+        console.log('sid', sid)
+        webpushr_sid.value = sid
+
+        if (account.value && account.value.id) {
+          setWebpushrUserId(account.value.id)
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   function setWebpushrUserId(id) {
@@ -250,6 +260,7 @@ export const useAccountStore = defineStore('account', () => {
     forceLogout,
     updateUser,
     validateAccount,
+    getWebpushrId,
     setWebpushrUserId,
   }
 })
