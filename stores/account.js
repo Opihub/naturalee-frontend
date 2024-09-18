@@ -5,6 +5,7 @@ import {
   skipHydrate,
   computed,
   useCookie,
+  nextTick,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -125,9 +126,17 @@ export const useAccountStore = defineStore('account', () => {
     account.value = user
   }
 
-  function getWebpushrId() {
+  function isWebpushrInstalled() {
     if (!window?.webpushr) {
       console.warn('Webpushr non inizializzato')
+      return false
+    }
+
+    return true
+  }
+
+  function getWebpushrId() {
+    if (!isWebpushrInstalled()) {
       return
     }
 
@@ -138,21 +147,17 @@ export const useAccountStore = defineStore('account', () => {
           return
         }
 
-        console.log('sid', sid)
         webpushr_sid.value = sid
 
-        if (account.value && account.value.id) {
-          setWebpushrUserId(account.value.id)
-        }
+        setWebpushrUserId(account.value?.id || null)
       })
     } catch (error) {
       console.error(error)
     }
   }
 
-  function setWebpushrUserId(id) {
-    if (!window?.webpushr) {
-      console.warn('Webpushr non inizializzato')
+  function setWebpushrUserId(id = null) {
+    if (!isWebpushrInstalled()) {
       return
     }
 
@@ -163,12 +168,20 @@ export const useAccountStore = defineStore('account', () => {
     }
   }
 
+  function removeWebpushrUserId() {
+    setWebpushrUserId(null)
+  }
+
   async function logout() {
     const cart = useCartStore()
 
     account.value = null
     token.value = null
     rememberMe.value = false
+
+    removeWebpushrUserId()
+
+    await nextTick()
 
     await cart.clearCart(true)
   }
@@ -262,6 +275,7 @@ export const useAccountStore = defineStore('account', () => {
     validateAccount,
     getWebpushrId,
     setWebpushrUserId,
+    removeWebpushrUserId,
   }
 })
 
