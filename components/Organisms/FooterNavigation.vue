@@ -24,6 +24,15 @@
             >Consegna</InlineButton
           >
         </li>
+        <li :class="itemClassName">
+          <span
+            id="webpushr-subscription-toggle-button"
+            data-size="1.1"
+            data-text-when-denied="You've blocked push notifications."
+            data-tooltip-position="right"
+            data-color="#ffd100"
+          >Iscriviti alle notifiche</span>
+        </li>
       </template>
     </InlineMenu>
 
