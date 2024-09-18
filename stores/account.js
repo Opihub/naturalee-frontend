@@ -125,9 +125,17 @@ export const useAccountStore = defineStore('account', () => {
     account.value = user
   }
 
-  function getWebpushrId() {
+  function isWebpushrInstalled() {
     if (!window?.webpushr) {
       console.warn('Webpushr non inizializzato')
+      return false
+    }
+
+    return true
+  }
+
+  function getWebpushrId() {
+    if (!isWebpushrInstalled()) {
       return
     }
 
@@ -138,7 +146,6 @@ export const useAccountStore = defineStore('account', () => {
           return
         }
 
-        console.log('sid', sid)
         webpushr_sid.value = sid
 
         if (account.value && account.value.id) {
@@ -151,8 +158,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   function setWebpushrUserId(id) {
-    if (!window?.webpushr) {
-      console.warn('Webpushr non inizializzato')
+    if (!isWebpushrInstalled()) {
       return
     }
 
