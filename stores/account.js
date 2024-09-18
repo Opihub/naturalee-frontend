@@ -5,6 +5,7 @@ import {
   skipHydrate,
   computed,
   useCookie,
+  nextTick,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -178,9 +179,11 @@ export const useAccountStore = defineStore('account', () => {
     token.value = null
     rememberMe.value = false
 
-    await cart.clearCart(true)
-
     removeWebpushrUserId()
+
+    await nextTick()
+
+    await cart.clearCart(true)
   }
 
   async function forceLogout() {
