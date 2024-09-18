@@ -109,12 +109,6 @@ const login = async () => {
     message.status = 'success'
     message.message = 'Login avvenuto con successo'
 
-    try {
-      webpushr('attributes',{"user_id" : response?.value?.data?.id});
-    } catch (error) {
-      console.log("Webpushr non inizializzato");
-    }
-
     await Promise.all([cart.load(true), wishlist.load()])
   } else {
     message.message = response?.value?.message || 'Errore generico'
