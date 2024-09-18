@@ -131,11 +131,26 @@ export const useAccountStore = defineStore('account', () => {
       delete user.token
     }
 
+    setWebpushrUserId(user?.id)
+
     if (memorize) {
       rememberMe.value = token.value
     }
 
     account.value = user
+  }
+
+  function setWebpushrUserId(id) {
+    if (!window?.webpushr) {
+      console.warn('Webpushr non inizializzato')
+      return
+    }
+
+    try {
+      window.webpushr('attributes', { user_id: id })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async function logout() {
@@ -164,7 +179,7 @@ export const useAccountStore = defineStore('account', () => {
     const user = { ...profile }
     const feedback = ref({
       success: false,
-      message: "È avvenuto un errore durante l'aggiornamento dell'utente"
+      message: "È avvenuto un errore durante l'aggiornamento dell'utente",
     })
 
     if (
@@ -235,6 +250,7 @@ export const useAccountStore = defineStore('account', () => {
     forceLogout,
     updateUser,
     validateAccount,
+    setWebpushrUserId,
   }
 })
 
