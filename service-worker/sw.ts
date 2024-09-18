@@ -13,8 +13,6 @@ import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 declare let self: ServiceWorkerGlobalScope
 
 const { VITE_SITE_URL } = import.meta.env
-console.info(import.meta.env)
-console.info(self)
 
 // await fetch('https://cdn.webpushr.com/sw-server.min.js')
 
