@@ -148,16 +148,14 @@ export const useAccountStore = defineStore('account', () => {
 
         webpushr_sid.value = sid
 
-        if (account.value && account.value.id) {
-          setWebpushrUserId(account.value.id)
-        }
+        setWebpushrUserId(account.value?.id || null)
       })
     } catch (error) {
       console.error(error)
     }
   }
 
-  function setWebpushrUserId(id) {
+  function setWebpushrUserId(id = null) {
     if (!isWebpushrInstalled()) {
       return
     }
@@ -169,6 +167,10 @@ export const useAccountStore = defineStore('account', () => {
     }
   }
 
+  function removeWebpushrUserId() {
+    setWebpushrUserId(null)
+  }
+
   async function logout() {
     const cart = useCartStore()
 
@@ -177,6 +179,8 @@ export const useAccountStore = defineStore('account', () => {
     rememberMe.value = false
 
     await cart.clearCart(true)
+
+    removeWebpushrUserId()
   }
 
   async function forceLogout() {
@@ -268,6 +272,7 @@ export const useAccountStore = defineStore('account', () => {
     validateAccount,
     getWebpushrId,
     setWebpushrUserId,
+    removeWebpushrUserId,
   }
 })
 
