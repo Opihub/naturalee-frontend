@@ -98,7 +98,7 @@ if (process.client) {
 
   const local_webpushrSetLocalStorage = window._webpushrSetLocalStorage
   window._webpushrSetLocalStorage = (key, value) => {
-    local_webpushrSetLocalStorage()
+    local_webpushrSetLocalStorage(key, value)
 
     if (key === 'bell_notification') {
       if (account.value?.id) {
