@@ -31,3 +31,9 @@
     flex: 1 1 auto;
   }
 }
+
+@include until(desktop) {
+  #webpushr-prompt-wrapper {
+    display: none;
+  }
+}
