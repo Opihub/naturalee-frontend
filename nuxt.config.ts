@@ -56,8 +56,14 @@ export default defineNuxtConfig({
     head: {
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        {
+          rel: 'apple-touch-icon',
+          type: 'image/png',
+          href: '/favicon-180x180.png',
+        },
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       ],
+      meta: [{ name: 'theme-color', content: '#00966e' }],
       htmlAttrs: {
         lang: 'it-IT',
       },
@@ -67,6 +73,15 @@ export default defineNuxtConfig({
         'iubenda-site-id': process.env?.IUBENDA_SITE_ID || '',
         'iubenda-cookie-policy-id': process.env?.IUBENDA_ID || '',
       },
+      script: [
+        {
+          children: `(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
+          type: 'text/javascript',
+          tagPosition: 'bodyOpen',
+        },
+      ],
     },
   },
   experimental: {
@@ -84,6 +99,96 @@ export default defineNuxtConfig({
           additionalData,
         },
       },
+    },
+  },
+  pwa: {
+    strategies: 'injectManifest',
+    srcDir: 'service-worker',
+    filename: 'sw.ts',
+    // strategies: sw ? 'injectManifest' : 'generateSW',
+    // srcDir: sw ? 'service-worker' : undefined,
+    // filename: sw ? 'sw.ts' : undefined,
+    // injectRegister: false,
+    registerType: 'autoUpdate',
+    includeAssets: [
+      'favicon.ico',
+      'android-icon-192x192.png',
+      'favicon-32x32.png',
+      'favicon-naturalee-512x512.png',
+    ],
+    manifest: {
+      name: process.env.APP_TITLE,
+      short_name: 'Naturalee',
+      description: 'Naturalee',
+      theme_color: '#00966e',
+      icons: [
+        {
+          src: 'android-icon-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: 'favicon-naturalee-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          // purpose: 'any maskable',
+        },
+      ],
+    },
+    useCredentials: true,
+    injectManifest: {
+      additionalManifestEntries: [
+        '/',
+        'api/v1/config',
+
+        'login/',
+        'api/v1/pages/login',
+
+        'faq/',
+        'api/v1/pages/faq',
+        'api/v1/faq',
+
+        'contatti/',
+        'api/v1/pages/contatti',
+
+        'azienda/',
+        'api/v1/pages/azienda',
+
+        'frutta/',
+        'api/v1/shop/categories/frutta',
+        'api/v1/shop/categories/frutta/products?limit=12',
+
+        'verdura/',
+        'api/v1/shop/categories/verdura',
+        'api/v1/shop/categories/verdura/products?limit=12',
+
+        'aromi/',
+        'api/v1/shop/categories/aromi',
+        'api/v1/shop/categories/aromi/products?limit=12',
+
+        'esotico/',
+        'api/v1/shop/categories/esotico',
+        'api/v1/shop/categories/esotico/products?limit=12',
+
+        'dispensa/',
+        'api/v1/shop/categories/dispensa',
+        'api/v1/shop/categories/dispensa/products?limit=12',
+      ],
+      globPatterns: ['**/*.{js,css,html,jpeg,jpeg,png,svg,ico}'],
+      globIgnores: ['google70829fb40494f313.html'],
+    },
+    client: {
+      installPrompt: true,
+      // you don't need to include this: only for testing purposes
+      // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
+      periodicSyncForUpdates: 20,
+    },
+    devOptions: {
+      enabled: true,
+      suppressWarnings: true,
+      // navigateFallback: '/',
+      // navigateFallbackAllowlist: [/^\/$/, /^(.*)$/],
+      type: 'module',
     },
   },
   routeRules: {
@@ -109,6 +214,7 @@ export default defineNuxtConfig({
     ],
     ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
     '@nuxtjs/sitemap',
+    '@vite-pwa/nuxt',
   ],
   googleFonts: {
     download: true,
