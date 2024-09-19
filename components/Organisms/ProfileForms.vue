@@ -32,12 +32,14 @@
         </FloatingIcon>
       </ClientOnly>
 
-      <FormRegistration
-        ref="registrationFormElement"
-        :disabled="sending"
-        @api:start="sending = true"
-        @api:end="sending = false"
-      />
+      <SiteContainer flex>
+        <FormRegistration
+          ref="registrationFormElement"
+          :disabled="sending"
+          @api:start="sending = true"
+          @api:end="sending = false"
+        />
+      </SiteContainer>
     </BackgroundHolder>
 
     <BackgroundHolder
@@ -73,43 +75,45 @@
         </FloatingIcon>
       </ClientOnly>
 
-      <Transition name="fade" mode="out-in">
-        <FormLogin
-          v-if="!isShowingForgotPasswordForm"
-          ref="loginFormElement"
-          :disabled="sending"
-          @api:start="sending = true"
-          @api:end="sending = false"
-        >
-          <template #forgotLink>
-            <BaseLink
-              :to="{ name: 'login', query: { forgot_password: true } }"
-              color="dark"
-              underline
-              @click.prevent="toggleLoginForm(true)"
-              >{{ $t('form.password.forget') }}</BaseLink
-            >
-          </template>
-        </FormLogin>
+      <SiteContainer flex>
+        <Transition name="fade" mode="out-in">
+          <FormLogin
+            v-if="!isShowingForgotPasswordForm"
+            ref="loginFormElement"
+            :disabled="sending"
+            @api:start="sending = true"
+            @api:end="sending = false"
+          >
+            <template #forgotLink>
+              <BaseLink
+                :to="{ name: 'login', query: { forgot_password: true } }"
+                color="dark"
+                underline
+                @click.prevent="toggleLoginForm(true)"
+                >{{ $t('form.password.forget') }}</BaseLink
+              >
+            </template>
+          </FormLogin>
 
-        <FormPasswordRecovery
-          v-else
-          ref="passwordFormElement"
-          :disabled="sending"
-          @api:start="sending = true"
-          @api:end="sending = false"
-        >
-          <template #profileLink>
-            <BaseLink
-              :to="{ name: 'login' }"
-              color="dark"
-              underline
-              @click.prevent="toggleLoginForm(false)"
-              >{{ $t('form.returnToLogin') }}</BaseLink
-            >
-          </template>
-        </FormPasswordRecovery>
-      </Transition>
+          <FormPasswordRecovery
+            v-else
+            ref="passwordFormElement"
+            :disabled="sending"
+            @api:start="sending = true"
+            @api:end="sending = false"
+          >
+            <template #profileLink>
+              <BaseLink
+                :to="{ name: 'login' }"
+                color="dark"
+                underline
+                @click.prevent="toggleLoginForm(false)"
+                >{{ $t('form.returnToLogin') }}</BaseLink
+              >
+            </template>
+          </FormPasswordRecovery>
+        </Transition>
+      </SiteContainer>
     </BackgroundHolder>
   </div>
 </template>
@@ -363,16 +367,25 @@ $prefix: 'profile-forms';
     );
   }
 
+  @include set-local-vars(
+    $prefix: 'container',
+    $map: (
+      justify-content: center,
+    )
+  );
+
   @include component('login-block') {
     position: relative;
     padding: 0 get-var(padding, $prefix: 'container');
     min-height: get-var(height, auto, $prefix: $prefix);
+    overflow: hidden;
   }
 
   @include component('registration-block') {
     position: relative;
     padding: 0 get-var(padding, $prefix: 'container');
     min-height: get-var(height, auto, $prefix: $prefix);
+    overflow: hidden;
   }
 
   form {
