@@ -165,7 +165,6 @@ export const useAccountStore = defineStore('account', () => {
     try {
       const { origin, href: url } = useRequestURL()
 
-      console.log(url)
       window.webpushr('attributes', {
         user_id,
         origin,
