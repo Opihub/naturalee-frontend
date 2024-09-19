@@ -81,7 +81,10 @@
 
     <slot name="after" />
 
-    <SiteFooter :class="{ 'u-mt-auto': !overrideLastElement }">
+    <SiteFooter
+      ref="footerElement"
+      :class="{ 'u-mt-auto': !overrideLastElement }"
+    >
       <FooterNavigation :socials-menu="menu.socials" :menu="menu.footer" />
 
       <FooterCopyrights
@@ -129,10 +132,12 @@ defineProps({
 onMounted(() => {
   setBottomGap()
   setHeaderGap()
+  setFooterGap()
   setHeaderOffset()
 
   window.addEventListener('resize', setBottomGap)
   window.addEventListener('resize', setHeaderGap)
+  window.addEventListener('resize', setFooterGap)
   window.addEventListener('resize', setHeaderOffset)
   window.addEventListener('scroll', setHeaderOffset)
 
@@ -145,6 +150,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', setBottomGap)
   window.removeEventListener('resize', setHeaderGap)
+  window.removeEventListener('resize', setFooterGap)
   window.removeEventListener('resize', setHeaderOffset)
   window.removeEventListener('scroll', setHeaderOffset)
 })
@@ -157,6 +163,7 @@ const route = useRoute()
 const layoutElement = ref(null)
 const headerElement = ref(null)
 const topBarElement = ref(null)
+const footerElement = ref(null)
 const categoriesMenuElement = ref(null)
 const isPostcodeModalOpen = ref(false)
 const isMobileMenuOpen = ref(false)
@@ -206,6 +213,17 @@ const setHeaderGap = () => {
   getElement(layoutElement).style.setProperty(
     '--layout-header-height',
     `${headerElement.value.$el.clientHeight}px`
+  )
+}
+
+const setFooterGap = () => {
+  if (!layoutElement.value || !footerElement.value) {
+    return
+  }
+
+  getElement(layoutElement).style.setProperty(
+    '--layout-footer-height',
+    `${footerElement.value.$el.clientHeight}px`
   )
 }
 

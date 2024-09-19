@@ -1,5 +1,5 @@
 <template>
-  <section class="o-page">
+  <section class="o-page s-page-login">
     <HeaderBottomBar v-if="page.breadcrumbs" :breadcrumb="page.breadcrumbs" />
 
     <ProfileForms class="o-page__main" />
@@ -53,3 +53,13 @@ const { t } = useI18n({
 
 // Methods
 </script>
+
+<style lang="scss">
+.s-page-login {
+  display: flex;
+  min-height: calc(
+    100vh - var(--layout-header-height, 0px) - var(--layout-footer-height, 0px) -
+      var(--layout-header-offset, 0px)
+  );
+}
+</style>
