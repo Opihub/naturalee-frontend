@@ -1,26 +1,24 @@
 <template>
-  <Transition name="fade">
-    <div :class="className" :style="style" v-bind="$attrs" @click="closeModal">
-      <div :class="`${className}__body`" :style="style">
-        <div :class="CSS_NAME_HEADER">
-          <slot name="header" />
+  <div :class="className" :style="style" v-bind="$attrs" @click="closeModal">
+    <div :class="`${className}__body`" :style="style">
+      <div :class="CSS_NAME_HEADER">
+        <slot name="header" />
 
-          <BaseButton
-            :class="[`${className}__close`, `${className}__close--header`]"
-            color="yellow"
-            svg="close"
-            @click="closeModal"
-          />
-        </div>
-
-        <div :class="[`${className}__main`,{'full-content':fullContent}]">
-          <slot />
-        </div>
-
-        <slot name="footer" :class-name="CSS_NAME_FOOTER" />
+        <BaseButton
+          :class="[`${className}__close`, `${className}__close--header`]"
+          color="yellow"
+          svg="close"
+          @click="closeModal"
+        />
       </div>
+
+      <div :class="[`${className}__main`, { 'full-content': fullContent }]">
+        <slot />
+      </div>
+
+      <slot name="footer" :class-name="CSS_NAME_FOOTER" />
     </div>
-  </Transition>
+  </div>
 </template>
 
 <script setup>
@@ -44,7 +42,7 @@ const props = defineProps({
   fullContent: {
     type: Boolean,
     default: false,
-  }
+  },
 })
 
 const emit = defineEmits(['open', 'close', 'toggle'])

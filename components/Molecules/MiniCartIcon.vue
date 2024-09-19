@@ -2,9 +2,9 @@
   <BaseLink
     :to="{ name: 'cart' }"
     :class="CSS_NAME"
-    :text="count"
     :label-class-name="`${CSS_NAME}__label`"
   >
+    <slot />
     <template #svg="{ className }">
       <BaseIcon name="bag" :class="className" :filled="false" />
     </template>
