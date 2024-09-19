@@ -101,9 +101,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   ++dailyKVCounter
   ++monthlyKVCounter
 
-  const { maxAge, noCache = false } = parse(
-    getRequestHeader(event, 'Cache-Control') || ''
-  )
+  const cacheControl = getRequestHeader(event, 'Cache-Control') || ''
+
+  const { maxAge, noCache = false } = parse(cacheControl)
+
+  if (cacheControl) {
+    event.node.res.setHeader('Cache-Control', cacheControl)
+  }
 
   const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
@@ -112,6 +116,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
     console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
+    event.node.res.setHeader('X-Cache', 'HIT')
 
     // return kv.get(cacheKey)
     return cacheData
@@ -124,7 +129,9 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     }
   }
 
-  const response = await $fetch(url, {
+  lastDay = today
+
+  return $fetch(url, {
     // Serve ad far "scivolare" la gestione degli errori al client
     ignoreResponseError: true,
     baseURL: config.endpoint,
@@ -215,8 +222,4 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       )
     },
   })
-
-  lastDay = today
-
-  return response
 })

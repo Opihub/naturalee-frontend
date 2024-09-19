@@ -63,12 +63,12 @@ import { useAccountStore } from '@/stores/account'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 
-import { useLoadingStore } from '@/stores/loading';
+import { useLoadingStore } from '@/stores/loading'
 
-const loadingStore = useLoadingStore();
+const loadingStore = useLoadingStore()
 
-const {loading} = storeToRefs(loadingStore);
-const {setLoading} = loadingStore;
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
 
 // Constants
 const CSS_NAME = 'c-registration-form'

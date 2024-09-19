@@ -5,6 +5,8 @@ import {
   skipHydrate,
   computed,
   useCookie,
+  nextTick,
+  useRequestURL,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -28,6 +30,8 @@ export const useAccountStore = defineStore('account', () => {
   const token = useCookie('jwt', {
     default: () => rememberMe.value,
   })
+
+  const webpushr_sid = useCookie('webpushr_sid')
 
   const isLoggedIn = computed(() => {
     return !!token.value
@@ -114,11 +118,65 @@ export const useAccountStore = defineStore('account', () => {
       delete user.token
     }
 
+    setWebpushrUserId(user?.id)
+
     if (memorize) {
       rememberMe.value = token.value
     }
 
     account.value = user
+  }
+
+  function isWebpushrInstalled() {
+    if (!window?.webpushr) {
+      console.warn('Webpushr non inizializzato')
+      return false
+    }
+
+    return true
+  }
+
+  function getWebpushrId() {
+    if (!isWebpushrInstalled()) {
+      return
+    }
+
+    try {
+      window.webpushr('fetch_id', function (sid) {
+        if (!sid) {
+          console.warn('Dispositivo non ancora iscritto a Webpushr')
+          return
+        }
+
+        webpushr_sid.value = sid
+
+        setWebpushrUserId(account.value?.id || null)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  function setWebpushrUserId(user_id = null) {
+    if (!isWebpushrInstalled()) {
+      return
+    }
+
+    try {
+      const { origin, href: url } = useRequestURL()
+
+      window.webpushr('attributes', {
+        user_id,
+        origin,
+        url,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  function removeWebpushrUserId() {
+    setWebpushrUserId(null)
   }
 
   async function logout() {
@@ -127,6 +185,10 @@ export const useAccountStore = defineStore('account', () => {
     account.value = null
     token.value = null
     rememberMe.value = false
+
+    removeWebpushrUserId()
+
+    await nextTick()
 
     await cart.clearCart(true)
   }
@@ -147,7 +209,7 @@ export const useAccountStore = defineStore('account', () => {
     const user = { ...profile }
     const feedback = ref({
       success: false,
-      message: "È avvenuto un errore durante l'aggiornamento dell'utente"
+      message: "È avvenuto un errore durante l'aggiornamento dell'utente",
     })
 
     if (
@@ -218,6 +280,9 @@ export const useAccountStore = defineStore('account', () => {
     forceLogout,
     updateUser,
     validateAccount,
+    getWebpushrId,
+    setWebpushrUserId,
+    removeWebpushrUserId,
   }
 })
 

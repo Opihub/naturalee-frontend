@@ -12,7 +12,7 @@
       @filter:change="toggleFilter"
       @filter:clear="clearFilters"
     />
-    
+
     <SiteContainer>
       <div v-if="products.length" class="o-row">
         <ProductCard
@@ -453,6 +453,15 @@ $prefix: 'products-grid';
   }
 
   @include from(tablet) {
+    @include set-local-vars(
+      $prefix: 'row',
+      $map: (
+        columns: 2,
+      )
+    );
+  }
+
+  @include from(desktop) {
     @include set-local-vars(
       $prefix: 'row',
       $map: (

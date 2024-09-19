@@ -1,6 +1,8 @@
 <template>
   <SVGDefinitions v-once />
 
+  <NuxtPwaManifest />
+
   <NuxtLoadingIndicator />
 
   <Transition name="fade">
@@ -10,6 +12,13 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+
+  <!-- You can use $pwa directly in templates! -->
+  <div v-show="$pwa && $pwa.needRefresh">
+    <span> New content available, click on reload button to update. </span>
+
+    <button @click="$pwa.updateServiceWorker()">Reload</button>
+  </div>
 
   <ClientOnly>
     <TransitionGroup id="notifications" name="fade" tag="div">
@@ -24,6 +33,8 @@
       </template>
     </TransitionGroup>
   </ClientOnly>
+
+  <PWABanner />
 </template>
 
 <script setup>
@@ -49,16 +60,25 @@ const configurationStore = useConfigurationStore()
 
 // Data
 const { notifications } = storeToRefs(notificationsStore)
-const {loading} = storeToRefs(loadingStore)
-const {setLoading} = loadingStore;
+const { account } = storeToRefs(accountStore)
+const { loading } = storeToRefs(loadingStore)
+const { setLoading } = loadingStore
+const { validateAccount, getWebpushrId, setWebpushrUserId } = accountStore
 
 const nuxtApp = useNuxtApp()
+const { $pwa } = useNuxtApp()
+
+onMounted(() => {
+  if ($pwa.offlineReady) {
+    notify({ status: 'success', notification: 'App ready to work offline' })
+  }
+})
 
 nuxtApp.hook('page:start', () => {
-  setLoading(true);
+  setLoading(true)
 })
 nuxtApp.hook('page:finish', () => {
-  setLoading(false);
+  setLoading(false)
 })
 
 /**
@@ -72,8 +92,21 @@ if (process.client) {
   // Se l'utente atterra sul sito dopo aver chiuso tutte le sessioni senza il remember me,
   // allora pulisco i dati appena torna sul sito
   if (!alreadyLanded.value) {
-    accountStore.validateAccount()
+    validateAccount()
     alreadyLanded.value = true
+  }
+
+  getWebpushrId()
+
+  const local_webpushrSetLocalStorage = window._webpushrSetLocalStorage
+  window._webpushrSetLocalStorage = (key, value) => {
+    local_webpushrSetLocalStorage(key, value)
+
+    if (key === 'bell_notification') {
+      if (account.value?.id) {
+        setWebpushrUserId(account.value.id)
+      }
+    }
   }
 }
 
@@ -194,5 +227,9 @@ cartStore.$onAction(({ name, args, after, onError }) => {
       position: static,
     )
   );
+
+  @include until(tablet) {
+    width: 100%;
+  }
 }
 </style>

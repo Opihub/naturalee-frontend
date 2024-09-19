@@ -7,7 +7,10 @@
     <template #header>
       <BaseHeading tag="h5">Pausa di Ferragosto</BaseHeading>
     </template>
-    <h3>Saremo chiusi dal 15 al 18 Agosto compresi.<br>Le consegne riprenderanno regolarmente da Lunedì 19.<br>Buone vacanze</h3>
+    <h3>
+      Saremo chiusi dal 15 al 18 Agosto compresi.<br />Le consegne riprenderanno
+      regolarmente da Lunedì 19.<br />Buone vacanze
+    </h3>
   </ModalContainer>
 
   <ModalContainer
@@ -17,9 +20,31 @@
     @close="toggleADVModal(false)"
   >
     <template #header>
-      <BaseHeading tag="h5">Il tuo regalo di benvenuto su Naturalee</BaseHeading>
+      <BaseHeading tag="h5"
+        >Il tuo regalo di benvenuto su Naturalee</BaseHeading
+      >
     </template>
-    <div class="naturalee-promo"><div class="naturalee-content"><p><img src="https://api.naturalee.it/wp-content/uploads/2024/07/logo-naturalee-w.png"></p><p>Inserisci il codice</p><p class="naturalee-codice-promo">BENVENUTO10</p><p>nel carrello per ottenere un'esclusivo <span>sconto del 10% e la spedizione gratuita</span> sul tuo primo ordine.</p></div><div class="naturalee-image"><img src="https://api.naturalee.it/wp-content/uploads/2024/07/sfondo-popup.png"></div></div>
+    <div class="naturalee-promo">
+      <div class="naturalee-content">
+        <p>
+          <img
+            src="https://api.naturalee.it/wp-content/uploads/2024/07/logo-naturalee-w.png"
+          />
+        </p>
+        <p>Inserisci il codice</p>
+        <p class="naturalee-codice-promo">BENVENUTO10</p>
+        <p>
+          nel carrello per ottenere un'esclusivo
+          <span>sconto del 10% e la spedizione gratuita</span> sul tuo primo
+          ordine.
+        </p>
+      </div>
+      <div class="naturalee-image">
+        <img
+          src="https://api.naturalee.it/wp-content/uploads/2024/07/sfondo-popup.png"
+        />
+      </div>
+    </div>
   </ModalContainer>
 
   <LayoutWrapper ref="layoutElement">
@@ -56,7 +81,10 @@
 
     <slot name="after" />
 
-    <SiteFooter :class="{ 'u-mt-auto': !overrideLastElement }">
+    <SiteFooter
+      ref="footerElement"
+      :class="{ 'u-mt-auto': !overrideLastElement }"
+    >
       <FooterNavigation :socials-menu="menu.socials" :menu="menu.footer" />
 
       <FooterCopyrights
@@ -104,22 +132,25 @@ defineProps({
 onMounted(() => {
   setBottomGap()
   setHeaderGap()
+  setFooterGap()
   setHeaderOffset()
 
   window.addEventListener('resize', setBottomGap)
   window.addEventListener('resize', setHeaderGap)
+  window.addEventListener('resize', setFooterGap)
   window.addEventListener('resize', setHeaderOffset)
   window.addEventListener('scroll', setHeaderOffset)
 
-  setTimeout(()=>{
+  setTimeout(() => {
     toggleADVModal(isADV.value)
     //toggleSummerModal(cookieSummerPopup.value=="closed"?false:true)
-  },1000)
+  }, 1000)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', setBottomGap)
   window.removeEventListener('resize', setHeaderGap)
+  window.removeEventListener('resize', setFooterGap)
   window.removeEventListener('resize', setHeaderOffset)
   window.removeEventListener('scroll', setHeaderOffset)
 })
@@ -132,6 +163,7 @@ const route = useRoute()
 const layoutElement = ref(null)
 const headerElement = ref(null)
 const topBarElement = ref(null)
+const footerElement = ref(null)
 const categoriesMenuElement = ref(null)
 const isPostcodeModalOpen = ref(false)
 const isMobileMenuOpen = ref(false)
@@ -139,18 +171,21 @@ const { top } = useElementBounding(headerElement)
 const document = ref(globalThis.window?.document.body || null)
 const isLocked = useScrollLock(document)
 
-const cookieSummerPopup = useCookie('summer-popup');
+const cookieSummerPopup = useCookie('summer-popup')
 const isADVModalOpen = ref(false)
 const isSummerModalOpen = ref(false)
 
-
 // Computed
 const isADV = computed(() => {
-  let adv = false;
+  let adv = false
 
-  if ((route.query.utm_source == "google" && route.query.utm_medium == "cpc")||route.query.gad_source == 1||route.query.gclid != undefined) {
-    adv = true;
-    toggleADVModal(true);
+  if (
+    (route.query.utm_source == 'google' && route.query.utm_medium == 'cpc') ||
+    route.query.gad_source == 1 ||
+    route.query.gclid != undefined
+  ) {
+    adv = true
+    toggleADVModal(true)
   }
 
   return adv
@@ -181,6 +216,17 @@ const setHeaderGap = () => {
   )
 }
 
+const setFooterGap = () => {
+  if (!layoutElement.value || !footerElement.value) {
+    return
+  }
+
+  getElement(layoutElement).style.setProperty(
+    '--layout-footer-height',
+    `${footerElement.value.$el.clientHeight}px`
+  )
+}
+
 const setHeaderOffset = () => {
   if (!layoutElement.value || !headerElement.value) {
     return
@@ -204,13 +250,11 @@ const updateMobileMenuStatus = (status) => {
 }
 
 const toggleADVModal = (status = null) => {
-  isADVModalOpen.value =
-    status !== null ? !!status : !isADVModalOpen.value
+  isADVModalOpen.value = status !== null ? !!status : !isADVModalOpen.value
 }
 
 const toggleSummerModal = (status = null) => {
-  if(status===false)
-    cookieSummerPopup.value = "closed"
+  if (status === false) cookieSummerPopup.value = 'closed'
 
   isSummerModalOpen.value =
     status !== null ? !!status : !isSummerModalOpen.value
@@ -255,5 +299,61 @@ $prefix: 'layout';
   }
 }
 
-.naturalee-promo{display:flex;flex-direction:column;align-items:center;text-align:center;background-color:var(--color-yellow);overflow:hidden;width:100%}.naturalee-content{padding:20px}.naturalee-content .naturalee-codice-promo{color:var(--color-green);font-weight:var(--weight-bold);font-size:3rem}.naturalee-content p{margin-bottom:10px;font-size: 17px;}.naturalee-content p img{margin-bottom:20px}.naturalee-content p span{color:var(--color-green);font-weight:var(--weight-bold)}.naturalee-image{width:100%;position:relative}.naturalee-image img{width:80%;height:auto;float:right}@media (min-width:600px){.naturalee-promo{flex-direction:row;text-align:left}.naturalee-content p img{width:60%;margin-bottom:40px}.naturalee-content{flex:1}.naturalee-image{flex:1;max-width:60%}.naturalee-image img{width:100%}}
+.naturalee-promo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: var(--color-yellow);
+  overflow: hidden;
+  width: 100%;
+}
+.naturalee-content {
+  padding: 20px;
+}
+.naturalee-content .naturalee-codice-promo {
+  color: var(--color-green);
+  font-weight: var(--weight-bold);
+  font-size: 3rem;
+}
+.naturalee-content p {
+  margin-bottom: 10px;
+  font-size: 17px;
+}
+.naturalee-content p img {
+  margin-bottom: 20px;
+}
+.naturalee-content p span {
+  color: var(--color-green);
+  font-weight: var(--weight-bold);
+}
+.naturalee-image {
+  width: 100%;
+  position: relative;
+}
+.naturalee-image img {
+  width: 80%;
+  height: auto;
+  float: right;
+}
+@media (min-width: 600px) {
+  .naturalee-promo {
+    flex-direction: row;
+    text-align: left;
+  }
+  .naturalee-content p img {
+    width: 60%;
+    margin-bottom: 40px;
+  }
+  .naturalee-content {
+    flex: 1;
+  }
+  .naturalee-image {
+    flex: 1;
+    max-width: 60%;
+  }
+  .naturalee-image img {
+    width: 100%;
+  }
+}
 </style>

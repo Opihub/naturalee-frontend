@@ -8,6 +8,17 @@
         :menu="socialsMenu"
         svg-size="18px"
       />
+
+      <div
+        id="webpushr-subscription-button"
+        class="u-d-none@desktop"
+        data-size="medium"
+        data-show-subscriber-count="false"
+        data-button-text="Iscriviti alle notifiche"
+        data-subscriber-count-text="utenti si sono già iscritti!"
+        data-background-color="#ffd100"
+        data-color="#00966e"
+      ></div>
     </div>
 
     <InlineMenu
