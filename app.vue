@@ -33,6 +33,8 @@
       </template>
     </TransitionGroup>
   </ClientOnly>
+
+  <PWABanner />
 </template>
 
 <script setup>
