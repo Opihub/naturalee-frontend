@@ -17,17 +17,23 @@
             :class="`${CSS_NAME_ACTIONS}__icon`"
             :count="count.toString()"
             @mouseover="isMiniCartMenuOpen = true"
-          />
-          <Transition name="fade">
-            <MiniCart
-              v-show="isMiniCartMenuOpen"
-              x-centered
-              :cart="cart"
-              :shipping-cost="shippingCost"
-              :total="total"
-              :class="`${CSS_NAME_ACTIONS}__popup`"
-            />
-          </Transition>
+          >
+            <ClientOnly>
+              <span>{{ count }}</span>
+            </ClientOnly>
+          </MiniCartIcon>
+          <ClientOnly>
+            <Transition name="fade">
+              <MiniCart
+                v-show="isMiniCartMenuOpen"
+                x-centered
+                :cart="cart"
+                :shipping-cost="shippingCost"
+                :total="total"
+                :class="`${CSS_NAME_ACTIONS}__popup`"
+              />
+            </Transition>
+          </ClientOnly>
         </li>
         <li
           :class="[
@@ -44,15 +50,17 @@
             }"
             @mouseover="isProfileMenuOpen = true"
           />
-          <Transition name="fade">
-            <ProfileMenu
-              v-if="isLoggedIn"
-              v-show="isProfileMenuOpen"
-              x-centered
-              :menu="profileMenu"
-              :class="`${CSS_NAME_ACTIONS}__popup`"
-            />
-          </Transition>
+          <ClientOnly>
+            <Transition name="fade">
+              <ProfileMenu
+                v-if="isLoggedIn"
+                v-show="isProfileMenuOpen"
+                x-centered
+                :menu="profileMenu"
+                :class="`${CSS_NAME_ACTIONS}__popup`"
+              />
+            </Transition>
+          </ClientOnly>
         </li>
         <li
           :class="[
