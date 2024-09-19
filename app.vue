@@ -33,6 +33,8 @@
       </template>
     </TransitionGroup>
   </ClientOnly>
+
+  <PWABanner />
 </template>
 
 <script setup>
@@ -225,5 +227,9 @@ cartStore.$onAction(({ name, args, after, onError }) => {
       position: static,
     )
   );
+
+  @include until(tablet) {
+    width: 100%;
+  }
 }
 </style>
