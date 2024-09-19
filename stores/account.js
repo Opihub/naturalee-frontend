@@ -6,6 +6,7 @@ import {
   computed,
   useCookie,
   nextTick,
+  useRequestURL,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { useApi } from '@/composables/api'
@@ -156,13 +157,20 @@ export const useAccountStore = defineStore('account', () => {
     }
   }
 
-  function setWebpushrUserId(id = null) {
+  function setWebpushrUserId(user_id = null) {
     if (!isWebpushrInstalled()) {
       return
     }
 
     try {
-      window.webpushr('attributes', { user_id: id })
+      const { origin, href: url } = useRequestURL()
+
+      console.log(url)
+      window.webpushr('attributes', {
+        user_id,
+        origin,
+        url,
+      })
     } catch (error) {
       console.error(error)
     }
