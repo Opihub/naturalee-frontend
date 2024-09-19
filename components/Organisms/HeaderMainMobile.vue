@@ -94,8 +94,8 @@ $prefix: 'header-mobile';
   @include set-local-vars(
     $prefix: 'overlay',
     $map: (
-      inset: calc(get-var(layout-header-height) + get-var(layout-header-offset))
-        0 get-var(layout-bottom-gap) 0,
+      inset: calc(get-var(layout-header-height, 0px) + get-var(layout-header-offset, 0px))
+        0 get-var(layout-bottom-gap, 0px) 0,
     )
   );
 

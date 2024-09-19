@@ -93,14 +93,12 @@
       />
     </SiteFooter>
 
-    <ClientOnly>
-      <CategoriesMenu
-        v-if="menu.categories && menu.categories"
-        ref="categoriesMenuElement"
-        :class="`${CSS_NAME}__categories`"
-        :categories="menu.categories"
-      />
-    </ClientOnly>
+    <CategoriesMenu
+      v-if="menu.categories && menu.categories"
+      ref="categoriesMenuElement"
+      :class="`${CSS_NAME}__categories`"
+      :categories="menu.categories"
+    />
 
     <Teleport to="body">
       <PostcodeModal
@@ -201,7 +199,7 @@ const setBottomGap = () => {
 
   getElement(layoutElement).style.setProperty(
     '--layout-bottom-gap',
-    `${categoriesMenuElement.value.$el.clientHeight}px`
+    `${categoriesMenuElement.value.$el.offsetHeight}px`
   )
 }
 
@@ -212,7 +210,7 @@ const setHeaderGap = () => {
 
   getElement(layoutElement).style.setProperty(
     '--layout-header-height',
-    `${headerElement.value.$el.clientHeight}px`
+    `${headerElement.value.$el.offsetHeight}px`
   )
 }
 
@@ -223,7 +221,7 @@ const setFooterGap = () => {
 
   getElement(layoutElement).style.setProperty(
     '--layout-footer-height',
-    `${footerElement.value.$el.clientHeight}px`
+    `${footerElement.value.$el.offsetHeight}px`
   )
 }
 
