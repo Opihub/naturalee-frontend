@@ -1,51 +1,55 @@
 <template>
-  <ModalContainer
-    v-if="isSummerModalOpen"
-    :max-width="500"
-    @close="toggleSummerModal(false)"
-  >
-    <template #header>
-      <BaseHeading tag="h5">Pausa di Ferragosto</BaseHeading>
-    </template>
-    <h3>
-      Saremo chiusi dal 15 al 18 Agosto compresi.<br />Le consegne riprenderanno
-      regolarmente da Lunedì 19.<br />Buone vacanze
-    </h3>
-  </ModalContainer>
+  <Transition name="fade">
+    <ModalContainer
+      v-if="isSummerModalOpen"
+      :max-width="500"
+      @close="toggleSummerModal(false)"
+    >
+      <template #header>
+        <BaseHeading tag="h5">Pausa di Ferragosto</BaseHeading>
+      </template>
+      <h3>
+        Saremo chiusi dal 15 al 18 Agosto compresi.<br />Le consegne
+        riprenderanno regolarmente da Lunedì 19.<br />Buone vacanze
+      </h3>
+    </ModalContainer>
+  </Transition>
 
-  <ModalContainer
-    v-if="isADVModalOpen"
-    :max-width="800"
-    :full-content="true"
-    @close="toggleADVModal(false)"
-  >
-    <template #header>
-      <BaseHeading tag="h5"
-        >Il tuo regalo di benvenuto su Naturalee</BaseHeading
-      >
-    </template>
-    <div class="naturalee-promo">
-      <div class="naturalee-content">
-        <p>
+  <Transition name="fade">
+    <ModalContainer
+      v-if="isADVModalOpen"
+      :max-width="800"
+      :full-content="true"
+      @close="toggleADVModal(false)"
+    >
+      <template #header>
+        <BaseHeading tag="h5"
+          >Il tuo regalo di benvenuto su Naturalee</BaseHeading
+        >
+      </template>
+      <div class="naturalee-promo">
+        <div class="naturalee-content">
+          <p>
+            <img
+              src="https://api.naturalee.it/wp-content/uploads/2024/07/logo-naturalee-w.png"
+            />
+          </p>
+          <p>Inserisci il codice</p>
+          <p class="naturalee-codice-promo">BENVENUTO10</p>
+          <p>
+            nel carrello per ottenere un'esclusivo
+            <span>sconto del 10% e la spedizione gratuita</span> sul tuo primo
+            ordine.
+          </p>
+        </div>
+        <div class="naturalee-image">
           <img
-            src="https://api.naturalee.it/wp-content/uploads/2024/07/logo-naturalee-w.png"
+            src="https://api.naturalee.it/wp-content/uploads/2024/07/sfondo-popup.png"
           />
-        </p>
-        <p>Inserisci il codice</p>
-        <p class="naturalee-codice-promo">BENVENUTO10</p>
-        <p>
-          nel carrello per ottenere un'esclusivo
-          <span>sconto del 10% e la spedizione gratuita</span> sul tuo primo
-          ordine.
-        </p>
+        </div>
       </div>
-      <div class="naturalee-image">
-        <img
-          src="https://api.naturalee.it/wp-content/uploads/2024/07/sfondo-popup.png"
-        />
-      </div>
-    </div>
-  </ModalContainer>
+    </ModalContainer>
+  </Transition>
 
   <LayoutWrapper ref="layoutElement">
     <HeaderTopBar
@@ -100,12 +104,16 @@
       :categories="menu.categories"
     />
 
-    <Teleport to="body">
-      <PostcodeModal
-        v-show="isPostcodeModalOpen"
-        @close="togglePostcodeModal(false)"
-      />
-    </Teleport>
+    <ClientOnly>
+      <Teleport to="body">
+        <Transition name="fade">
+          <PostcodeModal
+            v-show="isPostcodeModalOpen"
+            @close="togglePostcodeModal(false)"
+          />
+        </Transition>
+      </Teleport>
+    </ClientOnly>
   </LayoutWrapper>
 </template>
 
