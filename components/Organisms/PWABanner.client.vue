@@ -164,7 +164,7 @@ const promptPWA = () => {
   margin: 10px;
   max-width: 767px;
   width: calc(100% - 20px);
-  z-index: 999;
+  z-index: get-var(z-pwa-banner);
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;

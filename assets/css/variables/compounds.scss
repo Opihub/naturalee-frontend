@@ -31,6 +31,7 @@ $variables-to-set: (
   container-size: calc(#{get-var(container-width)} + #{get-var(container-default-padding)} * 2),
 
   z-header: map.get($z-index, header),
+  z-pwa-banner: map.get($z-index, pwa-banner),
   z-notification: map.get($z-index, notification),
   z-bottom-bar: map.get($z-index, bottom-bar),
   z-categories: map.get($z-index, categories),
