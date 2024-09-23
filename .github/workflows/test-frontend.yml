@@ -1,0 +1,25 @@
+name: 🚀 Frontend Deploy
+
+on:
+  push:
+    branches: [demo]
+
+jobs:
+  webserver-docker-deploy:
+    runs-on: ubuntu-latest
+    name: 🎉 Compile and publish frontend
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
+
+      - name: 🏗 Build and push to local registry
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: naturalee
+          tags: staging
+          registry: registry.promo.it
+          dockerfile: ./docker/staging/DockerFile
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
