@@ -1,7 +1,7 @@
+import type { ModuleOptions, NuxtConfig } from 'nuxt/schema'
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
-import type { ModuleOptions } from '@nuxt/image'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 const imageSettings: Partial<ModuleOptions> &
@@ -26,7 +26,7 @@ if (process.env.API_ENDPOINT_URL) {
   imageSettings.alias.remote = endpoint.protocol + '//' + endpoint.host
 }
 
-const modules: Partial<ModuleOptions> = [
+const modules: NuxtConfig['modules'] = [
   '@nuxtjs/i18n',
   '@nuxtjs/google-fonts',
   'nuxt-svgo',
