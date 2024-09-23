@@ -27,6 +27,7 @@ if (process.env.API_ENDPOINT_URL) {
 }
 
 const modules: NuxtConfig['modules'] = [
+  '@zadigetvoltaire/nuxt-gtm',
   '@nuxtjs/i18n',
   '@nuxtjs/google-fonts',
   'nuxt-svgo',
@@ -48,8 +49,11 @@ const modules: NuxtConfig['modules'] = [
   '@vite-pwa/nuxt',
 ]
 
-if (process.env?.GTM_ID) {
-  modules.push('@zadigetvoltaire/nuxt-gtm')
+const gtm: NuxtConfig['gtm'] = {
+  id: process.env?.GTM_ID || '',
+  enabled: !!process.env?.GTM_ENABLED,
+  debug: !!process.env?.GTM_DEBUG,
+  trackOnNextTick: true,
 }
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -296,12 +300,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
   svgo: {
     defaultImport: 'component',
   },
-  gtm: {
-    id: process.env?.GTM_ID || '',
-    enabled: Boolean(process.env?.GTM_ID),
-    debug: Boolean(process.env?.GTM_DEBUG),
-    trackOnNextTick: true,
-  },
+  gtm,
   // @ts-ignore
   storybook: {
     components: {
