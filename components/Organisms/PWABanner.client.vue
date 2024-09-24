@@ -143,6 +143,9 @@ const IstruzioniPWA = computed(() => {
 
 const togglePWAPopup = (status = null) => {
   isPWAPopupOpen.value = status !== null ? !!status : !isPWAPopupOpen.value
+  if(!status){
+    trackCustomEvent("close_pwa","banner_pwa");
+  }
 }
 
 const promptPWA = () => {
@@ -151,6 +154,7 @@ const promptPWA = () => {
   } else {
     PWAShowInfo.value = true
   }
+  trackCustomEvent("install_pwa","banner_pwa");
 }
 </script>
 
