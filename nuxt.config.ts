@@ -50,7 +50,7 @@ const modules: NuxtConfig['modules'] = [
 ]
 
 const gtm: NuxtConfig['gtm'] = {
-  id: process.env?.GTM_ID || '',
+  id: process.env?.GTM_ID,
   enabled: !!process.env?.GTM_ENABLED,
   debug: !!process.env?.GTM_DEBUG,
   trackOnNextTick: true,
