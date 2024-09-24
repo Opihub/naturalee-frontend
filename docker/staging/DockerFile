@@ -16,6 +16,7 @@ RUN npm ci
 
 # Copy the rest of the application files to the working directory
 COPY . ./
+RUN mv .env.staging .env
 
 # Build the application
 RUN npm run build
