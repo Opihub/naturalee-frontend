@@ -19,6 +19,7 @@ export const useConfigurationStore = defineStore('configuration', () => {
 
   const referrer_link = useCookie('referrer_link');
   const landing_page = useCookie('landing_page');
+  const pwa_mode = useCookie('pwa_mode');
 
 
   const set_cookie = () => {
@@ -67,6 +68,14 @@ export const useConfigurationStore = defineStore('configuration', () => {
     return configuration.value.products || {}
   })
 
+  const getPWAInfo = ()=>{
+    let isStandalone = false
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      isStandalone = true
+    }
+    pwa_mode.value = isStandalone
+  };
+
   return {
     configuration: skipHydrate(configuration),
     shopCategories,
@@ -76,6 +85,7 @@ export const useConfigurationStore = defineStore('configuration', () => {
     menu,
     load,
     set_cookie,
+    getPWAInfo
   }
 })
 
