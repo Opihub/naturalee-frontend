@@ -26,6 +26,32 @@ if (process.env.API_ENDPOINT_URL) {
   imageSettings.alias.remote = endpoint.protocol + '//' + endpoint.host
 }
 
+const modules: Partial<ModuleOptions> = [
+  '@nuxtjs/i18n',
+  '@nuxtjs/google-fonts',
+  'nuxt-svgo',
+  'nuxt-icons',
+  '@nuxt/image',
+  [
+    '@pinia/nuxt',
+    {
+      autoImports: [
+        'defineStore',
+        'skipHydrate',
+        'acceptHMRUpdate',
+        'storeToRefs',
+      ],
+    },
+  ],
+  ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
+  '@nuxtjs/sitemap',
+  '@vite-pwa/nuxt',
+]
+
+if (process.env?.GTM_ID) {
+  modules.push('@zadigetvoltaire/nuxt-gtm')
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -194,28 +220,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
   routeRules: {
     '/checkout': { ssr: false },
   },
-  modules: [
-    '@zadigetvoltaire/nuxt-gtm',
-    '@nuxtjs/i18n',
-    '@nuxtjs/google-fonts',
-    'nuxt-svgo',
-    'nuxt-icons',
-    '@nuxt/image',
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: [
-          'defineStore',
-          'skipHydrate',
-          'acceptHMRUpdate',
-          'storeToRefs',
-        ],
-      },
-    ],
-    ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
-    '@nuxtjs/sitemap',
-    '@vite-pwa/nuxt',
-  ],
+  modules,
   googleFonts: {
     download: true,
     inject: true,
