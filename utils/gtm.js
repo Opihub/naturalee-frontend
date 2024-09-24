@@ -62,6 +62,21 @@ export function generateItem(product, listArgs = {}) {
   return item
 }
 
+export function trackCustomEvent(event, category, action="click"){
+  const gtm = useGtm();
+
+  gtm.trackEvent({
+    event:"flush_event",
+    ecommerce:null,
+  })
+  
+  gtm.trackEvent({
+    event,
+    category,
+    action,
+  })
+}
+
 export function trackEcommerceEvent(event, products, argsList = {}) {
   const config = useRuntimeConfig()
   const gtm = useGtm()
