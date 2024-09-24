@@ -72,6 +72,7 @@ onMounted(() => {
   if ($pwa.offlineReady) {
     notify({ status: 'success', notification: 'App ready to work offline' })
   }
+  configurationStore.getPWAInfo()
 })
 
 nuxtApp.hook('page:start', () => {
