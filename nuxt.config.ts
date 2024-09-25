@@ -231,7 +231,6 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
   },
   routeRules: {
     '/checkout': { ssr: false },
-    '/service-worker.js': { proxy: '/sw.js' },
   },
   modules,
   googleFonts: {
