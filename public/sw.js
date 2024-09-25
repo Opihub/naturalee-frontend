@@ -1,4 +1,5 @@
 // public/sw.js
+console.info('rimozione vecchio sw')
 self.addEventListener('install', (e) => {
   self.skipWaiting()
 })
