@@ -1,7 +1,7 @@
+import type { ModuleOptions, NuxtConfig } from 'nuxt/schema'
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
-import type { ModuleOptions } from '@nuxt/image'
 const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 const imageSettings: Partial<ModuleOptions> &
@@ -26,7 +26,8 @@ if (process.env.API_ENDPOINT_URL) {
   imageSettings.alias.remote = endpoint.protocol + '//' + endpoint.host
 }
 
-const modules: Partial<ModuleOptions> = [
+const modules: NuxtConfig['modules'] = [
+  '@zadigetvoltaire/nuxt-gtm',
   '@nuxtjs/i18n',
   '@nuxtjs/google-fonts',
   'nuxt-svgo',
@@ -48,8 +49,11 @@ const modules: Partial<ModuleOptions> = [
   '@vite-pwa/nuxt',
 ]
 
-if (process.env?.GTM_ID) {
-  modules.push('@zadigetvoltaire/nuxt-gtm')
+const gtm: NuxtConfig['gtm'] = {
+  id: process.env?.GTM_ID,
+  enabled: !!process.env?.GTM_ENABLED,
+  debug: !!process.env?.GTM_DEBUG,
+  trackOnNextTick: true,
 }
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -58,8 +62,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
     useKV: !!process.env?.USE_KV || !!process.env?.KV_URL || false,
-    monthlyKVLimit: process.env?.KV_MONTHLY_LIMIT ? parseInt(process.env?.KV_MONTHLY_LIMIT) : 0,
-    dailyKVLimit: process.env?.KV_DAILY_LIMIT ? parseInt(process.env?.KV_DAILY_LIMIT) : 0,
+    monthlyKVLimit: process.env?.KV_MONTHLY_LIMIT
+      ? parseInt(process.env?.KV_MONTHLY_LIMIT)
+      : 0,
+    dailyKVLimit: process.env?.KV_DAILY_LIMIT
+      ? parseInt(process.env?.KV_DAILY_LIMIT)
+      : 0,
 
     public: {
       title: process.env.APP_TITLE,
@@ -296,12 +304,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
   svgo: {
     defaultImport: 'component',
   },
-  gtm: {
-    id: process.env?.GTM_ID || '',
-    enabled: Boolean(process.env?.GTM_ID),
-    debug: Boolean(process.env?.GTM_DEBUG),
-    trackOnNextTick: true,
-  },
+  gtm,
   // @ts-ignore
   storybook: {
     components: {

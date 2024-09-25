@@ -1,8 +1,7 @@
 import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration/ExpirationPlugin'
-import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import {
-  NavigationRoute,
   registerRoute,
   setDefaultHandler,
 } from 'workbox-routing'
@@ -14,17 +13,10 @@ declare let self: ServiceWorkerGlobalScope
 
 const { VITE_SITE_URL } = import.meta.env
 
-// await fetch('https://cdn.webpushr.com/sw-server.min.js')
+cleanupOutdatedCaches()
 
 // self.__WB_MANIFEST is default injection point
 precacheAndRoute(self.__WB_MANIFEST)
-
-// // to allow work offline
-// registerRoute(
-//   new NavigationRoute(createHandlerBoundToURL('index.html'), {
-//     denylist: [/^\/backoffice/],
-//   })
-// )
 
 registerRoute(
   '/',

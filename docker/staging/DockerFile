@@ -6,7 +6,6 @@ FROM node:${NODE_VERSION}-slim AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-
 # Copy package.json and pnpm-lock.yaml files to the working directory
 COPY ./package.json /app/
 COPY ./package-lock.json /app/
@@ -16,6 +15,7 @@ RUN npm ci
 
 # Copy the rest of the application files to the working directory
 COPY . ./
+RUN mv .env.staging .env
 
 # Build the application
 RUN npm run build
