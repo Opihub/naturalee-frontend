@@ -142,7 +142,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     // strategies: sw ? 'injectManifest' : 'generateSW',
     // srcDir: sw ? 'service-worker' : undefined,
     // filename: sw ? 'sw.ts' : undefined,
-    // injectRegister: false,
+    injectRegister: 'inline',
     registerType: 'autoUpdate',
     includeAssets: [
       'favicon.ico',
