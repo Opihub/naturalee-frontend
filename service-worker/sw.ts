@@ -106,5 +106,5 @@ try {
   console.warn('caricamento fallito per Webpushr')
 }
 
-// self.skipWaiting()
+self.skipWaiting()
 clientsClaim()
