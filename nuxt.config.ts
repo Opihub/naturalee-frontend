@@ -62,8 +62,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
     useKV: !!process.env?.USE_KV || !!process.env?.KV_URL || false,
-    monthlyKVLimit: process.env?.KV_MONTHLY_LIMIT ? parseInt(process.env?.KV_MONTHLY_LIMIT) : 0,
-    dailyKVLimit: process.env?.KV_DAILY_LIMIT ? parseInt(process.env?.KV_DAILY_LIMIT) : 0,
+    monthlyKVLimit: process.env?.KV_MONTHLY_LIMIT
+      ? parseInt(process.env?.KV_MONTHLY_LIMIT)
+      : 0,
+    dailyKVLimit: process.env?.KV_DAILY_LIMIT
+      ? parseInt(process.env?.KV_DAILY_LIMIT)
+      : 0,
 
     public: {
       title: process.env.APP_TITLE,
