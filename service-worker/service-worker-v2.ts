@@ -10,7 +10,7 @@ declare let self: ServiceWorkerGlobalScope
 
 const { VITE_SITE_URL } = import.meta.env
 
-console.info('test');
+console.info('test v2');
 cleanupOutdatedCaches()
 
 // self.__WB_MANIFEST is default injection point
