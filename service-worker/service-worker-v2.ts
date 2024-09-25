@@ -14,7 +14,7 @@ console.info('test');
 cleanupOutdatedCaches()
 
 // self.__WB_MANIFEST is default injection point
-// precacheAndRoute(self.__WB_MANIFEST)
+precacheAndRoute(self.__WB_MANIFEST)
 
 registerRoute(
   '/',
