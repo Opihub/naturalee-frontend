@@ -1,10 +1,7 @@
 import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration/ExpirationPlugin'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
-import {
-  registerRoute,
-  setDefaultHandler,
-} from 'workbox-routing'
+import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { NetworkFirst, CacheFirst, NetworkOnly } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 
@@ -13,7 +10,7 @@ declare let self: ServiceWorkerGlobalScope
 
 const { VITE_SITE_URL } = import.meta.env
 
-console.info('test');
+console.info('test v2');
 cleanupOutdatedCaches()
 
 // self.__WB_MANIFEST is default injection point
