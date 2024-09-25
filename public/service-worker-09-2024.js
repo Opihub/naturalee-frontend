@@ -1,5 +1,5 @@
 // public/sw.js
-console.info('rimozione vecchio service-worker')
+console.info('rimozione vecchio sw 09-2024')
 self.addEventListener('install', (e) => {
   self.skipWaiting()
 })

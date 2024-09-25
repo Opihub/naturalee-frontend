@@ -138,7 +138,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
   pwa: {
     strategies: 'injectManifest',
     srcDir: 'service-worker',
-    filename: 'service-worker-09-2024.ts',
+    filename: 'service-worker-v2.ts',
     // strategies: sw ? 'injectManifest' : 'generateSW',
     // srcDir: sw ? 'service-worker' : undefined,
     // filename: sw ? 'sw.ts' : undefined,
