@@ -13,7 +13,7 @@ const { VITE_SITE_URL } = import.meta.env
 cleanupOutdatedCaches()
 
 // self.__WB_MANIFEST is default injection point
-precacheAndRoute(self.__WB_MANIFEST)
+// precacheAndRoute(self.__WB_MANIFEST)
 
 registerRoute(
   '/',
