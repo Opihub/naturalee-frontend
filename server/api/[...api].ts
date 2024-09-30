@@ -11,7 +11,7 @@ const cacheOptions = {
 
 let monthlyKVCounter = 0
 let dailyKVCounter = 0
-let lastDay: Date | null = new Date('2024-05-2')
+let lastDay: Date | null = new Date()
 let outOfBudget = false
 
 const storageCache = new TTLCache(cacheOptions)
