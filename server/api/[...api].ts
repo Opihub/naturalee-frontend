@@ -132,6 +132,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     method,
     body,
     retry: 10,
+    retryDelay: 5000,
     signal: abortController.signal,
     headers,
 
