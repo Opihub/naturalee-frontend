@@ -137,16 +137,18 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
     // Log request
     async onRequest({ request, options }) {
-      if (method === 'GET') {
-        timer = setTimeout(() => {
-          abortController.abort()
-          console.log(`Retrying request to: ${request}`)
-        }, 5000) // Abort request in 2.5s.
-      }
-
       startTime = new Date().getTime()
       options.headers = new Headers(options.headers)
       options.headers.set('starttime', `${new Date().getTime()}`)
+
+      if (method === 'GET') {
+        timer = setTimeout(() => {
+          abortController.abort()
+          console.log(
+            `Retrying request to: "${request}" at ${new Date().getTime()}`
+          )
+        }, 5000) // Abort request in 2.5s.
+      }
 
       await console.log(
         `%c[${new Date().toLocaleTimeString()}] %cSSR-Request: %c${request}`,
