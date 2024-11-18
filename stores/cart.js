@@ -371,16 +371,16 @@ export const useCartStore = defineStore('cart', () => {
     let error = false
 
     if (coupon.value.expiration) {
-      const now = new Date().toLocaleString('it-IT', {
+      const now = new Date()/* .toLocaleString('it-IT', {
         timeZone: coupon.value.expiration.timezone,
-      })
+      }) */
 
-      const expiration = new Date(coupon.value.expiration.date).toLocaleString(
+      const expiration = new Date(coupon.value.expiration.date)/* .toLocaleString(
         'it-IT',
         {
           timeZone: 'Europe/Rome',
         }
-      )
+      ) */
 
       if (now > expiration) {
         error = ['coupon.expired']
@@ -459,6 +459,21 @@ export const useCartStore = defineStore('cart', () => {
     // coupon.value = {}
 
     return false
+  }
+
+  function automaticCoupon(codice, dataInizio, dataFine){
+    const now = new Date()
+  
+    const startBF = new Date(dataInizio)
+    const endBF = new Date(dataFine)
+  
+    if (now < startBF || now > endBF)
+      return false;
+    
+    if(hasCoupon.value)
+      return false
+    
+    applyCoupon(codice);
   }
 
   async function remoteClearCart() {
@@ -644,6 +659,7 @@ export const useCartStore = defineStore('cart', () => {
     validateCoupon,
     removeCoupon,
     applyCoupon,
+    automaticCoupon,
     remoteAddToCartBatch,
     requestPaymentIntent,
     clearPaymentIntent,

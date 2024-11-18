@@ -424,6 +424,12 @@ provide('holiday', [
 ])
 
 // Component life-cycle hooks
+onMounted(() => {
+  nextTick(() => {
+    cartStore.automaticCoupon("BLACKFRIDAY10","11/29/2024","12/01/2024");
+  })
+})
+
 onUnmounted(() => {
   unsubscribe()
 })
