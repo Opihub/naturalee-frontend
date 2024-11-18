@@ -1,6 +1,22 @@
 <template>
   <Transition name="fade">
     <ModalContainer
+      v-if="isBlackFridayModalOpen"
+      :max-width="800"
+      @close="toggleBlackFridayModal(false)"
+      dark
+    >
+      <template #header>
+        <BaseHeading tag="h6">🎉 Black Friday: Sconto del 10% su tutti gli ordini! 🎉</BaseHeading>
+      </template>
+      <p style="font-size:25px;">
+        Approfitta del 10% di sconto valido solo nei giorni 29, 30 novembre e 1 dicembre. 🛒✨<br>Non lasciarti scappare l'occasione: lo sconto è limitato e termina presto! 🕔
+      </p>
+    </ModalContainer>
+  </Transition>
+
+  <Transition name="fade">
+    <ModalContainer
       v-if="isSummerModalOpen"
       :max-width="500"
       @close="toggleSummerModal(false)"
@@ -150,6 +166,9 @@ onMounted(() => {
   setTimeout(() => {
     toggleADVModal(isADV.value)
     //toggleSummerModal(cookieSummerPopup.value=="closed"?false:true)
+    temporizedPopup("11/25/2024","12/02/2024",()=>{
+      toggleBlackFridayModal(cookieBlackFridayPopup.value=="closed"?false:true)
+    })
   }, 1000)
 })
 
@@ -178,8 +197,10 @@ const document = ref(globalThis.window?.document.body || null)
 const isLocked = useScrollLock(document)
 
 const cookieSummerPopup = useCookie('summer-popup')
+const cookieBlackFridayPopup = useCookie('BlackFriday-popup')
 const isADVModalOpen = ref(false)
 const isSummerModalOpen = ref(false)
+const isBlackFridayModalOpen = ref(false)
 
 // Computed
 const isADV = computed(() => {
@@ -264,6 +285,25 @@ const toggleSummerModal = (status = null) => {
 
   isSummerModalOpen.value =
     status !== null ? !!status : !isSummerModalOpen.value
+}
+
+const toggleBlackFridayModal = (status = null) => {
+  if (status === false) cookieBlackFridayPopup.value = 'closed'
+
+  isBlackFridayModalOpen.value =
+    status !== null ? !!status : !isBlackFridayModalOpen.value
+}
+
+const temporizedPopup = (dataInizio, dataFine, callback) => {
+  const now = new Date()
+  
+  const start = new Date(dataInizio)
+  const end = new Date(dataFine)
+
+  if (now < start || now > end)
+    return false;
+
+  callback();
 }
 
 // Provide
