@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="style" v-bind="$attrs" @click="closeModal">
+  <div :class="[className, { 'dark': dark }]" :style="style" v-bind="$attrs" @click="closeModal">
     <div :class="`${className}__body`" :style="style">
       <div :class="CSS_NAME_HEADER">
         <slot name="header" />
@@ -43,6 +43,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  dark: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const emit = defineEmits(['open', 'close', 'toggle'])
@@ -72,6 +76,7 @@ const closeModal = (event) => {
 
 <style lang="scss">
 $prefix: 'modal';
+
 @include object($prefix) {
   $prefix-close: '#{$prefix}-close';
   $prefix-header: '#{$prefix}-header';
@@ -109,6 +114,12 @@ $prefix: 'modal';
     @include from(tablet) {
       padding-top: rem(30px);
     }
+
+    color: get-var(
+      color-text,
+      get-var(color-black),
+      $prefix: $prefix
+    );
 
     &.full-content {
       padding: 0;
@@ -173,6 +184,13 @@ $prefix: 'modal';
         )
       );
     }
+  }
+
+  &.dark {
+    --modal-header-background: #000;
+    --modal-background: #262626;
+    --heading-text-color: #fff;
+    --modal-color-text:#fff;
   }
 }
 </style>
