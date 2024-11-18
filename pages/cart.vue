@@ -170,7 +170,7 @@ defineI18nRoute({
 onMounted(() => {
   nextTick(() => {
     loadCart();
-    cartStore.automaticCoupon("BLACKFRIDAY10","11/29/2024","12/01/2024");
+    cartStore.automaticCoupon("BLACKFRIDAY10","11/29/2024","12/02/2024");
   })
 })
 
