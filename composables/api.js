@@ -64,6 +64,22 @@ export async function useApi(url, options = {}) {
     async onResponse({ response }) {
       const data = createResponse(response._data)
 
+      /* CONTROLLO NEL CASO DI ERRORI JWT */
+      if (
+        [
+          'jwt_auth_user_not_found',
+          'jwt_auth_invalid_token',
+          'jwt_auth_obsolete_token',
+          'jwt_auth_invalid_refresh_token',
+          'jwt_auth_obsolete_refresh_token',
+          'jwt_auth_expired_refresh_token',
+          'jwt_auth_bad_iss',
+        ].includes(data.code)
+      ) {
+        const { logout } = useLogout()
+        return logout(true)
+      }
+
       data.fetchedAt = new Date()
 
       response._data = data
