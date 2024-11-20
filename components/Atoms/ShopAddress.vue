@@ -117,7 +117,7 @@ const invoice = computed(() => {
     return props.invoice
   }
 
-  const { invoice, company, cfCompany, vat, sdi, pec, cfPrivate } =
+  const { invoice, company, cfCompany, vat, sdi, pec, cfPrivate, cf } =
     props.address
 
   return {
@@ -128,6 +128,7 @@ const invoice = computed(() => {
     sdi: sdi || null,
     pec: pec || null,
     cfPrivate: cfPrivate || null,
+    cf: cf || null,
   }
 })
 
