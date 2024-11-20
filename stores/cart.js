@@ -214,8 +214,6 @@ export const useCartStore = defineStore('cart', () => {
 
     product.quantity = quantity
 
-    trackEcommerceEvent('add_to_cart', product)
-
     const existingProduct = pickProduct(variationId)
 
     if (existingProduct) {
@@ -505,6 +503,8 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     quantity = parseInt(quantity)
+
+    trackEcommerceEvent('add_to_cart', product)
 
     if (!isLoggedIn.value) {
       return addToCart(product, quantity)
