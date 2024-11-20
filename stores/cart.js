@@ -109,7 +109,7 @@ export const useCartStore = defineStore('cart', () => {
       })
 
       if (!response.value.success) {
-        throw new Error(response)
+        throw new Error(response.value.message)
       }
 
       cart.value = response.value.data.products
@@ -133,7 +133,7 @@ export const useCartStore = defineStore('cart', () => {
     })
 
     if (!response.value.success) {
-      throw new Error(response)
+      throw new Error(response.value.message)
     }
 
     cart.value = response.value.data
@@ -179,7 +179,7 @@ export const useCartStore = defineStore('cart', () => {
     })
 
     if (!response.value.success) {
-      throw new Error(response)
+      throw new Error(response.value.message)
     }
 
     for (const product of response.value.data) {
