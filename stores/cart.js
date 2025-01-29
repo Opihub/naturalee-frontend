@@ -132,8 +132,8 @@ export const useCartStore = defineStore('cart', () => {
       )
     })
 
-    if (!response.value.success) {
-      throw new Error(response.value.message)
+    if (!response?.value?.success) {
+      throw new Error(response?.value?.message || 'Errore generico')
     }
 
     cart.value = response.value.data

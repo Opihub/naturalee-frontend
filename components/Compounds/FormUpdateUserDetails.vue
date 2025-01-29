@@ -52,6 +52,7 @@
         v-model="formData.oldPassword"
         :class="[columnClassName, columnFullClassName]"
         type="password"
+        autocomplete="current-password"
         >{{ $t('form.password.old') }} ({{ $t('form.leaveBlank') }})</InputField
       >
 
@@ -59,6 +60,7 @@
         v-model="formData.newPassword"
         :class="[columnClassName, columnFullClassName]"
         type="password"
+        autocomplete="new-password"
         >{{ $t('form.password.new') }} ({{ $t('form.leaveBlank') }})</InputField
       >
 
@@ -66,6 +68,7 @@
         v-model="formData.confirmPassword"
         :class="[columnClassName, columnFullClassName]"
         type="password"
+        autocomplete="new-password"
         >{{ $t('form.password.check') }}</InputField
       >
 

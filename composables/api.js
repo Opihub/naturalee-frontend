@@ -74,6 +74,7 @@ export async function useApi(url, options = {}) {
           'jwt_auth_obsolete_refresh_token',
           'jwt_auth_expired_refresh_token',
           'jwt_auth_bad_iss',
+          'jwt_auth_no_auth_header'
         ].includes(data.code)
       ) {
         const { logout } = useLogout()
@@ -107,6 +108,7 @@ export async function useApi(url, options = {}) {
             'jwt_auth_obsolete_refresh_token',
             'jwt_auth_expired_refresh_token',
             'jwt_auth_bad_iss',
+            'jwt_auth_no_auth_header'
           ].includes(data.code)
         ) {
           const { logout } = useLogout()
