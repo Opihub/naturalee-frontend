@@ -11,7 +11,7 @@ const cacheOptions = {
 
 let monthlyKVCounter = 0
 let dailyKVCounter = 0
-let lastDay: Date | null = new Date('2024-05-2')
+let lastDay: Date | null = new Date()
 let outOfBudget = false
 
 const storageCache = new TTLCache(cacheOptions)
@@ -89,13 +89,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
       cacheData = await storageCache.get(cacheKey)
     }
   } catch (error) {
-    if (params?.debug) {
-      console.log(error)
-      console.log(error?.constructor)
-      console.log(error?.constructor?.name)
-      console.log(error?.message)
-      console.log(error?.code)
-    }
     console.log('Cache load error ', error)
   }
   ++dailyKVCounter
@@ -139,21 +132,25 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     method,
     body,
     retry: 10,
+    retryDelay: 5000,
+    timeout: 5000,
     signal: abortController.signal,
     headers,
 
     // Log request
     async onRequest({ request, options }) {
-      if (method === 'GET') {
-        timer = setTimeout(() => {
-          abortController.abort()
-          console.log(`Retrying request to: ${request}`)
-        }, 5000) // Abort request in 2.5s.
-      }
-
       startTime = new Date().getTime()
       options.headers = new Headers(options.headers)
       options.headers.set('starttime', `${new Date().getTime()}`)
+
+      if (method === 'GET') {
+        timer = setTimeout(() => {
+          abortController.abort()
+          console.log(
+            `Retrying request to: "${request}" at ${new Date().getTime()}`
+          )
+        }, 5000) // Abort request in 2.5s.
+      }
 
       await console.log(
         `%c[${new Date().toLocaleTimeString()}] %cSSR-Request: %c${request}`,
