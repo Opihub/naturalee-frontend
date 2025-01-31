@@ -104,7 +104,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
-  console.info('v7', url)
+  console.info('v9', url)
 
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
@@ -126,6 +126,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   console.info(headers)
 
+  headers['host'] = new URL(config.endpoint).host
+
   return $fetch(`v1/${url}`, {
     // Serve ad far "scivolare" la gestione degli errori al client
     ignoreResponseError: true,
@@ -137,7 +139,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     retryDelay: 5000,
     timeout: 5000,
     signal: abortController.signal,
-    // headers,
+    headers,
 
     // Log request
     async onRequest({ request, options }) {
