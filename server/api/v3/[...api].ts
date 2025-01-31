@@ -104,7 +104,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   // const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
-  console.info(url)
+  console.info('v3', `v1/${url}`)
 
   // if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
   //   // Log a cache hit to a given request URL
@@ -124,7 +124,11 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   // lastDay = today
 
-  return fetch(new URL(url, config.endpoint), {
+
+  const response = await fetch(`${config.endpoint}/v1/${url}`, {
     method,
   })
+  console.info(response.body)
+
+  return ( response).body
 })
