@@ -79,7 +79,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const method = event.method
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
-  const headers = getRequestHeaders(event)
+  const requestHeaders = getRequestHeaders(event)
+  const headers = new Headers()
 
   let cacheData = null
   try {
@@ -99,12 +100,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const { maxAge, noCache = false } = parse(cacheControl)
 
   if (cacheControl) {
+    headers.set('Cache-Control', cacheControl)
     event.node.res.setHeader('Cache-Control', cacheControl)
   }
 
   const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
-  console.info('v9', url)
+  console.info('v10', url)
 
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
@@ -115,18 +117,17 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     return cacheData
   }
 
-  // le chiamate con cache sono sempre anonime rimuovendo authorization
-  if (!noCache) {
-    if (headers?.['authorization']) {
-      delete headers['authorization']
-    }
+  // le chiamate da non mettere in cache generalmente saranno quelle con il token JWT
+  if (noCache && requestHeaders?.['authorization']) {
+    headers.set('authorization', requestHeaders['authorization'])
   }
 
   lastDay = today
 
-  headers['host'] = new URL(config.endpoint).host
+  // requestHeaders['host'] = new URL(config.endpoint).host
 
-  console.info(headers)
+  console.info(requestHeaders)
+  console.info(...headers)
 
   return $fetch(`v1/${url}`, {
     // Serve ad far "scivolare" la gestione degli errori al client
