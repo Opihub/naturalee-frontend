@@ -122,12 +122,16 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     headers.set('authorization', requestHeaders['authorization'])
   }
 
+  if (requestHeaders?.['cookie']) {
+    headers.set('cookie', requestHeaders['cookie'])
+  }
+
   lastDay = today
 
   // requestHeaders['host'] = new URL(config.endpoint).host
 
   console.info(requestHeaders)
-  console.info(...headers)
+  console.info(headers)
 
   return $fetch(`v1/${url}`, {
     // Serve ad far "scivolare" la gestione degli errori al client
