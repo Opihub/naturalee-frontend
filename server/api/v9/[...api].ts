@@ -124,9 +124,9 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   lastDay = today
 
-  console.info(headers)
-
   headers['host'] = new URL(config.endpoint).host
+
+  console.info(headers)
 
   return $fetch(`v1/${url}`, {
     // Serve ad far "scivolare" la gestione degli errori al client
@@ -144,6 +144,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     // Log request
     async onRequest({ request, options }) {
       startTime = new Date().getTime()
+
+      console.info(options.headers)
       options.headers = new Headers(options.headers)
       options.headers.set('starttime', `${new Date().getTime()}`)
 
