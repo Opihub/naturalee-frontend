@@ -124,7 +124,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   // lastDay = today
 
-  return fetch(url, {
+  return fetch(new URL(url, config.endpoint), {
     method,
   })
 })
