@@ -79,7 +79,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const method = event.method
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
-  const headers = getRequestHeaders(event)
+  const requestHeaders = getRequestHeaders(event)
+  const headers = new Headers()
 
   let cacheData = null
   try {
@@ -99,12 +100,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const { maxAge, noCache = false } = parse(cacheControl)
 
   if (cacheControl) {
+    headers.set('Cache-Control', cacheControl)
     event.node.res.setHeader('Cache-Control', cacheControl)
   }
 
   const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
 
-  console.info('v1', url)
+  console.info(url)
 
   if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
     // Log a cache hit to a given request URL
@@ -115,11 +117,13 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     return cacheData
   }
 
-  // le chiamate con cache sono sempre anonime rimuovendo authorization
-  if (!noCache) {
-    if (headers?.['authorization']) {
-      delete headers['authorization']
-    }
+  // le chiamate da non mettere in cache generalmente saranno quelle con il token JWT
+  if (noCache && requestHeaders?.['authorization']) {
+    headers.set('authorization', requestHeaders['authorization'])
+  }
+
+  if (requestHeaders?.['cookie']) {
+    headers.set('cookie', requestHeaders['cookie'])
   }
 
   lastDay = today
@@ -140,6 +144,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     // Log request
     async onRequest({ request, options }) {
       startTime = new Date().getTime()
+
       options.headers = new Headers(options.headers)
       options.headers.set('starttime', `${new Date().getTime()}`)
 
