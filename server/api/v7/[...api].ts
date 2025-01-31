@@ -126,7 +126,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   console.info(headers)
 
-  return $fetch(url, {
+  return $fetch(`v1/${url}`, {
     // Serve ad far "scivolare" la gestione degli errori al client
     ignoreResponseError: true,
     baseURL: config.endpoint,
