@@ -9,6 +9,10 @@ const imageSettings: Partial<ModuleOptions> &
   domains: [],
   alias: {},
   provider: 'ipx',
+  ipx: {
+    handleImages: true,
+    sharp: true,
+  },
   // unoptimized: true,
   // providers: {
   //   myProvider: {
