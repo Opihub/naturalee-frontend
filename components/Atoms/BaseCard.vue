@@ -1,7 +1,7 @@
 <template>
   <div :class="className" :style="style">
     <div v-if="image" :class="`${CSS_NAME}__image`" class="u-mb-medium">
-      <NuxtImg :src="image" :alt="heading" />
+      <NuxtImg :src="image" :alt="heading" unoptimized/>
     </div>
 
     <BaseHeading
