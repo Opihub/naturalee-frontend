@@ -8,6 +8,12 @@ const imageSettings: Partial<ModuleOptions> &
   Pick<ModuleOptions, 'domains' | 'alias'> = {
   domains: [],
   alias: {},
+  provider: 'ipx',
+  ipx: {
+    handleImages: true,
+    sharp: true,
+  },
+  // unoptimized: true,
   // providers: {
   //   myProvider: {
   //     name: 'clientProvider', // optional value to overrider provider name
