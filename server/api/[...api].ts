@@ -1,4 +1,3 @@
-import { kv } from '@vercel/kv'
 import { H3Event } from 'h3'
 import { useRuntimeConfig, getQuery } from '#imports'
 import TTLCache from '@isaacs/ttlcache'
@@ -9,17 +8,11 @@ const cacheOptions = {
   ttl: 1000 * 60 * 60, // One hour
 }
 
-let monthlyKVCounter = 0
-let dailyKVCounter = 0
-let lastDay: Date | null = new Date()
-let outOfBudget = false
-
 const storageCache = new TTLCache(cacheOptions)
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const config = useRuntimeConfig()
-  const today = new Date()
 
   const url = event.context.params?.api
   const cacheKey = event?._path || ''
@@ -29,52 +22,11 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     })
   }
 
-  const {
-    KV_URL,
-    KV_REST_API_URL,
-    KV_REST_API_TOKEN,
-    KV_REST_API_READ_ONLY_TOKEN,
-  } = process.env
-
   let startTime: number
   let duration: number
 
   const abortController = new AbortController()
   let timer: NodeJS.Timeout | null = null
-
-  const KV_ENABLED =
-    config.useKV &&
-    !!KV_URL &&
-    !!KV_REST_API_URL &&
-    !!KV_REST_API_TOKEN &&
-    !!KV_REST_API_READ_ONLY_TOKEN
-
-  if (KV_ENABLED && lastDay) {
-    // Se l'ultima data risale a prima di oggi, allora resetto la quota giornaliera
-    if (today.getDate() - lastDay.getDate() > 0) {
-      dailyKVCounter = 0
-      outOfBudget = false
-      console.log('NEW DAY: Resetting daily requests')
-    }
-
-    // Se l'ultima data risale ai mesi precedenti, allora resetto la quota mensile
-    if (today.getMonth() - lastDay.getMonth() > 0) {
-      dailyKVCounter = 0
-      outOfBudget = false
-      console.log('NEW MONTH: Resetting monthly requests')
-    }
-  }
-
-  const KV_REACH_DAILY_LIMIT =
-    config.dailyKVLimit !== 0 && dailyKVCounter >= config.dailyKVLimit
-  const KV_REACH_MONTHLY_LIMIT =
-    config.monthlyKVLimit !== 0 && monthlyKVCounter >= config.monthlyKVLimit
-
-  const LOAD_KV =
-    KV_ENABLED &&
-    !KV_REACH_DAILY_LIMIT &&
-    !KV_REACH_MONTHLY_LIMIT &&
-    !outOfBudget
 
   const method = event.method
   const params = getQuery(event)
@@ -84,16 +36,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   let cacheData = null
   try {
-    if (LOAD_KV) {
-      cacheData = await kv.get(cacheKey)
-    } else {
-      cacheData = await storageCache.get(cacheKey)
-    }
+    cacheData = await storageCache.get(cacheKey)
   } catch (error) {
     console.log('Cache load error ', error)
   }
-  ++dailyKVCounter
-  ++monthlyKVCounter
 
   const cacheControl = getRequestHeader(event, 'Cache-Control') || ''
 
@@ -113,7 +59,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
     event.node.res.setHeader('X-Cache', 'HIT')
 
-    // return kv.get(cacheKey)
     return cacheData
   }
 
@@ -125,8 +70,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   if (requestHeaders?.['cookie']) {
     headers.set('cookie', requestHeaders['cookie'])
   }
-
-  lastDay = today
 
   return $fetch(url, {
     // Serve ad far "scivolare" la gestione degli errori al client
@@ -198,14 +141,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         if (method === 'GET' && !noCache) {
           console.log(`🟢 questa chiama la salvo in cache per ${ttl}ms`)
           try {
-            if (LOAD_KV) {
-              await kv.set(cacheKey, response._data, { px: ttl })
-              ++dailyKVCounter
-              ++monthlyKVCounter
-            } else {
-              await storageCache.set(cacheKey, response._data, { ttl })
-            }
-            console.log(`CACHE USATA: ${LOAD_KV ? 'KV' : 'Local'}`)
+            await storageCache.set(cacheKey, response._data, { ttl })
           } catch (error) {
             console.log('Cache save error ', error)
           }
