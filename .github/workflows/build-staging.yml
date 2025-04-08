@@ -8,6 +8,21 @@ jobs:
   webserver-docker-deploy:
     runs-on: ubuntu-latest
     name: 🎉 Compile and publish frontend
+    env:
+      APP_TITLE: ${{ vars.STAGE_APP_TITLE }}
+      NUXT_PUBLIC_SITE_URL: ${{ vars.STAGE_SITE_URL }}
+      API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
+      STRIPE_PUBLIC_KEY: ${{ vars.STAGE_STRIPE_PUBLIC_KEY }}
+      RECAPTCHA_PUBLIC_KEY: ${{ vars.RECAPTCHA_PUBLIC_KEY }}
+      GTM_ID: ${{ vars.STAGE_GTM_ID }}
+      GTM_DEBUG: ${{ vars.STAGE_GTM_DEBUG }}
+      GTM_ENABLED: ${{ vars.STAGE_GTM_ENABLED }}
+      IUBENDA_ID: ${{ vars.IUBENDA_ID }}
+      IUBENDA_SITE_ID: ${{ vars.IUBENDA_SITE_ID }}
+      WEBPUSHR_TOKEN: ${{ vars.STAGE_WEBPUSHR_TOKEN }}
+      IS_PRODUCTION: false
+      VITE_SITE_URL: ${{ vars.STAGE_SITE_URL }}
+      VITE_API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v2
@@ -15,20 +30,6 @@ jobs:
           fetch-depth: 10
 
       - name: Generazione del file .env
-        env:
-          APP_TITLE: ${{ vars.STAGE_APP_TITLE }}
-          NUXT_PUBLIC_SITE_URL: ${{ vars.STAGE_SITE_URL }}
-          API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
-          STRIPE_PUBLIC_KEY: ${{ vars.STAGE_STRIPE_PUBLIC_KEY }}
-          RECAPTCHA_PUBLIC_KEY: ${{ vars.RECAPTCHA_PUBLIC_KEY }}
-          GTM_ID: ${{ vars.STAGE_GTM_ID }}
-          GTM_DEBUG: ${{ vars.STAGE_GTM_DEBUG }}
-          GTM_ENABLED: ${{ vars.STAGE_GTM_ENABLED }}
-          IUBENDA_ID: ${{ vars.STAGE_IUBENDA_ID }}
-          IUBENDA_SITE_ID: ${{ vars.STAGE_IUBENDA_SITE_ID }}
-          IS_PRODUCTION: false
-          VITE_SITE_URL: ${{ vars.STAGE_SITE_URL }}
-          VITE_API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
         run: |
           chmod +x ./env.sh
           ./env.sh -o .env.staging
