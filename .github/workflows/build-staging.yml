@@ -1,4 +1,4 @@
-name: 🚀 Frontend Deploy
+name: 🚀 Generazione immagine Docker per staging
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           VITE_API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
         run: |
           chmod +x ./env.sh
-          ./env.sh
+          ./env.sh -o .env.staging
           cat .env.staging
         shell: bash
 
