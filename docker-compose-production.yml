@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  cms:
+  frontend:
     image: registry.promo.it/naturalee:latest
     restart: always
     tty: true
