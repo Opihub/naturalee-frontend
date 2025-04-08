@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  cms:
+    image: registry.promo.it/naturalee:latest
+    restart: always
+    tty: true
+    deploy:
+      placement:
+        constraints:
+          - "node.role==worker"
+          - "node.labels.env==test"
+    networks:
+      - proxy_net
+      - stack
+
+# Networks
+networks:
+  stack:
+    driver: overlay
+  proxy_net:
+    external: true
