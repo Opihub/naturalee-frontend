@@ -10,7 +10,7 @@ declare let self: ServiceWorkerGlobalScope
 
 const { VITE_SITE_URL } = import.meta.env
 
-console.info('SW v2.1');
+console.info('SW v2.1')
 cleanupOutdatedCaches()
 
 // self.__WB_MANIFEST is default injection point
@@ -25,8 +25,40 @@ registerRoute(
   'GET'
 )
 if (VITE_SITE_URL) {
+  const apiBaseRoute = `${VITE_SITE_URL}/api/`
+  const apiRoute = new RegExp(`^${apiBaseRoute}.*$`, 'i')
   registerRoute(
-    new RegExp(`^${VITE_SITE_URL}/api/.*`, 'i'),
+    ({ url }) => {
+      const isApi = url.pathname.match(apiRoute)
+
+      if (!isApi) {
+        return false
+      }
+
+      const route = url.pathname.replace(apiBaseRoute, '')
+      console.log(route, url.pathname)
+
+      if (
+        route.includes('profile') ||
+        route.includes('shop/addresses') ||
+        route.includes('shop/cart') ||
+        route.includes('shop/wishlist') ||
+        route.includes('shop/orders') ||
+        route.includes('webpushr')
+      ) {
+        return false
+      }
+
+      // Bisogna essere loggati per usare il checkout
+      if (
+        route.includes('shop/checkout/save') ||
+        route.includes('shop/checkout/payment-intent')
+      ) {
+        return false
+      }
+
+      return true
+    },
     new CacheFirst({
       cacheName: 'api-cache',
       plugins: [
