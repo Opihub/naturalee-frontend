@@ -80,6 +80,9 @@
     "vue-recaptcha-v3": "^2.0.1",
     "vue3-lottie": "^3.1.0"
   },
+  "engines": {
+    "node": ">=18.20"
+  },
   "overrides": {
     "vue": "latest"
   }
