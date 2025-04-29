@@ -47,7 +47,6 @@
     "workbox-strategies": "^7.1.0"
   },
   "dependencies": {
-    "@isaacs/ttlcache": "^1.4.1",
     "@pinia/nuxt": "^0.4.7",
     "@splidejs/vue-splide": "^0.6.12",
     "@vuepic/vue-datepicker": "^7.2.0",

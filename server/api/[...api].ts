@@ -1,21 +1,12 @@
 import { H3Event } from 'h3'
 import { useRuntimeConfig, getQuery } from '#imports'
-import TTLCache from '@isaacs/ttlcache'
 import { parse } from 'cache-parser'
-
-const cacheOptions = {
-  max: 100,
-  ttl: 1000 * 60 * 60, // One hour
-}
-
-const storageCache = new TTLCache(cacheOptions)
 
 // https://gist.github.com/nathanchase/6440bf72d34c047498edcd4f35c15e2a
 export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const config = useRuntimeConfig()
 
   const url = event.context.params?.api
-  const cacheKey = event?._path || ''
   if (!url) {
     throw createError({
       statusCode: 403,
@@ -34,33 +25,16 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const requestHeaders = getRequestHeaders(event)
   const headers = new Headers()
 
-  let cacheData = null
-  try {
-    cacheData = await storageCache.get(cacheKey)
-  } catch (error) {
-    console.log('Cache load error ', error)
-  }
-
   const cacheControl = getRequestHeader(event, 'Cache-Control') || ''
 
-  const { maxAge, noCache = false } = parse(cacheControl)
+  const { noCache = false } = parse(cacheControl)
 
   if (cacheControl) {
     headers.set('Cache-Control', cacheControl)
     event.node.res.setHeader('Cache-Control', cacheControl)
   }
 
-  const ttl = maxAge ? maxAge * 1000 : cacheOptions.ttl
-
   console.info(url)
-
-  if (cacheData && typeof cacheData === 'object' && 'success' in cacheData) {
-    // Log a cache hit to a given request URL
-    console.log(`%c[SSR] Cache hit: ${url}`, 'color: orange')
-    event.node.res.setHeader('X-Cache', 'HIT')
-
-    return cacheData
-  }
 
   // le chiamate da non mettere in cache generalmente saranno quelle con il token JWT
   if (noCache && requestHeaders?.['authorization']) {
@@ -122,33 +96,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
         'color: orange',
         'color: white'
       )
-
-      if (response.status !== 200) {
-        console.log(
-          '🔴 questa chiama ' + response.status + ' non la salvo in cache'
-        )
-        await console.log(
-          `✔️ %c SSR-Feedback: request ${JSON.stringify(request)})`,
-          'color: orange',
-          'color: white'
-        )
-        await console.log(
-          `✔️ %c SSR-Feedback: response ${JSON.stringify(response)})`,
-          'color: orange',
-          'color: white'
-        )
-      } else {
-        if (method === 'GET' && !noCache) {
-          console.log(`🟢 questa chiama la salvo in cache per ${ttl}ms`)
-          try {
-            await storageCache.set(cacheKey, response._data, { ttl })
-          } catch (error) {
-            console.log('Cache save error ', error)
-          }
-        } else {
-          console.log('🟡 questa chiama 200 non la salvo in cache')
-        }
-      }
     },
 
     // Log error
