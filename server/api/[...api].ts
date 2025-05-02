@@ -27,6 +27,15 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
   const cacheControl = getRequestHeader(event, 'Cache-Control') || ''
 
+  console.log(
+    'IP: ',
+    getRequestIP(event, {
+      xForwardedFor: true,
+    })
+  )
+  console.log('user-agent: ', requestHeaders?.['user-agent'])
+  // console.log('requestHeaders: ', requestHeaders)
+
   const { noCache = false } = parse(cacheControl)
 
   if (cacheControl) {
