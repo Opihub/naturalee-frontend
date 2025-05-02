@@ -1,8 +1,6 @@
 import type { ModuleOptions, NuxtConfig } from 'nuxt/schema'
 import { additionalData } from './utils/globalCSS'
 import { fileURLToPath } from 'node:url'
-import { join } from 'node:path'
-const runtimeDir = fileURLToPath(new URL('.storybook/runtime', import.meta.url))
 
 const imageSettings: Partial<ModuleOptions> &
   Pick<ModuleOptions, 'domains' | 'alias'> = {
@@ -308,33 +306,4 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     defaultImport: 'component',
   },
   gtm,
-  // @ts-ignore
-  storybook: {
-    components: {
-      NuxtImg: 'storybook/custom/components.mjs',
-    },
-    composables: {
-      'storybook/custom/composables.mjs': {
-        '#app': [
-          'useFetch',
-          'useLazyFetch',
-          'useAsyncData',
-          'useLazyAsyncData',
-          'useRuntimeConfig',
-        ],
-        '#build/storybook/composables.mjs': ['useNuxtApp'],
-      },
-    },
-    templates: [
-      {
-        src: join(runtimeDir, 'composables.mjs'),
-        filename: 'storybook/custom/composables.mjs',
-      },
-
-      {
-        src: join(runtimeDir, 'components.mjs'),
-        filename: 'storybook/custom/components.mjs',
-      },
-    ],
-  },
 })
