@@ -1,13 +1,13 @@
 import {
   defineStore,
   acceptHMRUpdate,
-  skipHydrate,
   computed,
   storeToRefs,
   toRaw,
   useCart,
   trackEcommerceEvent,
 } from '#imports'
+import { skipHydrate } from 'pinia'
 
 import {
   useLocalStorage,
@@ -461,16 +461,16 @@ export const useCartStore = defineStore('cart', () => {
 
   function automaticCoupon(codice, dataInizio, dataFine){
     const now = new Date()
-  
+
     const startBF = new Date(dataInizio)
     const endBF = new Date(dataFine)
-  
+
     if (now < startBF || now > endBF)
       return false;
-    
+
     if(hasCoupon.value)
       return false
-    
+
     applyCoupon(codice);
   }
 

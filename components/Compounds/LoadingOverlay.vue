@@ -1,13 +1,15 @@
 <template>
   <BaseOverlay :class="CSS_NAME">
-    <Vue3Lottie
-      :class="`${CSS_NAME}__spinner`"
-      :animation-data="SpinnerLottie"
-      loop
-      :width="500"
-      :height="500"
-      no-margin
-    />
+    <ClientOnly>
+      <Vue3Lottie
+        :class="`${CSS_NAME}__spinner`"
+        :animation-data="SpinnerLottie"
+        loop
+        :width="500"
+        :height="500"
+        no-margin
+      />
+    </ClientOnly>
   </BaseOverlay>
 </template>
 

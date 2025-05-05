@@ -151,6 +151,7 @@ const {setLoading} = loadingStore;
 const userStore = useAccountStore()
 const cartStore = useCartStore()
 const configurationStore = useConfigurationStore()
+const localeRoute = useLocaleRoute()
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
@@ -284,13 +285,13 @@ const saveCart = async (direct = true) => {
 
 const goToCheckout = async () => {
   if (!isLoggedIn.value) {
-    await navigateTo({
+    await navigateTo(localeRoute({
       name: 'login',
       query: {
         redirectBecause: 'needAccount',
         redirectTo: 'checkout',
       },
-    })
+    }))
 
     return false
   }
@@ -301,9 +302,9 @@ const goToCheckout = async () => {
     return
   }
 
-  await navigateTo({
+  await navigateTo(localeRoute({
     name: 'checkout',
-  })
+  }))
 }
 
 cartStore.$onAction(({ args, name, after }) => {

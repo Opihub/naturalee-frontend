@@ -25,6 +25,8 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   const requestHeaders = getRequestHeaders(event)
   const headers = new Headers()
 
+  console.info('Send from', requestHeaders?.referer)
+
   const cacheControl = getRequestHeader(event, 'Cache-Control') || ''
 
   console.log(

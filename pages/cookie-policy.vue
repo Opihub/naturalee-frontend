@@ -5,8 +5,10 @@
 
 // Define (Props, Emits, Page Meta)
 definePageMeta({
-  name: 'cookie-policy ',
+  name: 'cookie-policy',
 })
+
+defineI18nRoute(false)
 
 defineRouteRules({
   index: false,

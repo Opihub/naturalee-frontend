@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink
+  <NuxtLinkLocale
     :class="className"
     active-class="is-current"
     exact-active-class="is-exact"
@@ -42,7 +42,7 @@
 
       <ArrowSVG v-if="arrow" :class="`${CSS_NAME}__arrow`" />
     </span>
-  </NuxtLink>
+  </NuxtLinkLocale>
 </template>
 
 <script setup>

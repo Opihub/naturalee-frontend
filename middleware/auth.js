@@ -2,12 +2,12 @@ import {
   defineNuxtRouteMiddleware,
   navigateTo,
   storeToRefs,
-  useRouter,
+  useLocaleRoute,
 } from '#imports'
 import { useAccountStore } from '@/stores/account'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const router = useRouter()
+  const localeRoute = useLocaleRoute()
 
   const store = useAccountStore()
   const { isLoggedIn } = storeToRefs(store)
@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware((to) => {
   if (!isLoggedIn.value) {
     const navigate = { name: 'login' }
 
-    const myAccountRoute = router.resolve({
+    const myAccountRoute = localeRoute({
       name: 'my-account',
     })
 
@@ -35,7 +35,7 @@ export default defineNuxtRouteMiddleware((to) => {
       }
     }
 
-    return navigateTo(navigate)
+    return navigateTo(localeRoute(navigate))
   }
 
   return true
