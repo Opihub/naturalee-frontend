@@ -26,6 +26,8 @@ jobs:
       SENTRY_DSN: ${{ vars.SENTRY_DSN }}
       SENTRY_ENVIRONMENT: production
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_TRACES_SAMPLE_RATE: ${{ vars.PROD_SENTRY_TRACES_SAMPLE_RATE }}
+      SENTRY_DEBUG: ${{ vars.PROD_SENTRY_DEBUG }}
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v2
