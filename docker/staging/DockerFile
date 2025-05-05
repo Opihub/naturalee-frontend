@@ -1,7 +1,7 @@
 ARG NODE_VERSION=20.19.0
 
 # Create build stage
-FROM node:${NODE_VERSION}-slim AS build
+FROM node:${NODE_VERSION}-alpine AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -21,7 +21,7 @@ RUN mv .env.staging .env
 RUN npm run build
 
 # Create a new stage for the production image
-FROM node:${NODE_VERSION}-slim
+FROM node:${NODE_VERSION}-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
