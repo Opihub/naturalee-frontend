@@ -1,6 +1,8 @@
 import type { ModuleOptions, NuxtConfig } from 'nuxt/schema'
 import { additionalData } from './utils/globalCSS'
-import { fileURLToPath } from 'node:url'
+
+const isProduction =
+  process.env?.IS_PRODUCTION?.toLowerCase() === 'true' || false
 
 const imageSettings: Partial<ModuleOptions> &
   Pick<ModuleOptions, 'domains' | 'alias'> = {
@@ -48,7 +50,14 @@ const modules: NuxtConfig['modules'] = [
       ],
     },
   ],
-  ['@nuxtjs/robots', { configPath: 'robots.config.js' }],
+  [
+    '@nuxtjs/robots',
+    {
+      configPath: isProduction
+        ? 'robots-production.config.js'
+        : 'robots.config.js',
+    },
+  ],
   '@nuxtjs/sitemap',
   '@vite-pwa/nuxt',
 ]
@@ -72,7 +81,7 @@ export default defineNuxtConfig({
       seoSeparator: '-',
       stripeKey: process.env.STRIPE_PUBLIC_KEY,
       recaptchaKey: process.env.RECAPTCHA_PUBLIC_KEY,
-      isProduction: process.env?.IS_PRODUCTION || false,
+      isProduction,
       currency: 'EUR',
       iubenda: {
         siteId: process.env?.IUBENDA_SITE_ID,
