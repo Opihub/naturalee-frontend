@@ -28,7 +28,7 @@
           src="shZXLvznzWk"
           provider="youtube"
           :aspect-ratio="ratio"
-          poster="/azienda/poster-azienda.svg"
+          poster="/azienda/poster-azienda.png"
         />
       </SiteContainer>
     </div>
