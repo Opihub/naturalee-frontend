@@ -1,11 +1,13 @@
 import {
   defineStore,
   acceptHMRUpdate,
-  computed,
   storeToRefs,
   toRaw,
   useCart,
   trackEcommerceEvent,
+  useApi,
+  useAccountStore,
+  notify,
 } from '#imports'
 import { skipHydrate } from 'pinia'
 
@@ -14,10 +16,6 @@ import {
   useSessionStorage,
   StorageSerializers,
 } from '@vueuse/core'
-
-import { useApi } from '@/composables/api'
-import { useAccountStore } from '@/stores/account'
-import { notify } from '@/utils/notify'
 
 export const useCartStore = defineStore('cart', () => {
   const profile = useAccountStore()

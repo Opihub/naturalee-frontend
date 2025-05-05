@@ -37,9 +37,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useCartStore } from '@/stores/cart'
-
 // Constants
 const CSS_NAME = 'c-coupon-form'
 const FORM_ID = 'coupon-form'

@@ -16,9 +16,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useConfigurationStore } from '@/stores/configuration'
-
 // Constants
 const configurationStore = useConfigurationStore()
 

@@ -1,6 +1,5 @@
-import { defineStore, acceptHMRUpdate, ref } from '#imports'
+import { defineStore, acceptHMRUpdate, ref, useI18n } from '#imports'
 import { useTimeoutFn } from '@vueuse/core'
-import { useI18n } from 'vue-i18n'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const { t } = useI18n({ useScope: 'global' })

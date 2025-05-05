@@ -30,9 +30,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useI18n } from 'vue-i18n'
-
 // Constants
 
 // Define (Props, Emits, Page Meta)

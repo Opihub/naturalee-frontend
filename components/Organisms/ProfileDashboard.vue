@@ -29,9 +29,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useConfigurationStore } from '@/stores/configuration';
-
 // Constants
 const CSS_NAME = 'c-profile-dashboard'
 const configurationStore = useConfigurationStore()

@@ -38,18 +38,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useCartStore } from '@/stores/cart'
-import { useAccountStore } from '@/stores/account'
-import { useNotificationsStore } from '@/stores/notifications'
-import { useConfigurationStore } from '@/stores/configuration'
-import { useLoadingStore } from '@/stores/loading'
-import { useI18n } from 'vue-i18n'
-
-// Constants
-
-// Define (Props, Emits, Page Meta)
-
 // Composables
 const { t } = useI18n()
 const cartStore = useCartStore()

@@ -20,9 +20,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useWishlistStore } from '@/stores/wishlist'
-
 // Constants
 
 // Define (Props, Emits, Page Meta)

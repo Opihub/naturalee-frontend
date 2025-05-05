@@ -12,7 +12,6 @@
 
 <script setup>
 // Imports
-import { useI18n } from '#imports'
 import Vlitejs from 'vlitejs'
 import VlitejsYoutube from 'vlitejs/providers/youtube'
 

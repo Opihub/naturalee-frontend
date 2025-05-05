@@ -6,9 +6,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useNotificationsStore } from '@/stores/notifications'
-
 // Constants
 const CSS_NAME = 'o-notification'
 

@@ -82,10 +82,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useAccountStore } from '@/stores/account'
-import { useCartStore } from '@/stores/cart'
-
 // Constants
 const CSS_NAME = 'c-header'
 const CSS_NAME_CONTAINER = `${CSS_NAME}__container`

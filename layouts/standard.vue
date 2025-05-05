@@ -136,7 +136,6 @@
 <script setup>
 // Imports
 import { useElementBounding, useScrollLock } from '@vueuse/core'
-import { useConfigurationStore } from '@/stores/configuration'
 
 // Constants
 const CSS_NAME = 'o-layout'

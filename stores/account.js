@@ -6,12 +6,12 @@ import {
   useCookie,
   nextTick,
   useRequestURL,
+  useApi,
+  useCartStore,
+  getPasswordPattern,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 import { skipHydrate } from 'pinia'
-import { useApi } from '@/composables/api'
-import { useCartStore } from '@/stores/cart'
-import { getPasswordPattern } from '@/utils/pattern'
 
 export const useAccountStore = defineStore('account', () => {
   // Tiene memorizzato il token alla chiusura del browser

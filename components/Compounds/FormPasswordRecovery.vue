@@ -51,9 +51,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useLoadingStore } from '@/stores/loading'
-
 const loadingStore = useLoadingStore()
 
 const { loading } = storeToRefs(loadingStore)

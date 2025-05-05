@@ -41,7 +41,6 @@
 <script setup>
 // Imports
 import CompleteLayout from '@/layouts/standard'
-import { useConfigurationStore } from '@/stores/configuration'
 
 // Constants
 const configurationStore = useConfigurationStore()

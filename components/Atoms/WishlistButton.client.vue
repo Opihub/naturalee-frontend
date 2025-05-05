@@ -9,7 +9,6 @@
 <script setup>
 // Imports
 import WishlistIcon from 'assets/svg/wishlist-icon.svg'
-import { useWishlistStore } from '@/stores/wishlist'
 
 // Constants
 const CSS_NAME = 'o-wishlist-button'

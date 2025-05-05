@@ -9,9 +9,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useAccountStore } from '@/stores/account'
-
 // Constants
 
 // Define (Props, Emits, Page Meta)

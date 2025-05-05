@@ -45,11 +45,6 @@
 </template>
 
 <script setup>
-//Imports
-import { useCartStore } from '@/stores/cart'
-
-import { useLoadingStore } from '@/stores/loading'
-
 const loadingStore = useLoadingStore()
 
 const { loading } = storeToRefs(loadingStore)

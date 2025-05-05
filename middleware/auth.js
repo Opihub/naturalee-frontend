@@ -3,8 +3,8 @@ import {
   navigateTo,
   storeToRefs,
   useLocaleRoute,
+  useAccountStore,
 } from '#imports'
-import { useAccountStore } from '@/stores/account'
 
 export default defineNuxtRouteMiddleware((to) => {
   const localeRoute = useLocaleRoute()

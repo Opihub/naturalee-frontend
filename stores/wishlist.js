@@ -4,13 +4,13 @@ import {
   computed,
   storeToRefs,
   trackEcommerceEvent,
+  useApi,
+  useAccountStore,
+  notify,
 } from '#imports'
 import { skipHydrate } from 'pinia'
 
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
-import { useApi } from '@/composables/api'
-import { useAccountStore } from '@/stores/account'
-import { notify } from '@/utils/notify'
 
 export const useWishlistStore = defineStore('wishlist', () => {
   const profile = useAccountStore()

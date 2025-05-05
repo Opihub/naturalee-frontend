@@ -1,5 +1,4 @@
-import { storeToRefs } from '#imports'
-import { useConfigurationStore } from '@/stores/configuration'
+import { storeToRefs, useConfigurationStore } from '#imports'
 
 export function isValidCategory(slug = null) {
   const configurationStore = useConfigurationStore()
