@@ -83,6 +83,7 @@ const formData = reactive({
 })
 
 const { recaptcha } = useCaptcha()
+const localeRoute = useLocaleRoute()
 
 // Watcher
 
@@ -99,6 +100,8 @@ const login = async () => {
   const token = await recaptcha()
 
   const response = await store.signUp({ ...formData, recaptcha_token: token })
+
+  console.log('response', response?.value)
 
   const message = {
     status: 'danger',
@@ -126,7 +129,7 @@ const login = async () => {
     }
   }
 
-  await navigateTo(routeParam)
+  await navigateTo(localeRoute(routeParam))
 }
 </script>
 

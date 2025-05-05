@@ -35,6 +35,7 @@
 
 <script setup>
 // Imports
+const localeRoute = useLocaleRoute()
 
 // Constants
 const CSS_NAME = 'c-search'
@@ -105,10 +106,12 @@ const goToSearch = async () => {
     return
   }
 
-  await navigateTo({
-    name: 'search',
-    query: { search: searchValue.value },
-  })
+  await navigateTo(
+    localeRoute({
+      name: 'search',
+      query: { search: searchValue.value },
+    }),
+  )
 }
 </script>
 

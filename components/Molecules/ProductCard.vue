@@ -12,9 +12,9 @@
       :class="`${CSS_NAME}__wishlist`"
     />
 
-    <NuxtLink :to="product.link" :class="`${CSS_NAME}__thumbnail`">
+    <NuxtLinkLocale :to="product.link" :class="`${CSS_NAME}__thumbnail`">
       <ProductImage :src="product.image" :size="fit" />
-    </NuxtLink>
+    </NuxtLinkLocale>
 
     <div :class="[`${CSS_NAME}__row`, `${CSS_NAME}__info`]">
       <BaseLink

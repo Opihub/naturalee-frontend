@@ -92,7 +92,7 @@ const props = defineProps({
 // Component life-cycle hooks
 
 // Composables
-const router = useRouter()
+const localeRoute = useLocaleRoute()
 
 // Data
 
@@ -121,7 +121,7 @@ const categoryLink = (category, filter = null) => {
     query['filters[]'] = filter
   }
 
-  const route = router.resolve({
+  const route = localeRoute({
     name: 'category',
     params: {
       category,

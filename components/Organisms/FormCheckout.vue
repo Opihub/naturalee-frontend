@@ -105,6 +105,7 @@ const props = defineProps({
 
 // Composables
 const cartStore = useCartStore()
+const localeRoute = useLocaleRoute()
 
 // Data
 const {
@@ -310,12 +311,12 @@ const submitOrder = async () => {
 
     clearPaymentIntent()
 
-    await navigateTo({
+    await navigateTo(localeRoute({
       name: 'order-confirmed',
       query: {
         orderId: orderId.value,
       },
-    })
+    }))
   } catch (error) {
     console.warn(error)
 

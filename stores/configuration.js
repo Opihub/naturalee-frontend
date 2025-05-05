@@ -1,11 +1,11 @@
 import {
   defineStore,
   acceptHMRUpdate,
-  skipHydrate,
   computed,
   useApi,
   useCookie,
 } from '#imports'
+import { skipHydrate } from 'pinia'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
 
 export const useConfigurationStore = defineStore('configuration', () => {

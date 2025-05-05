@@ -121,7 +121,7 @@ const className = computed(() => {
 })
 
 const is = computed(() => {
-  return props.as === 'link' ? resolveComponent('NuxtLink') : props.as
+  return props.as === 'link' ? resolveComponent('NuxtLinkLocale') : props.as
 })
 </script>
 

@@ -111,17 +111,17 @@ if (!isTokenValid || isTokenValid.length <= 0) {
   throw createError({ statusCode: 404 })
 }
 
-    const { data: response } = await useApi(
-      `auth/password-recovery/validate-token`,
-      {
-        method: 'POST',
-        body: {
-          token,
-          login,
-        },
-        cache: 'no-cache'
-      }
-    )
+const { data: response } = await useApi(
+  `auth/password-recovery/validate-token`,
+  {
+    method: 'POST',
+    body: {
+      token,
+      login,
+    },
+    cache: 'no-cache',
+  },
+)
 
 if (!response.value.success) {
   throw createError({ statusCode: 404 })
@@ -134,6 +134,7 @@ const emit = defineEmits(['api:start', 'api:end'])
 // Composables
 const config = useRuntimeConfig()
 const { sending, send } = useSender(emit)
+const localeRoute = useLocaleRoute()
 
 const { recaptcha } = useCaptcha()
 
@@ -228,7 +229,7 @@ const updatePassword = async () => {
         login,
         recaptcha_token,
       },
-      cache: 'no-cache'
+      cache: 'no-cache',
     })
   })
 
@@ -238,12 +239,14 @@ const updatePassword = async () => {
         status: 'success',
         message: 'Password resettata con successo!',
       },
-      5000
+      5000,
     )
 
-    await navigateTo({
-      name: 'login',
-    })
+    await navigateTo(
+      localeRoute({
+        name: 'login',
+      }),
+    )
   } else {
     showMessage.value = true
     feedback.message = response.value.message

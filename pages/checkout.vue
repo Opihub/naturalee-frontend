@@ -440,24 +440,25 @@ if (page.value && 'seo' in page.value) {
   usePageSeo(page.value.seo)
 }
 
+const localeRoute = useLocaleRoute()
 const config = useRuntimeConfig()
 const cartStore = useCartStore()
 const basket = await cartStore.load()
 
 if (basket.value.length <= 0) {
-  await navigateTo({
+  await navigateTo(localeRoute({
     name: 'cart',
     query: {
       redirectBecause: 'noProducts',
     },
-  })
+  }))
 } else if (cartStore.subTotal < 20) {
-  await navigateTo({
+  await navigateTo(localeRoute({
     name: 'cart',
     query: {
       redirectBecause: 'orderMinimumMissing',
     },
-  })
+  }))
 }
 
 const { t } = useI18n({

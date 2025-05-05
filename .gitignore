@@ -30,3 +30,7 @@ public/google-fonts.css
 *.key
 *.crt
 .vercel
+.clinic/
+
+# Sentry Config File
+.env.sentry-build-plugin

@@ -100,6 +100,7 @@ const formData = reactive({
 })
 
 const { recaptcha } = useCaptcha()
+const localeRoute = useLocaleRoute()
 
 // Watcher
 
@@ -139,6 +140,6 @@ const register = async () => {
     }
   }
 
-  await navigateTo(routeParam)
+  await navigateTo(localeRoute(routeParam))
 }
 </script>

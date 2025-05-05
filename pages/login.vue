@@ -17,10 +17,11 @@ definePageMeta({
   name: 'login',
   middleware: () => {
     const store = useAccountStore()
+    const localeRoute = useLocaleRoute()
     const { isLoggedIn } = storeToRefs(store)
 
     if (isLoggedIn.value) {
-      return navigateTo({ name: 'my-account' })
+      return navigateTo(localeRoute({ name: 'my-account' }))
     }
 
     return true
@@ -58,8 +59,10 @@ const { t } = useI18n({
 .s-page-login {
   display: flex;
   min-height: calc(
-    100vh - var(--layout-header-height, 0px) - var(--layout-footer-height, 0px) -
-      var(--layout-header-offset, 0px)
+    100vh - var(--layout-header-height, 0px) - var(
+        --layout-footer-height,
+        0px
+      ) - var(--layout-header-offset, 0px)
   );
 }
 </style>

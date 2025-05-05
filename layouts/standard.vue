@@ -296,7 +296,7 @@ const toggleBlackFridayModal = (status = null) => {
 
 const temporizedPopup = (dataInizio, dataFine, callback) => {
   const now = new Date()
-  
+
   const start = new Date(dataInizio)
   const end = new Date(dataFine)
 

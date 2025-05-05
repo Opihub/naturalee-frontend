@@ -8,38 +8,40 @@
     @click="add"
   >
     <template #default="{ svgStyle, svgFilled }">
-      <Vue3Lottie
-        v-if="sending"
-        :class="`${CSS_NAME}__spinner`"
-        :animation-data="SpinnerLottie"
-        loop
-        :width="21"
-        :height="21"
-        no-margin
-      />
-
-      <template v-else-if="animating">
+      <ClientOnly>
         <Vue3Lottie
-          :class="`${CSS_NAME}__animation`"
-          :animation-data="BasketLottie"
-          :loop="false"
-          :play-animation="animating"
+          v-if="sending"
+          :class="`${CSS_NAME}__spinner`"
+          :animation-data="SpinnerLottie"
+          loop
           :width="21"
           :height="21"
           no-margin
-          @on-complete="reset"
         />
-        <span :class="`${CSS_NAME}__text`">
-          <slot name="added">{{ $t('cart.addedSuccessfully') }}</slot>
-        </span>
-      </template>
 
-      <template v-else>
-        <span :class="`${CSS_NAME}__text`"
-          ><slot>{{ text }}</slot></span
-        >
-        <slot name="svg" :svg-style="svgStyle" :filled="svgFilled" />
-      </template>
+        <template v-else-if="animating">
+          <Vue3Lottie
+            :class="`${CSS_NAME}__animation`"
+            :animation-data="BasketLottie"
+            :loop="false"
+            :play-animation="animating"
+            :width="21"
+            :height="21"
+            no-margin
+            @on-complete="reset"
+          />
+          <span :class="`${CSS_NAME}__text`">
+            <slot name="added">{{ $t('cart.addedSuccessfully') }}</slot>
+          </span>
+        </template>
+
+        <template v-else>
+          <span :class="`${CSS_NAME}__text`"
+            ><slot>{{ text }}</slot></span
+          >
+          <slot name="svg" :svg-style="svgStyle" :filled="svgFilled" />
+        </template>
+      </ClientOnly>
     </template>
   </BaseButton>
 </template>
@@ -125,7 +127,7 @@ const add = async () => {
   }
 
   const feedback = await send(
-    async () => await cartStore.addToCart(props.product, props.quantity)
+    async () => await cartStore.addToCart(props.product, props.quantity),
   )
 
   if (feedback) {

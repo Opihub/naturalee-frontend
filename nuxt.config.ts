@@ -10,8 +10,10 @@ const imageSettings: Partial<ModuleOptions> &
   alias: {},
   provider: 'ipx',
   ipx: {
-    handleImages: true,
-    sharp: true,
+    modifiers: {
+      quality: 90,
+    },
+    maxAge: 86400,
   },
   // unoptimized: true,
   // providers: {
@@ -32,36 +34,6 @@ if (process.env.API_ENDPOINT_URL) {
   imageSettings.alias.remote = endpoint.protocol + '//' + endpoint.host
 }
 
-const modules: NuxtConfig['modules'] = [
-  '@zadigetvoltaire/nuxt-gtm',
-  '@nuxtjs/i18n',
-  '@nuxtjs/google-fonts',
-  'nuxt-svgo',
-  'nuxt-icons',
-  '@nuxt/image',
-  [
-    '@pinia/nuxt',
-    {
-      autoImports: [
-        'defineStore',
-        'skipHydrate',
-        'acceptHMRUpdate',
-        'storeToRefs',
-      ],
-    },
-  ],
-  [
-    '@nuxtjs/robots',
-    {
-      configPath: isProduction
-        ? 'robots-production.config.js'
-        : 'robots.config.js',
-    },
-  ],
-  '@nuxtjs/sitemap',
-  '@vite-pwa/nuxt',
-]
-
 const gtm: NuxtConfig['gtm'] = {
   id: process.env?.GTM_ID,
   enabled: !!process.env?.GTM_ENABLED,
@@ -71,7 +43,14 @@ const gtm: NuxtConfig['gtm'] = {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
+  },
+
   runtimeConfig: {
     endpoint: process.env.API_ENDPOINT_URL + '/api' || '/',
 
@@ -87,8 +66,13 @@ export default defineNuxtConfig({
         siteId: process.env?.IUBENDA_SITE_ID,
         cookiePolicyId: process.env?.IUBENDA_ID,
       },
+
+      sentry: {
+        dsn: process.env.SENTRY_DSN, // Use a public environment variable for the DSN
+      },
     },
   },
+
   app: {
     baseURL: process.env.BASE_URL ? process.env.BASE_URL : '/',
     rootId: 'app',
@@ -124,14 +108,17 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       ],
     },
   },
+
   experimental: {
     inlineRouteRules: true,
   },
+
   css: [
     '@splidejs/vue-splide/css/core',
     'assets/css/main.scss',
     // 'assets/css/google-fonts.css',
   ],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -141,6 +128,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       },
     },
   },
+
   pwa: {
     strategies: 'injectManifest',
     srcDir: 'service-worker',
@@ -235,10 +223,42 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       type: 'module',
     },
   },
-  routeRules: {
-    '/checkout': { ssr: false },
-  },
-  modules,
+
+  // routeRules: {
+  //   '/checkout': { ssr: false },
+  // },
+
+  modules: [
+    '@zadigetvoltaire/nuxt-gtm',
+    '@nuxtjs/i18n',
+    '@nuxtjs/google-fonts',
+    'nuxt-svgo',
+    'nuxt-icons',
+    '@nuxt/image',
+    // '@sentry/nuxt/module',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: [
+          'defineStore',
+          'skipHydrate',
+          'acceptHMRUpdate',
+          'storeToRefs',
+        ],
+      },
+    ],
+    [
+      '@nuxtjs/robots',
+      {
+        configPath: isProduction
+          ? 'robots-production.config.js'
+          : 'robots.config.js',
+      },
+    ],
+    '@nuxtjs/sitemap',
+    '@vite-pwa/nuxt',
+  ],
+
   googleFonts: {
     download: true,
     inject: true,
@@ -256,6 +276,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       },
     },
   },
+
   components: [
     {
       path: '~/components/Atoms',
@@ -274,14 +295,14 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       pathPrefix: false,
     },
   ],
+
   i18n: {
-    locales: [{ code: 'it', iso: 'it-IT' }],
+    locales: [{ code: 'it', name: 'Italiano', file: 'it.json' }],
     defaultLocale: 'it',
-    compilation: {
-      jit: process.env?.COMPILATED_TRANSLATION ? false : true,
-    },
-    vueI18n: './i18n.config.ts', // if you are using custom path, default
+    strategy: 'prefix_except_default',
+    // vueI18n: './i18n.config.ts', // if you are using custom path, default
   },
+
   image: imageSettings,
 
   sitemap: {
@@ -311,8 +332,20 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
   site: {
     trailingSlash: true,
   },
+
   svgo: {
     defaultImport: 'component',
   },
+
   gtm,
+
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: 'opihub',
+      project: 'naturalee-fe',
+    },
+  },
+
+  sourcemap: { client: 'hidden' },
+  compatibilityDate: '2025-05-02',
 })

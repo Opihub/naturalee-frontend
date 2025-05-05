@@ -8,6 +8,8 @@ definePageMeta({
   name: 'privacy-policy',
 })
 
+defineI18nRoute(false)
+
 defineRouteRules({
   index: false,
   robots: false,

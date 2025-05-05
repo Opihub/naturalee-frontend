@@ -2,13 +2,13 @@ import {
   ref,
   defineStore,
   acceptHMRUpdate,
-  skipHydrate,
   computed,
   useCookie,
   nextTick,
   useRequestURL,
 } from '#imports'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core'
+import { skipHydrate } from 'pinia'
 import { useApi } from '@/composables/api'
 import { useCartStore } from '@/stores/cart'
 import { getPasswordPattern } from '@/utils/pattern'
@@ -99,6 +99,8 @@ export const useAccountStore = defineStore('account', () => {
       body: formData,
       cache: 'no-cache',
     })
+
+    console.log('response', response)
 
     if (response?.value?.success) {
       await login(response.value.data, formData.remember)

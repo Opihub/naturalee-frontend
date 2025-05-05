@@ -30,7 +30,7 @@ defineRouteRules({
 
 // Composables
 const route = useRoute()
-const router = useRouter()
+const localeRoute = useLocaleRoute()
 
 // Data
 const page = ref({})
@@ -42,14 +42,16 @@ watch(
   async () => {
     let path = route.path
 
-    if(path === "/il-mio-account/"){
-      return navigateTo({name:'dashboard'}, { redirectCode: 301 })
+    if (path === '/il-mio-account/') {
+      return navigateTo(
+        localeRoute({ name: 'dashboard' }, { redirectCode: 301 }),
+      )
     }
 
     const isOrderChild = ['order-products', 'order-view'].includes(route.name)
 
     if (isOrderChild) {
-      const orderRoute = router.resolve({
+      const orderRoute = localeRoute({
         name: 'orders-list',
       })
 
@@ -59,7 +61,7 @@ watch(
     const isAddressesChild = ['address-details'].includes(route.name)
 
     if (isAddressesChild) {
-      const addressesRoute = router.resolve({
+      const addressesRoute = localeRoute({
         name: 'addresses-list',
       })
 
@@ -100,7 +102,7 @@ watch(
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 watch(
@@ -110,7 +112,7 @@ watch(
       usePageSeo(page.value.seo)
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // Computed
