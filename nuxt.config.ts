@@ -1,7 +1,8 @@
 import type { ModuleOptions, NuxtConfig } from 'nuxt/schema'
 import { additionalData } from './utils/globalCSS'
 
-const isProduction = process.env?.ENVIRONMENT?.toLowerCase() === 'production' || false
+const isProduction =
+  process.env?.ENVIRONMENT?.toLowerCase() === 'production' || false
 
 const imageSettings: Partial<ModuleOptions> &
   Pick<ModuleOptions, 'domains' | 'alias'> = {
@@ -40,6 +41,16 @@ const gtm: NuxtConfig['gtm'] = {
   trackOnNextTick: true,
 }
 
+const tracesSampleRate =
+  process.env?.SENTRY_TRACES_SAMPLE_RATE &&
+  !isNaN(parseFloat(process.env?.SENTRY_TRACES_SAMPLE_RATE))
+    ? parseFloat(process.env?.SENTRY_TRACES_SAMPLE_RATE)
+    : 0.3
+
+const debug = process.env?.SENTRY_DEBUG
+  ? Boolean(process.env?.SENTRY_DEBUG)
+  : false
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: {
@@ -67,8 +78,12 @@ export default defineNuxtConfig({
       },
 
       sentry: {
-        dsn: process.env.SENTRY_DSN, // Use a public environment variable for the DSN
+        dsn: process.env?.SENTRY_DSN, // Use a public environment variable for the DSN
       },
+      sentryOptions: {
+        tracesSampleRate,
+        debug,
+      }
     },
   },
 
@@ -234,7 +249,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     'nuxt-svgo',
     'nuxt-icons',
     '@nuxt/image',
-    // '@sentry/nuxt/module',
+    process.env.SENTRY_DSN ? '@sentry/nuxt/module' : undefined,
     [
       '@pinia/nuxt',
       {
