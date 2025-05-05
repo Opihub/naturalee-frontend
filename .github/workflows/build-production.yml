@@ -23,6 +23,9 @@ jobs:
       IS_PRODUCTION: false
       VITE_SITE_URL: ${{ vars.PROD_SITE_URL }}
       VITE_API_ENDPOINT_URL: ${{ vars.PROD_API_ENDPOINT_URL }}
+      SENTRY_DSN: ${{ vars.SENTRY_DSN }}
+      SENTRY_ENVIRONMENT: production
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v2
