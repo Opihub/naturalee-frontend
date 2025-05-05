@@ -1,8 +1,7 @@
 import type { ModuleOptions, NuxtConfig } from 'nuxt/schema'
 import { additionalData } from './utils/globalCSS'
 
-const isProduction =
-  process.env?.IS_PRODUCTION?.toLowerCase() === 'true' || false
+const isProduction = process.env?.ENVIRONMENT?.toLowerCase() === 'production' || false
 
 const imageSettings: Partial<ModuleOptions> &
   Pick<ModuleOptions, 'domains' | 'alias'> = {

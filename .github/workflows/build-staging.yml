@@ -20,7 +20,7 @@ jobs:
       IUBENDA_ID: ${{ vars.IUBENDA_ID }}
       IUBENDA_SITE_ID: ${{ vars.IUBENDA_SITE_ID }}
       WEBPUSHR_TOKEN: ${{ vars.STAGE_WEBPUSHR_TOKEN }}
-      IS_PRODUCTION: false
+      ENVIRONMENT: staging
       VITE_SITE_URL: ${{ vars.STAGE_SITE_URL }}
       VITE_API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
       SENTRY_DSN: ${{ vars.SENTRY_DSN }}
