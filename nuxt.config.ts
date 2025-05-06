@@ -224,7 +224,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       installPrompt: true,
       // you don't need to include this: only for testing purposes
       // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
-      periodicSyncForUpdates: 60,
+      // periodicSyncForUpdates: 60,
     },
     devOptions: {
       enabled: true,
