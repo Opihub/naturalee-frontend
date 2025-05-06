@@ -79,7 +79,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
           console.log(
             `Retrying request to: "${request}" at ${new Date().getTime()}`
           )
-        }, 50000) // Abort request in 2.5s.
+        }, 5000) // Abort request in 2.5s.
       }
 
       await console.log(
