@@ -109,6 +109,10 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
     // Log error
     async onResponseError({ error }) {
+      if (timer) {
+        clearTimeout(timer) // clear timer
+      }
+
       await console.error(
         '%cSSR-Error',
         error,
