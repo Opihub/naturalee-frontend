@@ -238,9 +238,27 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     },
   },
 
-  // routeRules: {
-  //   '/checkout': { ssr: false },
-  // },
+  routeRules: {
+    '/': { prerender: true },
+    '/faq': { prerender: true },
+    '/contatti': { prerender: true },
+    '/azienda': { prerender: true },
+    '/login': { prerender: true },
+    '/carrello': { prerender: false },
+
+    '/verdura/**': { swr: 3600 },
+    '/verdura/': { swr: 3600 },
+    '/frutta/**': { swr: 3600 },
+    '/frutta/': { swr: 3600 },
+    '/aromi/**': { swr: 3600 },
+    '/aromi/': { swr: 3600 },
+    '/dispensa/**': { swr: 3600 },
+    '/dispensa/': { swr: 3600 },
+    '/esotico/**': { swr: 3600 },
+    '/esotico/': { swr: 3600 },
+
+    '/checkout': { ssr: false },
+  },
 
   modules: [
     '@zadigetvoltaire/nuxt-gtm',
