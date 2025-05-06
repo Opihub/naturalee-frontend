@@ -240,11 +240,6 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
 
   routeRules: {
     '/': { prerender: true },
-    '/faq': { prerender: true },
-    '/contatti': { prerender: true },
-    '/azienda': { prerender: true },
-    '/login': { prerender: true },
-    '/carrello': { prerender: false },
 
     '/verdura/**': { swr: 3600 },
     '/verdura/': { swr: 3600 },
