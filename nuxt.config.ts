@@ -58,7 +58,7 @@ const modules: NuxtConfig['modules'] = [
     },
   ],
   '@nuxtjs/sitemap',
-  '@vite-pwa/nuxt',
+  // '@vite-pwa/nuxt',
 ]
 
 const gtm: NuxtConfig['gtm'] = {
