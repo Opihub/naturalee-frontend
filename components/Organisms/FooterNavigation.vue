@@ -38,9 +38,9 @@
       </template>
     </InlineMenu>
 
-    <NuxtImg
+    <img
       :class="`${CSS_NAME}__payment`"
-      src="footer/pagamenti-sicuri.png"
+      src="/footer/pagamenti-sicuri.png"
     />
   </SiteContainer>
 </template>
