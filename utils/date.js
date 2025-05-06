@@ -1,4 +1,4 @@
-import { capitalize } from '@/utils/capitalize'
+import { capitalize } from '#imports'
 
 export function getFormattedDate(date, locale = 'it-IT') {
   if (!(date instanceof Date)) {

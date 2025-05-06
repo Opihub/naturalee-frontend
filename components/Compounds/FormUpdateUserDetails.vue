@@ -94,10 +94,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useAccountStore } from '@/stores/account'
-import { useLoadingStore } from '@/stores/loading'
-
 // Constants
 const CSS_NAME = 'c-profile-update-form'
 

@@ -45,9 +45,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useAccountStore } from '@/stores/account'
-
 // Constants
 const CSS_NAME = 'c-header-mobile'
 

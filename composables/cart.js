@@ -1,5 +1,4 @@
-import { computed } from '#imports'
-import { useTotal } from '@/composables/total'
+import { computed, useTotal } from '#imports'
 
 export function useCart(cart, coupon, paymentMethod = null) {
   const hasCoupon = computed(() => {

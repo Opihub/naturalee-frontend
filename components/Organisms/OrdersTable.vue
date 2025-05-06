@@ -61,9 +61,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useI18n } from 'vue-i18n'
-
 // Constants
 const CSS_NAME = 'c-order-table'
 const CSS_NAME_ITEM = `${CSS_NAME}__item`

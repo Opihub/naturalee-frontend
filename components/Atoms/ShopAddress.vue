@@ -84,9 +84,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useI18n } from 'vue-i18n'
-
 // Constants
 const CSS_NAME = 'o-address'
 

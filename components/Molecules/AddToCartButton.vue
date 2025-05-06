@@ -48,7 +48,6 @@
 
 <script setup>
 // Imports
-import { useCartStore } from '@/stores/cart'
 import BasketLottie from 'assets/lotties/CaMQMFqXYq.json'
 import SpinnerLottie from 'assets/lotties/spinner.json'
 

@@ -1,5 +1,4 @@
-import { navigateTo } from '#imports'
-import { useAccountStore } from '@/stores/account'
+import { navigateTo, useAccountStore } from '#imports'
 
 export function useLogout() {
   const store = useAccountStore()

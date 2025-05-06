@@ -58,13 +58,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useAccountStore } from '@/stores/account'
-import { useCartStore } from '@/stores/cart'
-import { useWishlistStore } from '@/stores/wishlist'
-
-import { useLoadingStore } from '@/stores/loading'
-
 const loadingStore = useLoadingStore()
 
 const { loading } = storeToRefs(loadingStore)

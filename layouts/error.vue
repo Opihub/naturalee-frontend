@@ -6,26 +6,6 @@
   </LayoutWrapper>
 </template>
 
-<script setup>
-// Imports
-
-// Constants
-
-// Define (Props, Emits, Page Meta)
-
-// Component life-cycle hooks
-
-// Composables
-
-// Data
-
-// Watcher
-
-// Computed
-
-// Methods
-</script>
-
 <style lang="scss" scoped>
 @include scope('error') {
   background-position: center;

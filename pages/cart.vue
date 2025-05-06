@@ -135,12 +135,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useCartStore } from '@/stores/cart'
-import { useAccountStore } from '@/stores/account'
-import { useConfigurationStore } from '@/stores/configuration'
-import { useLoadingStore } from '@/stores/loading';
-
 const loadingStore = useLoadingStore();
 const loadingBasket = ref(true);
 

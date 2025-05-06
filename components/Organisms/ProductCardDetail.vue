@@ -62,8 +62,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useWishlistStore } from '@/stores/wishlist'
 // Constants
 const CSS_NAME = 'c-product-card-detail'
 

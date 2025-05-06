@@ -129,9 +129,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useConfigurationStore } from '@/stores/configuration'
-
 // Constants
 const configurationStore = useConfigurationStore()
 
@@ -153,12 +150,6 @@ const { togglePostcodeModal } = inject('postcodeModal', () => {})
 const { t } = useI18n({
   useScope: 'local',
 })
-
-// Watcher
-
-// Computed
-
-// Methods
 </script>
 
 <style lang="scss" scoped>

@@ -110,9 +110,6 @@
 </template>
 
 <script setup>
-// Imports
-import { useI18n } from 'vue-i18n'
-
 // Constants
 const CSS_NAME = 'c-products-filters'
 const CSS_NAME_OVERLAY = `${CSS_NAME}-overlay`
