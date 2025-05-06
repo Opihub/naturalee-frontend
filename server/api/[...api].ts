@@ -73,9 +73,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     async onRequest({ request, options }) {
       startTime = new Date().getTime()
 
-      options.headers = new Headers(options.headers)
-      options.headers.set('starttime', `${new Date().getTime()}`)
-
       if (method === 'GET') {
         timer = setTimeout(() => {
           abortController.abort()
