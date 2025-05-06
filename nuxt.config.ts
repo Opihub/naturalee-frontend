@@ -270,7 +270,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       },
     ],
     '@nuxtjs/sitemap',
-    '@vite-pwa/nuxt',
+    // '@vite-pwa/nuxt',
   ],
 
   googleFonts: {
