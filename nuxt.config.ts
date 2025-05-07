@@ -238,7 +238,6 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     },
   },
 
-  ssr: false,
   // routeRules: {
   //   '/checkout': { ssr: false },
   // },
