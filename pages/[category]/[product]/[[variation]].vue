@@ -7,7 +7,7 @@
     </SiteContainer>
 
     <template v-if="page?.brand && page.brand === 'MIO ORTO'">
-      <NuxtImg class="u-mb-huge" src="home/mioorto-row.png" />
+      <img class="u-mb-huge" src="/home/mioorto-row.png" />
     </template>
 
     <SiteContainer class="u-pt-huge u-pb-huge">

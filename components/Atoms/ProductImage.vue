@@ -57,8 +57,6 @@ const props = defineProps({
   },
 })
 
-const img = useImage()
-
 // Computed
 const style = computed(() => {
   const style = {}
@@ -80,16 +78,9 @@ const aspectRatio = computed(() => {
 })
 
 const href = computed(() => {
-  const imgConfig = {
-    width: props.width,
-    height: props.height,
-    quality: 70,
-    format: 'webp',
-  }
-
   const source = props.src ? props.src : '/logo.png'
 
-  return img(source, imgConfig)
+  return source
 })
 </script>
 
