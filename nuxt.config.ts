@@ -83,7 +83,7 @@ export default defineNuxtConfig({
       sentryOptions: {
         tracesSampleRate,
         debug,
-      }
+      },
     },
   },
 
@@ -248,6 +248,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-icons',
+    '@nuxtjs/mdc',
     // '@nuxt/image',
     process.env.SENTRY_DSN ? '@sentry/nuxt/module' : undefined,
     [

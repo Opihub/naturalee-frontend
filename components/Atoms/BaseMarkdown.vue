@@ -1,15 +1,12 @@
 <template>
-  <VueMarkdown
+  <MDC
     :class="CSS_NAME"
-    :source="content"
+    :value="content"
     :options="{ ...DEFAULT_OPTIONS, ...options }"
   />
 </template>
 
 <script setup>
-// Imports
-import VueMarkdown from 'vue-markdown-render'
-
 // Constants
 const CSS_NAME = 'c-content'
 const DEFAULT_OPTIONS = {}

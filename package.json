@@ -21,6 +21,7 @@
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "^9.5.4",
+    "@nuxtjs/mdc": "^0.17.0",
     "@nuxtjs/robots": "^5.2.10",
     "@nuxtjs/sitemap": "^7.2.10",
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
@@ -58,7 +59,6 @@
     "pinia": "^3.0.2",
     "vlitejs": "^7.3.1",
     "vue-icomoon": "^0.6.1",
-    "vue-markdown-render": "^2.2.1",
     "vue-recaptcha-v3": "^2.0.1",
     "vue3-lottie": "^3.3.1"
   },
