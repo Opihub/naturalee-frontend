@@ -20,6 +20,7 @@ jobs:
       IUBENDA_ID: ${{ vars.IUBENDA_ID }}
       IUBENDA_SITE_ID: ${{ vars.IUBENDA_SITE_ID }}
       WEBPUSHR_TOKEN: ${{ vars.PROD_WEBPUSHR_TOKEN }}
+      NUXT_SITE_ENV: production
       ENVIRONMENT: production
       VITE_SITE_URL: ${{ vars.PROD_SITE_URL }}
       VITE_API_ENDPOINT_URL: ${{ vars.PROD_API_ENDPOINT_URL }}
