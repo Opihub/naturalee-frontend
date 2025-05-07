@@ -16,9 +16,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
   let startTime: number
   let duration: number
 
-  const abortController = new AbortController()
-  let timer: NodeJS.Timeout | null = null
-
   const method = event.method
   const params = getQuery(event)
   const body = method === 'GET' ? undefined : await readBody(event)
@@ -63,24 +60,12 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     params,
     method,
     body,
-    retry: 10,
-    retryDelay: 5000,
     timeout: 5000,
-    signal: abortController.signal,
     headers,
 
     // Log request
     async onRequest({ request, options }) {
       startTime = new Date().getTime()
-
-      if (method === 'GET') {
-        timer = setTimeout(() => {
-          abortController.abort()
-          console.log(
-            `Retrying request to: "${request}" at ${new Date().getTime()}`
-          )
-        }, 5000) // Abort request in 2.5s.
-      }
 
       await console.log(
         `%c[${new Date().toLocaleTimeString()}] %cSSR-Request: %c${request}`,
@@ -92,10 +77,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
     // Log response
     async onResponse({ request, response }) {
-      if (timer) {
-        clearTimeout(timer) // clear timer
-      }
-
       const currentTime = new Date().getTime()
       duration = currentTime - startTime
 
@@ -108,10 +89,6 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
 
     // Log error
     async onResponseError({ error }) {
-      if (timer) {
-        clearTimeout(timer) // clear timer
-      }
-
       await console.error(
         '%cSSR-Error',
         error,
