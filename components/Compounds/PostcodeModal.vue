@@ -136,12 +136,14 @@
 <script setup>
 const CSS_NAME = 'c-postcode-modal'
 
+const { $api } = useNuxtApp()
+
 const formDataInitState = {
   postcode: null,
   address: null,
   email: null,
-};
-const takeForm = ref(Math.random());
+}
+const takeForm = ref(Math.random())
 
 const formData = reactive({ ...formDataInitState })
 
@@ -156,8 +158,8 @@ const resetStatus = () => {
 
   savedEmail.value = null
   matchedPostcode.value = null
-  Object.assign(formData, formDataInitState);
-  takeForm.value = Math.random();
+  Object.assign(formData, formDataInitState)
+  takeForm.value = Math.random()
 }
 
 const checkPostcode = async () => {
@@ -178,25 +180,26 @@ const checkPostcode = async () => {
   sending.value = true
 
   try {
-    const { data: response } = await useApi('postcodes/validate', {
-      clientSide: true,
+    const response = await $api('v1/postcodes/validate', {
       method: 'POST',
-      body: {...formData},
-      cache: 'no-cache'
+      body: { ...formData },
+      cache: 'no-cache',
     })
 
-    feedback.value = response.value.data
+    feedback.value = response.data
+    matchedPostcode.value =
+      response.success && response.code === 'cap_available'
+  } catch (error) {
+    const response = error.data
 
-    if(feedback.value.status === 500){
-      errorMessage.value = true;
+    if (response.status === 500) {
+      errorMessage.value = true
       sending.value = false
       return
     }
 
-    matchedPostcode.value =
-      response.value.success && response.value.code !== 'cap_not_available'
-  } catch (error) {
-    errorMessage.value = true
+    feedback.value = response.data
+    matchedPostcode.value = false
   }
 
   sending.value = false
@@ -213,17 +216,13 @@ const registerEmail = async () => {
   sending.value = true
 
   try {
-    const { data: response } = await useApi(
-      `postcodes/update/${feedback.value}`,
-      {
-        clientSide: true,
-        method: 'POST',
-        body: formData,
-        cache: 'no-cache'
-      }
-    )
+    const response = await $api(`v1/postcodes/update/${feedback.value}`, {
+      method: 'POST',
+      body: formData,
+      cache: 'no-cache',
+    })
 
-    savedEmail.value = response.value.success
+    savedEmail.value = response.success
   } catch (error) {
     errorMessage.value = true
   }
