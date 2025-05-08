@@ -2,26 +2,18 @@
   <MDC
     :class="CSS_NAME"
     :value="content"
-    :options="{ ...DEFAULT_OPTIONS, ...options }"
   />
 </template>
 
 <script setup>
 // Constants
 const CSS_NAME = 'c-content'
-const DEFAULT_OPTIONS = {}
 
 // Define (Props, Emits, Page Meta)
 defineProps({
   content: {
     type: String,
     required: true,
-  },
-  options: {
-    type: Object,
-    default() {
-      return {}
-    },
   },
 })
 
