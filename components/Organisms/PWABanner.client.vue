@@ -18,7 +18,7 @@
     </a>
     <div v-if="!PWAShowInfo" class="o-pwa__content">
       <div>
-        <img ref="parallaxElement" src="/android-icon-36x36.png" />
+        <NuxtImg ref="parallaxElement" src="/android-icon-36x36.png" />
       </div>
       <div>
         <strong>Naturalee.it</strong>
@@ -143,8 +143,8 @@ const IstruzioniPWA = computed(() => {
 
 const togglePWAPopup = (status = null) => {
   isPWAPopupOpen.value = status !== null ? !!status : !isPWAPopupOpen.value
-  if (!status) {
-    trackCustomEvent('close_pwa', 'banner_pwa')
+  if(!status){
+    trackCustomEvent("close_pwa","banner_pwa");
   }
 }
 
@@ -154,7 +154,7 @@ const promptPWA = () => {
   } else {
     PWAShowInfo.value = true
   }
-  trackCustomEvent('install_pwa', 'banner_pwa')
+  trackCustomEvent("install_pwa","banner_pwa");
 }
 </script>
 

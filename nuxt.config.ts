@@ -262,7 +262,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     'nuxt-svgo',
     'nuxt-icons',
     '@nuxtjs/mdc',
-    // '@nuxt/image',
+    '@nuxt/image',
     process.env.SENTRY_DSN ? '@sentry/nuxt/module' : undefined,
     [
       '@pinia/nuxt',
@@ -284,7 +284,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       },
     ],
     '@nuxtjs/sitemap',
-    // '@vite-pwa/nuxt',
+    '@vite-pwa/nuxt',
   ],
 
   googleFonts: {
@@ -331,7 +331,7 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     // vueI18n: './i18n.config.ts', // if you are using custom path, default
   },
 
-  // image: imageSettings,
+  image: imageSettings,
 
   sitemap: {
     sitemaps: {

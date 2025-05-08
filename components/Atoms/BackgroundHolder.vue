@@ -54,6 +54,7 @@ const props = defineProps({
 
 // Composables
 const slots = useSlots()
+const img = useImage()
 
 // Computed
 const className = computed(() => {
@@ -74,7 +75,12 @@ const style = computed(() => {
   const style = {}
 
   if (props.image) {
-    const url = props.image
+    const imgConfig = {
+      quality: 70,
+      format: 'webp',
+    }
+
+    const url = img(props.image, imgConfig)
     style['--background-image'] = `url(${url})`
   }
 

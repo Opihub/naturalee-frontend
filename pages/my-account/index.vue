@@ -1,6 +1,6 @@
 <template>
   <section class="s-dashboard">
-    <img
+    <NuxtImg
       class="u-mt-large u-mt-none@tablet u-mb-large@tablet"
       src="/account/banner-account.png"
     />

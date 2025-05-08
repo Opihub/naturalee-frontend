@@ -3,7 +3,8 @@ import { useFetch, storeToRefs, useAccountStore } from '#imports'
 /* import https from 'https' */
 
 function getApiUrl(url, options = {}) {
-  let path = '/api/'
+  let path = ''
+  // let path = '/api/'
   const paths = [url]
 
   if (options?.version) {
@@ -39,9 +40,9 @@ export function useFetchApi(url, options = {}) {
   }
 
   // fetchOptions.baseURL = '/api'
-  // if (!fetchOptions.baseURL && config?.public?.endpoint) {
-  //   fetchOptions.baseURL = config.public.endpoint
-  // }
+  if (!fetchOptions.baseURL && useRuntimeConfig().public?.endpoint) {
+    fetchOptions.baseURL = useRuntimeConfig().public.endpoint
+  }
 
   return (clientSide ? $fetch : useFetch)(
     getApiUrl(url, { version }),
