@@ -38,7 +38,7 @@
       </div>
 
       <div :class="[`${CSS_NAME}__parallax`, 'u-mb-large', 'u-mb-none@tablet']">
-        <img
+        <NuxtImg
           ref="parallaxElement"
           :class="`${CSS_NAME}__parallax__image`"
           :src="image"

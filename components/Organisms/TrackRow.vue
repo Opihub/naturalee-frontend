@@ -78,9 +78,9 @@
         </ol>
       </div>
 
-      <img
+      <NuxtImg
         ref="truck"
-        src="/home/van-naturalee.png"
+        src="home/van-naturalee.png"
         :class="CSS_NAME_IMAGE"
       />
     </SiteContainer>
