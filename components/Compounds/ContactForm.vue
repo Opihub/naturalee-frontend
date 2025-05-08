@@ -23,7 +23,7 @@
       <InputField
         v-model="formData.email"
         :class="[columnClassName, columnHalfClassName]"
-        type="text"
+        type="email"
         required
       >
         {{ $t('form.mailField') }}</InputField
