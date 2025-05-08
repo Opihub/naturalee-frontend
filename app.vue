@@ -1,7 +1,7 @@
 <template>
   <SVGDefinitions v-once />
 
-  <!-- <NuxtPwaManifest /> -->
+  <NuxtPwaManifest />
 
   <NuxtLoadingIndicator />
 
@@ -14,11 +14,11 @@
   </NuxtLayout>
 
   <!-- You can use $pwa directly in templates! -->
-  <!-- <div v-show="$pwa && $pwa.needRefresh">
+  <div v-show="$pwa && $pwa.needRefresh">
     <span> New content available, click on reload button to update. </span>
 
     <button @click="$pwa.updateServiceWorker()">Reload</button>
-  </div> -->
+  </div>
 
   <ClientOnly>
     <TransitionGroup id="notifications" name="fade" tag="div">
@@ -34,7 +34,7 @@
     </TransitionGroup>
   </ClientOnly>
 
-  <!-- <PWABanner /> -->
+  <PWABanner />
 </template>
 
 <script setup>
@@ -54,14 +54,14 @@ const { setLoading } = loadingStore
 const { validateAccount, getWebpushrId, setWebpushrUserId } = accountStore
 
 const nuxtApp = useNuxtApp()
-// const { $pwa } = useNuxtApp()
+const { $pwa } = useNuxtApp()
 
-// onMounted(() => {
-//   if ($pwa.offlineReady) {
-//     notify({ status: 'success', notification: 'App ready to work offline' })
-//   }
-//   configurationStore.getPWAInfo()
-// })
+onMounted(() => {
+  if ($pwa.offlineReady) {
+    notify({ status: 'success', notification: 'App ready to work offline' })
+  }
+  configurationStore.getPWAInfo()
+})
 
 nuxtApp.hook('page:start', () => {
   setLoading(true)
