@@ -90,6 +90,7 @@ const feedback = reactive({
 const sending = ref(false)
 
 const { recaptcha } = useCaptcha()
+const { $api } = useNuxtApp()
 
 const submitForm = async () => {
   if (sending.value) {
@@ -100,19 +101,19 @@ const submitForm = async () => {
   const token = await recaptcha()
 
   try {
-    const { data: response } = await useApi(`form/contacts`, {
+    const response = await $api('v1/form/contacts', {
       method: 'POST',
-      clientSide: true,
       body: { ...formData.value, _wpcf7_recaptcha_response: token },
-      cache: 'no-cache'
+      cache: 'no-cache',
     })
 
-    feedback.status =
-      response.value.data.status === 'mail_sent' ? 'success' : 'danger'
-    feedback.message = response.value.data.message
+    feedback.status = response.data.code === 'mail_sent' ? 'success' : 'danger'
+    feedback.message = response.data.message
   } catch (error) {
+    const response = error.data
+
     feedback.status = 'danger'
-    feedback.message =
+    feedback.message = response?.data?.message ||
       "È avvenuto un errore imprevisto durante l'invio della form..."
   }
 
