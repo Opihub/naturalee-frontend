@@ -204,12 +204,6 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
       type: 'module',
     },
   },
-
-  ssr: false,
-  // routeRules: {
-  //   '/checkout': { ssr: false },
-  // },
-
   routeRules: {
     '/checkout': { ssr: false },
   },
