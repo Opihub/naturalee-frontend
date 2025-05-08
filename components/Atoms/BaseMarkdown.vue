@@ -1,30 +1,19 @@
 <template>
-  <VueMarkdown
+  <MDC
     :class="CSS_NAME"
-    :source="content"
-    :options="{ ...DEFAULT_OPTIONS, ...options }"
+    :value="content"
   />
 </template>
 
 <script setup>
-// Imports
-import VueMarkdown from 'vue-markdown-render'
-
 // Constants
 const CSS_NAME = 'c-content'
-const DEFAULT_OPTIONS = {}
 
 // Define (Props, Emits, Page Meta)
 defineProps({
   content: {
     type: String,
     required: true,
-  },
-  options: {
-    type: Object,
-    default() {
-      return {}
-    },
   },
 })
 
