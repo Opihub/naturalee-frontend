@@ -12,6 +12,20 @@ services:
     networks:
       - proxy_net
       - stack
+  restarter:
+    image: docker:cli
+    restart: unless-stopped
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    entrypoint: ["/bin/sh","-c"]
+    command:
+      - |
+        while true; do
+          # l'orario è indietro di 2 ore!
+          if [ "$$(date +'%H:%M')" = '6:00' ] || [ "$$(date +'%H:%M')" = '14:00' ] || [ "$$(date +'%H:%M')" = '22:00' ]; then
+            docker service update naturalee_frontend --force
+          fi
+          sleep 60
+        done
 
 # Networks
 networks:
