@@ -2,7 +2,7 @@ version: '3.8'
 services:
   frontend:
     image: registry.promo.it/naturalee:latest
-    restart: always
+    restart: unless-stopped
     tty: true
     deploy:
       placement:
