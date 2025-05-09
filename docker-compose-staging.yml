@@ -1,8 +1,8 @@
 version: '3.8'
 services:
   frontend:
-    image: registry.promo.it/naturalee:staging
-    restart: always
+    image: naturalee:staging
+    restart: unless-stopped
     tty: true
     deploy:
       placement:
@@ -12,6 +12,21 @@ services:
     networks:
       - proxy_net
       - stack
+  restarter:
+    image: docker:cli
+    restart: unless-stopped
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    # command: ["/bin/sh", "-c", "while true; do sleep 60; docker restart test-naturalee_frontend; done"]
+    entrypoint: ["/bin/sh","-c"]
+    command:
+      - |
+        while true; do
+          # l'orario è indietro di 2 ore!
+          if [ "$$(date +'%H:%M')" = '6:00' ] || [ "$$(date +'%H:%M')" = '14:00' ] || [ "$$(date +'%H:%M')" = '22:00' ]; then
+            docker service update test-naturalee_frontend --force
+          fi
+          sleep 60
+        done
 
 # Networks
 networks:
