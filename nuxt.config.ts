@@ -228,7 +228,9 @@ webpushr('setup',{'key':'${process.env?.WEBPUSHR_TOKEN}', sw: 'none' });`,
     [
       '@nuxtjs/robots',
       {
-        configPath: 'robots.config.js',
+        configPath: isProduction
+          ? 'robots-production.config.js'
+          : 'robots.config.js',
       },
     ],
     '@nuxtjs/sitemap',
