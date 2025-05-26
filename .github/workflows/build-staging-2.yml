@@ -20,12 +20,12 @@ jobs:
       IUBENDA_ID: ${{ vars.IUBENDA_ID }}
       IUBENDA_SITE_ID: ${{ vars.IUBENDA_SITE_ID }}
       WEBPUSHR_TOKEN: ${{ vars.STAGE_WEBPUSHR_TOKEN }}
-      NUXT_SITE_ENV: production
-      ENVIRONMENT: production
+      NUXT_SITE_ENV: staging
+      ENVIRONMENT: staging
       VITE_SITE_URL: ${{ vars.STAGE_SITE_URL }}
       VITE_API_ENDPOINT_URL: ${{ vars.STAGE_API_ENDPOINT_URL }}
       SENTRY_DSN: ${{ vars.SENTRY_DSN }}
-      SENTRY_ENVIRONMENT: production
+      SENTRY_ENVIRONMENT: staging
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     steps:
       - name: 🚚 Get latest code
