@@ -42,6 +42,12 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     event.node.res.setHeader('Cache-Control', cacheControl)
   }
 
+  let timeout = parseInt(getRequestHeader(event, 'X-Request-Timeout') || '')
+  if (!timeout) {
+    timeout = method === 'GET' ? 5000 : 10000
+  }
+
+  console.info('timeout ', timeout)
   console.info(url)
 
   // le chiamate da non mettere in cache generalmente saranno quelle con il token JWT
@@ -60,7 +66,7 @@ export default defineEventHandler(async (event: H3Event): Promise<unknown> => {
     params,
     method,
     body,
-    timeout: 5000,
+    timeout,
     headers,
 
     // Log request
