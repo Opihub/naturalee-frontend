@@ -238,6 +238,7 @@ const submitOrder = async () => {
       method: 'POST',
       body: formData,
       cache: 'no-cache',
+      timeout: 30_000,
     })
 
     // Se la registrazione dell'ordine non va a buon fine, allora mostro le motivazioni

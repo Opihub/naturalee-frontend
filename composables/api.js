@@ -20,6 +20,10 @@ export async function useApi(url, options = {}) {
   })
   options.headers['Cache-Control'] = cacheControl.join(', ')
 
+  if (options?.timeout) {
+    options.headers['X-Request-Timeout'] = options.timeout
+  }
+
   const method = options?.method?.toUpperCase() || 'GET'
   options.method = method
 
@@ -74,7 +78,7 @@ export async function useApi(url, options = {}) {
           'jwt_auth_obsolete_refresh_token',
           'jwt_auth_expired_refresh_token',
           'jwt_auth_bad_iss',
-          'jwt_auth_no_auth_header'
+          'jwt_auth_no_auth_header',
         ].includes(data.code)
       ) {
         const { logout } = useLogout()
@@ -108,7 +112,7 @@ export async function useApi(url, options = {}) {
             'jwt_auth_obsolete_refresh_token',
             'jwt_auth_expired_refresh_token',
             'jwt_auth_bad_iss',
-            'jwt_auth_no_auth_header'
+            'jwt_auth_no_auth_header',
           ].includes(data.code)
         ) {
           const { logout } = useLogout()
