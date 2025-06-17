@@ -4,6 +4,14 @@ services:
     image: registry.promo.it/naturalee:staging
     restart: unless-stopped
     tty: true
+    healthcheck:
+      test: "curl -f http://localhost:3000"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "autoheal-naturalee-frontend-staging=true"
     deploy:
       placement:
         constraints:
@@ -22,11 +30,22 @@ services:
       - |
         while true; do
           # l'orario è indietro di 2 ore!
-          if [ "$$(date +'%H:%M')" = '6:00' ] || [ "$$(date +'%H:%M')" = '14:00' ] || [ "$$(date +'%H:%M')" = '22:00' ]; then
+          if [ "$$(date +'%H:%M')" = '2:00' ] || [ "$$(date +'%H:%M')" = '6:00' ] || [ "$$(date +'%H:%M')" = '10:00' ] || [ "$$(date +'%H:%M')" = '14:00' ] || [ "$$(date +'%H:%M')" = '18:00' ] || [ "$$(date +'%H:%M')" = '22:00' ]; then
             docker service update test-naturalee_frontend --force
           fi
           sleep 60
         done
+  autoheal:
+    deploy:
+      replicas: 1
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal-naturalee-frontend-staging
+    image: willfarrell/autoheal:latest
+    network_mode: none
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
 
 # Networks
 networks:
