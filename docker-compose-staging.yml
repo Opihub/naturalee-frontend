@@ -22,7 +22,7 @@ services:
       - |
         while true; do
           # l'orario è indietro di 2 ore!
-          if [ "$$(date +'%H:%M')" = '6:00' ] || [ "$$(date +'%H:%M')" = '14:00' ] || [ "$$(date +'%H:%M')" = '22:00' ]; then
+          if [ "$$(date +'%H:%M')" = '2:00' ] || [ "$$(date +'%H:%M')" = '6:00' ] || [ "$$(date +'%H:%M')" = '10:00' ] || [ "$$(date +'%H:%M')" = '14:00' ] || [ "$$(date +'%H:%M')" = '18:00' ] || [ "$$(date +'%H:%M')" = '22:00' ]; then
             docker service update test-naturalee_frontend --force
           fi
           sleep 60
