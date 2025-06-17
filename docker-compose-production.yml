@@ -10,6 +10,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+    labels:
+      - "autoheal-naturalee-frontend-prod=true"
     deploy:
       placement:
         constraints:
@@ -32,6 +34,17 @@ services:
           fi
           sleep 60
         done
+  autoheal:
+    deploy:
+      replicas: 1
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal-naturalee-frontend-prod
+    image: willfarrell/autoheal:latest
+    network_mode: none
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
 
 # Networks
 networks:
