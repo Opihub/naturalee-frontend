@@ -26,6 +26,8 @@ FROM node:${NODE_VERSION}-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
+RUN apk --no-cache add curl
+
 # Copy the output from the build stage to the working directory
 COPY --from=build /app/.output ./
 
