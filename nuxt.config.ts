@@ -7,7 +7,7 @@ const imageSettings: Partial<ModuleOptions> &
   Pick<ModuleOptions, 'domains' | 'alias'> = {
   domains: [],
   alias: {},
-  provider: 'ipx',
+  // provider: 'ipx',
   ipx: {
     handleImages: true,
     sharp: true,
